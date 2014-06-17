@@ -4,7 +4,8 @@ window.App = {
 
 	widgets: []
 
-	init: ->
+	init: (templateKey) ->
+		@templateKey = templateKey
 		$ =>
 			@bindEvents()
 			@load()
@@ -24,17 +25,17 @@ window.App = {
 		@widgets = (w for w in @widgets when w.guid != widget.guid)
 
 	load: ->
-		template = store.get('test1')
+		template = store.get(@templateKey)
 		if template
 			for widgetConfig in template.layout
 				@addWidget(widgetConfig)
 
 	save: ->
-		store.set('test1', @serialize())
+		store.set(@templateKey, @serialize())
 
 	clear: ->
 		@removeWidget(widget) for widget in @widgets
-		store.clear()
+		store.remove(@templateKey)
 
 	serialize: ->
 		layout = (widget.serialize() for widget in @widgets)
@@ -42,4 +43,4 @@ window.App = {
 }
 
 
-App.init()
+App.init('my-test-teplate')
