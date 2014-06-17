@@ -1,4 +1,7 @@
-App = {
+window.App = {
+	PAGE_SELECTOR: '#page'
+	GRID_SIZE: [20, 20]
+
 	widgets: []
 
 	init: -> @bindEvents()
