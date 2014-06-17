@@ -15,6 +15,7 @@
 }
 
 .widget-delete {
+  display: none;
   position: absolute;
   top: 0;
   right: 0;
@@ -29,4 +30,8 @@
   border-radius: 0;
   font-size: 12px;
   cursor: pointer;
+}
+
+.widget:hover .widget-delete {
+  display: block;
 }
