@@ -1,0 +1,11 @@
+.widget { 
+	width: 160px; 
+	height: 160px; 
+	background-color: rgba(128, 200, 128, 0.5);
+}
+
+#page {
+	width: 960px;
+	height: 1344px;
+	background-color: rgba(128, 128, 200, 0.5);
+}
