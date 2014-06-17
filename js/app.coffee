@@ -19,15 +19,21 @@ window.App = {
 		@widgets.push(widget)
 		widget.render()
 
+	removeWidget: (widget) ->
+		widget.remove()
+		@widgets = (w for w in @widgets when w.guid != widget.guid)
+
 	load: ->
 		template = store.get('test1')
-		for widgetConfig in template.layout
-			@addWidget(widgetConfig)
+		if template
+			for widgetConfig in template.layout
+				@addWidget(widgetConfig)
 
 	save: ->
 		store.set('test1', @serialize())
 
 	clear: ->
+		@removeWidget(widget) for widget in @widgets
 		store.clear()
 
 	serialize: ->

@@ -19,6 +19,9 @@ class window.Widget
     $('#page').append(@el)
     @bindEvents()
 
+  remove: ->
+    @el.remove()
+
   serialize: ->
     position = @el.position()
     {
