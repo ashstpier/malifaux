@@ -2,10 +2,10 @@ class window.Widget
   constructor: (config={}) ->
     @guid = config.guid || utils.guid()
     @origin = {
-      x: config.x || 20
-      y: config.y || 20
-      width: config.width || 160
-      height: config.height || 160
+      x: if config.x? then config.x else 20
+      y: if config.y? then config.y else 20
+      width: if config.width? then config.width else 160
+      height: if config.height? then config.height else 160
     }
 
   originStyles: -> """top:#{@origin.y}px; left:#{@origin.x}px; width:#{@origin.width}px; height:#{@origin.height}px;"""
