@@ -11,11 +11,16 @@ class window.Widget
   originStyles: -> """top:#{@origin.y}px; left:#{@origin.x}px; width:#{@origin.width}px; height:#{@origin.height}px;"""
 
   bindEvents: ->
+    @el.find('.widget-delete').click => App.removeWidget(this)
     @el.resizable(grid: App.GRID_SIZE, containment: App.PAGE_SELECTOR)
     @el.draggable(grid: App.GRID_SIZE, containment: App.PAGE_SELECTOR)
 
   render: ->
-    @el = $("""<div data-guid="#{@guid}" class="widget" style="#{@originStyles()}"></div>""")
+    @el = $("""
+      <div data-guid="#{@guid}" class="widget" style="#{@originStyles()}">
+        <button class="widget-delete">x</button>
+      </div>
+    """)
     $('#page').append(@el)
     @bindEvents()
 

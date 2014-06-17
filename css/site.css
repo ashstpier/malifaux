@@ -13,3 +13,20 @@
 	height: 160px;
 	background-color: rgba(128,128,128,0.7);
 }
+
+.widget-delete {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  line-height: 16px;
+  width: 16px;
+  height: 16px;
+  background: #c5c5c5;
+  color: #333;
+  border: none;
+  border-radius: 0;
+  font-size: 12px;
+  cursor: pointer;
+}
