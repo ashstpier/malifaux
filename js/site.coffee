@@ -10,8 +10,7 @@ addWidget = ->
 	enableWidget(guid)
 
 enableWidget = (guid) ->
-	console.log "enabling #{guid}"
-	widget = $("[data-uid='#{guid}']")
+	widget = $("[data-guid='#{guid}']")
 	grid = [20, 20]
 	widget.resizable({grid: grid, containment: "#page"})
 	widget.draggable({grid: grid, containment: "#page"})
