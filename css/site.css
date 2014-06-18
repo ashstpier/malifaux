@@ -24,7 +24,6 @@ body {
 	height: 160px;
 	background-color: rgba(160,160,160,0.7);
   overflow: hidden;
-  display: table;
 }
 
 .widget-button {
@@ -63,7 +62,7 @@ body {
   text-align: center;
 }
 
-..ui-state-disabled {
+.ui-state-disabled {
   opacity: 100%;
 }
 
