@@ -34,4 +34,6 @@
   text-decoration: none;
   display: table-cell;
   vertical-align: middle;
+  position: relative;
+  top: -8px;
 }
