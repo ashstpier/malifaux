@@ -11,7 +11,8 @@ window.App = {
 			@load()
 
 	bindEvents: ->
-		$('#add').click => @addWidget()
+		$('#add-text').click => @addWidget(type: 'TextContent')
+		$('#add-image').click => @addWidget(type: 'ImageContent')
 		$('#save').click => @save()
 		$('#clear').click => @clear()
 

@@ -7,6 +7,7 @@ class window.Widget
       width: if config.width? then config.width else 160
       height: if config.height? then config.height else 160
     }
+    @content = if config.type? then new window[config.type]() else new TextContent()
 
   originStyles: -> """top:#{@origin.y}px; left:#{@origin.x}px; width:#{@origin.width}px; height:#{@origin.height}px;"""
 
@@ -19,6 +20,7 @@ class window.Widget
     @el = $("""
       <div data-guid="#{@guid}" class="widget" style="#{@originStyles()}">
         <button class="widget-delete">x</button>
+        #{@content.render()}
       </div>
     """)
     $('#page').append(@el)
@@ -35,4 +37,5 @@ class window.Widget
       y: position.top
       width: @el.width()
       height: @el.height()
+      type: @content.constructor.name
     }
