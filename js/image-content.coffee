@@ -10,7 +10,6 @@ class window.ImageContent
         reader.readAsDataURL(file)
 
     @el.find(".icon").click (e) ->
-      el = $(e.currentTarget)
       picker = el.find(".picker")
       picker.click()
       return false
@@ -18,11 +17,11 @@ class window.ImageContent
   render: (mode) ->
     @el = $("""
       <div class="image-widget">
+        <img class="content" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
         <div class="edit">
           <a class="icon" href="#">&#43;</a>
-          <input class="picker" type="file">
+          <input class="picker" type="file" accept="image/x-png, image/gif, image/jpeg">
         </div>
-        <img class="content">
       </div>
     """)
     @bindEvents()

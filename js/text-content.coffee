@@ -5,6 +5,7 @@ class window.TextContent
 
   render: (mode) ->
     @el = $("""<div class="text-widget">#{@html}</div>""")
+    @el.click -> false
     @editor = new MediumEditor(@el) if mode is 'edit'
     @bindEvents()
     @el

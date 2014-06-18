@@ -15,8 +15,8 @@
   width: 100%;
   text-align: center;
 
-  opacity: 0.0;
-  background-color: rgba(128, 128, 128, 0.0);
+  opacity: 0.25;
+  background-color: rgba(128, 128, 128, 0.25);
 }
 
 .image-widget .edit:hover {

@@ -13,7 +13,6 @@ class window.Widget
   originStyles: -> """top:#{@origin.y}px; left:#{@origin.x}px; width:#{@origin.width}px; height:#{@origin.height}px;"""
 
   bindEvents: ->
-    @el.click -> false
     @el.dblclick => App.editWidget(this)
     @el.find('.widget-delete').click  => App.removeWidget(this)
     @el.resizable(grid: App.GRID_SIZE, containment: App.PAGE_SELECTOR)
