@@ -22,10 +22,11 @@ class window.ImageContent
   setImage: (data) ->
     @src = data
     @el.find(".content").attr('src', @src)
+    @el.removeClass('image-blank')
 
   render: (mode) ->
     @el = $("""
-      <div class="image-widget">
+      <div class="image-widget #{if @src is ImageContent.DEFAULT_IMAGE then 'image-blank'}">
         <img class="content" src="#{@src}">
         <div class="edit">
           <a class="icon" href="#">&#43;</a>
