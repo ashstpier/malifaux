@@ -1,21 +1,27 @@
 class window.ImageContent
 
+  @DEFAULT_IMAGE: "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+
   constructor: (config={}) ->
-    @src = if config.src? then config.src else "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+    @src = if config.src? then config.src else ImageContent.DEFAULT_IMAGE
 
   bindEvents: ->
-    el = @el
-    @el.find(".picker").change (e) ->
-      for file in e.currentTarget.files
-        reader = new FileReader()
-        reader.onload = (e) ->
-          el.find(".content").attr('src', e.target.result)
-        reader.readAsDataURL(file)
+    @el.find(".picker").change (e) => @setImageFromFile(e.currentTarget.files[0])
+    @el.find(".icon").dblclick => @openFilePicker()
 
-    @el.find(".icon").click (e) ->
-      picker = el.find(".picker")
-      picker.click()
-      return false
+  openFilePicker: ->
+    picker = @el.find(".picker")
+    picker.click()
+    return false
+
+  setImageFromFile: (file) ->
+    reader = new FileReader()
+    reader.onload = (e) => @setImage(e.target.result)
+    reader.readAsDataURL(file)
+
+  setImage: (data) ->
+    @src = data
+    @el.find(".content").attr('src', @src)
 
   render: (mode) ->
     @el = $("""
@@ -30,6 +36,5 @@ class window.ImageContent
     @bindEvents()
     @el
 
-  serialize: -> 
-    console.log("hello world") 
-    { src: @el.find(".content").attr("src") }
+  serialize: ->
+    { src: @src }
