@@ -1,7 +1,7 @@
 class window.TextContent
 
-  constructor: ->
-    @html = "<p>Type text here&hellip;</p>"
+  constructor: (config={}) ->
+    @html = if config.html? then config.html else "<p>Type text here&hellip;</p>"
 
   render: (mode) ->
     @el = $("""<div class="text-widget">#{@html}</div>""")

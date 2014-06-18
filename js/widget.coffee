@@ -8,7 +8,7 @@ class window.Widget
       width: if config.width? then config.width else 160
       height: if config.height? then config.height else 160
     }
-    @content = if config.type? then new window[config.type]() else new TextContent()
+    @content = if config.type? then new window[config.type](config.content) else new TextContent()
 
   originStyles: -> """top:#{@origin.y}px; left:#{@origin.x}px; width:#{@origin.width}px; height:#{@origin.height}px;"""
 
@@ -59,4 +59,5 @@ class window.Widget
       width: @el.width()
       height: @el.height()
       type: @content.constructor.name
+      content: @content.serialize()
     }

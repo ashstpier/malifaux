@@ -27,3 +27,5 @@ class window.ImageContent
     """)
     @bindEvents()
     @el
+
+  serialize: -> {}
