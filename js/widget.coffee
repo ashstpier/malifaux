@@ -22,8 +22,8 @@ class window.Widget
   render: ->
     @el = $("""
       <div data-guid="#{@guid}" class="widget" style="#{@originStyles()}">
-        <button class="widget-button widget-delete">x</button>
         <div class="widget-content"></div>
+        <button class="widget-button widget-delete">x</button>
       </div>
     """)
     @contentContainer = @el.find('.widget-content')
