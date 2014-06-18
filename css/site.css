@@ -3,7 +3,6 @@ body {
 }
 
 #toolbar {
-  /*background: #fff;*/
   text-align: center;
 }
 
@@ -22,12 +21,21 @@ body {
   left: 20px;
 	width: 160px;
 	height: 160px;
-	background-color: rgba(230,230,230,0.7);
   overflow: hidden;
   cursor: move;
 }
+.widget.widget-layout-mode:hover {
+  outline: 1px dashed #ccc;
+}
 .widget.widget-edit-mode {
-  background-color: rgba(255,255,220,0.7);
+  outline: 1px solid #666;
+}
+
+.widget .ui-icon-gripsmall-diagonal-se {
+  opacity: 0;
+}
+.widget:hover .ui-icon-gripsmall-diagonal-se {
+  opacity: 1;
 }
 
 .widget.ui-draggable-disabled {
@@ -44,7 +52,7 @@ body {
   line-height: 16px;
   width: 16px;
   height: 16px;
-  background: #c5c5c5;
+  background: rgba(230,230,230,0.2);
   color: #333;
   border: none;
   border-radius: 0;
