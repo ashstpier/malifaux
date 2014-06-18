@@ -1,8 +1,5 @@
 class window.ImageContent
 
-  filePicked: (e) ->
-    console.log e.currentTarget.files
-
   bindEvents: ->
     el = @el
     @el.find(".picker").change (e) ->
