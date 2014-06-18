@@ -20,9 +20,9 @@ class window.Widget
     @el = $("""
       <div data-guid="#{@guid}" class="widget" style="#{@originStyles()}">
         <button class="widget-delete">x</button>
-        #{@content.render()}
       </div>
     """)
+    @el.append(@content.render())
     $('#page').append(@el)
     @bindEvents()
 

@@ -44,4 +44,4 @@ window.App = {
 }
 
 
-App.init('my-test-teplate')
+$ -> App.init('my-test-template')
