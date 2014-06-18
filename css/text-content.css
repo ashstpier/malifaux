@@ -1,0 +1,12 @@
+.text-widget {
+  text-align: left;
+}
+
+.widget-edit-mode .text-widget {
+  cursor: text;
+}
+
+
+.text-widget p {
+  margin: 0 0 1em 0;
+}

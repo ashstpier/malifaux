@@ -22,8 +22,16 @@ body {
   left: 20px;
 	width: 160px;
 	height: 160px;
-	background-color: rgba(160,160,160,0.7);
+	background-color: rgba(230,230,230,0.7);
   overflow: hidden;
+  cursor: move;
+}
+.widget.widget-edit-mode {
+  background-color: rgba(255,255,220,0.7);
+}
+
+.widget.ui-draggable-disabled {
+  cursor: auto;
 }
 
 .widget-button {
@@ -49,11 +57,6 @@ body {
   right: 0;
 }
 
-.widget-edit {
-  top: 0;
-  left: 0;
-}
-
 .widget:hover .widget-button {
   display: block;
 }
@@ -63,7 +66,15 @@ body {
 }
 
 .ui-state-disabled {
-  opacity: 100%;
+  opacity: 1;
+}
+
+.widget-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .browseimage {

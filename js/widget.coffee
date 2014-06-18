@@ -14,7 +14,7 @@ class window.Widget
 
   bindEvents: ->
     @el.click -> false
-    @el.find('.widget-edit').click    => App.editWidget(this)
+    @el.dblclick => App.editWidget(this)
     @el.find('.widget-delete').click  => App.removeWidget(this)
     @el.resizable(grid: App.GRID_SIZE, containment: App.PAGE_SELECTOR)
     @el.draggable(grid: App.GRID_SIZE, containment: App.PAGE_SELECTOR)
@@ -22,7 +22,6 @@ class window.Widget
   render: ->
     @el = $("""
       <div data-guid="#{@guid}" class="widget" style="#{@originStyles()}">
-        <button class="widget-button widget-edit">e</button>
         <button class="widget-button widget-delete">x</button>
         <div class="widget-content"></div>
       </div>
@@ -32,7 +31,11 @@ class window.Widget
     $('#page').append(@el)
     @bindEvents()
 
-  renderContent: -> @contentContainer.html(@content.render(@mode))
+  renderContent: ->
+    @el.removeClass("widget-layout-mode")
+    @el.removeClass("widget-edit-mode")
+    @el.addClass("widget-#{@mode}-mode")
+    @contentContainer.html(@content.render(@mode))
 
   layoutMode: ->
     @mode = 'layout'
