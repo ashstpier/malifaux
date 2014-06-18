@@ -1,5 +1,6 @@
 class window.Widget
   constructor: (config={}) ->
+    @mode = 'layout'
     @guid = config.guid || utils.guid()
     @origin = {
       x: if config.x? then config.x else 20
@@ -12,19 +13,36 @@ class window.Widget
   originStyles: -> """top:#{@origin.y}px; left:#{@origin.x}px; width:#{@origin.width}px; height:#{@origin.height}px;"""
 
   bindEvents: ->
-    @el.find('.widget-delete').click => App.removeWidget(this)
+    @el.click -> false
+    @el.find('.widget-edit').click    => App.editWidget(this)
+    @el.find('.widget-delete').click  => App.removeWidget(this)
     @el.resizable(grid: App.GRID_SIZE, containment: App.PAGE_SELECTOR)
     @el.draggable(grid: App.GRID_SIZE, containment: App.PAGE_SELECTOR)
 
   render: ->
     @el = $("""
       <div data-guid="#{@guid}" class="widget" style="#{@originStyles()}">
-        <button class="widget-delete">x</button>
+        <button class="widget-button widget-edit">e</button>
+        <button class="widget-button widget-delete">x</button>
+        <div class="widget-content"></div>
       </div>
     """)
-    @el.append(@content.render())
+    @contentContainer = @el.find('.widget-content')
+    @renderContent()
     $('#page').append(@el)
     @bindEvents()
+
+  renderContent: -> @contentContainer.html(@content.render(@mode))
+
+  layoutMode: ->
+    @mode = 'layout'
+    @el.draggable('enable')
+    @renderContent()
+
+  editMode: ->
+    @mode = 'edit'
+    @el.draggable('disable')
+    @renderContent()
 
   remove: ->
     @el.remove()

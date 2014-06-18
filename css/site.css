@@ -27,7 +27,7 @@ body {
   display: table;
 }
 
-.widget-delete {
+.widget-button {
   display: none;
   position: absolute;
   top: 0;
@@ -45,12 +45,26 @@ body {
   cursor: pointer;
 }
 
-.widget:hover .widget-delete {
+.widget-delete {
+  top: 0;
+  right: 0;
+}
+
+.widget-edit {
+  top: 0;
+  left: 0;
+}
+
+.widget:hover .widget-button {
   display: block;
 }
 
 .widget {
   text-align: center;
+}
+
+..ui-state-disabled {
+  opacity: 100%;
 }
 
 .browseimage {

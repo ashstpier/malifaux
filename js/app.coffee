@@ -3,10 +3,12 @@ window.App = {
 	GRID_SIZE: [20, 20]
 
 	widgets: []
+	currentEditWidget: null
 
 	init: (templateKey) ->
 		@templateKey = templateKey
 		$ =>
+			@page = $(@PAGE_SELECTOR)
 			@bindEvents()
 			@load()
 
@@ -15,11 +17,22 @@ window.App = {
 		$('#add-image').click => @addWidget(type: 'ImageContent')
 		$('#save').click => @save()
 		$('#clear').click => @clear()
+		@page.click => @clearEditWidget()
 
 	addWidget: (widgetConfig={}) ->
 		widget = new Widget(widgetConfig)
 		@widgets.push(widget)
 		widget.render()
+
+	clearEditWidget: ->
+		if @currentEditWidget
+			@currentEditWidget.layoutMode()
+			@currentEditWidget = null
+
+	editWidget: (widget) ->
+		@clearEditWidget()
+		@currentEditWidget = widget
+		widget.editMode()
 
 	removeWidget: (widget) ->
 		widget.remove()
