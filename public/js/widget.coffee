@@ -1,4 +1,20 @@
 class window.Widget
+  @WIDGET_NAMES: [
+    'image'
+    'text'
+  ]
+
+  @loadAll: (cb) ->
+    completed = 0
+    for name in Widget.WIDGET_NAMES
+      @load name, ->
+        completed++
+        cb() if completed is Widget.WIDGET_NAMES.length
+
+  @load: (name, cb) ->
+    utils.loadCSS("widgets/#{name}/#{name}-content.css")
+    utils.loadCoffeeScript("widgets/#{name}/#{name}-content.coffee", cb)
+
   constructor: (config={}) ->
     @mode = if config.mode? then config.mode else 'layout'
     @guid = config.guid || utils.guid()

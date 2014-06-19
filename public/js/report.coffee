@@ -1,11 +1,12 @@
 window.Report = {
 
   init: ->
-    @studentId = utils.querystring("studentid")
-    @templateName = utils.querystring('template')
-    @debug = utils.querystring('debug') is '1'
-    @template = new Template(store.get(@templateName))
-    $.get "#{@studentId}.json", (data) => @render(data)
+    Widget.loadAll =>
+      @studentId = utils.querystring("studentid")
+      @templateName = utils.querystring('template')
+      @debug = utils.querystring('debug') is '1'
+      @template = new Template(store.get(@templateName))
+      $.get "#{@studentId}.json", (data) => @render(data)
 
   render: (data) ->
     @template.render(data)
@@ -36,4 +37,5 @@ class window.Template
     @widgets.push(widget)
     @page.append(widget.render())
 
-$ -> Report.init()
+$ ->
+  Report.init()

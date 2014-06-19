@@ -15,4 +15,10 @@ window.utils = {
     str.replace(/&/g, "&amp;")
        .replace(/</g, "&lt;")
        .replace(/>/g, "&gt;")
+
+  loadCSS: (path) ->
+    $('head').append("""<link rel="stylesheet" type="text/css" href="#{path}">""")
+
+  loadCoffeeScript: (path, cb=null) ->
+    CoffeeScript.load(path, cb)
 }

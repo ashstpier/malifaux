@@ -8,9 +8,10 @@ window.Designer = {
 	init: (templateKey) ->
 		@templateKey = templateKey
 		$ =>
-			@page = $(@PAGE_SELECTOR)
-			@bindEvents()
-			@load()
+			Widget.loadAll =>
+				@page = $(@PAGE_SELECTOR)
+				@bindEvents()
+				@load()
 
 	bindEvents: ->
 		$('#add-text').click => @addWidget(type: 'TextContent')
