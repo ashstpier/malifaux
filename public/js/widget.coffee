@@ -1,6 +1,6 @@
 class window.Widget
   constructor: (config={}) ->
-    @mode = 'layout'
+    @mode = if config.mode? then config.mode else 'layout'
     @guid = config.guid || utils.guid()
     @origin = {
       x: if config.x? then config.x else 20
@@ -22,13 +22,14 @@ class window.Widget
     @el = $("""
       <div data-guid="#{@guid}" class="widget" style="#{@originStyles()}">
         <div class="widget-content"></div>
-        <button class="widget-button widget-delete">x</button>
       </div>
     """)
     @contentContainer = @el.find('.widget-content')
     @renderContent()
-    $('#page').append(@el)
-    @bindEvents()
+    unless @mode is 'display'
+      @el.append("""<button class="widget-button widget-delete">x</button>""")
+      @bindEvents()
+    @el
 
   renderContent: ->
     @el.removeClass("widget-layout-mode")

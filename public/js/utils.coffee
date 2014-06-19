@@ -10,4 +10,9 @@ window.utils = {
     regex = new RegExp("[\\?&]" + name + "=([^&#]*)")
     results = regex.exec(location.search);
     if results == null then "" else decodeURIComponent(results[1].replace(/\+/g, " "))
+
+  escape: (str) ->
+    str.replace(/&/g, "&amp;")
+       .replace(/</g, "&lt;")
+       .replace(/>/g, "&gt;")
 }

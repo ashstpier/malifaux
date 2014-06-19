@@ -22,7 +22,7 @@ window.Designer = {
 	addWidget: (widgetConfig={}) ->
 		widget = new Widget(widgetConfig)
 		@widgets.push(widget)
-		widget.render()
+		@page.append(widget.render())
 
 	clearEditWidget: ->
 		if @currentEditWidget

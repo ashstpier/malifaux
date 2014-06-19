@@ -7,15 +7,15 @@ window.Students = {
       $('#students')
         .append($("<option></option>")
         .attr("value", key)
-        .text(value)); 
+        .text(value));
 
   runReport: (studentId) ->
-    window.location.href = "/report.html?studentid=#{studentId}"
+    window.location.href = "/report.html?studentid=#{studentId}&template=my-test-template&debug=1"
 
   init: ->
     $.get @STUDENTS_URL, (feedData) => @setStudents(feedData["students"])
 
-    $('#run').click => 
+    $('#run').click =>
       studentId = $('#students option:selected').attr("value")
       @runReport(studentId)
 }
