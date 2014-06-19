@@ -10,3 +10,7 @@
 .text-widget p {
   margin: 0 0 1em 0;
 }
+
+.text-widget .html-switch {
+  display: none;
+}
