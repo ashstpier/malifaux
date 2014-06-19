@@ -4,4 +4,10 @@ window.utils = {
       r = Math.random() * 16 | 0
       v = if c is 'x' then r else (r & 0x3|0x8)
       v.toString(16)
+
+  querystring: (name) ->
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]")
+    regex = new RegExp("[\\?&]" + name + "=([^&#]*)")
+    results = regex.exec(location.search);
+    if results == null then "" else decodeURIComponent(results[1].replace(/\+/g, " "))
 }
