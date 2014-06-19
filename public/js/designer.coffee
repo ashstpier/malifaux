@@ -1,4 +1,4 @@
-window.App = {
+window.Designer = {
 	PAGE_SELECTOR: '#page'
 	GRID_SIZE: [20, 20]
 
@@ -57,4 +57,4 @@ window.App = {
 }
 
 
-$ -> App.init('my-test-template')
+$ -> Designer.init('my-test-template')

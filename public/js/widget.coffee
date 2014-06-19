@@ -13,10 +13,10 @@ class window.Widget
   originStyles: -> """top:#{@origin.y}px; left:#{@origin.x}px; width:#{@origin.width}px; height:#{@origin.height}px;"""
 
   bindEvents: ->
-    @el.dblclick => App.editWidget(this)
-    @el.find('.widget-delete').click  => App.removeWidget(this)
-    @el.resizable(grid: App.GRID_SIZE, containment: App.PAGE_SELECTOR)
-    @el.draggable(grid: App.GRID_SIZE, containment: App.PAGE_SELECTOR)
+    @el.dblclick => Designer.editWidget(this)
+    @el.find('.widget-delete').click  => Designer.removeWidget(this)
+    @el.resizable(grid: Designer.GRID_SIZE, containment: Designer.PAGE_SELECTOR)
+    @el.draggable(grid: Designer.GRID_SIZE, containment: Designer.PAGE_SELECTOR)
 
   render: ->
     @el = $("""
