@@ -1,5 +1,5 @@
 {
-  "name": "reports",
+  "name": "ark-reports",
   "version": "0.0.0",
   "authors": [
     "Nicholas Kostelnik <nkostelnik@gmail.com>"
@@ -12,5 +12,36 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "jqueryui": "~1.10.4",
+    "medium-editor": "~1.8.14",
+    "store.js": "~1.3.16"
+  },
+  "overrides": {
+    "jquery": {
+      "main": [
+        "dist/jquery.min.js",
+        "dist/jquery.min.map"
+      ]
+    },
+    "jqueryui": {
+      "main": [
+        "ui/minified/jquery-ui.min.js"
+      ]
+    },
+    "medium-editor": {
+      "main": [
+        "dist/js/medium-editor.min.js",
+        "dist/css/medium-editor.css",
+        "dist/css/themes/bootstrap.min.css"
+      ]
+    },
+    "store.js": {
+      "main": [
+        "store.min.js"
+      ]
+    }
+  }
 }

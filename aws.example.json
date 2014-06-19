@@ -1,0 +1,6 @@
+{
+  "key": "<YOUR KEY>",
+  "secret": "<YOUR SECRET>",
+  "bucket": "forwardpe.co.uk",
+  "region": "eu-west-1"
+}

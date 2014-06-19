@@ -1,11 +1,25 @@
 {
-  "name": "contenteditable",
+  "name": "ark-reports",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "gulpfile.js",
+  "devDependencies": {
+    "express": "^4.4.3",
+    "gulp": "^3.8.1",
+    "gulp-bower-files": "^0.2.5",
+    "gulp-s3": "^0.3.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arkschools/ccr-parentreports.git"
+  },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arkschools/ccr-parentreports/issues"
+  },
+  "homepage": "https://github.com/arkschools/ccr-parentreports"
 }
