@@ -12,6 +12,7 @@ window.utils = {
     if results == null then "" else decodeURIComponent(results[1].replace(/\+/g, " "))
 
   escape: (str) ->
+    return '' unless str?.replace?
     str.replace(/&/g, "&amp;")
        .replace(/</g, "&lt;")
        .replace(/>/g, "&gt;")

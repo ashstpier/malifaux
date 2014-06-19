@@ -12,6 +12,7 @@ window.Report = {
     @template.render(data)
     if @debug
       $('body').append("""
+        <div style="height:1344px;" />
         <hr/>
         <h3>Student Data</h3>
         <pre>#{JSON.stringify(data, null, 2)}</pre>
@@ -29,11 +30,11 @@ class window.Template
 
   render: (data) ->
     for widgetConfig in @layout
-      @addWidget(widgetConfig)
+      @addWidget(widgetConfig, data)
 
-  addWidget: (widgetConfig={}) ->
+  addWidget: (widgetConfig, data) ->
     widgetConfig.mode = 'display'
-    widget = new Widget(widgetConfig)
+    widget = new Widget(widgetConfig, data)
     @widgets.push(widget)
     @page.append(widget.render())
 

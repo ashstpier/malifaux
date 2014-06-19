@@ -19,7 +19,7 @@ class window.TextContent
   constructor: (config={}) ->
     @html = if config.html? then config.html else "<p>Type text here&hellip;</p>"
 
-  render: (mode) ->
+  render: (mode, data) ->
     @el = $("""<div class="text-widget">#{@html}</div>""")
     @el.click -> false
     @editor = @el.editable(TextContent.EDITOR_CONFIG) if mode is 'edit'

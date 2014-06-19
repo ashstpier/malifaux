@@ -2,6 +2,7 @@ class window.Widget
   @WIDGET_NAMES: [
     'image'
     'text'
+    'name'
   ]
 
   @loadAll: (cb) ->
@@ -15,7 +16,7 @@ class window.Widget
     utils.loadCSS("widgets/#{name}/#{name}-content.css")
     utils.loadCoffeeScript("widgets/#{name}/#{name}-content.coffee", cb)
 
-  constructor: (config={}) ->
+  constructor: (config={}, @data=null) ->
     @mode = if config.mode? then config.mode else 'layout'
     @guid = config.guid || utils.guid()
     @origin = {
@@ -26,7 +27,7 @@ class window.Widget
     }
     @content = if config.type? then new window[config.type](config.content) else new TextContent()
 
-  originStyles: -> """top:#{@origin.y}px; left:#{@origin.x}px; width:#{@origin.width}px; height:#{@origin.height}px;"""
+  originStyles: -> """position:absolute; top:#{@origin.y}px; left:#{@origin.x}px; width:#{@origin.width}px; height:#{@origin.height}px;"""
 
   bindEvents: ->
     @el.dblclick => Designer.editWidget(this)
@@ -51,7 +52,7 @@ class window.Widget
     @el.removeClass("widget-layout-mode")
     @el.removeClass("widget-edit-mode")
     @el.addClass("widget-#{@mode}-mode")
-    @contentContainer.html(@content.render(@mode))
+    @contentContainer.html(@content.render(@mode, @data))
 
   layoutMode: ->
     @mode = 'layout'

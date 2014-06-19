@@ -16,6 +16,7 @@ window.Designer = {
 	bindEvents: ->
 		$('#add-text').click => @addWidget(type: 'TextContent')
 		$('#add-image').click => @addWidget(type: 'ImageContent')
+		$('#add-name').click => @addWidget(type: 'NameContent')
 		$('#save').click => @save()
 		$('#clear').click => @clear()
 		@page.click => @clearEditWidget()
