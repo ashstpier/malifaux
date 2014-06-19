@@ -10,16 +10,20 @@ window.Designer = {
 		$ =>
 			Widget.loadAll =>
 				@page = $(@PAGE_SELECTOR)
+				@renderControls()
 				@bindEvents()
 				@load()
 
+	renderControls: ->
+		for name, className of Widget.WIDGET_NAMES
+			$("#toolbar").append("""<button id="add-#{name}" type="button">Add #{name}</button>""")
+
 	bindEvents: ->
-		$('#add-text').click => @addWidget(type: 'TextContent')
-		$('#add-image').click => @addWidget(type: 'ImageContent')
-		$('#add-name').click => @addWidget(type: 'NameContent')
 		$('#save').click => @save()
 		$('#clear').click => @clear()
 		@page.click => @clearEditWidget()
+		for name, className of Widget.WIDGET_NAMES
+			do (className) => $("#add-#{name}").click => @addWidget(type: className)
 
 	addWidget: (widgetConfig={}) ->
 		widget = new Widget(widgetConfig)

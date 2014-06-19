@@ -1,16 +1,17 @@
 class window.Widget
-  @WIDGET_NAMES: [
-    'image'
-    'text'
-    'name'
-  ]
+  @WIDGET_NAMES: {
+    'image': 'ImageContent'
+    'text':  'TextContent'
+    'name':  'NameContent'
+  }
 
   @loadAll: (cb) ->
     completed = 0
-    for name in Widget.WIDGET_NAMES
+    widgetCount = Object.keys(Widget.WIDGET_NAMES).length
+    for name, className of Widget.WIDGET_NAMES
       @load name, ->
         completed++
-        cb() if completed is Widget.WIDGET_NAMES.length
+        cb() if completed is widgetCount
 
   @load: (name, cb) ->
     utils.loadCSS("widgets/#{name}/#{name}-content.css")
