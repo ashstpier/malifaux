@@ -27,6 +27,6 @@ class window.TextContent
     @el
 
   bindEvents: ->
-    @el.on 'input', => @html = @el.html()
+    @el.on 'input', => @html = @el.editable("getHTML")
 
   serialize: -> { html: @html }
