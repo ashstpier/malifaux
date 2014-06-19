@@ -17,7 +17,8 @@
     "jquery": "~2.1.1",
     "jqueryui": "~1.10.4",
     "store.js": "~1.3.16",
-    "froala": "~1.1.5"
+    "froala": "~1.1.5",
+    "coffee-script": "~1.7.1"
   },
   "overrides": {
     "jquery": {
@@ -48,6 +49,11 @@
         "fonts/fontawesome-webfont.ttf",
         "fonts/fontawesome-webfont.woff",
         "fonts/FontAwesome.otf"
+      ]
+    },
+    "coffee-script": {
+      "main": [
+        "extras/coffee-script.js"
       ]
     }
   }
