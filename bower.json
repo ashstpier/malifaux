@@ -28,7 +28,9 @@
     },
     "jqueryui": {
       "main": [
-        "ui/minified/jquery-ui.min.js"
+        "ui/minified/jquery-ui.min.js",
+        "themes/base/minified/jquery-ui.min.css",
+        "themes/base/minified/images/ui-icons_222222_256x240.png"
       ]
     },
     "store.js": {
