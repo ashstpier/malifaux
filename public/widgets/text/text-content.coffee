@@ -1,4 +1,4 @@
-class window.TextContent
+class window.TextContent extends WidgetContent
 
   @EDITOR_CONFIG: {
     imageUpload: false
@@ -13,20 +13,24 @@ class window.TextContent
       "sep", "align",
       "insertOrderedList", "insertUnorderedList",
       "outdent", "indent"
-    ] 
+    ]
   }
 
+  @DEFAULT_CONTENT: "<p>Type text here&hellip;</p>"
+
   constructor: (config={}) ->
-    @html = if config.html? then config.html else "<p>Type text here&hellip;</p>"
+    @html = @get(config.html, TextContent.DEFAULT_CONTENT)
 
-  render: (mode, data) ->
-    @el = $("""<div class="text-widget">#{@html}</div>""")
-    @el.click -> false
-    @editor = @el.editable(TextContent.EDITOR_CONFIG) if mode is 'edit'
-    @bindEvents()
-    @el
+  render_layout: (data) ->
+    $("""<div class="text-widget">#{@html}</div>""")
 
-  bindEvents: ->
-    @el.on 'input', => @html = @el.editable("getHTML")
+  render_edit: (data) ->
+    node = @render_layout(data)
+    @editor = node.editable(TextContent.EDITOR_CONFIG)
+    node
+
+  bindEvents: (el) ->
+    el.click -> false
+    el.on 'input', => @html = @el.editable("getHTML")
 
   serialize: -> { html: @html }

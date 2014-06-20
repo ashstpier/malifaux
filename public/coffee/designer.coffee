@@ -26,14 +26,14 @@ window.Designer = {
     if @currentEditWidget
       @currentEditWidget.layoutMode()
       @currentEditWidget = null
- 
+
   editWidget: (widget) ->
     @clearEditWidget()
     @currentEditWidget = widget
     widget.editMode()
 
   addWidget: (widgetConfig={}) ->
-    @template.addWidget(widgetConfig, '')
+    @template.addWidget(widgetConfig, 'layout')
 
   removeWidget: (widget) ->
     @template.removeWidget(widget)

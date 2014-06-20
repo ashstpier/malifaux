@@ -1,13 +1,13 @@
-class window.ImageContent
+class window.ImageContent extends WidgetContent
 
   @DEFAULT_IMAGE: "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
 
   constructor: (config={}) ->
-    @src = if config.src? then config.src else ImageContent.DEFAULT_IMAGE
+    @src = @get(config.src, ImageContent.DEFAULT_IMAGE)
 
-  bindEvents: ->
-    @el.find(".picker").change (e) => @setImageFromFile(e.currentTarget.files[0])
-    @el.find(".icon").dblclick => @openFilePicker()
+  bindEvents: (el) ->
+    el.find(".picker").change (e) => @setImageFromFile(e.currentTarget.files[0])
+    el.find(".icon").dblclick => @openFilePicker()
 
   openFilePicker: ->
     picker = @el.find(".picker")
@@ -24,8 +24,8 @@ class window.ImageContent
     @el.find(".content").attr('src', @src)
     @el.removeClass('image-blank')
 
-  render: (mode) ->
-    @el = $("""
+  render_layout: (data) ->
+    $("""
       <div class="image-widget #{if @src is ImageContent.DEFAULT_IMAGE then 'image-blank'}">
         <img class="content" src="#{@src}">
         <div class="edit">
@@ -34,8 +34,6 @@ class window.ImageContent
         </div>
       </div>
     """)
-    @bindEvents()
-    @el
 
   serialize: ->
     { src: @src }

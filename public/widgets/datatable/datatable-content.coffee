@@ -1,9 +1,8 @@
-class window.DatatableContent
-  constructor: (config={}) -> null
+class window.DatatableContent extends WidgetContent
 
-  render: (mode, data=utils.fakeStudentData()) ->
+  render_layout: (data) ->
     name = utils.escape(data.name)
-    @el = $("""
+    node = $("""
       <table class="datatable">
         <thead>
           <tr>
@@ -24,7 +23,7 @@ class window.DatatableContent
       </table>
     """)
     for code, subject of data.subjects
-      @el.find("tbody").append("""
+      node.find("tbody").append("""
         <tr>
           <th>
             <strong class="subject">#{subject.subjectName}</strong>
@@ -41,6 +40,4 @@ class window.DatatableContent
           <td>B</td>
         </tr>
       """)
-    @el
-
-  serialize: -> {}
+    node

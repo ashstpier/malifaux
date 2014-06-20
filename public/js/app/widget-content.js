@@ -1,0 +1,50 @@
+window.WidgetContent = (function() {
+  function WidgetContent(config) {
+    if (config == null) {
+      config = {};
+    }
+    null;
+  }
+
+  WidgetContent.prototype.render = function(mode, data) {
+    if (mode == null) {
+      mode = 'layout';
+    }
+    if (data == null) {
+      data = utils.fakeStudentData();
+    }
+    console.log(mode);
+    this.el = this["render_" + mode].call(this, data);
+    this.bindEvents(this.el);
+    return this.el;
+  };
+
+  WidgetContent.prototype.render_layout = function(data) {
+    return this.el = $("<div></div>");
+  };
+
+  WidgetContent.prototype.render_edit = function(data) {
+    return render_layout();
+  };
+
+  WidgetContent.prototype.render_display = function(data) {
+    return render_layout();
+  };
+
+  WidgetContent.prototype.bindEvents = function(el) {};
+
+  WidgetContent.prototype.serialize = function() {
+    return {};
+  };
+
+  WidgetContent.prototype.get = function(param, fallback) {
+    if (param != null) {
+      return param;
+    } else {
+      return fallback;
+    }
+  };
+
+  return WidgetContent;
+
+})();

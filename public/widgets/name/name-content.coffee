@@ -1,8 +1,5 @@
-class window.NameContent
-  constructor: (config={}) -> null
+class window.NameContent extends WidgetContent
 
-  render: (mode, data={name: "{Student Name}"}) ->
+  render_layout: (data) ->
     name = utils.escape(data.name)
-    @el = $("<p>#{name}</p>")
-
-  serialize: -> {}
+    $("<p>#{name}</p>")

@@ -75,7 +75,7 @@ window.Designer = {
     if (widgetConfig == null) {
       widgetConfig = {};
     }
-    return this.template.addWidget(widgetConfig, '');
+    return this.template.addWidget(widgetConfig, 'layout');
   },
   removeWidget: function(widget) {
     return this.template.removeWidget(widget);
