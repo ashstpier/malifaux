@@ -30,7 +30,7 @@ window.Widget = (function() {
 
   Widget.load = function(name, cb) {
     utils.loadCSS("widgets/" + name + "/" + name + "-content.css");
-    return utils.loadCoffeeScript("js/widgets/" + name + "/" + name + "-content.js", cb);
+    return utils.loadCoffeeScript("js/" + name + "-content.js", cb);
   };
 
   function Widget(config, data) {

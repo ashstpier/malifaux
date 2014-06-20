@@ -5,7 +5,8 @@ var gulp 					= require('gulp'),
 	gulpBowerFiles  = require('gulp-bower-files'),
 	coffee 					= require('gulp-coffee'),
 	gutil 					= require('gutil'),
-	watch						= require('gulp-watch')
+	watch						= require('gulp-watch'),
+	flatten					= require('gulp-flatten')
 	;
 
 gulp.task('default', function() {
@@ -29,25 +30,29 @@ gulp.task('server', ["express", "coffee", "jit"], function() { } );
 gulp.task('coffee', function() {
   gulp.src('./public/coffee/*.coffee')
     .pipe(coffee({bare: true}).on('error', gutil.log))
-    .pipe(gulp.dest('./public/js/app/'))
+    .pipe(flatten())
+    .pipe(gulp.dest('./public/js'))
 
   gulp.src('./public/widgets/**/*.coffee')
     .pipe(coffee({bare: true}).on('error', gutil.log))
-    .pipe(gulp.dest('./public/js/widgets'))
+    .pipe(flatten())
+    .pipe(gulp.dest('./public/js'))
 });
 
 gulp.task('jit-app', function() {
 	gulp.src('./public/coffee/*.coffee', { read: false })
 		.pipe(watch())
 		.pipe(coffee({bare: true}).on('error', gutil.log))
-		.pipe(gulp.dest('./public/js/app/'))
+		.pipe(flatten())
+		.pipe(gulp.dest('./public/js'))
 });
 
 gulp.task('jit-widgets', function() {
 	gulp.src('./public/widgets/**/*.coffee', { read: false })
 		.pipe(watch())
 		.pipe(coffee({bare: true}).on('error', gutil.log))
-		.pipe(gulp.dest('./public/js/widgets/'))
+		.pipe(flatten())
+		.pipe(gulp.dest('./public/js'))
 });
 
 gulp.task('jit', ['jit-app', 'jit-widgets'], function() { });
