@@ -1,13 +1,11 @@
 window.Designer = {
 
-  widgets: []
   currentEditWidget: null
 
   init: (templateKey) ->
     @templateKey = templateKey
     $ =>
       Widget.loadAll =>
-        @page = $(@PAGE_SELECTOR)
         @renderControls()
         @bindEvents()
         @load()
@@ -19,12 +17,10 @@ window.Designer = {
   bindEvents: ->
     $('#save').click => @save()
     $('#clear').click => @clear()
-    @page.click => @clearEditWidget()
+    $('#delete').click => @delete()
+    $('#page').click => @clearEditWidget()
     for name, className of Widget.WIDGET_NAMES
       do (className) => $("#add-#{name}").click => @addWidget(type: className)
-
-  addWidget: (widgetConfig={}) ->
-    @template.addWidget(widgetConfig, '')
 
   clearEditWidget: ->
     if @currentEditWidget
@@ -36,9 +32,14 @@ window.Designer = {
     @currentEditWidget = widget
     widget.editMode()
 
+  addWidget: (widgetConfig={}) ->
+    @template.addWidget(widgetConfig, '')
+
   removeWidget: (widget) ->
-    widget.remove()
-    @widgets = (w for w in @widgets when w.guid != widget.guid)
+    @template.removeWidget(widget)
+
+  clear: ->
+    @template.removeAllWidgets()
 
   load: ->
     @template = Template.load(@templateKey)
@@ -47,9 +48,9 @@ window.Designer = {
   save: ->
     @template.save(@templateKey)
 
-  clear: ->
-    @removeWidget(widget) for widget in @widgets
-    store.remove(@templateKey)
+  delete: ->
+    Template.delete(@templateKey)
+    window.location.href = '/'
 }
 
 
