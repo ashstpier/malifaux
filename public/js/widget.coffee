@@ -3,7 +3,7 @@ class window.Widget
   @PAGE_SELECTOR: '#page'
   @GRID_SIZE: [20, 20]
 
-  @WIDGET_NAMES: {
+  @WIDGETS: {
     'image':     'ImageContent'
     'text':      'TextContent'
     'name':      'NameContent'
@@ -12,8 +12,8 @@ class window.Widget
 
   @loadAll: (cb) ->
     completed = 0
-    widgetCount = Object.keys(Widget.WIDGET_NAMES).length
-    for name, className of Widget.WIDGET_NAMES
+    widgetCount = Object.keys(Widget.WIDGETS).length
+    for name, className of Widget.WIDGETS
       @load name, ->
         completed++
         cb() if completed is widgetCount
@@ -23,7 +23,6 @@ class window.Widget
     utils.loadCoffeeScript("widgets/#{name}/#{name}-content.coffee", cb)
 
   constructor: (config={}, @data=null) ->
-    @mode = if config.mode? then config.mode else 'layout'
     @guid = config.guid || utils.guid()
     @origin = {
       x: if config.x? then config.x else 20
@@ -41,34 +40,32 @@ class window.Widget
     @el.resizable(grid: Widget.GRID_SIZE, containment: Widget.PAGE_SELECTOR)
     @el.draggable(grid: Widget.GRID_SIZE, containment: Widget.PAGE_SELECTOR)
 
-  render: ->
+  render: (mode) ->
     @el = $("""
       <div data-guid="#{@guid}" class="widget" style="#{@originStyles()}">
         <div class="widget-content"></div>
       </div>
     """)
     @contentContainer = @el.find('.widget-content')
-    @renderContent()
-    unless @mode is 'display'
+    @renderContent(mode)
+    unless mode is 'display'
       @el.append("""<button class="widget-button widget-delete">x</button>""")
       @bindEvents()
     @el
 
-  renderContent: ->
+  renderContent: (mode) ->
     @el.removeClass("widget-layout-mode")
     @el.removeClass("widget-edit-mode")
-    @el.addClass("widget-#{@mode}-mode")
-    @contentContainer.html(@content.render(@mode, @data))
+    @el.addClass("widget-#{mode}-mode")
+    @contentContainer.html(@content.render(mode, @data))
 
   layoutMode: ->
-    @mode = 'layout'
     @el.draggable('enable')
-    @renderContent()
+    @renderContent('layout')
 
   editMode: ->
-    @mode = 'edit'
     @el.draggable('disable')
-    @renderContent()
+    @renderContent('edit')
 
   remove: ->
     @el.remove()

@@ -19,7 +19,7 @@ window.Designer = {
     $('#clear').click => @clear()
     $('#delete').click => @delete()
     $('#page').click => @clearEditWidget()
-    for name, className of Widget.WIDGET_NAMES
+    for name, className of Widget.WIDGETS
       do (className) => $("#add-#{name}").click => @addWidget(type: className)
 
   clearEditWidget: ->
@@ -52,6 +52,5 @@ window.Designer = {
     Template.delete(@templateKey)
     window.location.href = '/'
 }
-
 
 $ -> Designer.init('my-test-template')
