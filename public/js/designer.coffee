@@ -1,65 +1,55 @@
 window.Designer = {
-	PAGE_SELECTOR: '#page'
-	GRID_SIZE: [20, 20]
 
-	widgets: []
-	currentEditWidget: null
+  widgets: []
+  currentEditWidget: null
 
-	init: (templateKey) ->
-		@templateKey = templateKey
-		$ =>
-			Widget.loadAll =>
-				@page = $(@PAGE_SELECTOR)
-				@renderControls()
-				@bindEvents()
-				@load()
+  init: (templateKey) ->
+    @templateKey = templateKey
+    $ =>
+      Widget.loadAll =>
+        @page = $(@PAGE_SELECTOR)
+        @renderControls()
+        @bindEvents()
+        @load()
 
-	renderControls: ->
-		for name, className of Widget.WIDGET_NAMES
-			$("#toolbar").append("""<button id="add-#{name}" type="button">Add #{name}</button>""")
+  renderControls: ->
+    for name, className of Widget.WIDGET_NAMES
+      $("#toolbar").append("""<button id="add-#{name}" type="button">Add #{name}</button>""")
 
-	bindEvents: ->
-		$('#save').click => @save()
-		$('#clear').click => @clear()
-		@page.click => @clearEditWidget()
-		for name, className of Widget.WIDGET_NAMES
-			do (className) => $("#add-#{name}").click => @addWidget(type: className)
+  bindEvents: ->
+    $('#save').click => @save()
+    $('#clear').click => @clear()
+    @page.click => @clearEditWidget()
+    for name, className of Widget.WIDGET_NAMES
+      do (className) => $("#add-#{name}").click => @addWidget(type: className)
 
-	addWidget: (widgetConfig={}) ->
-		widget = new Widget(widgetConfig)
-		@widgets.push(widget)
-		@page.append(widget.render())
+  addWidget: (widgetConfig={}) ->
+    @template.addWidget(widgetConfig, '')
 
-	clearEditWidget: ->
-		if @currentEditWidget
-			@currentEditWidget.layoutMode()
-			@currentEditWidget = null
+  clearEditWidget: ->
+    if @currentEditWidget
+      @currentEditWidget.layoutMode()
+      @currentEditWidget = null
 
-	editWidget: (widget) ->
-		@clearEditWidget()
-		@currentEditWidget = widget
-		widget.editMode()
+  editWidget: (widget) ->
+    @clearEditWidget()
+    @currentEditWidget = widget
+    widget.editMode()
 
-	removeWidget: (widget) ->
-		widget.remove()
-		@widgets = (w for w in @widgets when w.guid != widget.guid)
+  removeWidget: (widget) ->
+    widget.remove()
+    @widgets = (w for w in @widgets when w.guid != widget.guid)
 
-	load: ->
-		template = store.get(@templateKey)
-		if template
-			for widgetConfig in template.layout
-				@addWidget(widgetConfig)
+  load: ->
+    @template = Template.load(@templateKey)
+    @template.render()
 
-	save: ->
-		store.set(@templateKey, @serialize())
+  save: ->
+    @template.save(@templateKey)
 
-	clear: ->
-		@removeWidget(widget) for widget in @widgets
-		store.remove(@templateKey)
-
-	serialize: ->
-		layout = (widget.serialize() for widget in @widgets)
-		{ layout: layout }
+  clear: ->
+    @removeWidget(widget) for widget in @widgets
+    store.remove(@templateKey)
 }
 
 

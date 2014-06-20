@@ -1,4 +1,8 @@
 class window.Widget
+
+  @PAGE_SELECTOR: '#page'
+  @GRID_SIZE: [20, 20]
+
   @WIDGET_NAMES: {
     'image': 'ImageContent'
     'text':  'TextContent'
@@ -33,8 +37,8 @@ class window.Widget
   bindEvents: ->
     @el.dblclick => Designer.editWidget(this)
     @el.find('.widget-delete').click  => Designer.removeWidget(this)
-    @el.resizable(grid: Designer.GRID_SIZE, containment: Designer.PAGE_SELECTOR)
-    @el.draggable(grid: Designer.GRID_SIZE, containment: Designer.PAGE_SELECTOR)
+    @el.resizable(grid: Widget.GRID_SIZE, containment: Widget.PAGE_SELECTOR)
+    @el.draggable(grid: Widget.GRID_SIZE, containment: Widget.PAGE_SELECTOR)
 
   render: ->
     @el = $("""

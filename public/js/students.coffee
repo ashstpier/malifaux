@@ -7,7 +7,7 @@ window.Students = {
       $('#students')
         .append($("<option></option>")
         .attr("value", key)
-        .text(value));
+        .text(value))
 
   runReport: (studentId) ->
     window.location.href = "/report.html?studentid=#{studentId}&template=my-test-template&debug=1"
