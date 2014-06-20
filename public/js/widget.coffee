@@ -1,8 +1,9 @@
 class window.Widget
   @WIDGET_NAMES: {
-    'image': 'ImageContent'
-    'text':  'TextContent'
-    'name':  'NameContent'
+    'image':     'ImageContent'
+    'text':      'TextContent'
+    'name':      'NameContent'
+    'datatable': 'DatatableContent'
   }
 
   @loadAll: (cb) ->
