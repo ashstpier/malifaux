@@ -20,7 +20,7 @@ class window.Widget
 
   @load: (name, cb) ->
     utils.loadCSS("widgets/#{name}/#{name}-content.css")
-    utils.loadCoffeeScript("widgets/#{name}/#{name}-content.coffee", cb)
+    utils.loadCoffeeScript("js/widgets/#{name}/#{name}-content.js", cb)
 
   constructor: (config={}, @data=null) ->
     @guid = config.guid || utils.guid()

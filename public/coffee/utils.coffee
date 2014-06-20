@@ -21,7 +21,11 @@ window.utils = {
     $('head').append("""<link rel="stylesheet" type="text/css" href="#{path}">""")
 
   loadCoffeeScript: (path, cb=null) ->
-    CoffeeScript.load(path, cb)
+    $.get path, (data) ->
+        eval(data)
+        cb() if cb?
+        # console.log data
+    # CoffeeScript.load(path, cb)
 
   fakeStudentData: ->
     {

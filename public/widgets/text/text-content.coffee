@@ -13,7 +13,7 @@ class window.TextContent
       "sep", "align",
       "insertOrderedList", "insertUnorderedList",
       "outdent", "indent"
-    ]
+    ] 
   }
 
   constructor: (config={}) ->

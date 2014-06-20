@@ -11,7 +11,7 @@ window.Designer = {
         @load()
 
   renderControls: ->
-    for name, className of Widget.WIDGET_NAMES
+    for name, className of Widget.WIDGETS
       $("#toolbar").append("""<button id="add-#{name}" type="button">Add #{name}</button>""")
 
   bindEvents: ->
@@ -26,7 +26,7 @@ window.Designer = {
     if @currentEditWidget
       @currentEditWidget.layoutMode()
       @currentEditWidget = null
-
+ 
   editWidget: (widget) ->
     @clearEditWidget()
     @currentEditWidget = widget
