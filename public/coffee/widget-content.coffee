@@ -10,9 +10,9 @@ class window.WidgetContent
   render_layout: (data) ->
     @el = $("<div></div>")
 
-  render_edit: (data) -> render_layout()
+  render_edit: (data) -> @render_layout(data)
 
-  render_display: (data) -> render_layout()
+  render_display: (data) -> @render_layout(data)
 
   bindEvents: (el) ->
 

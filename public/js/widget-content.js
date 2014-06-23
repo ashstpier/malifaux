@@ -24,11 +24,11 @@ window.WidgetContent = (function() {
   };
 
   WidgetContent.prototype.render_edit = function(data) {
-    return render_layout();
+    return this.render_layout(data);
   };
 
   WidgetContent.prototype.render_display = function(data) {
-    return render_layout();
+    return this.render_layout(data);
   };
 
   WidgetContent.prototype.bindEvents = function(el) {};
