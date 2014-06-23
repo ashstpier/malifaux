@@ -18,7 +18,10 @@
     "jqueryui": "~1.10.4",
     "store.js": "~1.3.16",
     "froala": "~1.1.5",
-    "coffee-script": "~1.7.1"
+    "coffee-script": "~1.7.1",
+    "bower-foundation": "~4.0.0",
+    "modernizr": "~2.8.2",
+    "normalize-css": "~3.0.1"
   },
   "overrides": {
     "jquery": {
@@ -51,9 +54,19 @@
         "fonts/FontAwesome.otf"
       ]
     },
-    "coffee-script": {
+    "bower-foundation": {
       "main": [
-        "extras/coffee-script.js"
+        "css/foundation.min.css"
+      ]
+    },
+    "normalize-css": {
+      "main": [
+        "normalize.css"
+      ]
+    },
+    "modernizr": {
+      "main": [
+        "modernizr.js"
       ]
     }
   }
