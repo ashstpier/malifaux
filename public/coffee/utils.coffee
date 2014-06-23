@@ -9,7 +9,7 @@ window.utils = {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]")
     regex = new RegExp("[\\?&]" + name + "=([^&#]*)")
     results = regex.exec(location.search);
-    if results == null then "" else decodeURIComponent(results[1].replace(/\+/g, " "))
+    if results == null then null else decodeURIComponent(results[1].replace(/\+/g, " "))
 
   escape: (str) ->
     return '' unless str?.replace?

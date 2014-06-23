@@ -2,8 +2,16 @@ window.Designer = {
 
   currentEditWidget: null
 
-  init: (templateKey) ->
-    @templateKey = templateKey
+  init: ->
+    templateKey = utils.querystring("template")
+
+    if not templateKey?
+      @template = Template.create()
+      @templateKey = @template.key
+    else
+      @template = Template.load(templateKey)
+      @templateKey = templateKey
+
     $ =>
       Widget.loadAll =>
         @renderControls()
@@ -12,15 +20,20 @@ window.Designer = {
 
   renderControls: ->
     for name, className of Widget.WIDGETS
-      $("#toolbar").append("""<button id="add-#{name}" type="button">Add #{name}</button>""")
+      $("#gallery").append("""<button id="add-#{name}" type="button">Add #{name}</button>""")
 
   bindEvents: ->
     $('#save').click => @save()
     $('#clear').click => @clear()
     $('#delete').click => @delete()
     $('#page').click => @clearEditWidget()
+    $('#name').blur => @updateName()
     for name, className of Widget.WIDGETS
       do (className) => $("#add-#{name}").click => @addWidget(type: className)
+
+  updateName: ->
+    name = $('#name').text()
+    @template.name = name
 
   clearEditWidget: ->
     if @currentEditWidget
@@ -42,15 +55,15 @@ window.Designer = {
     @template.removeAllWidgets()
 
   load: ->
-    @template = Template.load(@templateKey)
+    $('#name').text(@template.name)
     @template.render()
 
   save: ->
-    @template.save(@templateKey)
+    @template.save()
 
   delete: ->
     Template.delete(@templateKey)
     window.location.href = '/'
 }
 
-$ -> Designer.init('my-test-template')
+$ -> Designer.init()

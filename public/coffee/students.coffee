@@ -9,15 +9,24 @@ window.Students = {
         .attr("value", key)
         .text(value))
 
-  runReport: (studentId) ->
-    window.location.href = "/report.html?studentid=#{studentId}&template=my-test-template&debug=1"
+  setTemplates: (templates) ->
+    $.each templates, (key, value) ->
+      $('#templates')
+        .append($("<option></option>")
+        .attr("value", key)
+        .text(value.name))
+
+  runReport: (studentId, templateKey) ->
+    window.location.href = "/report.html?studentid=#{studentId}&template=#{templateKey}&debug=1"
 
   init: ->
     $.get @STUDENTS_URL, (feedData) => @setStudents(feedData["students"])
+    @setTemplates(Template.all())
 
     $('#run').click =>
       studentId = $('#students option:selected').attr("value")
-      @runReport(studentId)
+      templateKey = $('#templates option:selected').attr("value")
+      @runReport(studentId, templateKey)
 }
 
 $ -> Students.init()

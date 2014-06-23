@@ -1,20 +1,37 @@
 <html>
 	<head>
-		<link rel="stylesheet" href="vendor/normalize-css/normalize.css">
-		<link rel="stylesheet" href="vendor/bower-foundation/css/foundation.min.css">
-		<script src="vendor/modernizr/modernizr.js"></script>
-		
+		<link rel="stylesheet" type="text/css" href="vendor/normalize-css/normalize.css">
+		<link rel="stylesheet" type="text/css" href="css/site.css">
 		<script type="text/javascript" src="vendor/jquery/dist/jquery.min.js"></script>
-		<script type="text/javascript" src="js/students.js"></script>
+		<script type="text/javascript" src="vendor/bower-foundation/js/foundation.min.js"></script>
+		<script type="text/javascript" src="vendor/store.js/store.min.js"></script>
+		<script type="text/javascript" src="js/template.js"></script>
+		<script type="text/javascript" src="js/templates.js"></script>
+
+
+		<script>
+			$(document).foundation();
+		</script>
 	</head>
 	<body>
+		<nav>
+			<div>Templates</div>
+		</nav>
 		<section>
-			<a href="designer.html">Designer</a>
+			<a href="/run.html">Run Report</a>
 		</section>
 		<section>
-			<label for="students">Students</label>
-			<select id="students"></select>
-			<button id="run">Run</button>
+			<a href="/designer.html">New Template</a>
+		</section>
+		<section>
+			<table id="templates">
+				<thead>
+					<tr>
+						<td>Name</td>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
 		</section>
 	</body>
 </html>

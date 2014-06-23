@@ -1,7 +1,15 @@
 window.Designer = {
   currentEditWidget: null,
-  init: function(templateKey) {
-    this.templateKey = templateKey;
+  init: function() {
+    var templateKey;
+    templateKey = utils.querystring("template");
+    if (templateKey == null) {
+      this.template = Template.create();
+      this.templateKey = this.template.key;
+    } else {
+      this.template = Template.load(templateKey);
+      this.templateKey = templateKey;
+    }
     return $((function(_this) {
       return function() {
         return Widget.loadAll(function() {
@@ -18,7 +26,7 @@ window.Designer = {
     _results = [];
     for (name in _ref) {
       className = _ref[name];
-      _results.push($("#toolbar").append("<button id=\"add-" + name + "\" type=\"button\">Add " + name + "</button>"));
+      _results.push($("#gallery").append("<button id=\"add-" + name + "\" type=\"button\">Add " + name + "</button>"));
     }
     return _results;
   },
@@ -44,6 +52,11 @@ window.Designer = {
         return _this.clearEditWidget();
       };
     })(this));
+    $('#name').blur((function(_this) {
+      return function() {
+        return _this.updateName();
+      };
+    })(this));
     _ref = Widget.WIDGETS;
     _results = [];
     for (name in _ref) {
@@ -59,6 +72,11 @@ window.Designer = {
       })(this)(className));
     }
     return _results;
+  },
+  updateName: function() {
+    var name;
+    name = $('#name').text();
+    return this.template.name = name;
   },
   clearEditWidget: function() {
     if (this.currentEditWidget) {
@@ -84,11 +102,11 @@ window.Designer = {
     return this.template.removeAllWidgets();
   },
   load: function() {
-    this.template = Template.load(this.templateKey);
+    $('#name').text(this.template.name);
     return this.template.render();
   },
   save: function() {
-    return this.template.save(this.templateKey);
+    return this.template.save();
   },
   "delete": function() {
     Template["delete"](this.templateKey);
@@ -97,5 +115,5 @@ window.Designer = {
 };
 
 $(function() {
-  return Designer.init('my-test-template');
+  return Designer.init();
 });

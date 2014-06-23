@@ -2,13 +2,29 @@ class window.Template
 
   @load: (templateName) ->
     templateData = store.get(templateName)
+    templateData.key = templateName
     templateData = { layout: [] } if templateData == undefined
-    return new Template(templateData)
+    template = new Template(templateData)
+    template.key = templateName
+    template.name = templateData.name
+    return template
 
   @delete: (templateName) ->
     store.remove(templateName)
 
+  @create: ->
+    console.log "create"
+    template = new Template()
+    template.key = utils.guid()
+    template.name = "Untitled Template"
+    template.save()
+    return template
+
+  @all: ->
+    store.getAll()
+
   constructor: (description) ->
+    description ||= { layout: {} }
     @page = $('#page')
     @widgets = []
     @layout = description.layout
@@ -29,10 +45,16 @@ class window.Template
   removeAllWidgets: ->
     @removeWidget(widget) for widget in @widgets
 
-  save: (templateName) ->
-    store.set(templateName, @serialize())
+  save: ->
+    store.set(@key, @serialize())
 
   serialize: ->
     layout = (widget.serialize() for widget in @widgets)
-    { layout: layout }
+    { 
+      layout: layout,
+      name: @name 
+    }
+
+  isNew: ->
+    return true
 

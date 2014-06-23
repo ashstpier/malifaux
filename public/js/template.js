@@ -1,20 +1,41 @@
 window.Template = (function() {
   Template.load = function(templateName) {
-    var templateData;
+    var template, templateData;
     templateData = store.get(templateName);
+    templateData.key = templateName;
     if (templateData === void 0) {
       templateData = {
         layout: []
       };
     }
-    return new Template(templateData);
+    template = new Template(templateData);
+    template.key = templateName;
+    template.name = templateData.name;
+    return template;
   };
 
   Template["delete"] = function(templateName) {
     return store.remove(templateName);
   };
 
+  Template.create = function() {
+    var template;
+    console.log("create");
+    template = new Template();
+    template.key = utils.guid();
+    template.name = "Untitled Template";
+    template.save();
+    return template;
+  };
+
+  Template.all = function() {
+    return store.getAll();
+  };
+
   function Template(description) {
+    description || (description = {
+      layout: {}
+    });
     this.page = $('#page');
     this.widgets = [];
     this.layout = description.layout;
@@ -66,8 +87,8 @@ window.Template = (function() {
     return _results;
   };
 
-  Template.prototype.save = function(templateName) {
-    return store.set(templateName, this.serialize());
+  Template.prototype.save = function() {
+    return store.set(this.key, this.serialize());
   };
 
   Template.prototype.serialize = function() {
@@ -83,8 +104,13 @@ window.Template = (function() {
       return _results;
     }).call(this);
     return {
-      layout: layout
+      layout: layout,
+      name: this.name
     };
+  };
+
+  Template.prototype.isNew = function() {
+    return true;
   };
 
   return Template;

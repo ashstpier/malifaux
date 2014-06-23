@@ -56,7 +56,8 @@
     },
     "bower-foundation": {
       "main": [
-        "css/foundation.min.css"
+        "css/foundation.min.css",
+        "js/foundation.min.js"
       ]
     },
     "normalize-css": {

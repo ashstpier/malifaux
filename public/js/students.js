@@ -5,8 +5,13 @@ window.Students = {
       return $('#students').append($("<option></option>").attr("value", key).text(value));
     });
   },
-  runReport: function(studentId) {
-    return window.location.href = "/report.html?studentid=" + studentId + "&template=my-test-template&debug=1";
+  setTemplates: function(templates) {
+    return $.each(templates, function(key, value) {
+      return $('#templates').append($("<option></option>").attr("value", key).text(value.name));
+    });
+  },
+  runReport: function(studentId, templateKey) {
+    return window.location.href = "/report.html?studentid=" + studentId + "&template=" + templateKey + "&debug=1";
   },
   init: function() {
     $.get(this.STUDENTS_URL, (function(_this) {
@@ -14,11 +19,13 @@ window.Students = {
         return _this.setStudents(feedData["students"]);
       };
     })(this));
+    this.setTemplates(Template.all());
     return $('#run').click((function(_this) {
       return function() {
-        var studentId;
+        var studentId, templateKey;
         studentId = $('#students option:selected').attr("value");
-        return _this.runReport(studentId);
+        templateKey = $('#templates option:selected').attr("value");
+        return _this.runReport(studentId, templateKey);
       };
     })(this));
   }
