@@ -53,9 +53,22 @@ window.DatatableContent = (function(_super) {
 
   DatatableContent.prototype.render_edit = function(data) {
     var col, i, node, row, rows;
-    row = function(i, col) {
-      return "<tr class=\"column-setting\">\n  <td><input class=\"col-title\" name=\"col-title-" + i + "\" type=\"text\" value=\"" + col.title + "\" /></td>\n  <td>\n    <select class=\"col-value\" name=\"col-value-" + i + "\">\n      <option value=\"\" " + (col.value === "" ? 'selected="selcted"' : void 0) + "></option>\n      <option " + (col.value === "3BG" ? 'selected="selcted"' : void 0) + ">3BG</option>\n      <option " + (col.value === "3EC" ? 'selected="selcted"' : void 0) + ">3EC</option>\n      <option " + (col.value === "Y11BG" ? 'selected="selcted"' : void 0) + ">Y11BG</option>\n    </select>\n  </td>\n</tr>";
-    };
+    row = (function(_this) {
+      return function(i, col) {
+        var key, opt, options;
+        options = (function() {
+          var _ref, _results;
+          _ref = this.assessmentPoints();
+          _results = [];
+          for (key in _ref) {
+            opt = _ref[key];
+            _results.push("<option value=\"" + key + "\" " + (key === col.value ? 'selected="selected"' : '') + ">[" + opt.name + "] " + opt.longName + "</option>");
+          }
+          return _results;
+        }).call(_this);
+        return "<tr class=\"column-setting\">\n  <td><input class=\"col-title\" name=\"col-title-" + i + "\" type=\"text\" value=\"" + col.title + "\" /></td>\n  <td>\n    <select class=\"col-value\" name=\"col-value-" + i + "\">\n      <option value=\"\" " + (col.value === "" ? 'selected="selected"' : '') + "></option>\n      " + (options.join("\n")) + "\n    </select>\n  </td>\n</tr>";
+      };
+    })(this);
     rows = (function() {
       var _i, _len, _ref, _results;
       _ref = this.columns;
@@ -70,7 +83,7 @@ window.DatatableContent = (function(_super) {
       title: '',
       value: ''
     }));
-    node = $("<div>\n  <h3>Configure Data Table</h3>\n  <h4>Columns</h4>\n  <table>\n    <thead>\n      <tr>\n        <th>Title</th>\n        <th>Value</th>\n      </tr>\n    </thead>\n    <tbody>\n        " + (rows.join("\n")) + "\n    </tbody>\n  </table>\n  <button id=\"done\">Done</button>\n</div>");
+    node = $("<div class=\"datatable-edit\">\n  <h3>Configure Data Table</h3>\n  <h4>Columns</h4>\n  <table>\n    <thead>\n      <tr>\n        <th>Title</th>\n        <th>Value</th>\n      </tr>\n    </thead>\n    <tbody>\n        " + (rows.join("\n")) + "\n    </tbody>\n  </table>\n  <button id=\"done\">Done</button>\n</div>");
     return node;
   };
 

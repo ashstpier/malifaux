@@ -13,10 +13,11 @@ window.Designer = {
       @templateKey = templateKey
 
     $ =>
-      Widget.loadAll =>
-        @renderControls()
-        @bindEvents()
-        @load()
+      API.loadConfig =>
+        Widget.loadAll =>
+          @renderControls()
+          @bindEvents()
+          @load()
 
   renderControls: ->
     for name, className of Widget.WIDGETS

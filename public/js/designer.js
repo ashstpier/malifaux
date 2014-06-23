@@ -12,10 +12,12 @@ window.Designer = {
     }
     return $((function(_this) {
       return function() {
-        return Widget.loadAll(function() {
-          _this.renderControls();
-          _this.bindEvents();
-          return _this.load();
+        return API.loadConfig(function() {
+          return Widget.loadAll(function() {
+            _this.renderControls();
+            _this.bindEvents();
+            return _this.load();
+          });
         });
       };
     })(this));

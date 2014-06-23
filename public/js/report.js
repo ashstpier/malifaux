@@ -6,7 +6,7 @@ window.Report = {
         _this.templateName = utils.querystring('template');
         _this.debug = utils.querystring('debug') === '1';
         _this.template = Template.load(_this.templateName);
-        return $.get("" + _this.studentId + ".json", function(data) {
+        return API.student(_this.studentId, function(data) {
           return _this.render(data);
         });
       };

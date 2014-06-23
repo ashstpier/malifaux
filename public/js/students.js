@@ -1,5 +1,4 @@
 window.Students = {
-  STUDENTS_URL: "/configuration.json",
   setStudents: function(students) {
     return $.each(students, function(key, value) {
       return $('#students').append($("<option></option>").attr("value", key).text(value));
@@ -14,9 +13,9 @@ window.Students = {
     return window.location.href = "/report.html?studentid=" + studentId + "&template=" + templateKey + "&debug=1";
   },
   init: function() {
-    $.get(this.STUDENTS_URL, (function(_this) {
-      return function(feedData) {
-        return _this.setStudents(feedData["students"]);
+    API.config((function(_this) {
+      return function(config) {
+        return _this.setStudents(config["students"]);
       };
     })(this));
     this.setTemplates(Template.all());

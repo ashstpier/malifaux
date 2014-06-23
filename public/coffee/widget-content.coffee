@@ -25,3 +25,6 @@ class window.WidgetContent
 
   defaultWidth: -> 160
   defaultHeight: -> 160
+
+  assessmentPoints: ->
+    API.assessmentPoints()

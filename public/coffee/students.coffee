@@ -1,7 +1,4 @@
 window.Students = {
-
-  STUDENTS_URL: "/configuration.json"
-
   setStudents: (students) ->
     $.each students, (key, value) ->
       $('#students')
@@ -20,7 +17,7 @@ window.Students = {
     window.location.href = "/report.html?studentid=#{studentId}&template=#{templateKey}&debug=1"
 
   init: ->
-    $.get @STUDENTS_URL, (feedData) => @setStudents(feedData["students"])
+    API.config (config) => @setStudents(config["students"])
     @setTemplates(Template.all())
 
     $('#run').click =>

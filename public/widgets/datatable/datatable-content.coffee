@@ -37,21 +37,22 @@ class window.DatatableContent extends WidgetContent
     node
 
   render_edit: (data) ->
-    row = (i, col) -> """<tr class="column-setting">
-      <td><input class="col-title" name="col-title-#{i}" type="text" value="#{col.title}" /></td>
-      <td>
-        <select class="col-value" name="col-value-#{i}">
-          <option value="" #{'selected="selcted"' if col.value is ""}></option>
-          <option #{'selected="selcted"' if col.value is "3BG"}>3BG</option>
-          <option #{'selected="selcted"' if col.value is "3EC"}>3EC</option>
-          <option #{'selected="selcted"' if col.value is "Y11BG"}>Y11BG</option>
-        </select>
-      </td>
-    </tr>"""
+    row = (i, col) =>
+      options = for key, opt of @assessmentPoints()
+        """<option value="#{key}" #{if key is col.value then 'selected="selected"' else ''}>[#{opt.name}] #{opt.longName}</option>"""
+      """<tr class="column-setting">
+        <td><input class="col-title" name="col-title-#{i}" type="text" value="#{col.title}" /></td>
+        <td>
+          <select class="col-value" name="col-value-#{i}">
+            <option value="" #{if col.value is "" then 'selected="selected"' else ''}></option>
+            #{options.join("\n")}
+          </select>
+        </td>
+      </tr>"""
     rows = (row(i, col) for col, i in @columns)
     rows.push(row(@columns.length, {title:'', value:''}))
     node = $("""
-      <div>
+      <div class="datatable-edit">
         <h3>Configure Data Table</h3>
         <h4>Columns</h4>
         <table>
