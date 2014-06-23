@@ -15,7 +15,9 @@ window.WidgetContent = (function() {
     }
     console.log(mode);
     this.el = this["render_" + mode].call(this, data);
-    this.bindEvents(this.el);
+    if (mode !== 'display') {
+      this.bindEvents(this.el);
+    }
     return this.el;
   };
 
@@ -33,6 +35,10 @@ window.WidgetContent = (function() {
 
   WidgetContent.prototype.bindEvents = function(el) {};
 
+  WidgetContent.prototype.cancelEditing = function() {
+    return Designer.clearEditWidget();
+  };
+
   WidgetContent.prototype.serialize = function() {
     return {};
   };
@@ -43,6 +49,14 @@ window.WidgetContent = (function() {
     } else {
       return fallback;
     }
+  };
+
+  WidgetContent.prototype.defaultWidth = function() {
+    return 160;
+  };
+
+  WidgetContent.prototype.defaultHeight = function() {
+    return 160;
   };
 
   return WidgetContent;

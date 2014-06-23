@@ -38,14 +38,15 @@ window.Widget = (function() {
       config = {};
     }
     this.data = data != null ? data : null;
+    this.currentMode = 'layout';
     this.guid = config.guid || utils.guid();
+    this.content = config.type != null ? new window[config.type](config.content) : new TextContent();
     this.origin = {
       x: config.x != null ? config.x : 20,
       y: config.y != null ? config.y : 20,
-      width: config.width != null ? config.width : 160,
-      height: config.height != null ? config.height : 160
+      width: config.width != null ? config.width : this.content.defaultWidth(),
+      height: config.height != null ? config.height : this.content.defaultHeight()
     };
-    this.content = config.type != null ? new window[config.type](config.content) : new TextContent();
   }
 
   Widget.prototype.originStyles = function() {
@@ -53,6 +54,15 @@ window.Widget = (function() {
   };
 
   Widget.prototype.bindEvents = function() {
+    this.el.click((function(_this) {
+      return function() {
+        if (_this.currentMode === 'edit') {
+          return false;
+        } else {
+          return true;
+        }
+      };
+    })(this));
     this.el.dblclick((function(_this) {
       return function() {
         return Designer.editWidget(_this);
@@ -85,6 +95,7 @@ window.Widget = (function() {
   };
 
   Widget.prototype.renderContent = function(mode) {
+    this.currentMode = mode;
     this.el.removeClass("widget-layout-mode");
     this.el.removeClass("widget-edit-mode");
     this.el.addClass("widget-" + mode + "-mode");

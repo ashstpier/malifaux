@@ -4,7 +4,7 @@ class window.WidgetContent
   render: (mode= 'layout', data=utils.fakeStudentData()) ->
     console.log mode
     @el = @["render_#{mode}"].call(this, data)
-    @bindEvents(@el)
+    @bindEvents(@el) unless mode is 'display'
     @el
 
   render_layout: (data) ->
@@ -16,6 +16,12 @@ class window.WidgetContent
 
   bindEvents: (el) ->
 
+  cancelEditing: ->
+    Designer.clearEditWidget()
+
   serialize: -> {}
 
   get: (param, fallback) -> if param? then param else fallback
+
+  defaultWidth: -> 160
+  defaultHeight: -> 160

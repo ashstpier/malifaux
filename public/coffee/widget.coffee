@@ -23,18 +23,20 @@ class window.Widget
     utils.loadCoffeeScript("js/#{name}-content.js", cb)
 
   constructor: (config={}, @data=null) ->
+    @currentMode = 'layout'
     @guid = config.guid || utils.guid()
+    @content = if config.type? then new window[config.type](config.content) else new TextContent()
     @origin = {
       x: if config.x? then config.x else 20
       y: if config.y? then config.y else 20
-      width: if config.width? then config.width else 160
-      height: if config.height? then config.height else 160
+      width: if config.width? then config.width else @content.defaultWidth()
+      height: if config.height? then config.height else @content.defaultHeight()
     }
-    @content = if config.type? then new window[config.type](config.content) else new TextContent()
 
   originStyles: -> """position:absolute; top:#{@origin.y}px; left:#{@origin.x}px; width:#{@origin.width}px; height:#{@origin.height}px;"""
 
   bindEvents: ->
+    @el.click => if @currentMode is 'edit' then false else true
     @el.dblclick => Designer.editWidget(this)
     @el.find('.widget-delete').click  => Designer.removeWidget(this)
     @el.resizable(grid: Widget.GRID_SIZE, containment: Widget.PAGE_SELECTOR)
@@ -54,6 +56,7 @@ class window.Widget
     @el
 
   renderContent: (mode) ->
+    @currentMode = mode
     @el.removeClass("widget-layout-mode")
     @el.removeClass("widget-edit-mode")
     @el.addClass("widget-#{mode}-mode")
