@@ -1,21 +1,37 @@
 class RemoteTemplateStore
 
+  ENDPOINT_HOST = "localhost:9000" 
+  # "http://localhost:9000/ccr2s/api/parent-reports/report/
+  ENDPOINT_URL = "http://#{ENDPOINT_HOST}/reports"
+  # ENDPOINT_URL = "ccr2s/api/parent-reports/"
+
   all: (cb) ->
-    console.log "all"
+    $.get "#{ENDPOINT_URL}/", (data) -> cb(data)
 
   get: (key, cb) ->
-    console.log "get"
+    $.get "#{ENDPOINT_URL}/#{key}", (data) -> cb(data)
 
   delete: (key) ->
-    console.log "delete"
+    $.ajax({ 
+      type: 'DELETE',
+      url: "#{ENDPOINT_URL}/reports/#{key}",
+      dataType: 'json'
+    });
 
   save: (key, data) ->
-    console.log "save"
+    $.ajax({ 
+      type: 'PUT',
+      url: "#{ENDPOINT_URL}/#{key}",
+      data: data
+      dataType: 'json'
+    });
 
 class LocalTemplateStore
 
   all: (cb) ->
-    cb(store.getAll())
+    data = store.getAll()
+    templates = _.map data, (v, k) -> v
+    cb(templates)
 
   get: (key, cb) ->
     cb(store.get(key))

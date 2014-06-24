@@ -1,12 +1,12 @@
 window.Templates = {
 
   init: ->
-    templates = Template.all (templates) ->
-      $.each templates, (key, template) -> 
+    Template.all (templates) ->
+      $.each templates, (i, template) -> 
         $("#templates tbody").append("""
           <tr>
             <td>
-              <a href="/designer.html?template=#{key}">#{template.name}</a>
+              <a href="/designer.html?template=#{template.key}">#{template.name}</a>
             </td>
           </tr>
           """)

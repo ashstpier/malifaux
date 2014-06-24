@@ -1,6 +1,6 @@
 class window.Template
 
-  @TEMPLATE_STORE = new LocalTemplateStore()
+  @TEMPLATE_STORE = new RemoteTemplateStore()
 
   @load: (templateName, cb) -> 
     @TEMPLATE_STORE.get templateName, (templateData) =>
@@ -49,7 +49,9 @@ class window.Template
     @removeWidget(widget) for widget in @widgets
 
   save: ->
-    Template.TEMPLATE_STORE.save(@key, @serialize())
+    data = @serialize()
+    data.key = @key
+    Template.TEMPLATE_STORE.save(@key, data)
 
   serialize: ->
     layout = (widget.serialize() for widget in @widgets)

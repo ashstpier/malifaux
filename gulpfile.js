@@ -7,6 +7,7 @@ var gulp 					= require('gulp'),
 	gutil 					= require('gutil'),
 	watch						= require('gulp-watch'),
 	flatten					= require('gulp-flatten')
+  bodyParser      = require('body-parser')
 	;
 
 gulp.task('default', function() {
@@ -20,8 +21,40 @@ gulp.task("vendor", function() {
 gulp.task('express', function() {
 	express = require('express')
 	app = express()
-	app.use(express.static(__dirname + '/public'))
-	app.use(express.static(__dirname + '/private'))
+
+  app.use(bodyParser());
+  app.use(express.static(__dirname + "/public"));
+  app.use(express.static(__dirname + '/private'));
+  
+  var router = express.Router();
+
+  router.get('/', function(req, res) {
+    res.json( { message: 'hooray! welcome to our api!' } );
+  });
+
+  router.route('/reports')
+    .post(function(req, res) {
+      res.json( { } );      
+    })
+
+    .get(function(req, res) {
+      res.json( [{ "key" : "23213-213213-213-1213", "layout" : [], "name" : "Hello World" }] );
+    });
+
+  router.route('/reports/:key')
+    .get(function(req, res) {
+      res.json( { "key" : "23213-213213-213-1213", "layout" : [], "name" : "Hello World" } );
+    })
+
+    .put(function(req, res) {
+      res.json( [{ "key" : "23213-213213-213-1213", "layout" : [], "name" : "Hello World" }] );
+    })
+
+    .delete(function(req, res) {
+      res.json({ message: 'Ok' });
+    });
+
+  app.use(router);
 	app.listen(9000);
 });
 

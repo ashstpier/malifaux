@@ -4,6 +4,7 @@
   "description": "",
   "main": "gulpfile.js",
   "devDependencies": {
+    "body-parser": "^1.4.3",
     "express": "^4.4.3",
     "gulp": "^3.8.1",
     "gulp-bower-files": "^0.2.5",

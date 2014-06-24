@@ -1,5 +1,5 @@
 window.Template = (function() {
-  Template.TEMPLATE_STORE = new LocalTemplateStore();
+  Template.TEMPLATE_STORE = new RemoteTemplateStore();
 
   Template.load = function(templateName, cb) {
     return this.TEMPLATE_STORE.get(templateName, (function(_this) {
@@ -92,7 +92,10 @@ window.Template = (function() {
   };
 
   Template.prototype.save = function() {
-    return Template.TEMPLATE_STORE.save(this.key, this.serialize());
+    var data;
+    data = this.serialize();
+    data.key = this.key;
+    return Template.TEMPLATE_STORE.save(this.key, data);
   };
 
   Template.prototype.serialize = function() {
