@@ -1,9 +1,7 @@
 class window.Template
 
-  @TEMPLATE_STORE = new RemoteTemplateStore()
-
   @load: (templateName, cb) -> 
-    @TEMPLATE_STORE.get templateName, (templateData) =>
+    TemplateStore.get templateName, (templateData) =>
       templateData.key = templateName
       templateData = { layout: [] } if templateData == undefined
 
@@ -14,7 +12,7 @@ class window.Template
       cb(template)
 
   @delete: (templateKey) ->
-    @TEMPLATE_STORE.delete(templateKey)
+    TemplateStore.delete(templateKey)
 
   @create: ->
     template = new Template()
@@ -24,10 +22,11 @@ class window.Template
     return template
 
   @all: (cb) ->
-    @TEMPLATE_STORE.all(cb)
+    TemplateStore.all(cb)
 
   constructor: (description) ->
-    description ||= { layout: {} }
+    description ||= { }
+    description.layout ||= []
     @page = $('#page')
     @widgets = []
     @layout = description.layout
@@ -51,7 +50,7 @@ class window.Template
   save: ->
     data = @serialize()
     data.key = @key
-    Template.TEMPLATE_STORE.save(@key, data)
+    TemplateStore.save(@key, data)
 
   serialize: ->
     layout = (widget.serialize() for widget in @widgets)

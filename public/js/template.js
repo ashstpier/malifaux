@@ -1,8 +1,6 @@
 window.Template = (function() {
-  Template.TEMPLATE_STORE = new RemoteTemplateStore();
-
   Template.load = function(templateName, cb) {
-    return this.TEMPLATE_STORE.get(templateName, (function(_this) {
+    return TemplateStore.get(templateName, (function(_this) {
       return function(templateData) {
         var template;
         templateData.key = templateName;
@@ -20,7 +18,7 @@ window.Template = (function() {
   };
 
   Template["delete"] = function(templateKey) {
-    return this.TEMPLATE_STORE["delete"](templateKey);
+    return TemplateStore["delete"](templateKey);
   };
 
   Template.create = function() {
@@ -33,13 +31,12 @@ window.Template = (function() {
   };
 
   Template.all = function(cb) {
-    return this.TEMPLATE_STORE.all(cb);
+    return TemplateStore.all(cb);
   };
 
   function Template(description) {
-    description || (description = {
-      layout: {}
-    });
+    description || (description = {});
+    description.layout || (description.layout = []);
     this.page = $('#page');
     this.widgets = [];
     this.layout = description.layout;
@@ -95,7 +92,7 @@ window.Template = (function() {
     var data;
     data = this.serialize();
     data.key = this.key;
-    return Template.TEMPLATE_STORE.save(this.key, data);
+    return TemplateStore.save(this.key, data);
   };
 
   Template.prototype.serialize = function() {

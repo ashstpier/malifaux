@@ -5,8 +5,8 @@ window.Students = {
     });
   },
   setTemplates: function(templates) {
-    return $.each(templates, function(key, value) {
-      return $('#templates').append($("<option></option>").attr("value", key).text(value.name));
+    return $.each(templates, function(i, template) {
+      return $('#templates').append($("<option></option>").attr("value", template.key).text(template.name));
     });
   },
   runReport: function(studentId, templateKey) {

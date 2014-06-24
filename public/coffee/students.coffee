@@ -7,11 +7,11 @@ window.Students = {
         .text(value))
 
   setTemplates: (templates) ->
-    $.each templates, (key, value) ->
+    $.each templates, (i, template) ->
       $('#templates')
         .append($("<option></option>")
-        .attr("value", key)
-        .text(value.name))
+        .attr("value", template.key)
+        .text(template.name))
 
   runReport: (studentId, templateKey) ->
     window.location.href = "/report.html?studentid=#{studentId}&template=#{templateKey}&debug=1"

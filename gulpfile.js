@@ -7,7 +7,9 @@ var gulp 					= require('gulp'),
 	gutil 					= require('gutil'),
 	watch						= require('gulp-watch'),
 	flatten					= require('gulp-flatten')
-  bodyParser      = require('body-parser')
+  bodyParser      = require('body-parser'),
+  secret          = require( 'secret' ),
+  _               = require('underscore')
 	;
 
 gulp.task('default', function() {
@@ -28,31 +30,18 @@ gulp.task('express', function() {
   
   var router = express.Router();
 
-  router.get('/', function(req, res) {
-    res.json( { message: 'hooray! welcome to our api!' } );
-  });
-
   router.route('/reports')
-    .post(function(req, res) {
-      res.json( { } );      
-    })
-
+    .post(function(req, res) { res.json( secret.getAll() ); })
     .get(function(req, res) {
-      res.json( [{ "key" : "23213-213213-213-1213", "layout" : [], "name" : "Hello World" }] );
+      storage = secret.getAll()
+      templates = _.map(storage, function(v, k) { return v; })
+      res.json( templates );
     });
 
   router.route('/reports/:key')
-    .get(function(req, res) {
-      res.json( { "key" : "23213-213213-213-1213", "layout" : [], "name" : "Hello World" } );
-    })
-
-    .put(function(req, res) {
-      res.json( [{ "key" : "23213-213213-213-1213", "layout" : [], "name" : "Hello World" }] );
-    })
-
-    .delete(function(req, res) {
-      res.json({ message: 'Ok' });
-    });
+    .get(function(req, res) { res.json(secret.get(req.params.key)); })
+    .put(function(req, res) { res.json(secret.set(req.params.key, req.body)); })
+    .delete(function(req, res) { res.json(secret.remove(req.params.key)); });
 
   app.use(router);
 	app.listen(9000);

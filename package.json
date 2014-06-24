@@ -4,6 +4,7 @@
   "description": "",
   "main": "gulpfile.js",
   "devDependencies": {
+    "alfred": "^0.5.4",
     "body-parser": "^1.4.3",
     "express": "^4.4.3",
     "gulp": "^3.8.1",
@@ -12,7 +13,9 @@
     "gulp-flatten": "0.0.2",
     "gulp-s3": "^0.3.0",
     "gulp-watch": "^0.6.7",
-    "gutil": "^1.2.0"
+    "gutil": "^1.2.0",
+    "secret": "git://github.com/nkostelnik/node.secret.git#master",
+    "underscore": "^1.6.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
