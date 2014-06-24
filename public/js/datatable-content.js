@@ -52,35 +52,60 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.render_edit = function(data) {
-    var col, i, node, row, rows;
-    row = function(i, col) {
-      return "<tr class=\"column-setting\">\n  <td><input class=\"col-title\" name=\"col-title-" + i + "\" type=\"text\" value=\"" + col.title + "\" /></td>\n  <td>\n    <select class=\"col-value\" name=\"col-value-" + i + "\">\n      <option value=\"\" " + (col.value === "" ? 'selected="selcted"' : void 0) + "></option>\n      <option " + (col.value === "3BG" ? 'selected="selcted"' : void 0) + ">3BG</option>\n      <option " + (col.value === "3EC" ? 'selected="selcted"' : void 0) + ">3EC</option>\n      <option " + (col.value === "Y11BG" ? 'selected="selcted"' : void 0) + ">Y11BG</option>\n    </select>\n  </td>\n</tr>";
-    };
-    rows = (function() {
-      var _i, _len, _ref, _results;
-      _ref = this.columns;
-      _results = [];
-      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-        col = _ref[i];
-        _results.push(row(i, col));
-      }
-      return _results;
-    }).call(this);
-    rows.push(row(this.columns.length, {
-      title: '',
-      value: ''
-    }));
-    node = $("<div>\n  <h3>Configure Data Table</h3>\n  <h4>Columns</h4>\n  <table>\n    <thead>\n      <tr>\n        <th>Title</th>\n        <th>Value</th>\n      </tr>\n    </thead>\n    <tbody>\n        " + (rows.join("\n")) + "\n    </tbody>\n  </table>\n  <button id=\"done\">Done</button>\n</div>");
+    var col, node, table, _i, _len, _ref;
+    node = $("<div class=\"datatable-edit\">\n  <h3>Configure Data Table</h3>\n  <h4>Columns</h4>\n  <table>\n    <thead>\n      <tr>\n        <th>Title</th>\n        <th>Value</th>\n      </tr>\n    </thead>\n    <tbody class=\"edit-rows\">\n    </tbody>\n  </table>\n  <button id=\"done\">Done</button>\n</div>");
+    table = node.find('.edit-rows');
+    _ref = this.columns;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      col = _ref[_i];
+      table.append(this.buildEditRow(col));
+    }
+    table.append(this.buildEditRow());
     return node;
   };
 
+  DatatableContent.prototype.buildEditRow = function(col) {
+    var key, opt, options;
+    if (col == null) {
+      col = {
+        title: '',
+        value: ''
+      };
+    }
+    options = (function() {
+      var _ref, _results;
+      _ref = this.assessmentPoints();
+      _results = [];
+      for (key in _ref) {
+        opt = _ref[key];
+        _results.push("<option value=\"" + key + "\" " + (key === col.value ? 'selected="selected"' : '') + ">[" + opt.name + "] " + opt.longName + "</option>");
+      }
+      return _results;
+    }).call(this);
+    return "<tr class=\"column-setting\">\n  <td><input class=\"col-title\" name=\"col-title\" type=\"text\" value=\"" + col.title + "\" /></td>\n  <td>\n    <select class=\"col-value\" name=\"col-value\">\n      <option value=\"\" " + (col.value === "" ? 'selected="selected"' : '') + "></option>\n      " + (options.join("\n")) + "\n    </select>\n  </td>\n</tr>";
+  };
+
   DatatableContent.prototype.bindEvents = function(el) {
+    el.on("change", "input, select", (function(_this) {
+      return function() {
+        return _this.maybeAddEditRow();
+      };
+    })(this));
     return el.find("#done").click((function(_this) {
       return function() {
         _this.saveConfig();
         return _this.cancelEditing();
       };
     })(this));
+  };
+
+  DatatableContent.prototype.maybeAddEditRow = function() {
+    var lastRow, rows;
+    rows = this.el.find('.column-setting');
+    lastRow = $(rows[rows.length - 1]);
+    if (lastRow.find('.col-title').val() !== '') {
+      return lastRow.after(this.buildEditRow());
+    }
   };
 
   DatatableContent.prototype.saveConfig = function() {

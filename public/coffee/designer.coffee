@@ -5,10 +5,12 @@ window.Designer = {
   loadAll: (template) ->
     @template = template
     @templateKey = template.key
-    Widget.loadAll =>
-        @renderControls()
-        @bindEvents()
-        @load()
+    $ =>
+      API.loadConfig =>
+        Widget.loadAll =>
+          @renderControls()
+          @bindEvents()
+          @load()
 
   init: ->
     templateKey = utils.querystring("template")

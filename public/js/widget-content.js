@@ -58,6 +58,10 @@ window.WidgetContent = (function() {
     return 160;
   };
 
+  WidgetContent.prototype.assessmentPoints = function() {
+    return API.assessmentPoints();
+  };
+
   return WidgetContent;
 
 })();

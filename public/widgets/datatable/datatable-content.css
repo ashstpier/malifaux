@@ -25,3 +25,7 @@
 .datatable .teacher {
   font-weight: normal;
 }
+
+.datatable-edit {
+  padding: 20px;
+}

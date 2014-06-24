@@ -7,7 +7,7 @@ window.Report = {
       @debug = utils.querystring('debug') is '1'
       Template.load @templateName, (template) => 
         @template = template
-        $.get "#{@studentId}.json", (data) => @render(data)
+        API.student @studentId, (data) => @render(data)
 
   renderDebug: (data) ->
     if @debug

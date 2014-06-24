@@ -3,11 +3,15 @@ window.Designer = {
   loadAll: function(template) {
     this.template = template;
     this.templateKey = template.key;
-    return Widget.loadAll((function(_this) {
+    return $((function(_this) {
       return function() {
-        _this.renderControls();
-        _this.bindEvents();
-        return _this.load();
+        return API.loadConfig(function() {
+          return Widget.loadAll(function() {
+            _this.renderControls();
+            _this.bindEvents();
+            return _this.load();
+          });
+        });
       };
     })(this));
   },
