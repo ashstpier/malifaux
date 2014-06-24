@@ -21,9 +21,9 @@ window.Students = {
 
   init: ->
     $.get @STUDENTS_URL, (feedData) => @setStudents(feedData["students"])
-    @setTemplates(Template.all())
+    Template.all (templates) => @setTemplates(templates)
 
-    $('#run').click =>
+    $('#run').click => 
       studentId = $('#students option:selected').attr("value")
       templateKey = $('#templates option:selected').attr("value")
       @runReport(studentId, templateKey)

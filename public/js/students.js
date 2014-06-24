@@ -19,7 +19,11 @@ window.Students = {
         return _this.setStudents(feedData["students"]);
       };
     })(this));
-    this.setTemplates(Template.all());
+    Template.all((function(_this) {
+      return function(templates) {
+        return _this.setTemplates(templates);
+      };
+    })(this));
     return $('#run').click((function(_this) {
       return function() {
         var studentId, templateKey;

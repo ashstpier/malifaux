@@ -1,24 +1,28 @@
 window.Designer = {
   currentEditWidget: null,
+  loadAll: function(template) {
+    this.template = template;
+    this.templateKey = template.key;
+    return Widget.loadAll((function(_this) {
+      return function() {
+        _this.renderControls();
+        _this.bindEvents();
+        return _this.load();
+      };
+    })(this));
+  },
   init: function() {
     var templateKey;
     templateKey = utils.querystring("template");
     if (templateKey == null) {
-      this.template = Template.create();
-      this.templateKey = this.template.key;
+      return this.loadAll(Template.create());
     } else {
-      this.template = Template.load(templateKey);
-      this.templateKey = templateKey;
+      return Template.load(templateKey, (function(_this) {
+        return function(template) {
+          return _this.loadAll(template);
+        };
+      })(this));
     }
-    return $((function(_this) {
-      return function() {
-        return Widget.loadAll(function() {
-          _this.renderControls();
-          _this.bindEvents();
-          return _this.load();
-        });
-      };
-    })(this));
   },
   renderControls: function() {
     var className, name, _ref, _results;

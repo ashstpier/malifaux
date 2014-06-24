@@ -5,9 +5,11 @@ window.Report = {
         _this.studentId = utils.querystring("studentid");
         _this.templateName = utils.querystring('template');
         _this.debug = utils.querystring('debug') === '1';
-        _this.template = Template.load(_this.templateName);
-        return $.get("" + _this.studentId + ".json", function(data) {
-          return _this.render(data);
+        return Template.load(_this.templateName, function(template) {
+          _this.template = template;
+          return $.get("" + _this.studentId + ".json", function(data) {
+            return _this.render(data);
+          });
         });
       };
     })(this));

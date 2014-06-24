@@ -2,7 +2,6 @@ class window.WidgetContent
   constructor: (config={}) -> null
 
   render: (mode= 'layout', data=utils.fakeStudentData()) ->
-    console.log mode
     @el = @["render_#{mode}"].call(this, data)
     @bindEvents(@el) unless mode is 'display'
     @el

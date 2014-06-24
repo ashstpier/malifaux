@@ -1,27 +1,30 @@
 class window.Template
 
-  @load: (templateName) ->
-    templateData = store.get(templateName)
-    templateData.key = templateName
-    templateData = { layout: [] } if templateData == undefined
-    template = new Template(templateData)
-    template.key = templateName
-    template.name = templateData.name
-    return template
+  @TEMPLATE_STORE = new LocalTemplateStore()
 
-  @delete: (templateName) ->
-    store.remove(templateName)
+  @load: (templateName, cb) -> 
+    @TEMPLATE_STORE.get templateName, (templateData) =>
+      templateData.key = templateName
+      templateData = { layout: [] } if templateData == undefined
+
+      template = new Template(templateData)
+      template.key = templateName
+      template.name = templateData.name 
+      
+      cb(template)
+
+  @delete: (templateKey) ->
+    @TEMPLATE_STORE.delete(templateKey)
 
   @create: ->
-    console.log "create"
     template = new Template()
     template.key = utils.guid()
     template.name = "Untitled Template"
     template.save()
     return template
 
-  @all: ->
-    store.getAll()
+  @all: (cb) ->
+    @TEMPLATE_STORE.all(cb)
 
   constructor: (description) ->
     description ||= { layout: {} }
@@ -46,7 +49,7 @@ class window.Template
     @removeWidget(widget) for widget in @widgets
 
   save: ->
-    store.set(@key, @serialize())
+    Template.TEMPLATE_STORE.save(@key, @serialize())
 
   serialize: ->
     layout = (widget.serialize() for widget in @widgets)

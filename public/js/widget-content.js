@@ -13,7 +13,6 @@ window.WidgetContent = (function() {
     if (data == null) {
       data = utils.fakeStudentData();
     }
-    console.log(mode);
     this.el = this["render_" + mode].call(this, data);
     if (mode !== 'display') {
       this.bindEvents(this.el);

@@ -2,21 +2,20 @@ window.Designer = {
 
   currentEditWidget: null
 
-  init: ->
-    templateKey = utils.querystring("template")
-
-    if not templateKey?
-      @template = Template.create()
-      @templateKey = @template.key
-    else
-      @template = Template.load(templateKey)
-      @templateKey = templateKey
-
-    $ =>
-      Widget.loadAll =>
+  loadAll: (template) ->
+    @template = template
+    @templateKey = template.key
+    Widget.loadAll =>
         @renderControls()
         @bindEvents()
         @load()
+
+  init: ->
+    templateKey = utils.querystring("template")
+    if not templateKey?
+      @loadAll(Template.create())
+    else
+      Template.load templateKey, (template) => @loadAll(template)
 
   renderControls: ->
     for name, className of Widget.WIDGETS
