@@ -6,7 +6,9 @@ window.DatatableContent = (function(_super) {
 
   DatatableContent.STYLE_DEFAULTS = {
     heading_text_color: '#000000',
-    heading_background_color: '#FFFFFF'
+    heading_background_color: '#FFFFFF',
+    cell_text_color: '#000000',
+    cell_background_color: '#FFFFFF'
   };
 
   DatatableContent.prototype.defaultWidth = function() {
@@ -34,32 +36,32 @@ window.DatatableContent = (function(_super) {
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         col = _ref[_i];
-        _results.push("<th " + (this.headingStyles()) + ">" + col.title + "</th>");
+        _results.push("<th style=\"" + (this.headingStyles()) + "\">" + col.title + "</th>");
       }
       return _results;
     }).call(this);
-    node = $("<table class=\"datatable\">\n  <thead>\n    <tr>\n      <th " + (this.headingStyles()) + "></th>\n      " + (columnTitles.join("\n")) + "\n    </tr>\n  </thead>\n  <tbody>\n  </tbody>\n</table>");
+    node = $("<table class=\"datatable\">\n  <thead>\n    <tr>\n      <th style=\"" + (this.headingStyles()) + "\"></th>\n      " + (columnTitles.join("\n")) + "\n    </tr>\n  </thead>\n  <tbody>\n  </tbody>\n</table>");
     _ref = data.subjects;
     for (code in _ref) {
       subject = _ref[code];
       columnValues = (function() {
-        var _i, _len, _ref1, _ref2, _results;
+        var _i, _len, _ref1, _results;
         _ref1 = this.columns;
         _results = [];
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           col = _ref1[_i];
-          _results.push("<td>" + (((_ref2 = subject.results) != null ? _ref2[col.value] : void 0) || '') + "</td>");
+          _results.push("<td style=");
         }
         return _results;
       }).call(this);
-      node.find("tbody").append("<tr>\n  <th " + (this.headingStyles()) + ">\n    <strong class=\"subject\">" + subject.subjectName + "</strong>\n    <em class=\"teacher\">" + subject.teacherNames + "</em>\n  </th>\n  " + (columnValues.join("\n")) + "\n</tr>");
+      node.find("tbody").append("<tr>\n  <th style=\"" + (this.headingStyles()) + "\">\n    <strong class=\"subject\">" + subject.subjectName + "</strong>\n    <em class=\"teacher\">" + subject.teacherNames + "</em>\n  </th>\n  " + (columnValues.join("\n")) + "\n</tr>");
     }
     return node;
   };
 
   DatatableContent.prototype.render_edit = function(data) {
     var col, node, table, _i, _len, _ref;
-    node = $("<div class=\"datatable-edit\">\n  <h3>Configure Data Table</h3>\n  <h4>Columns</h4>\n  <table>\n    <thead>\n      <tr>\n        <th>Title</th>\n        <th>Value</th>\n      </tr>\n    </thead>\n    <tbody class=\"edit-rows\">\n    </tbody>\n  </table>\n\n  <h4>Style</h4>\n  " + (this.styleOption('heading_text_color', "Heading Text Color")) + "\n  " + (this.styleOption('heading_background_color', "Heading Background Color")) + "\n\n  <button id=\"done\">Done</button>\n</div>");
+    node = $("<div class=\"datatable-edit\">\n  <h3>Configure Data Table</h3>\n  <h4>Columns</h4>\n  <table>\n    <thead>\n      <tr>\n        <th>Title</th>\n        <th>Value</th>\n      </tr>\n    </thead>\n    <tbody class=\"edit-rows\">\n    </tbody>\n  </table>\n\n  <h4>Style</h4>\n  " + (this.styleOption('color', 'heading_text_color', "Heading Text Color")) + "\n  " + (this.styleOption('color', 'heading_background_color', "Heading Background Color")) + "\n  " + (this.styleOption('color', 'cell_text_color', "Cell Text Color")) + "\n  " + (this.styleOption('color', 'cell_background_color', "Cell Background Color")) + "\n\n  <button id=\"done\">Done</button>\n</div>");
     table = node.find('.edit-rows');
     _ref = this.columns;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -91,15 +93,18 @@ window.DatatableContent = (function(_super) {
     return "<tr class=\"column-setting\">\n  <td><input class=\"col-title\" name=\"col-title\" type=\"text\" value=\"" + col.title + "\" /></td>\n  <td>\n    <select class=\"col-value\" name=\"col-value\">\n      <option value=\"\" " + (col.value === "" ? 'selected="selected"' : '') + "></option>\n      " + (options.join("\n")) + "\n    </select>\n  </td>\n</tr>";
   };
 
-  DatatableContent.prototype.styleOption = function(key, label) {
-    if (label == null) {
-      label = key;
-    }
-    return "<p>\n  <label>\n    " + label + ":\n    <input class=\"style-option\" name=\"" + key + "\" type=\"text\" value=\"" + this.style[key] + "\" />\n  </label>\n</p>";
+  DatatableContent.prototype.headingStyles = function() {
+    return this.styleString({
+      'background-color': this.style.heading_background_color,
+      color: this.style.heading_text_color
+    });
   };
 
-  DatatableContent.prototype.headingStyles = function() {
-    return "style=\"background-color: " + this.style.heading_background_color + "; color: " + this.style.heading_text_color + ";\" ";
+  DatatableContent.prototype.cellStyles = function() {
+    return this.styleString({
+      'background-color': this.style.cell_background_color,
+      color: this.style.cell_text_color
+    });
   };
 
   DatatableContent.prototype.bindEvents = function(el) {

@@ -27,3 +27,17 @@ class window.WidgetContent
 
   assessmentPoints: ->
     API.assessmentPoints()
+
+  styleOption: (type, key, label=key) ->
+      """
+        <p>
+          <label>
+            #{label}:
+            <input class="style-option" name="#{key}" type="text" value="#{@style[key]}" />
+          </label>
+        </p>
+      """
+
+  styleString: (styles) ->
+    ("#{name}: #{value};" for name, value of styles).join(" ")
+

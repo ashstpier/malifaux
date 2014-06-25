@@ -62,6 +62,26 @@ window.WidgetContent = (function() {
     return API.assessmentPoints();
   };
 
+  WidgetContent.prototype.styleOption = function(type, key, label) {
+    if (label == null) {
+      label = key;
+    }
+    return "<p>\n  <label>\n    " + label + ":\n    <input class=\"style-option\" name=\"" + key + "\" type=\"text\" value=\"" + this.style[key] + "\" />\n  </label>\n</p>";
+  };
+
+  WidgetContent.prototype.styleString = function(styles) {
+    var name, value;
+    return ((function() {
+      var _results;
+      _results = [];
+      for (name in styles) {
+        value = styles[name];
+        _results.push("" + name + ": " + value + ";");
+      }
+      return _results;
+    })()).join(" ");
+  };
+
   return WidgetContent;
 
 })();

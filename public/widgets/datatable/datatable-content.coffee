@@ -3,6 +3,8 @@ class window.DatatableContent extends WidgetContent
   @STYLE_DEFAULTS: {
     heading_text_color: '#000000'
     heading_background_color: '#FFFFFF'
+    cell_text_color: '#000000'
+    cell_background_color: '#FFFFFF'
   }
 
   defaultWidth: -> 640
@@ -15,12 +17,12 @@ class window.DatatableContent extends WidgetContent
   render_layout: (data) ->
     name = utils.escape(data.name)
     columnTitles = for col in @columns
-      "<th #{@headingStyles()}>#{col.title}</th>"
+      """<th style="#{@headingStyles()}">#{col.title}</th>"""
     node = $("""
       <table class="datatable">
         <thead>
           <tr>
-            <th #{@headingStyles()}></th>
+            <th style="#{@headingStyles()}"></th>
             #{columnTitles.join("\n")}
           </tr>
         </thead>
@@ -30,10 +32,10 @@ class window.DatatableContent extends WidgetContent
     """)
     for code, subject of data.subjects
       columnValues = for col in @columns
-        "<td>#{subject.results?[col.value] or ''}</td>"
+        "<td style="#{@cellStyles()}">#{subject.results?[col.value] or ''}</td>"
       node.find("tbody").append("""
         <tr>
-          <th #{@headingStyles()}>
+          <th style="#{@headingStyles()}">
             <strong class="subject">#{subject.subjectName}</strong>
             <em class="teacher">#{subject.teacherNames}</em>
           </th>
@@ -59,8 +61,10 @@ class window.DatatableContent extends WidgetContent
         </table>
 
         <h4>Style</h4>
-        #{@styleOption('heading_text_color', "Heading Text Color")}
-        #{@styleOption('heading_background_color', "Heading Background Color")}
+        #{@styleOption('color', 'heading_text_color', "Heading Text Color")}
+        #{@styleOption('color', 'heading_background_color', "Heading Background Color")}
+        #{@styleOption('color', 'cell_text_color', "Cell Text Color")}
+        #{@styleOption('color', 'cell_background_color', "Cell Background Color")}
 
         <button id="done">Done</button>
       </div>
@@ -84,18 +88,11 @@ class window.DatatableContent extends WidgetContent
       </td>
     </tr>"""
 
-  styleOption: (key, label=key) ->
-    """
-      <p>
-        <label>
-          #{label}:
-          <input class="style-option" name="#{key}" type="text" value="#{@style[key]}" />
-        </label>
-      </p>
-    """
-
   headingStyles: ->
-    """style="background-color: #{@style.heading_background_color}; color: #{@style.heading_text_color};" """
+    @styleString('background-color': @style.heading_background_color, color: @style.heading_text_color)
+
+  cellStyles: ->
+    @styleString('background-color': @style.cell_background_color, color: @style.cell_text_color)
 
   bindEvents: (el) ->
     el.on "change", ".col-title, .col-value", => @maybeAddEditRow()
