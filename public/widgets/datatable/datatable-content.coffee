@@ -1,20 +1,26 @@
 class window.DatatableContent extends WidgetContent
 
+  @STYLE_DEFAULTS: {
+    heading_text_color: '#000000'
+    heading_background_color: '#FFFFFF'
+  }
+
   defaultWidth: -> 640
   defaultHeight: -> 480
 
   constructor: (config={}) ->
     @columns = @get(config.columns, [])
+    @style = $.extend({}, DatatableContent.STYLE_DEFAULTS, @get(config.style, {}))
 
   render_layout: (data) ->
     name = utils.escape(data.name)
     columnTitles = for col in @columns
-      "<th>#{col.title}</th>"
+      "<th #{@headingStyles()}>#{col.title}</th>"
     node = $("""
       <table class="datatable">
         <thead>
           <tr>
-            <th></th>
+            <th #{@headingStyles()}></th>
             #{columnTitles.join("\n")}
           </tr>
         </thead>
@@ -27,7 +33,7 @@ class window.DatatableContent extends WidgetContent
         "<td>#{subject.results?[col.value] or ''}</td>"
       node.find("tbody").append("""
         <tr>
-          <th>
+          <th #{@headingStyles()}>
             <strong class="subject">#{subject.subjectName}</strong>
             <em class="teacher">#{subject.teacherNames}</em>
           </th>
@@ -51,6 +57,11 @@ class window.DatatableContent extends WidgetContent
           <tbody class="edit-rows">
           </tbody>
         </table>
+
+        <h4>Style</h4>
+        #{@styleOption('heading_text_color', "Heading Text Color")}
+        #{@styleOption('heading_background_color', "Heading Background Color")}
+
         <button id="done">Done</button>
       </div>
     """)
@@ -73,8 +84,21 @@ class window.DatatableContent extends WidgetContent
       </td>
     </tr>"""
 
+  styleOption: (key, label=key) ->
+    """
+      <p>
+        <label>
+          #{label}:
+          <input class="style-option" name="#{key}" type="text" value="#{@style[key]}" />
+        </label>
+      </p>
+    """
+
+  headingStyles: ->
+    """style="background-color: #{@style.heading_background_color}; color: #{@style.heading_text_color};" """
+
   bindEvents: (el) ->
-    el.on "change", "input, select", => @maybeAddEditRow()
+    el.on "change", ".col-title, .col-value", => @maybeAddEditRow()
     el.find("#done").click =>
       @saveConfig()
       @cancelEditing()
@@ -86,11 +110,20 @@ class window.DatatableContent extends WidgetContent
       lastRow.after(@buildEditRow())
 
   saveConfig: ->
+    @saveColumns()
+    @saveStyle()
+
+  saveColumns: ->
     columns = for col in @el.find('.column-setting')
       title = $(col).find('.col-title').val()
       value = $(col).find('.col-value').val()
       {title: title, value: value}
     @columns = (col for col in columns when col.title isnt '' and col.value? and col.value isnt '')
 
+  saveStyle: ->
+    for el in @el.find('.style-option')
+      name = $(el).attr('name')
+      @style[name] = $(el).val()
+
   serialize: ->
-    {columns: @columns}
+    {columns: @columns, style: @style}
