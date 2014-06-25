@@ -30,11 +30,9 @@ class window.WidgetContent
 
   styleOption: (type, key, label=key) ->
       """
-        <p>
-          <label>
-            #{label}:
-            <input class="style-option" name="#{key}" type="#{type}" value="#{@style[key]}" />
-          </label>
+        <p class="style-option">
+          <label for="#{key}">#{label}</label>
+          <input name="#{key}" class="style-option" name="#{key}" type="#{type}" value="#{@style[key]}" />
         </p>
       """
 

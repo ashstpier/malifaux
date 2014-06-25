@@ -27,5 +27,25 @@
 }
 
 .datatable-edit {
+  box-sizing: border-box;
   padding: 20px;
+  height: 100%;
+  overflow: scroll;
+}
+.datatable-edit th {
+  text-align: left;
+}
+
+
+.style-option {
+  margin: 0 0 1em 0;
+}
+.style-option label {
+  display: inline-block;
+  min-width: 200px;
+  font-weight: bold;
+  font-size: 12px;
+}
+.style-option input {
+  display: inline-block;
 }
