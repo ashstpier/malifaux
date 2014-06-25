@@ -56,8 +56,10 @@ window.Designer = {
       };
     })(this));
     $('#page').click((function(_this) {
-      return function() {
-        return _this.clearEditWidget();
+      return function(e) {
+        if (e.target === $('#page')[0]) {
+          return _this.clearEditWidget();
+        }
       };
     })(this));
     $('#name').blur((function(_this) {

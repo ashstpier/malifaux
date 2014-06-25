@@ -33,7 +33,7 @@ class window.WidgetContent
         <p>
           <label>
             #{label}:
-            <input class="style-option" name="#{key}" type="text" value="#{@style[key]}" />
+            <input class="style-option" name="#{key}" type="#{type}" value="#{@style[key]}" />
           </label>
         </p>
       """

@@ -27,7 +27,7 @@ window.Designer = {
     $('#save').click => @save()
     $('#clear').click => @clear()
     $('#delete').click => @delete()
-    $('#page').click => @clearEditWidget()
+    $('#page').click (e) => if e.target is $('#page')[0] then @clearEditWidget()
     $('#name').blur => @updateName()
     for name, className of Widget.WIDGETS
       do (className) => $("#add-#{name}").click => @addWidget(type: className)

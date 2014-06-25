@@ -66,7 +66,7 @@ window.WidgetContent = (function() {
     if (label == null) {
       label = key;
     }
-    return "<p>\n  <label>\n    " + label + ":\n    <input class=\"style-option\" name=\"" + key + "\" type=\"text\" value=\"" + this.style[key] + "\" />\n  </label>\n</p>";
+    return "<p>\n  <label>\n    " + label + ":\n    <input class=\"style-option\" name=\"" + key + "\" type=\"" + type + "\" value=\"" + this.style[key] + "\" />\n  </label>\n</p>";
   };
 
   WidgetContent.prototype.styleString = function(styles) {

@@ -54,15 +54,6 @@ window.Widget = (function() {
   };
 
   Widget.prototype.bindEvents = function() {
-    this.el.click((function(_this) {
-      return function() {
-        if (_this.currentMode === 'edit') {
-          return false;
-        } else {
-          return true;
-        }
-      };
-    })(this));
     this.el.dblclick((function(_this) {
       return function() {
         return Designer.editWidget(_this);

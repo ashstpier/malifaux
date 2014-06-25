@@ -36,7 +36,6 @@ class window.Widget
   originStyles: -> """position:absolute; top:#{@origin.y}px; left:#{@origin.x}px; width:#{@origin.width}px; height:#{@origin.height}px;"""
 
   bindEvents: ->
-    @el.click => if @currentMode is 'edit' then false else true
     @el.dblclick => Designer.editWidget(this)
     @el.find('.widget-delete').click  => Designer.removeWidget(this)
     @el.resizable(grid: Widget.GRID_SIZE, containment: Widget.PAGE_SELECTOR)
