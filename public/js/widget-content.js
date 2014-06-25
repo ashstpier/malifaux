@@ -66,7 +66,7 @@ window.WidgetContent = (function() {
     if (label == null) {
       label = key;
     }
-    return "<p class=\"style-option\">\n  <label for=\"" + key + "\">" + label + "</label>\n  <input name=\"" + key + "\" class=\"style-option\" name=\"" + key + "\" type=\"" + type + "\" value=\"" + this.style[key] + "\" />\n</p>";
+    return new StyleOptionRenderer(type, key, label).render(this.style);
   };
 
   WidgetContent.prototype.styleString = function(styles) {
@@ -79,9 +79,65 @@ window.WidgetContent = (function() {
         _results.push("" + name + ": " + value + ";");
       }
       return _results;
-    })()).join(" ");
+    })()).join(" ").replace(/"/gm, '&quot;');
   };
 
   return WidgetContent;
+
+})();
+
+window.StyleOptionRenderer = (function() {
+  function StyleOptionRenderer(type, key, label) {
+    this.type = type;
+    this.key = key;
+    this.label = label;
+  }
+
+  StyleOptionRenderer.prototype.render = function(styles) {
+    return "<p class=\"style-option\">\n  <label for=\"" + this.key + "\">" + this.label + "</label>\n  " + (this.renderInput(styles)) + "\n</p>";
+  };
+
+  StyleOptionRenderer.prototype.renderInput = function(styles) {
+    switch (this.type) {
+      case 'font':
+        return this.renderFontInput(styles);
+      case 'size':
+        return this.renderSizeInput(styles);
+      default:
+        return "<input name=\"" + this.key + "\" class=\"style-option\" name=\"" + this.key + "\" type=\"" + this.type + "\" value=\"" + styles[this.key] + "\" />";
+    }
+  };
+
+  StyleOptionRenderer.prototype.renderFontInput = function(styles) {
+    var desc, fontName, options;
+    options = (function() {
+      var _ref, _results;
+      _ref = utils.fontMap;
+      _results = [];
+      for (fontName in _ref) {
+        desc = _ref[fontName];
+        _results.push("<option " + (styles[this.key] === fontName ? 'selected' : '') + ">" + fontName + "</option>");
+      }
+      return _results;
+    }).call(this);
+    return "<select name=\"" + this.key + "\" class=\"style-option\" name=\"" + this.key + "\">\n  " + (options.join("\n")) + "\n</select>";
+  };
+
+  StyleOptionRenderer.prototype.renderSizeInput = function(styles) {
+    var options, size, sizeName;
+    options = (function() {
+      var _ref, _results;
+      _ref = utils.sizeMap;
+      _results = [];
+      for (sizeName in _ref) {
+        size = _ref[sizeName];
+        _results.push("<option " + (styles[this.key] === sizeName ? 'selected' : '') + ">" + sizeName + "</option>");
+      }
+      return _results;
+    }).call(this);
+    return "<select name=\"" + this.key + "\" class=\"style-option\" name=\"" + this.key + "\">\n  " + (options.join("\n")) + "\n</select>";
+  };
+
+  return StyleOptionRenderer;
 
 })();

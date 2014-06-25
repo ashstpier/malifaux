@@ -1,4 +1,24 @@
 window.utils = {
+  fontMap: {
+    'Arial':            'Arial, "Helvetica Neue", Helvetica, sans-serif'
+    'Helvetica':        '"Helvetica Neue", Helvetica, Arial, sans-serif'
+    'Verdana':          'Verdana, Geneva, sans-serif'
+
+    'Garamond':         'Garamond, Baskerville, "Baskerville Old Face", "Hoefler Text", "Times New Roman", serif'
+    'Georgia':          'Georgia, Times, "Times New Roman", serif'
+    'Times New Roman':  'TimesNewRoman, "Times New Roman", Times, Baskerville, Georgia, serif'
+    'Courier New':      '"Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace'
+
+    'Brush Script':     '"Brush Script MT", cursive'
+  }
+
+  sizeMap: {
+    'Small': '12px'
+    'Medium': '14px'
+    'Large': '16px'
+  }
+
+
   guid: ->
     'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace /[xy]/g, (c) ->
       r = Math.random() * 16 | 0
@@ -14,18 +34,16 @@ window.utils = {
   escape: (str) ->
     return '' unless str?.replace?
     str.replace(/&/g, "&amp;")
-       .replace(/</g, "&lt;")
-       .replace(/>/g, "&gt;")
+     .replace(/</g, "&lt;")
+     .replace(/>/g, "&gt;")
 
   loadCSS: (path) ->
     $('head').append("""<link rel="stylesheet" type="text/css" href="#{path}">""")
 
   loadCoffeeScript: (path, cb=null) ->
     $.get path, (data) ->
-        eval(data)
-        cb() if cb?
-        # console.log data
-    # CoffeeScript.load(path, cb)
+      eval(data)
+      cb() if cb?
 
   fakeStudentData: ->
     {

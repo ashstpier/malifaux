@@ -8,7 +8,9 @@ window.DatatableContent = (function(_super) {
     heading_text_color: '#000000',
     heading_background_color: '#FFFFFF',
     cell_text_color: '#000000',
-    cell_background_color: '#FFFFFF'
+    cell_background_color: '#FFFFFF',
+    font: 'Helvetica',
+    size: 'Medium'
   };
 
   DatatableContent.prototype.defaultWidth = function() {
@@ -40,7 +42,10 @@ window.DatatableContent = (function(_super) {
       }
       return _results;
     }).call(this);
-    node = $("<table class=\"datatable\">\n  <thead>\n    <tr>\n      <th style=\"" + (this.headingStyles()) + "\"></th>\n      " + (columnTitles.join("\n")) + "\n    </tr>\n  </thead>\n  <tbody>\n  </tbody>\n</table>");
+    node = $("<table class=\"datatable\" style=\"" + (this.styleString({
+      'font-family': utils.fontMap[this.style.font],
+      'font-size': utils.sizeMap[this.style.size]
+    })) + "\">\n  <thead>\n    <tr>\n      <th style=\"" + (this.headingStyles()) + "\"></th>\n      " + (columnTitles.join("\n")) + "\n    </tr>\n  </thead>\n  <tbody>\n  </tbody>\n</table>");
     _ref = data.subjects;
     for (code in _ref) {
       subject = _ref[code];
@@ -61,7 +66,7 @@ window.DatatableContent = (function(_super) {
 
   DatatableContent.prototype.render_edit = function(data) {
     var col, node, table, _i, _len, _ref;
-    node = $("<div class=\"datatable-edit\">\n  <h3>Configure Data Table</h3>\n  <h4>Columns</h4>\n  <table>\n    <thead>\n      <tr>\n        <th>Title</th>\n        <th>Value</th>\n      </tr>\n    </thead>\n    <tbody class=\"edit-rows\">\n    </tbody>\n  </table>\n\n  <h4>Style</h4>\n  " + (this.styleOption('color', 'heading_text_color', "Heading Text Color")) + "\n  " + (this.styleOption('color', 'heading_background_color', "Heading Background Color")) + "\n  " + (this.styleOption('color', 'cell_text_color', "Cell Text Color")) + "\n  " + (this.styleOption('color', 'cell_background_color', "Cell Background Color")) + "\n\n  <button id=\"done\">Done</button>\n</div>");
+    node = $("<div class=\"datatable-edit\">\n  <h3>Configure Data Table</h3>\n  <h4>Columns</h4>\n  <table>\n    <thead>\n      <tr>\n        <th>Title</th>\n        <th>Value</th>\n      </tr>\n    </thead>\n    <tbody class=\"edit-rows\">\n    </tbody>\n  </table>\n\n  <h4>Style</h4>\n  " + (this.styleOption('font', 'font', "Font")) + "\n  " + (this.styleOption('size', 'size', "Text Size")) + "\n  " + (this.styleOption('color', 'heading_text_color', "Heading Text Color")) + "\n  " + (this.styleOption('color', 'heading_background_color', "Heading Background Color")) + "\n  " + (this.styleOption('color', 'cell_text_color', "Cell Text Color")) + "\n  " + (this.styleOption('color', 'cell_background_color', "Cell Background Color")) + "\n\n  <button id=\"done\">Done</button>\n</div>");
     table = node.find('.edit-rows');
     _ref = this.columns;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {

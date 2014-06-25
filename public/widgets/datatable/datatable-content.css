@@ -21,9 +21,11 @@
 .datatable .subject, .datatable .teacher {
   display: block;
   text-align: left;
+  line-height: 1.2;
 }
 .datatable .teacher {
   font-weight: normal;
+  font-size: 0.9em;
 }
 
 .datatable-edit {

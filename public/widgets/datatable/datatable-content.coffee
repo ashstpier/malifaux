@@ -5,6 +5,8 @@ class window.DatatableContent extends WidgetContent
     heading_background_color: '#FFFFFF'
     cell_text_color: '#000000'
     cell_background_color: '#FFFFFF'
+    font: 'Helvetica'
+    size: 'Medium'
   }
 
   defaultWidth: -> 640
@@ -19,7 +21,7 @@ class window.DatatableContent extends WidgetContent
     columnTitles = for col in @columns
       """<th style="#{@headingStyles()}">#{col.title}</th>"""
     node = $("""
-      <table class="datatable">
+      <table class="datatable" style="#{@styleString('font-family': utils.fontMap[@style.font], 'font-size': utils.sizeMap[@style.size])}">
         <thead>
           <tr>
             <th style="#{@headingStyles()}"></th>
@@ -61,6 +63,8 @@ class window.DatatableContent extends WidgetContent
         </table>
 
         <h4>Style</h4>
+        #{@styleOption('font',  'font', "Font")}
+        #{@styleOption('size',  'size', "Text Size")}
         #{@styleOption('color', 'heading_text_color', "Heading Text Color")}
         #{@styleOption('color', 'heading_background_color', "Heading Background Color")}
         #{@styleOption('color', 'cell_text_color', "Cell Text Color")}
