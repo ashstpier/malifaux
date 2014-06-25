@@ -104,6 +104,9 @@ window.Designer = {
     return this.template.addWidget(widgetConfig, 'layout');
   },
   removeWidget: function(widget) {
+    if (this.currentEditWidget === widget) {
+      this.currentEditWidget = null;
+    }
     return this.template.removeWidget(widget);
   },
   clear: function() {

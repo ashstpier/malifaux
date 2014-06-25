@@ -50,6 +50,7 @@ window.Designer = {
     @template.addWidget(widgetConfig, 'layout')
 
   removeWidget: (widget) ->
+    @currentEditWidget = null if @currentEditWidget is widget
     @template.removeWidget(widget)
 
   clear: ->
