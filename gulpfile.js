@@ -34,7 +34,7 @@ gulp.task('express', function() {
     .get(function(req, res) {
       storage = secret.getAll()
       templates = _.map(storage, function(v, k) { return v; })
-      res.json( templates );
+      res.send( templates );
     });
 
   router.route('/reports/:key')
