@@ -76,6 +76,18 @@ window.Designer = {
         return _this.updateName();
       };
     })(this));
+    $('#name').keypress((function(_this) {
+      return function(e) {
+        if (e.which === 13) {
+          return $('#name').blur();
+        }
+      };
+    })(this));
+    $('#name').click((function(_this) {
+      return function(e) {
+        return $(e.currentTarget).selectText();
+      };
+    })(this));
     _ref = Widget.WIDGETS;
     _results = [];
     for (name in _ref) {

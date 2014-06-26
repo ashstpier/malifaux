@@ -34,6 +34,9 @@ window.Designer = {
     $('#page').click (e) => if e.target is $('#page')[0] then @clearEditWidget()
     $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())
     $('#name').blur => @updateName()
+    $('#name').keypress (e) => $('#name').blur() if e.which == 13
+    $('#name').click (e) => $(e.currentTarget).selectText() 
+      
     for name, className of Widget.WIDGETS
       do (className) => $("#add-#{name}").click => @addWidget(type: className)
 
