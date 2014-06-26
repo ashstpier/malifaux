@@ -9,7 +9,7 @@ TemplateStore = (function() {
 
   TemplateStore.all = function(cb) {
     return $.get("" + ENDPOINT_URL, function(data) {
-      return cb(JSON.parse(data));
+      return cb(data);
     });
   };
 
