@@ -1,4 +1,7 @@
 window.utils = {
+
+  environment: if window.location.hostname == "localhost" then "development" else "production"
+
   fontMap: {
     'Arial':            'Arial, "Helvetica Neue", Helvetica, sans-serif'
     'Helvetica':        '"Helvetica Neue", Helvetica, Arial, sans-serif'
@@ -17,7 +20,6 @@ window.utils = {
     'Medium': '14px'
     'Large': '16px'
   }
-
 
   guid: ->
     'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace /[xy]/g, (c) ->

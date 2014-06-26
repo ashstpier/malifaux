@@ -1,13 +1,11 @@
 var TemplateStore;
 
 TemplateStore = (function() {
-  var ENDPOINT_PATH, ENDPOINT_URL;
+  var ENDPOINT_URL;
 
   function TemplateStore() {}
 
-  ENDPOINT_PATH = window.location.hostname === "localhost" ? TEMPLATE_ENDPOINTS.development : TEMPLATE_ENDPOINTS.production;
-
-  ENDPOINT_URL = "http://" + window.location.host + "/" + ENDPOINT_PATH;
+  ENDPOINT_URL = "http://" + window.location.host + "/" + TEMPLATE_ENDPOINTS[utils.environment];
 
   TemplateStore.all = function(cb) {
     return $.get("" + ENDPOINT_URL + "/", function(data) {

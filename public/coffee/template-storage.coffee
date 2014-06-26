@@ -1,7 +1,6 @@
 class TemplateStore
 
-  ENDPOINT_PATH = if window.location.hostname is "localhost" then TEMPLATE_ENDPOINTS.development else TEMPLATE_ENDPOINTS.production
-  ENDPOINT_URL = "http://#{window.location.host}/#{ENDPOINT_PATH}"
+  ENDPOINT_URL = "http://#{window.location.host}/#{TEMPLATE_ENDPOINTS[utils.environment]}"
   
   @all: (cb) ->
     $.get "#{ENDPOINT_URL}/", (data) -> cb(data)
