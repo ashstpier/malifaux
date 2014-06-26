@@ -31,9 +31,8 @@ TemplateStore = (function() {
     return $.ajax({
       type: 'PUT',
       url: "" + ENDPOINT_URL + "/" + key,
-      processData: false,
-      data: JSON.stringify(data),
-      dataType: 'json'
+      contentType: "application/json",
+      data: JSON.stringify(data)
     });
   };
 
