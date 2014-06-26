@@ -9,6 +9,7 @@ class TemplateStore
     $.get "#{ENDPOINT_URL}/#{key}", (data) -> cb(data)
 
   @delete: (key) ->
+    console.log key
     $.ajax({
       type: 'DELETE',
       url: "#{ENDPOINT_URL}/#{key}",

@@ -10,7 +10,7 @@ window.Students = {
     });
   },
   runReport: function(studentId, templateKey) {
-    return window.location.href = "./report.html?studentid=" + studentId + "&template=" + templateKey + "&debug=1";
+    return window.location.href = "./report.html?studentid=" + studentId + "&template=" + templateKey;
   },
   init: function() {
     API.config((function(_this) {
