@@ -3,7 +3,6 @@ class window.Template
   @load: (templateName, cb) -> 
     TemplateStore.get templateName, (templateData) =>
       templateData.layout ||= []
-      console.log templateData 
 
       template = new Template(templateData)
       template.key = templateName
