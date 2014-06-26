@@ -1,5 +1,5 @@
 window.utils = {
-  environment: window.location.hostname === "localhost" ? "development" : "production",
+  environment: window.location.port === "9000" ? "development" : "production",
   fontMap: {
     'Arial': 'Arial, "Helvetica Neue", Helvetica, sans-serif',
     'Helvetica': '"Helvetica Neue", Helvetica, Arial, sans-serif',
