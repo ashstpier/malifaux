@@ -1,16 +1,15 @@
 var TemplateStore;
 
 TemplateStore = (function() {
-  var ENDPOINT_HOST, ENDPOINT_URL;
+  var ENDPOINT_PATH, ENDPOINT_URL;
 
   function TemplateStore() {}
 
-  ENDPOINT_HOST = window.location.host;
+  ENDPOINT_PATH = window.location.hostname === "localhost" ? TEMPLATE_ENDPOINTS.development : TEMPLATE_ENDPOINTS.production;
 
-  ENDPOINT_URL = "http://" + ENDPOINT_HOST + "/reports";
+  ENDPOINT_URL = "http://" + window.location.host + "/" + ENDPOINT_PATH;
 
   TemplateStore.all = function(cb) {
-    console.log(ENDPOINT_HOST);
     return $.get("" + ENDPOINT_URL + "/", function(data) {
       return cb(data);
     });

@@ -1,10 +1,9 @@
 class TemplateStore
 
-  ENDPOINT_HOST = window.location.host
-  ENDPOINT_URL = "http://#{ENDPOINT_HOST}/reports"
+  ENDPOINT_PATH = if window.location.hostname is "localhost" then TEMPLATE_ENDPOINTS.development else TEMPLATE_ENDPOINTS.production
+  ENDPOINT_URL = "http://#{window.location.host}/#{ENDPOINT_PATH}"
   
   @all: (cb) ->
-    console.log ENDPOINT_HOST
     $.get "#{ENDPOINT_URL}/", (data) -> cb(data)
 
   @get: (key, cb) ->
