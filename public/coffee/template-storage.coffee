@@ -12,7 +12,6 @@ class TemplateStore
     $.ajax({
       type: 'DELETE',
       url: "#{ENDPOINT_URL}/#{key}",
-      processData: false,
       dataType: 'json'
     });
 
@@ -21,6 +20,6 @@ class TemplateStore
       type: 'PUT',
       url: "#{ENDPOINT_URL}/#{key}",
       processData: false,
-      data: data,
+      data: JSON.stringify(data),
       dataType: 'json'
     });

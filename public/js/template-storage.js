@@ -23,7 +23,6 @@ TemplateStore = (function() {
     return $.ajax({
       type: 'DELETE',
       url: "" + ENDPOINT_URL + "/" + key,
-      processData: false,
       dataType: 'json'
     });
   };
@@ -33,7 +32,7 @@ TemplateStore = (function() {
       type: 'PUT',
       url: "" + ENDPOINT_URL + "/" + key,
       processData: false,
-      data: data,
+      data: JSON.stringify(data),
       dataType: 'json'
     });
   };
