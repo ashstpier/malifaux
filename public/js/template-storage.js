@@ -8,7 +8,7 @@ TemplateStore = (function() {
   ENDPOINT_URL = "" + TEMPLATE_ENDPOINTS[utils.environment];
 
   TemplateStore.all = function(cb) {
-    return $.get("" + ENDPOINT_URL + "/", function(data) {
+    return $.get("" + ENDPOINT_URL, function(data) {
       return cb(data);
     });
   };
