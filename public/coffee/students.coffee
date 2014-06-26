@@ -14,7 +14,7 @@ window.Students = {
         .text(template.name))
 
   runReport: (studentId, templateKey) ->
-    window.location.href = "/report.html?studentid=#{studentId}&template=#{templateKey}&debug=1"
+    window.location.href = "./report.html?studentid=#{studentId}&template=#{templateKey}&debug=1"
 
   init: ->
     API.config (config) => @setStudents(config["students"])

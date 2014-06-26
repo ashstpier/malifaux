@@ -146,7 +146,7 @@ window.Designer = {
   },
   "delete": function() {
     Template["delete"](this.templateKey);
-    return window.location.href = '/';
+    return window.location.href = './index.html';
   }
 };
 

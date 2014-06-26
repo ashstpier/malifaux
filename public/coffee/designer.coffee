@@ -75,7 +75,7 @@ window.Designer = {
 
   delete: ->
     Template.delete(@templateKey)
-    window.location.href = '/'
+    window.location.href = './index.html'
 }
 
 $ -> Designer.init()
