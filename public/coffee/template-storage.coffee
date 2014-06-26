@@ -12,14 +12,15 @@ class TemplateStore
     $.ajax({
       type: 'DELETE',
       url: "#{ENDPOINT_URL}/#{key}",
+      contentType: "application/json",
       dataType: 'json'
     });
 
   @save: (key, data) ->
-    console.log 
     $.ajax({ 
       type: 'PUT',
       url: "#{ENDPOINT_URL}/#{key}",
-      data: data
+      data: data,
+      contentType: "application/json",
       dataType: 'json'
     });

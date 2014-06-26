@@ -23,16 +23,17 @@ TemplateStore = (function() {
     return $.ajax({
       type: 'DELETE',
       url: "" + ENDPOINT_URL + "/" + key,
+      contentType: "application/json",
       dataType: 'json'
     });
   };
 
   TemplateStore.save = function(key, data) {
-    console.log;
     return $.ajax({
       type: 'PUT',
       url: "" + ENDPOINT_URL + "/" + key,
       data: data,
+      contentType: "application/json",
       dataType: 'json'
     });
   };
