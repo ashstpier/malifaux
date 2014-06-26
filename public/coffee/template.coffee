@@ -2,8 +2,8 @@ class window.Template
 
   @load: (templateName, cb) -> 
     TemplateStore.get templateName, (templateData) =>
-      templateData.key = templateName
-      templateData = { layout: [] } if templateData == undefined
+      templateData.layout ||= []
+      console.log templateData 
 
       template = new Template(templateData)
       template.key = templateName
@@ -15,9 +15,12 @@ class window.Template
     TemplateStore.delete(templateKey)
 
   @create: ->
-    template = new Template()
-    template.key = utils.guid()
-    template.name = "Untitled Template"
+    template = new Template({ 
+      key: utils.guid(),
+      name: "Untitled Template",
+      layout: [],
+      orientation: 'portrait' 
+    })
     template.save()
     return template
 
@@ -25,11 +28,12 @@ class window.Template
     TemplateStore.all(cb)
 
   constructor: (description) ->
-    description ||= { }
-    description.layout ||= []
     @page = $('#page')
     @widgets = []
+    @key = description.key
+    @name = description.name
     @layout = description.layout
+    @orientation = description.orientation
 
   render: (mode, data) ->
     for widgetConfig in @layout
@@ -54,11 +58,9 @@ class window.Template
 
   serialize: ->
     layout = (widget.serialize() for widget in @widgets)
-    { 
+    data = { 
       layout: layout,
-      name: @name 
+      name: @name,
+      orientation: @orientation
     }
-
-  isNew: ->
-    return true
-
+    data

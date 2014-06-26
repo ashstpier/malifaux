@@ -5,11 +5,12 @@ TemplateStore = (function() {
 
   function TemplateStore() {}
 
-  ENDPOINT_HOST = "localhost:9000";
+  ENDPOINT_HOST = window.location.host;
 
   ENDPOINT_URL = "http://" + ENDPOINT_HOST + "/reports";
 
   TemplateStore.all = function(cb) {
+    console.log(ENDPOINT_HOST);
     return $.get("" + ENDPOINT_URL + "/", function(data) {
       return cb(data);
     });

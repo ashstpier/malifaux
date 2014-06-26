@@ -38,6 +38,10 @@ window.Designer = {
     }
     return _results;
   },
+  setOrientation: function(orientation) {
+    $('#page').attr('class', orientation);
+    return this.template.orientation = orientation;
+  },
   bindEvents: function() {
     var className, name, _ref, _results;
     $('#save').click((function(_this) {
@@ -60,6 +64,11 @@ window.Designer = {
         if (e.target === $('#page')[0]) {
           return _this.clearEditWidget();
         }
+      };
+    })(this));
+    $('#orientation input:radio').change((function(_this) {
+      return function(e) {
+        return _this.setOrientation($(e.currentTarget).val());
       };
     })(this));
     $('#name').blur((function(_this) {
@@ -116,6 +125,8 @@ window.Designer = {
   },
   load: function() {
     $('#name').text(this.template.name);
+    $("#orientation input:radio[value='" + this.template.orientation + "']").attr('checked', true);
+    $('#page').attr("class", this.template.orientation);
     return this.template.render();
   },
   save: function() {

@@ -1,9 +1,10 @@
 class TemplateStore
 
-  ENDPOINT_HOST = "localhost:9000" 
+  ENDPOINT_HOST = window.location.host
   ENDPOINT_URL = "http://#{ENDPOINT_HOST}/reports"
   
   @all: (cb) ->
+    console.log ENDPOINT_HOST
     $.get "#{ENDPOINT_URL}/", (data) -> cb(data)
 
   @get: (key, cb) ->

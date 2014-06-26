@@ -23,11 +23,16 @@ window.Designer = {
     for name, className of Widget.WIDGETS
       $("#gallery").append("""<button id="add-#{name}" type="button">Add #{name}</button>""")
 
+  setOrientation: (orientation) ->
+    $('#page').attr('class', orientation)
+    @template.orientation = orientation
+
   bindEvents: ->
     $('#save').click => @save()
     $('#clear').click => @clear()
     $('#delete').click => @delete()
     $('#page').click (e) => if e.target is $('#page')[0] then @clearEditWidget()
+    $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())
     $('#name').blur => @updateName()
     for name, className of Widget.WIDGETS
       do (className) => $("#add-#{name}").click => @addWidget(type: className)
@@ -58,6 +63,8 @@ window.Designer = {
 
   load: ->
     $('#name').text(@template.name)
+    $("#orientation input:radio[value='#{@template.orientation}']").attr('checked', true)
+    $('#page').attr("class", @template.orientation)
     @template.render()
 
   save: ->

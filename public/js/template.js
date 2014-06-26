@@ -3,12 +3,8 @@ window.Template = (function() {
     return TemplateStore.get(templateName, (function(_this) {
       return function(templateData) {
         var template;
-        templateData.key = templateName;
-        if (templateData === void 0) {
-          templateData = {
-            layout: []
-          };
-        }
+        templateData.layout || (templateData.layout = []);
+        console.log(templateData);
         template = new Template(templateData);
         template.key = templateName;
         template.name = templateData.name;
@@ -23,9 +19,12 @@ window.Template = (function() {
 
   Template.create = function() {
     var template;
-    template = new Template();
-    template.key = utils.guid();
-    template.name = "Untitled Template";
+    template = new Template({
+      key: utils.guid(),
+      name: "Untitled Template",
+      layout: [],
+      orientation: 'portrait'
+    });
     template.save();
     return template;
   };
@@ -35,11 +34,12 @@ window.Template = (function() {
   };
 
   function Template(description) {
-    description || (description = {});
-    description.layout || (description.layout = []);
     this.page = $('#page');
     this.widgets = [];
+    this.key = description.key;
+    this.name = description.name;
     this.layout = description.layout;
+    this.orientation = description.orientation;
   }
 
   Template.prototype.render = function(mode, data) {
@@ -96,7 +96,7 @@ window.Template = (function() {
   };
 
   Template.prototype.serialize = function() {
-    var layout, widget;
+    var data, layout, widget;
     layout = (function() {
       var _i, _len, _ref, _results;
       _ref = this.widgets;
@@ -107,14 +107,12 @@ window.Template = (function() {
       }
       return _results;
     }).call(this);
-    return {
+    data = {
       layout: layout,
-      name: this.name
+      name: this.name,
+      orientation: this.orientation
     };
-  };
-
-  Template.prototype.isNew = function() {
-    return true;
+    return data;
   };
 
   return Template;

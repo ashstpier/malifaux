@@ -14,10 +14,20 @@ body {
 #page {
   position: relative;
   margin: 10px auto 50px;
-  width: 960px;
-  height: 1344px; /* A4 Ratio is ~ 1:1.4 */
   background-color: #fff;
   box-shadow: #c9c9c9 0 0 5px;
+}
+
+ /* A4 Ratio is ~ 1:1.4 */
+ 
+.portrait {
+  width: 960px;
+  height: 1344px;
+}
+
+.landscape {
+  width: 1344px;
+  height: 960px;
 }
 
 .widget {
