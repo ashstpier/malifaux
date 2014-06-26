@@ -2,7 +2,7 @@ window.Templates = {
 
   init: ->
     Template.all (templates) ->
-      $.each templates, (i, template) -> 
+      $.each templates, (i, template) ->
         $("#templates tbody").append("""
           <tr>
             <td>
