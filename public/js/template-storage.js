@@ -9,7 +9,6 @@ TemplateStore = (function() {
 
   TemplateStore.all = function(cb) {
     return $.get("" + ENDPOINT_URL, function(data) {
-      console.log(data);
       return cb(data);
     });
   };
