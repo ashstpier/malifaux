@@ -1,6 +1,6 @@
 class TemplateStore
 
-  ENDPOINT_URL = "http://#{window.location.host}/#{TEMPLATE_ENDPOINTS[utils.environment]}"
+  ENDPOINT_URL = "#{TEMPLATE_ENDPOINTS[utils.environment]}"
   
   @all: (cb) ->
     $.get "#{ENDPOINT_URL}/", (data) -> cb(data)
@@ -9,7 +9,7 @@ class TemplateStore
     $.get "#{ENDPOINT_URL}/#{key}", (data) -> cb(data)
 
   @delete: (key) ->
-    $.ajax({ 
+    $.ajax({
       type: 'DELETE',
       url: "#{ENDPOINT_URL}/#{key}",
       dataType: 'json'

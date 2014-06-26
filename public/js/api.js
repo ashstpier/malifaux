@@ -4,7 +4,7 @@ window.API = {
     if (this._config) {
       cb(this._config);
     }
-    return $.get("/configuration.json", (function(_this) {
+    return $.get("" + CONFIGURATION_ENDPOINTS[utils.environment], (function(_this) {
       return function(data) {
         _this._config = data;
         return cb(data);
@@ -18,10 +18,16 @@ window.API = {
   },
   _students: {},
   student: function(id, cb) {
+    var extensions, studentUrl;
     if (this._students[id]) {
       cb(this._students[id]);
     }
-    return $.get("/" + id + ".json", (function(_this) {
+    extensions = {
+      "production": "",
+      "development": ".json"
+    };
+    studentUrl = "" + STUDENT_ENDPOINTS[utils.environment] + "/" + id + extensions[utils.environment];
+    return $.get(studentUrl, (function(_this) {
       return function(data) {
         _this._students[id] = data;
         return cb(data);

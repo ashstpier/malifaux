@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="vendor/normalize-css/normalize.css">
+		<link rel="stylesheet" type="text/css" href="css/glyphicons.css">
 		<link rel="stylesheet" type="text/css" href="css/site.css">
 		<script type="text/javascript" src="vendor/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="vendor/bower-foundation/js/foundation.min.js"></script>
@@ -14,9 +15,17 @@
 		<script type="text/javascript" src="js/templates.js"></script>
 	</head>
 	<body>
-		<nav>
-			<div>Templates</div>
-		</nav>
+		<header id="toolbar">
+			<h1 id="name">Templates</h1>
+			<ul id="nav">
+				<li class="nav-option" id="exit">
+					<a href="designer.html">
+						<i class="glyphicons white file"></i>
+						New
+					</a>
+				</li>
+			</ul>
+		</header>
 		<section>
 			<a href="/run.html">Run Report</a>
 		</section>

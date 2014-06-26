@@ -1,3 +1,64 @@
+body {
+  background: #f0f0f0;
+  font-family: Helvetica Neue, Helvetica, Arial, Sans-Serif;
+  margin: 0;
+  padding: 0;
+  min-width: 980px;
+}
+
+#toolbar {
+  height: 50px;
+  background-color: #4184D3;
+  color: #fff;
+  font-weight: 300;
+
+}
+
+#name {
+  margin: 0px 0 10px 40px;
+  padding: 10px 0px;
+  float: left;
+
+  color: #fff;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 30px;
+  white-space: pre-wrap;
+}
+
+#nav {
+  float: right;
+  margin: 0;
+  padding: 0;
+}
+
+#nav .nav-option {
+  display: inline-block;
+  width: 160px;
+  margin: 0;
+  padding: 0;
+}
+
+#nav .nav-option a {
+  display: block;
+  position: relative;
+  margin: 0;
+  padding: 0 0 0 60px;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 50px;
+  color: #fff;
+  text-decoration: none;
+}
+#nav .nav-option:hover a {
+  background-color: #3467A3;
+}
+#nav .nav-option a .glyphicons {
+  position: absolute;
+  top: 12px;
+  left: 25px;
+}
+
 .widget {
   position: absolute;
   top: 20px;
