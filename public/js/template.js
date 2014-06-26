@@ -4,7 +4,6 @@ window.Template = (function() {
       return function(templateData) {
         var template;
         templateData.layout || (templateData.layout = []);
-        console.log(templateData);
         template = new Template(templateData);
         template.key = templateName;
         template.name = templateData.name;

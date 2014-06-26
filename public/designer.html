@@ -3,7 +3,9 @@
 		<link rel="stylesheet" href="vendor/froala/css/font-awesome.min.css">
 		<link rel="stylesheet" href="vendor/froala/css/froala_editor.min.css">
 		<link rel="stylesheet" href="vendor/jqueryui/themes/base/minified/jquery-ui.min.css">
+		<link rel="stylesheet" type="text/css" href="css/glyphicons.css">
 		<link rel="stylesheet" type="text/css" href="css/site.css">
+		<link rel="stylesheet" type="text/css" href="css/designer.css">
 
 		<script type="text/javascript" src="vendor/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="vendor/froala/js/froala_editor.min.js"></script>
@@ -21,18 +23,42 @@
 	</head>
 	<body>
 		<header id="toolbar">
-			<a href="/">Back</a>
-			<div contenteditable="true" id="name"></div>
-			<form id="orientation">
-				<label><input type="radio" name="orientation" value="portrait"> Portrait</label>
-				<label><input type="radio" name="orientation" value="landscape"> Landscape</label>
-			</form>
-			<button id="delete" type="button">Delete</button>
-			<button id="clear" type="button">Clear</button>
-			<button id="save" type="button">Save</button>
+			<div id="template-name">
+				<i class="glyphicons white file"></i>
+				<h1 contenteditable="true" id="name"></h1>
+			</div>
+			<ul id="nav">
+				<li class="nav-option" id="template-options">
+					<a href="#">
+						<i class="glyphicons white folder_open"></i>
+						Template
+					</a>
+					<div class="subnav" id="template">
+						<button id="delete">Delete</button>
+						<button id="clear">Clear</button>
+						<button id="save">Save</button>
+						<form id="orientation">
+							<label><input type="radio" name="orientation" value="portrait"> Portrait</label>
+							<label><input type="radio" name="orientation" value="landscape"> Landscape</label>
+						</form>
+					</div>
+				</li>
+				<li class="nav-option" id="widget-options">
+					<a href="#">
+						<i class="glyphicons white circle_plus"></i>
+						Widgets
+					</a>
+					<div class="subnav" id="gallery"></div>
+				</li>
+				<li class="nav-option" id="exit">
+					<a href="/">
+						<i class="glyphicons white exit"></i>
+						Exit
+					</a>
+				</li>
+			</ul>
 		</header>
-		<section id="gallery">
-		</section>
+
 		<div id="page"></div>
 	</body>
 </html>
