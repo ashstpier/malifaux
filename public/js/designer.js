@@ -101,9 +101,10 @@ window.Designer = {
             setTimeout((function() {
               return $('#gallery').removeClass('hidden');
             }), 500);
-            return _this.addWidget({
+            _this.addWidget({
               type: className
             });
+            return false;
           });
         };
       })(this)(className));

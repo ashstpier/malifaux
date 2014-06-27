@@ -33,8 +33,8 @@ class window.WidgetContent
   assessmentPoints: ->
     API.assessmentPoints()
 
-  styleOption: (type, key, label=key) ->
-    new StyleOptionRenderer(type, key, label).render(@style)
+  styleOption: (type, key, label=key, options={}) ->
+    new StyleOptionRenderer(type, key, label, options).render(@style)
 
   styleString: (styles) ->
     ("#{name}: #{value};" for name, value of styles).join(" ").replace(/"/gm, '&quot;')
@@ -42,7 +42,7 @@ class window.WidgetContent
 
 
 class window.StyleOptionRenderer
-  constructor: (@type, @key, @label) ->
+  constructor: (@type, @key, @label, @options={}) ->
 
   render: (styles) ->
     """
@@ -54,8 +54,9 @@ class window.StyleOptionRenderer
 
   renderInput: (styles) ->
     switch @type
-      when 'font' then @renderFontInput(styles)
-      when 'size' then @renderSizeInput(styles)
+      when 'font'   then @renderFontInput(styles)
+      when 'size'   then @renderSizeInput(styles)
+      when 'select' then @renderSelectInput(styles)
       else
         """<input name="#{@key}" class="style-option" name="#{@key}" type="#{@type}" value="#{styles[@key]}" />"""
 
@@ -71,6 +72,15 @@ class window.StyleOptionRenderer
   renderSizeInput: (styles) ->
     options = for sizeName, size of utils.sizeMap
       """<option #{if styles[@key] is sizeName then 'selected' else ''}>#{sizeName}</option>"""
+    """
+      <select name="#{@key}" class="style-option" name="#{@key}">
+        #{options.join("\n")}
+      </select>
+    """
+
+  renderSelectInput: (styles) ->
+    options = for value, name of @options
+      """<option value="#{value}" #{if styles[@key] is value then 'selected' else ''}>#{name}</option>"""
     """
       <select name="#{@key}" class="style-option" name="#{@key}">
         #{options.join("\n")}

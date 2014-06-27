@@ -68,11 +68,14 @@ window.WidgetContent = (function() {
     return API.assessmentPoints();
   };
 
-  WidgetContent.prototype.styleOption = function(type, key, label) {
+  WidgetContent.prototype.styleOption = function(type, key, label, options) {
     if (label == null) {
       label = key;
     }
-    return new StyleOptionRenderer(type, key, label).render(this.style);
+    if (options == null) {
+      options = {};
+    }
+    return new StyleOptionRenderer(type, key, label, options).render(this.style);
   };
 
   WidgetContent.prototype.styleString = function(styles) {
@@ -93,10 +96,11 @@ window.WidgetContent = (function() {
 })();
 
 window.StyleOptionRenderer = (function() {
-  function StyleOptionRenderer(type, key, label) {
+  function StyleOptionRenderer(type, key, label, options) {
     this.type = type;
     this.key = key;
     this.label = label;
+    this.options = options != null ? options : {};
   }
 
   StyleOptionRenderer.prototype.render = function(styles) {
@@ -109,6 +113,8 @@ window.StyleOptionRenderer = (function() {
         return this.renderFontInput(styles);
       case 'size':
         return this.renderSizeInput(styles);
+      case 'select':
+        return this.renderSelectInput(styles);
       default:
         return "<input name=\"" + this.key + "\" class=\"style-option\" name=\"" + this.key + "\" type=\"" + this.type + "\" value=\"" + styles[this.key] + "\" />";
     }
@@ -138,6 +144,21 @@ window.StyleOptionRenderer = (function() {
       for (sizeName in _ref) {
         size = _ref[sizeName];
         _results.push("<option " + (styles[this.key] === sizeName ? 'selected' : '') + ">" + sizeName + "</option>");
+      }
+      return _results;
+    }).call(this);
+    return "<select name=\"" + this.key + "\" class=\"style-option\" name=\"" + this.key + "\">\n  " + (options.join("\n")) + "\n</select>";
+  };
+
+  StyleOptionRenderer.prototype.renderSelectInput = function(styles) {
+    var name, options, value;
+    options = (function() {
+      var _ref, _results;
+      _ref = this.options;
+      _results = [];
+      for (value in _ref) {
+        name = _ref[value];
+        _results.push("<option value=\"" + value + "\" " + (styles[this.key] === value ? 'selected' : '') + ">" + name + "</option>");
       }
       return _results;
     }).call(this);

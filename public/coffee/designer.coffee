@@ -51,6 +51,7 @@ window.Designer = {
         $('#gallery').addClass('hidden')
         setTimeout (-> $('#gallery').removeClass('hidden')), 500
         @addWidget(type: className)
+        false
 
   updateName: ->
     name = $('#name').text()
