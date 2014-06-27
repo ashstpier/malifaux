@@ -18,7 +18,7 @@ window.ImageContent = (function(_super) {
     return 240;
   };
 
-  ImageContent.DEFAULT_IMAGE = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+  ImageContent.DEFAULT_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
   function ImageContent(config) {
     if (config == null) {

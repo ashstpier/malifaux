@@ -7,7 +7,7 @@ class window.ImageContent extends WidgetContent
   defaultWidth: -> 240
   defaultHeight: -> 240
 
-  @DEFAULT_IMAGE: "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+  @DEFAULT_IMAGE: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
 
   constructor: (config={}) ->
     @src = @get(config.src, ImageContent.DEFAULT_IMAGE)
