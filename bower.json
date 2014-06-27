@@ -19,7 +19,6 @@
     "store.js": "~1.3.16",
     "froala": "~1.1.5",
     "coffee-script": "~1.7.1",
-    "bower-foundation": "~4.0.0",
     "modernizr": "~2.8.2",
     "normalize-css": "~3.0.1",
     "underscore": "~1.6.0",
@@ -55,12 +54,6 @@
         "fonts/fontawesome-webfont.ttf",
         "fonts/fontawesome-webfont.woff",
         "fonts/FontAwesome.otf"
-      ]
-    },
-    "bower-foundation": {
-      "main": [
-        "css/foundation.min.css",
-        "js/foundation.min.js"
       ]
     },
     "normalize-css": {
