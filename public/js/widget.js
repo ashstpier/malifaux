@@ -7,7 +7,8 @@ window.Widget = (function() {
     'image': 'ImageContent',
     'text': 'TextContent',
     'name': 'NameContent',
-    'datatable': 'DatatableContent'
+    'datatable': 'DatatableContent',
+    'attendance': 'AttendanceContent'
   };
 
   Widget.loadAll = function(cb) {
