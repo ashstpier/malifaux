@@ -5,6 +5,7 @@ class window.DatatableContent extends WidgetContent
   @icon:        "table"
 
   @STYLE_DEFAULTS: {
+    subject_order: 'alphabetical'
     heading_text_color: '#000000'
     heading_background_color: '#FFFFFF'
     cell_text_color: '#000000'
@@ -36,7 +37,7 @@ class window.DatatableContent extends WidgetContent
         </tbody>
       </table>
     """)
-    for code, subject of data.subjects
+    for subject in @orderdSubjects(data.subjects)
       columnValues = for col in @columns
         "<td style="#{@cellStyles()}">#{subject.results?[col.value] or ''}</td>"
       node.find("tbody").append("""
@@ -53,7 +54,6 @@ class window.DatatableContent extends WidgetContent
   render_edit: (data) ->
     node = $("""
       <div class="datatable-edit">
-        <h3>Configure Data Table</h3>
         <h4>Columns</h4>
         <table>
           <thead>
@@ -67,13 +67,13 @@ class window.DatatableContent extends WidgetContent
         </table>
 
         <h4>Style</h4>
+        #{@styleOption('select', 'subject_order', "Order of Subjects", alphabetical: "Alphabetical", core_first: 'Core First')}
         #{@styleOption('font',  'font', "Font")}
         #{@styleOption('size',  'size', "Text Size")}
         #{@styleOption('color', 'heading_text_color', "Heading Text Color")}
         #{@styleOption('color', 'heading_background_color', "Heading Background Color")}
         #{@styleOption('color', 'cell_text_color', "Cell Text Color")}
         #{@styleOption('color', 'cell_background_color', "Cell Background Color")}
-
         <button id="done">Done</button>
       </div>
     """)
@@ -129,6 +129,19 @@ class window.DatatableContent extends WidgetContent
     for el in @el.find('.style-option')
       name = $(el).attr('name')
       @style[name] = $(el).val()
+
+  orderdSubjects: (subjects) ->
+    subjects = (v for k,v of subjects)
+    alphabetical = subjects.sort (a,b) =>
+      if @style.subject_order is 'core_first'
+        if a.subjectName is 'English' or a.subjectName is 'Maths' or a.subjectName is 'Science'
+          return -1
+        else
+          return 1
+      else
+        if a.subjectName >= b.subjectName then 1 else -1
+
+    alphabetical
 
   serialize: ->
     {columns: @columns, style: @style}

@@ -11,6 +11,7 @@ window.DatatableContent = (function(_super) {
   DatatableContent.icon = "table";
 
   DatatableContent.STYLE_DEFAULTS = {
+    subject_order: 'alphabetical',
     heading_text_color: '#000000',
     heading_background_color: '#FFFFFF',
     cell_text_color: '#000000',
@@ -36,7 +37,7 @@ window.DatatableContent = (function(_super) {
   }
 
   DatatableContent.prototype.render_layout = function(data) {
-    var code, col, columnTitles, columnValues, name, node, subject, _ref;
+    var col, columnTitles, columnValues, name, node, subject, _i, _len, _ref;
     name = utils.escape(data.name);
     columnTitles = (function() {
       var _i, _len, _ref, _results;
@@ -52,15 +53,15 @@ window.DatatableContent = (function(_super) {
       'font-family': utils.fontMap[this.style.font],
       'font-size': utils.sizeMap[this.style.size]
     })) + "\">\n  <thead>\n    <tr>\n      <th style=\"" + (this.headingStyles()) + "\"></th>\n      " + (columnTitles.join("\n")) + "\n    </tr>\n  </thead>\n  <tbody>\n  </tbody>\n</table>");
-    _ref = data.subjects;
-    for (code in _ref) {
-      subject = _ref[code];
+    _ref = this.orderdSubjects(data.subjects);
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      subject = _ref[_i];
       columnValues = (function() {
-        var _i, _len, _ref1, _results;
+        var _j, _len1, _ref1, _results;
         _ref1 = this.columns;
         _results = [];
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          col = _ref1[_i];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          col = _ref1[_j];
           _results.push("<td style=");
         }
         return _results;
@@ -72,7 +73,10 @@ window.DatatableContent = (function(_super) {
 
   DatatableContent.prototype.render_edit = function(data) {
     var col, node, table, _i, _len, _ref;
-    node = $("<div class=\"datatable-edit\">\n  <h3>Configure Data Table</h3>\n  <h4>Columns</h4>\n  <table>\n    <thead>\n      <tr>\n        <th>Title</th>\n        <th>Value</th>\n      </tr>\n    </thead>\n    <tbody class=\"edit-rows\">\n    </tbody>\n  </table>\n\n  <h4>Style</h4>\n  " + (this.styleOption('font', 'font', "Font")) + "\n  " + (this.styleOption('size', 'size', "Text Size")) + "\n  " + (this.styleOption('color', 'heading_text_color', "Heading Text Color")) + "\n  " + (this.styleOption('color', 'heading_background_color', "Heading Background Color")) + "\n  " + (this.styleOption('color', 'cell_text_color', "Cell Text Color")) + "\n  " + (this.styleOption('color', 'cell_background_color', "Cell Background Color")) + "\n\n  <button id=\"done\">Done</button>\n</div>");
+    node = $("<div class=\"datatable-edit\">\n  <h4>Columns</h4>\n  <table>\n    <thead>\n      <tr>\n        <th>Title</th>\n        <th>Value</th>\n      </tr>\n    </thead>\n    <tbody class=\"edit-rows\">\n    </tbody>\n  </table>\n\n  <h4>Style</h4>\n  " + (this.styleOption('select', 'subject_order', "Order of Subjects", {
+      alphabetical: "Alphabetical",
+      core_first: 'Core First'
+    })) + "\n  " + (this.styleOption('font', 'font', "Font")) + "\n  " + (this.styleOption('size', 'size', "Text Size")) + "\n  " + (this.styleOption('color', 'heading_text_color', "Heading Text Color")) + "\n  " + (this.styleOption('color', 'heading_background_color', "Heading Background Color")) + "\n  " + (this.styleOption('color', 'cell_text_color', "Cell Text Color")) + "\n  " + (this.styleOption('color', 'cell_background_color', "Cell Background Color")) + "\n  <button id=\"done\">Done</button>\n</div>");
     table = node.find('.edit-rows');
     _ref = this.columns;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -186,6 +190,37 @@ window.DatatableContent = (function(_super) {
       _results.push(this.style[name] = $(el).val());
     }
     return _results;
+  };
+
+  DatatableContent.prototype.orderdSubjects = function(subjects) {
+    var alphabetical, k, v;
+    subjects = (function() {
+      var _results;
+      _results = [];
+      for (k in subjects) {
+        v = subjects[k];
+        _results.push(v);
+      }
+      return _results;
+    })();
+    alphabetical = subjects.sort((function(_this) {
+      return function(a, b) {
+        if (_this.style.subject_order === 'core_first') {
+          if (a.subjectName === 'English' || a.subjectName === 'Maths' || a.subjectName === 'Science') {
+            return -1;
+          } else {
+            return 1;
+          }
+        } else {
+          if (a.subjectName >= b.subjectName) {
+            return 1;
+          } else {
+            return -1;
+          }
+        }
+      };
+    })(this));
+    return alphabetical;
   };
 
   DatatableContent.prototype.serialize = function() {
