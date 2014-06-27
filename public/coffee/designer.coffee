@@ -43,6 +43,7 @@ window.Designer = {
   updateName: ->
     name = $('#name').text()
     @template.name = name
+    @save()
 
   clearEditWidget: ->
     if @currentEditWidget

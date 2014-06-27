@@ -107,7 +107,8 @@ window.Designer = {
   updateName: function() {
     var name;
     name = $('#name').text();
-    return this.template.name = name;
+    this.template.name = name;
+    return this.save();
   },
   clearEditWidget: function() {
     if (this.currentEditWidget) {
