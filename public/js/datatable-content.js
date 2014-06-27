@@ -4,6 +4,12 @@ var __hasProp = {}.hasOwnProperty,
 window.DatatableContent = (function(_super) {
   __extends(DatatableContent, _super);
 
+  DatatableContent.displayName = "Subjects Data Table";
+
+  DatatableContent.description = "Showing assessment points, one row per subject.";
+
+  DatatableContent.icon = "table";
+
   DatatableContent.STYLE_DEFAULTS = {
     heading_text_color: '#000000',
     heading_background_color: '#FFFFFF',

@@ -1,5 +1,12 @@
 class window.TextContent extends WidgetContent
 
+  @displayName: "Free Text"
+  @description: "A block of static text with formatting options."
+  @icon:        "font"
+
+  defaultWidth: -> 360
+  defaultHeight: -> 240
+
   @EDITOR_CONFIG: {
     imageUpload: false
     inlineMode: true

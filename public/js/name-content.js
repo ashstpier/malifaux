@@ -8,6 +8,20 @@ window.NameContent = (function(_super) {
     return NameContent.__super__.constructor.apply(this, arguments);
   }
 
+  NameContent.displayName = "Student Name";
+
+  NameContent.description = "Name of the student in the format \"last, first\"";
+
+  NameContent.icon = "girl";
+
+  NameContent.prototype.defaultWidth = function() {
+    return 280;
+  };
+
+  NameContent.prototype.defaultHeight = function() {
+    return 40;
+  };
+
   NameContent.prototype.render_layout = function(data) {
     var name;
     name = utils.escape(data.name);

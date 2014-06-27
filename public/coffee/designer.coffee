@@ -21,7 +21,14 @@ window.Designer = {
 
   renderControls: ->
     for name, className of Widget.WIDGETS
-      $("#gallery").append("""<button id="add-#{name}" type="button">Add #{name}</button>""")
+      type = window[className]
+      $("#gallery").append """
+        <div id="add-#{name}" class="add-widget">
+          <i class="glyphicons white #{type.icon}"></i>
+          <h4>#{type.displayName}</h4>
+          <p>#{type.description}</p>
+        </div>
+      """
 
   setOrientation: (orientation) ->
     $('#page').attr('class', orientation)
@@ -35,8 +42,8 @@ window.Designer = {
     $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())
     $('#name').blur => @updateName()
     $('#name').keypress (e) => $('#name').blur() if e.which == 13
-    $('#name').click (e) => $(e.currentTarget).selectText() 
-      
+    $('#name').click (e) => $(e.currentTarget).selectText()
+
     for name, className of Widget.WIDGETS
       do (className) => $("#add-#{name}").click => @addWidget(type: className)
 
