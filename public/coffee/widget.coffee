@@ -4,10 +4,11 @@ class window.Widget
   @GRID_SIZE: [20, 20]
 
   @WIDGETS: {
-    'image':     'ImageContent'
-    'text':      'TextContent'
-    'name':      'NameContent'
-    'datatable': 'DatatableContent'
+    'image':      'ImageContent'
+    'text':       'TextContent'
+    'name':       'NameContent'
+    'datatable':  'DatatableContent'
+    'attendance': 'AttendanceContent'
   }
 
   @loadAll: (cb) ->
