@@ -52,13 +52,7 @@ window.Designer = {
     })(this));
     $('#exit a').click((function(_this) {
       return function() {
-        _this.exit();
-        return false;
-      };
-    })(this));
-    $('#clear').click((function(_this) {
-      return function() {
-        return _this.clear();
+        return _this.exit();
       };
     })(this));
     $('#page').click((function(_this) {
@@ -160,7 +154,8 @@ window.Designer = {
     })(this));
   },
   exit: function() {
-    return $('#save-modal').modal();
+    $('#save-modal').modal();
+    return false;
   }
 };
 

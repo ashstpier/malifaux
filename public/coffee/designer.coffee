@@ -36,10 +36,7 @@ window.Designer = {
 
   bindEvents: ->
     $('#save').click => @saveAndExit()
-    $('#exit a').click => 
-      @exit() 
-      false
-    $('#clear').click => @clear()
+    $('#exit a').click => @exit() 
     $('#page').click (e) => if e.target is $('#page')[0] then @clearEditWidget()
     $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())
     $('#name').blur => @updateName()
@@ -93,6 +90,7 @@ window.Designer = {
 
   exit: ->
     $('#save-modal').modal()
+    false
     
 }
 
