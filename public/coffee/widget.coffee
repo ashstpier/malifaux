@@ -57,6 +57,7 @@ class window.Widget
     @el
 
   renderContent: (mode) ->
+    console.log mode
     @currentMode = mode
     @el.removeClass("widget-layout-mode")
     @el.removeClass("widget-edit-mode")
@@ -65,6 +66,7 @@ class window.Widget
 
   layoutMode: ->
     @el.draggable('enable')
+    console.log "Hello"
     @renderContent('layout')
 
   editMode: ->

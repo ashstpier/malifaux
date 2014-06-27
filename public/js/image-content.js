@@ -33,7 +33,7 @@ window.ImageContent = (function(_super) {
         return _this.setImageFromFile(e.currentTarget.files[0]);
       };
     })(this));
-    return el.find(".icon").dblclick((function(_this) {
+    return el.find(".content").dblclick((function(_this) {
       return function() {
         return _this.openFilePicker();
       };
@@ -65,7 +65,14 @@ window.ImageContent = (function(_super) {
   };
 
   ImageContent.prototype.render_layout = function(data) {
-    return $("<div class=\"image-widget " + (this.src === ImageContent.DEFAULT_IMAGE ? 'image-blank' : void 0) + "\">\n  <img class=\"content\" src=\"" + this.src + "\">\n  <div class=\"edit\">\n    <a class=\"icon\" href=\"#\">&#43;</a>\n    <input class=\"picker\" type=\"file\" accept=\"image/x-png, image/gif, image/jpeg\">\n  </div>\n</div>");
+    return $("<div class=\"image-widget " + (this.src === ImageContent.DEFAULT_IMAGE ? 'image-blank' : void 0) + "\">\n  <img class=\"content\" src=\"" + this.src + "\">\n  <input class=\"picker\" type=\"file\" accept=\"image/png, image/gif, image/jpeg\">\n</div>");
+  };
+
+  ImageContent.prototype.render_edit = function(data) {
+    var node;
+    node = this.render_layout(data);
+    this.bindEvents(node);
+    return node;
   };
 
   ImageContent.prototype.serialize = function() {

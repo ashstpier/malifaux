@@ -79,7 +79,7 @@ window.Designer = {
     $('#name').text(@template.name)
     $("#orientation input:radio[value='#{@template.orientation}']").attr('checked', true)
     $('#page').attr("class", @template.orientation)
-    @template.render()
+    @template.render("layout")
 
   save: ->
     @template.save

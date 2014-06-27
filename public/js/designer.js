@@ -141,7 +141,7 @@ window.Designer = {
     $('#name').text(this.template.name);
     $("#orientation input:radio[value='" + this.template.orientation + "']").attr('checked', true);
     $('#page').attr("class", this.template.orientation);
-    return this.template.render();
+    return this.template.render("layout");
   },
   save: function() {
     return this.template.save;

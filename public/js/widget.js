@@ -89,6 +89,7 @@ window.Widget = (function() {
   };
 
   Widget.prototype.renderContent = function(mode) {
+    console.log(mode);
     this.currentMode = mode;
     this.el.removeClass("widget-layout-mode");
     this.el.removeClass("widget-edit-mode");
@@ -98,6 +99,7 @@ window.Widget = (function() {
 
   Widget.prototype.layoutMode = function() {
     this.el.draggable('enable');
+    console.log("Hello");
     return this.renderContent('layout');
   };
 

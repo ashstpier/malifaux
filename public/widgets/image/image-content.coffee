@@ -14,12 +14,12 @@ class window.ImageContent extends WidgetContent
 
   bindEvents: (el) ->
     el.find(".picker").change (e) => @setImageFromFile(e.currentTarget.files[0])
-    el.find(".icon").dblclick => @openFilePicker()
+    el.find(".content").dblclick => @openFilePicker()
 
   openFilePicker: ->
     picker = @el.find(".picker")
     picker.click()
-    return false
+    false
 
   setImageFromFile: (file) ->
     reader = new FileReader()
@@ -35,12 +35,16 @@ class window.ImageContent extends WidgetContent
     $("""
       <div class="image-widget #{if @src is ImageContent.DEFAULT_IMAGE then 'image-blank'}">
         <img class="content" src="#{@src}">
-        <div class="edit">
-          <a class="icon" href="#">&#43;</a>
-          <input class="picker" type="file" accept="image/x-png, image/gif, image/jpeg">
-        </div>
+        <input class="picker" type="file" accept="image/png, image/gif, image/jpeg">
       </div>
     """)
 
+  render_edit: (data) ->
+    node = @render_layout(data)
+    @bindEvents(node)
+    node
+
   serialize: ->
     { src: @src }
+
+
