@@ -28,12 +28,17 @@ TemplateStore = (function() {
     });
   };
 
-  TemplateStore.save = function(key, data) {
+  TemplateStore.save = function(key, data, cb) {
     return $.ajax({
       type: 'PUT',
       url: "" + ENDPOINT_URL + "/" + key,
       contentType: "application/json",
-      data: JSON.stringify(data)
+      data: JSON.stringify(data),
+      complete: function() {
+        if (cb) {
+          return cb();
+        }
+      }
     });
   };
 

@@ -87,11 +87,11 @@ window.Template = (function() {
     return _results;
   };
 
-  Template.prototype.save = function() {
+  Template.prototype.save = function(cb) {
     var data;
     data = this.serialize();
     data.key = this.key;
-    return TemplateStore.save(this.key, data);
+    return TemplateStore.save(this.key, data, cb);
   };
 
   Template.prototype.serialize = function() {

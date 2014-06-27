@@ -22,7 +22,9 @@
     "bower-foundation": "~4.0.0",
     "modernizr": "~2.8.2",
     "normalize-css": "~3.0.1",
-    "underscore": "~1.6.0"
+    "underscore": "~1.6.0",
+    "vex": "~2.1.1",
+    "bootstrap": "~3.2.0"
   },
   "overrides": {
     "jquery": {
@@ -74,6 +76,12 @@
     "underscore": {
       "main": [
         "underscore.js"
+      ]
+    },
+    "bootstrap": {
+      "main": [
+        "dist/js/bootstrap.min.js",
+        "dist/css/bootstrap.min.css"
       ]
     }
   }

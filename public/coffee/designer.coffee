@@ -28,9 +28,11 @@ window.Designer = {
     @template.orientation = orientation
 
   bindEvents: ->
-    $('#save').click => @save()
+    $('#save').click => @saveAndExit()
+    $('#exit a').click => 
+      @exit() 
+      false
     $('#clear').click => @clear()
-    $('#delete').click => @delete()
     $('#page').click (e) => if e.target is $('#page')[0] then @clearEditWidget()
     $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())
     $('#name').blur => @updateName()
@@ -72,11 +74,15 @@ window.Designer = {
     @template.render()
 
   save: ->
-    @template.save()
+    @template.save
 
-  delete: ->
-    Template.delete(@templateKey)
-    window.location.href = './index.html'
+  saveAndExit: ->
+    @template.save =>
+      window.location.href = './index.html'
+
+  exit: ->
+    $('#save-modal').modal()
+    
 }
 
 $ -> Designer.init()

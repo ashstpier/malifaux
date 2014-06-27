@@ -50,10 +50,10 @@ class window.Template
   removeAllWidgets: ->
     @removeWidget(widget) for widget in @widgets
 
-  save: ->
+  save: (cb) ->
     data = @serialize()
     data.key = @key
-    TemplateStore.save(@key, data)
+    TemplateStore.save(@key, data, cb)
 
   serialize: ->
     layout = (widget.serialize() for widget in @widgets)

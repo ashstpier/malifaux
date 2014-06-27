@@ -46,17 +46,18 @@ window.Designer = {
     var className, name, _ref, _results;
     $('#save').click((function(_this) {
       return function() {
-        return _this.save();
+        return _this.saveAndExit();
+      };
+    })(this));
+    $('#exit a').click((function(_this) {
+      return function() {
+        _this.exit();
+        return false;
       };
     })(this));
     $('#clear').click((function(_this) {
       return function() {
         return _this.clear();
-      };
-    })(this));
-    $('#delete').click((function(_this) {
-      return function() {
-        return _this["delete"]();
       };
     })(this));
     $('#page').click((function(_this) {
@@ -143,11 +144,17 @@ window.Designer = {
     return this.template.render();
   },
   save: function() {
-    return this.template.save();
+    return this.template.save;
   },
-  "delete": function() {
-    Template["delete"](this.templateKey);
-    return window.location.href = './index.html';
+  saveAndExit: function() {
+    return this.template.save((function(_this) {
+      return function() {
+        return window.location.href = './index.html';
+      };
+    })(this));
+  },
+  exit: function() {
+    return $('#save-modal').modal();
   }
 };
 

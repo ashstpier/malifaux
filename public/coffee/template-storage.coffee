@@ -16,10 +16,11 @@ class TemplateStore
       dataType: 'json'
     });
 
-  @save: (key, data) ->
+  @save: (key, data, cb) ->
     $.ajax({ 
       type: 'PUT',
       url: "#{ENDPOINT_URL}/#{key}",
       contentType: "application/json",
-      data: JSON.stringify(data)
+      data: JSON.stringify(data),
+      complete: -> cb() if cb
     });

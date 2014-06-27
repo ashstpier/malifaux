@@ -4,6 +4,8 @@
 		<link rel="stylesheet" href="vendor/froala/css/froala_editor.min.css">
 		<link rel="stylesheet" href="vendor/jqueryui/themes/base/minified/jquery-ui.min.css">
 		<link rel="stylesheet" type="text/css" href="css/glyphicons.css">
+		<link rel="stylesheet" type="text/css" href="css/modal.css">
+		<link rel="stylesheet" type="text/css" href="css/btn.css">
 		<link rel="stylesheet" type="text/css" href="css/site.css">
 		<link rel="stylesheet" type="text/css" href="css/designer.css">
 
@@ -12,6 +14,8 @@
 		<script type="text/javascript" src="vendor/jqueryui/ui/minified/jquery-ui.min.js"></script>
 		<script type="text/javascript" src="vendor/store.js/store.min.js"></script>
 
+		<script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+		
 		<script type="text/javascript" src="js/jquery-select-text.js"></script>
 		<script type="text/javascript" src="js/endpoints.js"></script>
 		<script type="text/javascript" src="js/utils.js"></script>
@@ -37,9 +41,7 @@
 						Template
 					</a>
 					<div class="subnav" id="template">
-						<button id="delete">Delete</button>
 						<button id="clear">Clear</button>
-						<button id="save">Save</button>
 						<form id="orientation">
 							<label><input type="radio" name="orientation" value="portrait"> Portrait</label>
 							<label><input type="radio" name="orientation" value="landscape"> Landscape</label>
@@ -63,5 +65,19 @@
 		</header>
 
 		<div id="page"></div>
+
+		<div class="modal fade" id="save-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-body">
+		      	<h4 class="modal-title" id="myModalLabel">Save Changes?</h4>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Discard</button>
+		        <button type="button" id="save" class="btn btn-primary">Save</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
 	</body>
 </html>
