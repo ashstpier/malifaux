@@ -26,11 +26,13 @@ class window.Widget
     @currentMode = 'layout'
     @guid = config.guid || utils.guid()
     @content = if config.type? then new window[config.type](config.content) else new TextContent()
+    width = if config.width? then config.width else @content.defaultWidth()
+    height = if config.height? then config.height else @content.defaultHeight()
     @origin = {
-      x: if config.x? then config.x else 20
-      y: if config.y? then config.y else 20
-      width: if config.width? then config.width else @content.defaultWidth()
-      height: if config.height? then config.height else @content.defaultHeight()
+      x: if config.x? then config.x else ((960/2) - (width/2))
+      y: if config.y? then config.y else 300
+      width: width
+      height: height
     }
 
   originStyles: -> """position:absolute; top:#{@origin.y}px; left:#{@origin.x}px; width:#{@origin.width}px; height:#{@origin.height}px;"""

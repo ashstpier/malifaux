@@ -4,6 +4,20 @@ var __hasProp = {}.hasOwnProperty,
 window.ImageContent = (function(_super) {
   __extends(ImageContent, _super);
 
+  ImageContent.displayName = "Image";
+
+  ImageContent.description = "A static photograph, logo or graphic";
+
+  ImageContent.icon = "picture";
+
+  ImageContent.prototype.defaultWidth = function() {
+    return 240;
+  };
+
+  ImageContent.prototype.defaultHeight = function() {
+    return 240;
+  };
+
   ImageContent.DEFAULT_IMAGE = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
 
   function ImageContent(config) {

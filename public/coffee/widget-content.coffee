@@ -1,4 +1,9 @@
 class window.WidgetContent
+
+  @displayName: "A Widget"
+  @description: "An element that can be added to the page."
+  @icon:        "wrench"
+
   constructor: (config={}) -> null
 
   render: (mode= 'layout', data=utils.fakeStudentData()) ->

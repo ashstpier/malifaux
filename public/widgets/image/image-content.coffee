@@ -1,5 +1,12 @@
 class window.ImageContent extends WidgetContent
 
+  @displayName: "Image"
+  @description: "A static photograph, logo or graphic"
+  @icon:        "picture"
+
+  defaultWidth: -> 240
+  defaultHeight: -> 240
+
   @DEFAULT_IMAGE: "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
 
   constructor: (config={}) ->

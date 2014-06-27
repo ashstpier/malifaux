@@ -29,12 +29,13 @@ window.Designer = {
     }
   },
   renderControls: function() {
-    var className, name, _ref, _results;
+    var className, name, type, _ref, _results;
     _ref = Widget.WIDGETS;
     _results = [];
     for (name in _ref) {
       className = _ref[name];
-      _results.push($("#gallery").append("<button id=\"add-" + name + "\" type=\"button\">Add " + name + "</button>"));
+      type = window[className];
+      _results.push($("#gallery").append("<div id=\"add-" + name + "\" class=\"add-widget\">\n  <i class=\"glyphicons white " + type.icon + "\"></i>\n  <h4>" + type.displayName + "</h4>\n  <p>" + type.description + "</p>\n</div>"));
     }
     return _results;
   },
@@ -96,6 +97,10 @@ window.Designer = {
       _results.push((function(_this) {
         return function(className) {
           return $("#add-" + name).click(function() {
+            $('#gallery').addClass('hidden');
+            setTimeout((function() {
+              return $('#gallery').removeClass('hidden');
+            }), 500);
             return _this.addWidget({
               type: className
             });

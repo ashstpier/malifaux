@@ -1,5 +1,9 @@
 class window.DatatableContent extends WidgetContent
 
+  @displayName: "Subjects Data Table"
+  @description: "Showing assessment points, one row per subject."
+  @icon:        "table"
+
   @STYLE_DEFAULTS: {
     heading_text_color: '#000000'
     heading_background_color: '#FFFFFF'

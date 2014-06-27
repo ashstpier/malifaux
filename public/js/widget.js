@@ -34,6 +34,7 @@ window.Widget = (function() {
   };
 
   function Widget(config, data) {
+    var height, width;
     if (config == null) {
       config = {};
     }
@@ -41,11 +42,13 @@ window.Widget = (function() {
     this.currentMode = 'layout';
     this.guid = config.guid || utils.guid();
     this.content = config.type != null ? new window[config.type](config.content) : new TextContent();
+    width = config.width != null ? config.width : this.content.defaultWidth();
+    height = config.height != null ? config.height : this.content.defaultHeight();
     this.origin = {
-      x: config.x != null ? config.x : 20,
-      y: config.y != null ? config.y : 20,
-      width: config.width != null ? config.width : this.content.defaultWidth(),
-      height: config.height != null ? config.height : this.content.defaultHeight()
+      x: config.x != null ? config.x : (960 / 2) - (width / 2),
+      y: config.y != null ? config.y : 300,
+      width: width,
+      height: height
     };
   }
 

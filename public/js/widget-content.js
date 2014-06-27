@@ -1,4 +1,10 @@
 window.WidgetContent = (function() {
+  WidgetContent.displayName = "A Widget";
+
+  WidgetContent.description = "An element that can be added to the page.";
+
+  WidgetContent.icon = "wrench";
+
   function WidgetContent(config) {
     if (config == null) {
       config = {};

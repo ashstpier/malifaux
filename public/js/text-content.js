@@ -4,6 +4,20 @@ var __hasProp = {}.hasOwnProperty,
 window.TextContent = (function(_super) {
   __extends(TextContent, _super);
 
+  TextContent.displayName = "Free Text";
+
+  TextContent.description = "A block of static text with formatting options.";
+
+  TextContent.icon = "font";
+
+  TextContent.prototype.defaultWidth = function() {
+    return 360;
+  };
+
+  TextContent.prototype.defaultHeight = function() {
+    return 240;
+  };
+
   TextContent.EDITOR_CONFIG = {
     imageUpload: false,
     inlineMode: true,
