@@ -68,6 +68,10 @@ window.WidgetContent = (function() {
     return API.assessmentPoints();
   };
 
+  WidgetContent.prototype.metrics = function() {
+    return API.metrics();
+  };
+
   WidgetContent.prototype.styleOption = function(type, key, label, options) {
     if (label == null) {
       label = key;

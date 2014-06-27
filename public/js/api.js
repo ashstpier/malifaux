@@ -4,7 +4,7 @@ window.API = {
     if (this._config) {
       cb(this._config);
     }
-    return $.get("" + CONFIGURATION_ENDPOINTS[utils.environment], (function(_this) {
+    return $.get(CONFIGURATION_ENDPOINTS[utils.environment], (function(_this) {
       return function(data) {
         _this._config = data;
         return cb(data);
@@ -36,5 +36,8 @@ window.API = {
   },
   assessmentPoints: function() {
     return this._config.assessmentPoints;
+  },
+  metrics: function() {
+    return ["name", "attendance.present", "attendance.late", "attendance.authorised", "attendance.nonAuthorised", "classGroup.classGroupCode", "classGroup.classGroupName", "classGroup.tutors", "year.yearCode", "year.yearName", "year.yearLongName"];
   }
 };

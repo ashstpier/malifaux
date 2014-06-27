@@ -2,7 +2,7 @@ window.API = {
   _config: null
   config: (cb) ->
     cb(@_config) if @_config
-    $.get "#{CONFIGURATION_ENDPOINTS[utils.environment]}", (data) =>
+    $.get CONFIGURATION_ENDPOINTS[utils.environment], (data) =>
       @_config = data
       cb(data)
 
@@ -21,4 +21,18 @@ window.API = {
       cb(data)
 
   assessmentPoints: -> @_config.assessmentPoints
+  metrics: -> [
+    "name"
+    "attendance.present"
+    "attendance.late"
+    "attendance.authorised"
+    "attendance.nonAuthorised"
+    "classGroup.classGroupCode"
+    "classGroup.classGroupName"
+    "classGroup.tutors"
+    "year.yearCode"
+    "year.yearName"
+    "year.yearLongName"
+  ]
+
 }

@@ -8,6 +8,7 @@ class window.Widget
     'text':       'TextContent'
     'name':       'NameContent'
     'datatable':  'DatatableContent'
+    'field':      'FieldContent'
     'attendance': 'AttendanceContent'
   }
 

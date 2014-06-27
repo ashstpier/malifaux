@@ -33,6 +33,9 @@ class window.WidgetContent
   assessmentPoints: ->
     API.assessmentPoints()
 
+  metrics: ->
+    API.metrics()
+
   styleOption: (type, key, label=key, options={}) ->
     new StyleOptionRenderer(type, key, label, options).render(@style)
 
