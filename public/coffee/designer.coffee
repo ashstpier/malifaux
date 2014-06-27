@@ -45,7 +45,10 @@ window.Designer = {
     $('#name').click (e) => $(e.currentTarget).selectText()
 
     for name, className of Widget.WIDGETS
-      do (className) => $("#add-#{name}").click => @addWidget(type: className)
+      do (className) => $("#add-#{name}").click =>
+        $('#gallery').addClass('hidden')
+        setTimeout (-> $('#gallery').removeClass('hidden')), 500
+        @addWidget(type: className)
 
   updateName: ->
     name = $('#name').text()

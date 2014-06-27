@@ -96,6 +96,10 @@ window.Designer = {
       _results.push((function(_this) {
         return function(className) {
           return $("#add-" + name).click(function() {
+            $('#gallery').addClass('hidden');
+            setTimeout((function() {
+              return $('#gallery').removeClass('hidden');
+            }), 500);
             return _this.addWidget({
               type: className
             });
