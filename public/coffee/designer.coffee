@@ -36,6 +36,7 @@ window.Designer = {
 
   bindEvents: ->
     $('#save').click => @saveAndExit()
+    $('#discard').click => @discard()
     $('#exit a').click => @exit() 
     $('#page').click (e) => if e.target is $('#page')[0] then @clearEditWidget()
     $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())
@@ -87,6 +88,9 @@ window.Designer = {
   saveAndExit: ->
     @template.save =>
       window.location.href = './index.html'
+
+  discard: ->
+    window.location.href = './index.html'
 
   exit: ->
     $('#save-modal').modal()

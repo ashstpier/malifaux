@@ -14,9 +14,9 @@
   outline: 0;
 }
 .modal.fade .modal-dialog {
-  -webkit-transition: -webkit-transform .3s ease-out;
-       -o-transition:      -o-transform .3s ease-out;
-          transition:         transform .3s ease-out;
+  -webkit-transition: -webkit-transform .2s ease-out;
+       -o-transition:      -o-transform .2s ease-out;
+          transition:         transform .2s ease-out;
   -webkit-transform: translate3d(0, -25%, 0);
        -o-transform: translate3d(0, -25%, 0);
           transform: translate3d(0, -25%, 0);

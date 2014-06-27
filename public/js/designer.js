@@ -50,6 +50,11 @@ window.Designer = {
         return _this.saveAndExit();
       };
     })(this));
+    $('#discard').click((function(_this) {
+      return function() {
+        return _this.discard();
+      };
+    })(this));
     $('#exit a').click((function(_this) {
       return function() {
         return _this.exit();
@@ -152,6 +157,9 @@ window.Designer = {
         return window.location.href = './index.html';
       };
     })(this));
+  },
+  discard: function() {
+    return window.location.href = './index.html';
   },
   exit: function() {
     $('#save-modal').modal();
