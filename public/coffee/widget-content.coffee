@@ -31,7 +31,9 @@ class window.WidgetContent
   defaultHeight: -> 160
 
   assessmentPoints: ->
-    API.assessmentPoints()
+    points = ($.extend({}, obj, {code: key}) for key, obj of API.assessmentPoints())
+    points.sort (a,b) -> if a.name <= b.name then -1 else 1
+
 
   metrics: ->
     API.metrics()

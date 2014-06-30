@@ -88,7 +88,7 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.buildEditRow = function(col) {
-    var key, opt, options;
+    var options, point;
     if (col == null) {
       col = {
         title: '',
@@ -96,12 +96,12 @@ window.DatatableContent = (function(_super) {
       };
     }
     options = (function() {
-      var _ref, _results;
+      var _i, _len, _ref, _results;
       _ref = this.assessmentPoints();
       _results = [];
-      for (key in _ref) {
-        opt = _ref[key];
-        _results.push("<option value=\"" + key + "\" " + (key === col.value ? 'selected="selected"' : '') + ">[" + opt.name + "] " + opt.longName + "</option>");
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        point = _ref[_i];
+        _results.push("<option value=\"" + point.code + "\" " + (point.code === col.value ? 'selected="selected"' : '') + ">" + point.name + " | " + point.longName + "</option>");
       }
       return _results;
     }).call(this);

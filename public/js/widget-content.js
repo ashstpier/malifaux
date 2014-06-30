@@ -65,7 +65,26 @@ window.WidgetContent = (function() {
   };
 
   WidgetContent.prototype.assessmentPoints = function() {
-    return API.assessmentPoints();
+    var key, obj, points;
+    points = (function() {
+      var _ref, _results;
+      _ref = API.assessmentPoints();
+      _results = [];
+      for (key in _ref) {
+        obj = _ref[key];
+        _results.push($.extend({}, obj, {
+          code: key
+        }));
+      }
+      return _results;
+    })();
+    return points.sort(function(a, b) {
+      if (a.name <= b.name) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
   };
 
   WidgetContent.prototype.metrics = function() {

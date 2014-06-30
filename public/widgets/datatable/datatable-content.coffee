@@ -83,8 +83,8 @@ class window.DatatableContent extends WidgetContent
     node
 
   buildEditRow: (col={title:'', value:''}) ->
-    options = for key, opt of @assessmentPoints()
-      """<option value="#{key}" #{if key is col.value then 'selected="selected"' else ''}>[#{opt.name}] #{opt.longName}</option>"""
+    options = for point in @assessmentPoints()
+      """<option value="#{point.code}" #{if point.code is col.value then 'selected="selected"' else ''}>#{point.name} | #{point.longName}</option>"""
 
     """<tr class="column-setting">
       <td><input class="col-title" name="col-title" type="text" value="#{col.title}" /></td>
