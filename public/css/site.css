@@ -59,6 +59,10 @@ body {
   left: 25px;
 }
 
+#nav #layout-options {
+  width:200px;
+}
+
 .widget {
   position: absolute;
   top: 20px;
