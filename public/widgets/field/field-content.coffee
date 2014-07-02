@@ -13,7 +13,7 @@ class window.FieldContent extends WidgetContent
     size: 'Medium'
   }
 
-  constructor: (config={}) ->
+  initWithConfig: (config) ->
     @field = @get(config.field, @metrics()[0])
     @style = $.extend({}, FieldContent.STYLE_DEFAULTS, @get(config.style, {}))
 

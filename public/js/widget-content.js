@@ -5,11 +5,12 @@ window.WidgetContent = (function() {
 
   WidgetContent.icon = "wrench";
 
-  function WidgetContent(config) {
+  function WidgetContent(widget, config) {
+    this.widget = widget;
     if (config == null) {
       config = {};
     }
-    null;
+    this.initWithConfig(config);
   }
 
   WidgetContent.prototype.render = function(mode, data) {
@@ -112,6 +113,13 @@ window.WidgetContent = (function() {
       }
       return _results;
     })()).join(" ").replace(/"/gm, '&quot;');
+  };
+
+  WidgetContent.prototype.setAspectRatio = function(ratio) {
+    if (ratio == null) {
+      ratio = true;
+    }
+    return this.widget.setAspectRatio(ratio);
   };
 
   return WidgetContent;

@@ -4,6 +4,10 @@ var __hasProp = {}.hasOwnProperty,
 window.ImageContent = (function(_super) {
   __extends(ImageContent, _super);
 
+  function ImageContent() {
+    return ImageContent.__super__.constructor.apply(this, arguments);
+  }
+
   ImageContent.displayName = "Image";
 
   ImageContent.description = "A static photograph, logo or graphic";
@@ -20,12 +24,9 @@ window.ImageContent = (function(_super) {
 
   ImageContent.DEFAULT_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
-  function ImageContent(config) {
-    if (config == null) {
-      config = {};
-    }
-    this.src = this.get(config.src, ImageContent.DEFAULT_IMAGE);
-  }
+  ImageContent.prototype.initWithConfig = function(config) {
+    return this.src = this.get(config.src, ImageContent.DEFAULT_IMAGE);
+  };
 
   ImageContent.prototype.bindEvents = function(el) {
     el.find(".picker").change((function(_this) {
@@ -59,9 +60,19 @@ window.ImageContent = (function(_super) {
   };
 
   ImageContent.prototype.setImage = function(data) {
+    var ratio;
     this.src = data;
     this.el.find(".content").attr('src', this.src);
-    return this.el.removeClass('image-blank');
+    this.el.removeClass('image-blank');
+    ratio = this.aspectRatio();
+    return this.setAspectRatio(ratio);
+  };
+
+  ImageContent.prototype.aspectRatio = function() {
+    var img;
+    img = new Image();
+    img.src = this.src;
+    return img.width / img.height;
   };
 
   ImageContent.prototype.render_layout = function(data) {

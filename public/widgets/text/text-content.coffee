@@ -25,7 +25,7 @@ class window.TextContent extends WidgetContent
 
   @DEFAULT_CONTENT: "<p>Type text here&hellip;</p>"
 
-  constructor: (config={}) ->
+  initWithConfig: (config) ->
     @html = @get(config.html, TextContent.DEFAULT_CONTENT)
 
   render_layout: (data) ->

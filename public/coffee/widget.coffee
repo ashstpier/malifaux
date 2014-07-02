@@ -1,7 +1,7 @@
 class window.Widget
 
   @PAGE_SELECTOR: '#page'
-  @GRID_SIZE: [20, 20]
+  @GRID_SIZE: [1,1]
 
   @WIDGETS: {
     'image':      'ImageContent'
@@ -27,7 +27,7 @@ class window.Widget
   constructor: (config={}, @data=null) ->
     @currentMode = 'layout'
     @guid = config.guid || utils.guid()
-    @content = if config.type? then new window[config.type](config.content) else new TextContent()
+    @content = if config.type? then new window[config.type](this, config.content) else new TextContent()
     width = if config.width? then config.width else @content.defaultWidth()
     height = if config.height? then config.height else @content.defaultHeight()
     @origin = {
@@ -42,7 +42,7 @@ class window.Widget
   bindEvents: ->
     @el.dblclick => Designer.editWidget(this)
     @el.find('.widget-delete').click  => Designer.removeWidget(this)
-    @el.resizable(grid: Widget.GRID_SIZE, containment: Widget.PAGE_SELECTOR)
+    @el.resizable(grid: Widget.GRID_SIZE, containment: Widget.PAGE_SELECTOR, handles: 'n, e, s, w, ne, se, sw, nw')
     @el.draggable(grid: Widget.GRID_SIZE, containment: Widget.PAGE_SELECTOR)
 
   render: (mode) ->
@@ -87,3 +87,9 @@ class window.Widget
       type: @content.constructor.name
       content: @content.serialize()
     }
+
+  setAspectRatio: (ratio) ->
+    console.log ratio
+    @el.resizable('destroy')
+    @el.height(@el.width()/ratio)
+    @el.resizable(grid: Widget.GRID_SIZE, containment: Widget.PAGE_SELECTOR, aspectRatio: ratio)

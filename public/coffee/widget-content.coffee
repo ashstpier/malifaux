@@ -4,7 +4,8 @@ class window.WidgetContent
   @description: "An element that can be added to the page."
   @icon:        "wrench"
 
-  constructor: (config={}) -> null
+  constructor: (@widget, config={}) ->
+    @initWithConfig(config)
 
   render: (mode= 'layout', data=utils.fakeStudentData()) ->
     @el = @["render_#{mode}"].call(this, data)
@@ -43,6 +44,8 @@ class window.WidgetContent
 
   styleString: (styles) ->
     ("#{name}: #{value};" for name, value of styles).join(" ").replace(/"/gm, '&quot;')
+
+  setAspectRatio: (ratio=true) -> @widget.setAspectRatio(ratio)
 
 
 
@@ -91,3 +94,4 @@ class window.StyleOptionRenderer
         #{options.join("\n")}
       </select>
     """
+

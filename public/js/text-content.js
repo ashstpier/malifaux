@@ -4,6 +4,10 @@ var __hasProp = {}.hasOwnProperty,
 window.TextContent = (function(_super) {
   __extends(TextContent, _super);
 
+  function TextContent() {
+    return TextContent.__super__.constructor.apply(this, arguments);
+  }
+
   TextContent.displayName = "Free Text";
 
   TextContent.description = "A block of static text with formatting options.";
@@ -29,12 +33,9 @@ window.TextContent = (function(_super) {
 
   TextContent.DEFAULT_CONTENT = "<p>Type text here&hellip;</p>";
 
-  function TextContent(config) {
-    if (config == null) {
-      config = {};
-    }
-    this.html = this.get(config.html, TextContent.DEFAULT_CONTENT);
-  }
+  TextContent.prototype.initWithConfig = function(config) {
+    return this.html = this.get(config.html, TextContent.DEFAULT_CONTENT);
+  };
 
   TextContent.prototype.render_layout = function(data) {
     return $("<div class=\"text-widget\">" + this.html + "</div>");
