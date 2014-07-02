@@ -18,15 +18,22 @@ window.FieldContent = (function(_super) {
     return 50;
   };
 
+  FieldContent.STYLE_DEFAULTS = {
+    color: '#000000',
+    font: 'Helvetica',
+    size: 'Medium'
+  };
+
   function FieldContent(config) {
     if (config == null) {
       config = {};
     }
     this.field = this.get(config.field, this.metrics()[0]);
+    this.style = $.extend({}, FieldContent.STYLE_DEFAULTS, this.get(config.style, {}));
   }
 
   FieldContent.prototype.render_layout = function(data) {
-    return $("<div class=\"field-widget\">" + (this.fieldFrom(data)) + "</div>");
+    return $("<div class=\"field-widget\" style=\"" + (this.textStyles()) + "\">" + (this.fieldFrom(data)) + "</div>");
   };
 
   FieldContent.prototype.render_edit = function(data) {
@@ -41,7 +48,15 @@ window.FieldContent = (function(_super) {
       }
       return _results;
     }).call(this);
-    return $("<div class=\"field-edit\">\n  <select id=\"field-selector\">" + (options.join("\n")) + "</select>\n  <button id=\"done\">Done</button>\n</div>");
+    return $("<div class=\"field-edit\">\n  <select id=\"field-selector\">" + (options.join("\n")) + "</select>\n  <button id=\"done\">Done</button>\n\n  <h4>Style</h4>\n  " + (this.styleOption('font', 'font', "Font")) + "\n  " + (this.styleOption('size', 'size', "Text Size")) + "\n  " + (this.styleOption('color', 'color', "Text Color")) + "\n</div>");
+  };
+
+  FieldContent.prototype.textStyles = function() {
+    return this.styleString({
+      'color': this.style.color,
+      'font-family': this.style.font,
+      'font-size': this.style.size
+    });
   };
 
   FieldContent.prototype.bindEvents = function(el) {
@@ -63,13 +78,31 @@ window.FieldContent = (function(_super) {
     return data;
   };
 
-  FieldContent.prototype.saveConfig = function() {
+  FieldContent.prototype.saveText = function() {
     return this.field = this.el.find('#field-selector').val();
+  };
+
+  FieldContent.prototype.saveConfig = function() {
+    this.saveText();
+    return this.saveStyle();
+  };
+
+  FieldContent.prototype.saveStyle = function() {
+    var el, name, _i, _len, _ref, _results;
+    _ref = this.el.find('.style-option');
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      el = _ref[_i];
+      name = $(el).attr('name');
+      _results.push(this.style[name] = $(el).val());
+    }
+    return _results;
   };
 
   FieldContent.prototype.serialize = function() {
     return {
-      field: this.field
+      field: this.field,
+      style: this.style
     };
   };
 
