@@ -9,7 +9,8 @@ class window.DatatableContent extends WidgetContent
     heading_text_color: '#000000'
     heading_background_color: '#FFFFFF'
     cell_text_color: '#000000'
-    cell_background_color: '#FFFFFF'
+    cell_background_color_odd: '#FFFFFF'
+    cell_background_color_even: '#FFFFFF'
     font: 'Helvetica'
     size: 'Medium'
   }
@@ -37,9 +38,9 @@ class window.DatatableContent extends WidgetContent
         </tbody>
       </table>
     """)
-    for subject in @orderdSubjects(data.subjects)
+    for subject, i in @orderdSubjects(data.subjects)
       columnValues = for col in @columns
-        "<td style="#{@cellStyles()}">#{subject.results?[col.value] or ''}</td>"
+        """<td style="#{@cellStyles(i+1)}">#{subject.results?[col.value] or ''}</td>"""
       node.find("tbody").append("""
         <tr>
           <th style="#{@headingStyles()}">
@@ -73,7 +74,8 @@ class window.DatatableContent extends WidgetContent
         #{@styleOption('color', 'heading_text_color', "Heading Text Color")}
         #{@styleOption('color', 'heading_background_color', "Heading Background Color")}
         #{@styleOption('color', 'cell_text_color', "Cell Text Color")}
-        #{@styleOption('color', 'cell_background_color', "Cell Background Color")}
+        #{@styleOption('color', 'cell_background_color_odd', "Cell Background Color (odd rows)")}
+        #{@styleOption('color', 'cell_background_color_even', "Cell Background Color (even rows)")}
         <button id="done">Done</button>
       </div>
     """)
@@ -99,8 +101,9 @@ class window.DatatableContent extends WidgetContent
   headingStyles: ->
     @styleString('background-color': @style.heading_background_color, color: @style.heading_text_color)
 
-  cellStyles: ->
-    @styleString('background-color': @style.cell_background_color, color: @style.cell_text_color)
+  cellStyles: (row) ->
+    bg_color = if row % 2 is 0 then @style.cell_background_color_even else @style.cell_background_color_odd
+    @styleString('background-color': bg_color, color: @style.cell_text_color)
 
   bindEvents: (el) ->
     el.on "change", ".col-title, .col-value", => @maybeAddEditRow()

@@ -19,7 +19,8 @@ window.DatatableContent = (function(_super) {
     heading_text_color: '#000000',
     heading_background_color: '#FFFFFF',
     cell_text_color: '#000000',
-    cell_background_color: '#FFFFFF',
+    cell_background_color_odd: '#FFFFFF',
+    cell_background_color_even: '#FFFFFF',
     font: 'Helvetica',
     size: 'Medium'
   };
@@ -38,7 +39,7 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.render_layout = function(data) {
-    var col, columnTitles, columnValues, name, node, subject, _i, _len, _ref;
+    var col, columnTitles, columnValues, i, name, node, subject, _i, _len, _ref;
     name = utils.escape(data.name);
     columnTitles = (function() {
       var _i, _len, _ref, _results;
@@ -55,15 +56,15 @@ window.DatatableContent = (function(_super) {
       'font-size': utils.sizeMap[this.style.size]
     })) + "\">\n  <thead>\n    <tr>\n      <th style=\"" + (this.headingStyles()) + "\"></th>\n      " + (columnTitles.join("\n")) + "\n    </tr>\n  </thead>\n  <tbody>\n  </tbody>\n</table>");
     _ref = this.orderdSubjects(data.subjects);
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      subject = _ref[_i];
+    for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+      subject = _ref[i];
       columnValues = (function() {
-        var _j, _len1, _ref1, _results;
+        var _j, _len1, _ref1, _ref2, _results;
         _ref1 = this.columns;
         _results = [];
         for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
           col = _ref1[_j];
-          _results.push("<td style=");
+          _results.push("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (((_ref2 = subject.results) != null ? _ref2[col.value] : void 0) || '') + "</td>");
         }
         return _results;
       }).call(this);
@@ -77,7 +78,7 @@ window.DatatableContent = (function(_super) {
     node = $("<div class=\"datatable-edit\">\n  <h4>Columns</h4>\n  <table>\n    <thead>\n      <tr>\n        <th>Title</th>\n        <th>Value</th>\n      </tr>\n    </thead>\n    <tbody class=\"edit-rows\">\n    </tbody>\n  </table>\n\n  <h4>Style</h4>\n  " + (this.styleOption('select', 'subject_order', "Order of Subjects", {
       alphabetical: "Alphabetical",
       core_first: 'Core First'
-    })) + "\n  " + (this.styleOption('font', 'font', "Font")) + "\n  " + (this.styleOption('size', 'size', "Text Size")) + "\n  " + (this.styleOption('color', 'heading_text_color', "Heading Text Color")) + "\n  " + (this.styleOption('color', 'heading_background_color', "Heading Background Color")) + "\n  " + (this.styleOption('color', 'cell_text_color', "Cell Text Color")) + "\n  " + (this.styleOption('color', 'cell_background_color', "Cell Background Color")) + "\n  <button id=\"done\">Done</button>\n</div>");
+    })) + "\n  " + (this.styleOption('font', 'font', "Font")) + "\n  " + (this.styleOption('size', 'size', "Text Size")) + "\n  " + (this.styleOption('color', 'heading_text_color', "Heading Text Color")) + "\n  " + (this.styleOption('color', 'heading_background_color', "Heading Background Color")) + "\n  " + (this.styleOption('color', 'cell_text_color', "Cell Text Color")) + "\n  " + (this.styleOption('color', 'cell_background_color_odd', "Cell Background Color (odd rows)")) + "\n  " + (this.styleOption('color', 'cell_background_color_even', "Cell Background Color (even rows)")) + "\n  <button id=\"done\">Done</button>\n</div>");
     table = node.find('.edit-rows');
     _ref = this.columns;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -116,9 +117,11 @@ window.DatatableContent = (function(_super) {
     });
   };
 
-  DatatableContent.prototype.cellStyles = function() {
+  DatatableContent.prototype.cellStyles = function(row) {
+    var bg_color;
+    bg_color = row % 2 === 0 ? this.style.cell_background_color_even : this.style.cell_background_color_odd;
     return this.styleString({
-      'background-color': this.style.cell_background_color,
+      'background-color': bg_color,
       color: this.style.cell_text_color
     });
   };
