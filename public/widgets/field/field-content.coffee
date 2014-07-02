@@ -7,7 +7,7 @@ class window.FieldContent extends WidgetContent
   defaultWidth: -> 200
   defaultHeight: -> 50
 
-  constructor: (config={}) ->
+  initWithConfig: (config) ->
     @field = @get(config.field, @metrics()[0])
 
   render_layout: (data) ->

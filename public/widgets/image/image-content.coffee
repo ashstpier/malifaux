@@ -9,7 +9,7 @@ class window.ImageContent extends WidgetContent
 
   @DEFAULT_IMAGE: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
 
-  constructor: (config={}) ->
+  initWithConfig: (config) ->
     @src = @get(config.src, ImageContent.DEFAULT_IMAGE)
 
   bindEvents: (el) ->
@@ -30,6 +30,14 @@ class window.ImageContent extends WidgetContent
     @src = data
     @el.find(".content").attr('src', @src)
     @el.removeClass('image-blank')
+    ratio = @aspectRatio()
+    @setAspectRatio(ratio)
+
+  aspectRatio: ->
+    img = new Image()
+    img.src = @src
+    img.width / img.height
+
 
   render_layout: (data) ->
     $("""

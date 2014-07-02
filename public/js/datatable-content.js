@@ -4,6 +4,10 @@ var __hasProp = {}.hasOwnProperty,
 window.DatatableContent = (function(_super) {
   __extends(DatatableContent, _super);
 
+  function DatatableContent() {
+    return DatatableContent.__super__.constructor.apply(this, arguments);
+  }
+
   DatatableContent.displayName = "Subjects Data Table";
 
   DatatableContent.description = "Showing assessment points, one row per subject.";
@@ -28,13 +32,10 @@ window.DatatableContent = (function(_super) {
     return 480;
   };
 
-  function DatatableContent(config) {
-    if (config == null) {
-      config = {};
-    }
+  DatatableContent.prototype.initWithConfig = function(config) {
     this.columns = this.get(config.columns, []);
-    this.style = $.extend({}, DatatableContent.STYLE_DEFAULTS, this.get(config.style, {}));
-  }
+    return this.style = $.extend({}, DatatableContent.STYLE_DEFAULTS, this.get(config.style, {}));
+  };
 
   DatatableContent.prototype.render_layout = function(data) {
     var col, columnTitles, columnValues, name, node, subject, _i, _len, _ref;

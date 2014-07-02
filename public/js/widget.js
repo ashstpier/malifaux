@@ -1,7 +1,7 @@
 window.Widget = (function() {
   Widget.PAGE_SELECTOR = '#page';
 
-  Widget.GRID_SIZE = [20, 20];
+  Widget.GRID_SIZE = [1, 1];
 
   Widget.WIDGETS = {
     'image': 'ImageContent',
@@ -43,7 +43,7 @@ window.Widget = (function() {
     this.data = data != null ? data : null;
     this.currentMode = 'layout';
     this.guid = config.guid || utils.guid();
-    this.content = config.type != null ? new window[config.type](config.content) : new TextContent();
+    this.content = config.type != null ? new window[config.type](this, config.content) : new TextContent();
     width = config.width != null ? config.width : this.content.defaultWidth();
     height = config.height != null ? config.height : this.content.defaultHeight();
     this.origin = {
@@ -71,7 +71,8 @@ window.Widget = (function() {
     })(this));
     this.el.resizable({
       grid: Widget.GRID_SIZE,
-      containment: Widget.PAGE_SELECTOR
+      containment: Widget.PAGE_SELECTOR,
+      handles: 'n, e, s, w, ne, se, sw, nw'
     });
     return this.el.draggable({
       grid: Widget.GRID_SIZE,
@@ -126,6 +127,17 @@ window.Widget = (function() {
       type: this.content.constructor.name,
       content: this.content.serialize()
     };
+  };
+
+  Widget.prototype.setAspectRatio = function(ratio) {
+    console.log(ratio);
+    this.el.resizable('destroy');
+    this.el.height(this.el.width() / ratio);
+    return this.el.resizable({
+      grid: Widget.GRID_SIZE,
+      containment: Widget.PAGE_SELECTOR,
+      aspectRatio: ratio
+    });
   };
 
   return Widget;

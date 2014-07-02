@@ -4,6 +4,10 @@ var __hasProp = {}.hasOwnProperty,
 window.FieldContent = (function(_super) {
   __extends(FieldContent, _super);
 
+  function FieldContent() {
+    return FieldContent.__super__.constructor.apply(this, arguments);
+  }
+
   FieldContent.displayName = "Dynamic Text";
 
   FieldContent.description = "Pull a text field from a student record and style it for display.";
@@ -18,12 +22,9 @@ window.FieldContent = (function(_super) {
     return 50;
   };
 
-  function FieldContent(config) {
-    if (config == null) {
-      config = {};
-    }
-    this.field = this.get(config.field, this.metrics()[0]);
-  }
+  FieldContent.prototype.initWithConfig = function(config) {
+    return this.field = this.get(config.field, this.metrics()[0]);
+  };
 
   FieldContent.prototype.render_layout = function(data) {
     return $("<div class=\"field-widget\">" + (this.fieldFrom(data)) + "</div>");

@@ -17,7 +17,7 @@ class window.DatatableContent extends WidgetContent
   defaultWidth: -> 640
   defaultHeight: -> 480
 
-  constructor: (config={}) ->
+  initWithConfig: (config) ->
     @columns = @get(config.columns, [])
     @style = $.extend({}, DatatableContent.STYLE_DEFAULTS, @get(config.style, {}))
 
