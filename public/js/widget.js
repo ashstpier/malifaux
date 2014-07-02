@@ -127,8 +127,11 @@ window.Widget = (function() {
     };
   };
 
+  Widget.prototype.saveConfig = function() {
+    return this.content.saveConfig();
+  };
+
   Widget.prototype.setAspectRatio = function(ratio) {
-    console.log(ratio);
     this.el.resizable('destroy');
     this.el.height(this.el.width() / ratio);
     return this.el.resizable({

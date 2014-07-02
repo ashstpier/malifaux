@@ -118,6 +118,7 @@ window.Designer = {
   },
   clearEditWidget: function() {
     if (this.currentEditWidget) {
+      this.currentEditWidget.saveConfig();
       this.currentEditWidget.layoutMode();
       return this.currentEditWidget = null;
     }

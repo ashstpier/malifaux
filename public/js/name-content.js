@@ -22,6 +22,8 @@ window.NameContent = (function(_super) {
     return 40;
   };
 
+  NameContent.prototype.initWithConfig = function(config) {};
+
   NameContent.prototype.render_layout = function(data) {
     var name;
     name = utils.escape(data.name);

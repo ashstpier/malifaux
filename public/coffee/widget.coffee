@@ -88,8 +88,10 @@ class window.Widget
       content: @content.serialize()
     }
 
+  saveConfig: -> 
+    @content.saveConfig()
+
   setAspectRatio: (ratio) ->
-    console.log ratio
     @el.resizable('destroy')
     @el.height(@el.width()/ratio)
     @el.resizable(grid: Widget.GRID_SIZE, containment: Widget.PAGE_SELECTOR, aspectRatio: ratio)

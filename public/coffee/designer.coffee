@@ -58,6 +58,7 @@ window.Designer = {
 
   clearEditWidget: ->
     if @currentEditWidget
+      @currentEditWidget.saveConfig()
       @currentEditWidget.layoutMode()
       @currentEditWidget = null
 

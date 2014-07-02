@@ -76,7 +76,6 @@ class window.DatatableContent extends WidgetContent
         #{@styleOption('color', 'cell_text_color', "Cell Text Color")}
         #{@styleOption('color', 'cell_background_color_odd', "Cell Background Color (odd rows)")}
         #{@styleOption('color', 'cell_background_color_even', "Cell Background Color (even rows)")}
-        <button id="done">Done</button>
       </div>
     """)
     table = node.find('.edit-rows')
@@ -107,9 +106,6 @@ class window.DatatableContent extends WidgetContent
 
   bindEvents: (el) ->
     el.on "change", ".col-title, .col-value", => @maybeAddEditRow()
-    el.find("#done").click =>
-      @saveConfig()
-      @cancelEditing()
 
   maybeAddEditRow: ->
     rows = @el.find('.column-setting')

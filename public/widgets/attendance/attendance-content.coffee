@@ -7,6 +7,8 @@ class window.AttendanceContent extends WidgetContent
   defaultWidth: -> 400
   defaultHeight: -> 200
 
+  initWithConfig: (config) -> {}
+
   render_layout: (data) ->
     $("""<div class="attendance-widget"><img src="#{@chartUrl(data)}"/></div>""")
 

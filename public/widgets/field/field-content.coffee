@@ -26,7 +26,6 @@ class window.FieldContent extends WidgetContent
     $ """
       <div class="field-edit">
         <select id="field-selector">#{options.join("\n")}</select>
-        <button id="done">Done</button>
 
         <h4>Style</h4>
         #{@styleOption('font',  'font', "Font")}
@@ -38,11 +37,7 @@ class window.FieldContent extends WidgetContent
   textStyles: ->
     @styleString('color': @style.color, 'font-family': @style.font, 'font-size': @style.size)
 
-  bindEvents: (el) ->
-    el.find('#done').click =>
-      @saveConfig()
-      @cancelEditing()
-
+  bindEvents: (el) -> {}
 
   fieldFrom: (data) ->
     data = data[key] for key in @field.split('.')

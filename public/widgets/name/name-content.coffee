@@ -7,6 +7,8 @@ class window.NameContent extends WidgetContent
   defaultWidth: -> 280
   defaultHeight: -> 40
 
+  initWithConfig: (config) ->
+
   render_layout: (data) ->
     name = utils.escape(data.name)
     $("<p>#{name}</p>")

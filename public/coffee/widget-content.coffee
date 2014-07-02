@@ -26,6 +26,8 @@ class window.WidgetContent
 
   serialize: -> {}
 
+  saveConfig: -> {}
+
   get: (param, fallback) -> if param? then param else fallback
 
   defaultWidth: -> 160

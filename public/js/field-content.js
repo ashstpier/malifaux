@@ -49,7 +49,7 @@ window.FieldContent = (function(_super) {
       }
       return _results;
     }).call(this);
-    return $("<div class=\"field-edit\">\n  <select id=\"field-selector\">" + (options.join("\n")) + "</select>\n  <button id=\"done\">Done</button>\n\n  <h4>Style</h4>\n  " + (this.styleOption('font', 'font', "Font")) + "\n  " + (this.styleOption('size', 'size', "Text Size")) + "\n  " + (this.styleOption('color', 'color', "Text Color")) + "\n</div>");
+    return $("<div class=\"field-edit\">\n  <select id=\"field-selector\">" + (options.join("\n")) + "</select>\n\n  <h4>Style</h4>\n  " + (this.styleOption('font', 'font', "Font")) + "\n  " + (this.styleOption('size', 'size', "Text Size")) + "\n  " + (this.styleOption('color', 'color', "Text Color")) + "\n</div>");
   };
 
   FieldContent.prototype.textStyles = function() {
@@ -61,12 +61,7 @@ window.FieldContent = (function(_super) {
   };
 
   FieldContent.prototype.bindEvents = function(el) {
-    return el.find('#done').click((function(_this) {
-      return function() {
-        _this.saveConfig();
-        return _this.cancelEditing();
-      };
-    })(this));
+    return {};
   };
 
   FieldContent.prototype.fieldFrom = function(data) {

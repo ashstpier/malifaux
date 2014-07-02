@@ -22,6 +22,10 @@ window.AttendanceContent = (function(_super) {
     return 200;
   };
 
+  AttendanceContent.prototype.initWithConfig = function(config) {
+    return {};
+  };
+
   AttendanceContent.prototype.render_layout = function(data) {
     return $("<div class=\"attendance-widget\"><img src=\"" + (this.chartUrl(data)) + "\"/></div>");
   };

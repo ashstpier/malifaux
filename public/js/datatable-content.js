@@ -78,7 +78,7 @@ window.DatatableContent = (function(_super) {
     node = $("<div class=\"datatable-edit\">\n  <h4>Columns</h4>\n  <table>\n    <thead>\n      <tr>\n        <th>Title</th>\n        <th>Value</th>\n      </tr>\n    </thead>\n    <tbody class=\"edit-rows\">\n    </tbody>\n  </table>\n\n  <h4>Style</h4>\n  " + (this.styleOption('select', 'subject_order', "Order of Subjects", {
       alphabetical: "Alphabetical",
       core_first: 'Core First'
-    })) + "\n  " + (this.styleOption('font', 'font', "Font")) + "\n  " + (this.styleOption('size', 'size', "Text Size")) + "\n  " + (this.styleOption('color', 'heading_text_color', "Heading Text Color")) + "\n  " + (this.styleOption('color', 'heading_background_color', "Heading Background Color")) + "\n  " + (this.styleOption('color', 'cell_text_color', "Cell Text Color")) + "\n  " + (this.styleOption('color', 'cell_background_color_odd', "Cell Background Color (odd rows)")) + "\n  " + (this.styleOption('color', 'cell_background_color_even', "Cell Background Color (even rows)")) + "\n  <button id=\"done\">Done</button>\n</div>");
+    })) + "\n  " + (this.styleOption('font', 'font', "Font")) + "\n  " + (this.styleOption('size', 'size', "Text Size")) + "\n  " + (this.styleOption('color', 'heading_text_color', "Heading Text Color")) + "\n  " + (this.styleOption('color', 'heading_background_color', "Heading Background Color")) + "\n  " + (this.styleOption('color', 'cell_text_color', "Cell Text Color")) + "\n  " + (this.styleOption('color', 'cell_background_color_odd', "Cell Background Color (odd rows)")) + "\n  " + (this.styleOption('color', 'cell_background_color_even', "Cell Background Color (even rows)")) + "\n</div>");
     table = node.find('.edit-rows');
     _ref = this.columns;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -127,15 +127,9 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.bindEvents = function(el) {
-    el.on("change", ".col-title, .col-value", (function(_this) {
+    return el.on("change", ".col-title, .col-value", (function(_this) {
       return function() {
         return _this.maybeAddEditRow();
-      };
-    })(this));
-    return el.find("#done").click((function(_this) {
-      return function() {
-        _this.saveConfig();
-        return _this.cancelEditing();
       };
     })(this));
   };

@@ -38,7 +38,6 @@ class window.ImageContent extends WidgetContent
     img.src = @src
     img.width / img.height
 
-
   render_layout: (data) ->
     $("""
       <div class="image-widget #{if @src is ImageContent.DEFAULT_IMAGE then 'image-blank'}">

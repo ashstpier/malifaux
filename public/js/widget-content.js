@@ -49,6 +49,10 @@ window.WidgetContent = (function() {
     return {};
   };
 
+  WidgetContent.prototype.saveConfig = function() {
+    return {};
+  };
+
   WidgetContent.prototype.get = function(param, fallback) {
     if (param != null) {
       return param;
