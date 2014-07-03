@@ -40,7 +40,7 @@ class window.DatatableContent extends WidgetContent
     """)
     for subject, i in @orderdSubjects(data.subjects)
       columnValues = for col in @columns
-        """<td style="#{@cellStyles(i+1)}">#{subject.results?[col.value] or ''}</td>"""
+        """<td style="#{@cellStyles(i+1)}">#{@cellContent(subject, col)}</td>"""
       node.find("tbody").append("""
         <tr>
           <th style="#{@headingStyles()}">
@@ -83,17 +83,25 @@ class window.DatatableContent extends WidgetContent
     table.append(@buildEditRow())
     node
 
-  buildEditRow: (col={title:'', value:''}) ->
-    options = for point in @assessmentPoints()
-      """<option value="#{point.code}" #{if point.code is col.value then 'selected="selected"' else ''}>#{point.name} | #{point.longName}</option>"""
+  buildEditRow: (col={title:'', value:'', compare_to:''}) ->
+    options = (val) =>
+      for point in @assessmentPoints()
+        """<option value="#{point.code}" #{if point.code is val then 'selected="selected"' else ''}>#{point.name} | #{point.longName}</option>"""
 
     """<tr class="column-setting">
       <td><input class="col-title" name="col-title" type="text" value="#{col.title}" /></td>
       <td>
-        <select class="col-value" name="col-value">
+        <select class="col-value" name="col-value" style="max-width: 400px">
           <option value="" #{if col.value is "" then 'selected="selected"' else ''}></option>
-          #{options.join("\n")}
+          #{options(col.value).join("\n")}
         </select>
+        <p class="comparison">
+          compared to
+          <select class="col-compare-to" name="col-compare-to" style="max-width: 300px">
+            <option value="" #{if col.compare_to is "" then 'selected="selected"' else ''}></option>
+            #{options(col.compare_to).join("\n")}
+          </select>
+        </p>
       </td>
     </tr>"""
 
@@ -103,6 +111,17 @@ class window.DatatableContent extends WidgetContent
   cellStyles: (row) ->
     bg_color = if row % 2 is 0 then @style.cell_background_color_even else @style.cell_background_color_odd
     @styleString('background-color': bg_color, color: @style.cell_text_color)
+
+  cellContent: (subject, col) ->
+    val = subject.results?[col.value] or ''
+    return val unless col.compare_to and col.compare_to.length > 0
+    numVal = subject.internalPoints?[col.value] or 0
+    compareTo = subject.internalPoints?[col.compare_to] or 0
+    console.log col.value, col.compare_to, val, numVal, compareTo
+    tlClass = 'amber'
+    tlClass = 'red' if numVal < compareTo
+    tlClass = 'green' if numVal > compareTo
+    """<span class="traffic-light #{tlClass}">#{val}</span>"""
 
   bindEvents: (el) ->
     el.on "change", ".col-title, .col-value", => @maybeAddEditRow()
@@ -119,9 +138,12 @@ class window.DatatableContent extends WidgetContent
 
   saveColumns: ->
     columns = for col in @el.find('.column-setting')
-      title = $(col).find('.col-title').val()
-      value = $(col).find('.col-value').val()
-      {title: title, value: value}
+      $col = $(col)
+      {
+        title:            $col.find('.col-title').val()
+        value:            $col.find('.col-value').val()
+        compare_to:       $col.find('.col-compare-to').val()
+      }
     @columns = (col for col in columns when col.title isnt '' and col.value? and col.value isnt '')
 
   saveStyle: ->

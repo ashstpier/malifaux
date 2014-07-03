@@ -15,7 +15,7 @@
   border: 1px solid #666;
   margin: 0;
   padding: 1em;
-  text-align: left;
+  text-align: center;
 }
 
 .datatable .subject, .datatable .teacher {
@@ -28,14 +28,46 @@
   font-size: 0.9em;
 }
 
+.datatable .traffic-light {
+  display: inline-block;
+  font-size: 1px;
+  text-indent: -100px;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+  background-color: #ffbb22;
+  border-radius: 10px;
+}
+.datatable .traffic-light.green { background-color: #22ee66; }
+.datatable .traffic-light.red   { background-color: #ee2222; }
+
 .datatable-edit {
   box-sizing: border-box;
   padding: 20px;
   height: 100%;
   overflow: scroll;
+  background-color: #fff;
+}
+.datatable-edit table {
+  border-collapse: collapse;
 }
 .datatable-edit th {
   text-align: left;
+  padding: 10px 10px 10px 0;
+}
+.datatable-edit td {
+  vertical-align: top;
+  font-size: 12px;
+  line-height: 20px;
+}
+.datatable-edit .column-setting td {
+  border-top: 1px solid #ccc;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 10px 10px 10px 0;
+}
+.datatable-edit .comparison {
+  text-align: right;
 }
 
 
