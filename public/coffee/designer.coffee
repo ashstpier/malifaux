@@ -86,13 +86,17 @@ window.Designer = {
   save: ->
     @template.save
 
+  exitDesigner: ->
+    redirect = utils.querystring("return")
+    window.location.href = if redirect then redirect else "./index.html"
+
   saveAndExit: ->
-    @template.save =>
-      window.location.href = './index.html'
+    @template.save => 
+    @exitDesigner()
 
   discard: ->
-    window.location.href = './index.html'
-
+    @exitDesigner()
+    
   exit: ->
     $('#save-modal').modal()
     false

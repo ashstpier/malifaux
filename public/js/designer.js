@@ -152,15 +152,19 @@ window.Designer = {
   save: function() {
     return this.template.save;
   },
+  exitDesigner: function() {
+    var redirect;
+    redirect = utils.querystring("return");
+    return window.location.href = redirect ? redirect : "./index.html";
+  },
   saveAndExit: function() {
-    return this.template.save((function(_this) {
-      return function() {
-        return window.location.href = './index.html';
-      };
+    this.template.save((function(_this) {
+      return function() {};
     })(this));
+    return this.exitDesigner();
   },
   discard: function() {
-    return window.location.href = './index.html';
+    return this.exitDesigner();
   },
   exit: function() {
     $('#save-modal').modal();
