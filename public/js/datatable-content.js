@@ -59,12 +59,12 @@ window.DatatableContent = (function(_super) {
     for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
       subject = _ref[i];
       columnValues = (function() {
-        var _j, _len1, _ref1, _ref2, _results;
+        var _j, _len1, _ref1, _results;
         _ref1 = this.columns;
         _results = [];
         for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
           col = _ref1[_j];
-          _results.push("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (((_ref2 = subject.results) != null ? _ref2[col.value] : void 0) || '') + "</td>");
+          _results.push("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(subject, col)) + "</td>");
         }
         return _results;
       }).call(this);
@@ -90,24 +90,27 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.buildEditRow = function(col) {
-    var options, point;
+    var options;
     if (col == null) {
       col = {
         title: '',
-        value: ''
+        value: '',
+        compare_to: ''
       };
     }
-    options = (function() {
-      var _i, _len, _ref, _results;
-      _ref = this.assessmentPoints();
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        point = _ref[_i];
-        _results.push("<option value=\"" + point.code + "\" " + (point.code === col.value ? 'selected="selected"' : '') + ">" + point.name + " | " + point.longName + "</option>");
-      }
-      return _results;
-    }).call(this);
-    return "<tr class=\"column-setting\">\n  <td><input class=\"col-title\" name=\"col-title\" type=\"text\" value=\"" + col.title + "\" /></td>\n  <td>\n    <select class=\"col-value\" name=\"col-value\">\n      <option value=\"\" " + (col.value === "" ? 'selected="selected"' : '') + "></option>\n      " + (options.join("\n")) + "\n    </select>\n  </td>\n</tr>";
+    options = (function(_this) {
+      return function(val) {
+        var point, _i, _len, _ref, _results;
+        _ref = _this.assessmentPoints();
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          point = _ref[_i];
+          _results.push("<option value=\"" + point.code + "\" " + (point.code === val ? 'selected="selected"' : '') + ">" + point.name + " | " + point.longName + "</option>");
+        }
+        return _results;
+      };
+    })(this);
+    return "<tr class=\"column-setting\">\n  <td><input class=\"col-title\" name=\"col-title\" type=\"text\" value=\"" + col.title + "\" /></td>\n  <td>\n    <select class=\"col-value\" name=\"col-value\" style=\"max-width: 400px\">\n      <option value=\"\" " + (col.value === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.value).join("\n")) + "\n    </select>\n    <p class=\"comparison\">\n      compared to\n      <select class=\"col-compare-to\" name=\"col-compare-to\" style=\"max-width: 300px\">\n        <option value=\"\" " + (col.compare_to === "" ? 'selected="selected"' : '') + "></option>\n        " + (options(col.compare_to).join("\n")) + "\n      </select>\n    </p>\n  </td>\n</tr>";
   };
 
   DatatableContent.prototype.headingStyles = function() {
@@ -124,6 +127,25 @@ window.DatatableContent = (function(_super) {
       'background-color': bg_color,
       color: this.style.cell_text_color
     });
+  };
+
+  DatatableContent.prototype.cellContent = function(subject, col) {
+    var compareTo, numVal, tlClass, val, _ref, _ref1, _ref2;
+    val = ((_ref = subject.results) != null ? _ref[col.value] : void 0) || '';
+    if (!(col.compare_to && col.compare_to.length > 0)) {
+      return val;
+    }
+    numVal = ((_ref1 = subject.internalPoints) != null ? _ref1[col.value] : void 0) || 0;
+    compareTo = ((_ref2 = subject.internalPoints) != null ? _ref2[col.compare_to] : void 0) || 0;
+    console.log(col.value, col.compare_to, val, numVal, compareTo);
+    tlClass = 'amber';
+    if (numVal < compareTo) {
+      tlClass = 'red';
+    }
+    if (numVal > compareTo) {
+      tlClass = 'green';
+    }
+    return "<span class=\"traffic-light " + tlClass + "\">" + val + "</span>";
   };
 
   DatatableContent.prototype.bindEvents = function(el) {
@@ -149,18 +171,18 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.saveColumns = function() {
-    var col, columns, title, value;
+    var $col, col, columns;
     columns = (function() {
       var _i, _len, _ref, _results;
       _ref = this.el.find('.column-setting');
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         col = _ref[_i];
-        title = $(col).find('.col-title').val();
-        value = $(col).find('.col-value').val();
+        $col = $(col);
         _results.push({
-          title: title,
-          value: value
+          title: $col.find('.col-title').val(),
+          value: $col.find('.col-value').val(),
+          compare_to: $col.find('.col-compare-to').val()
         });
       }
       return _results;
