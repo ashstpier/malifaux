@@ -15,7 +15,8 @@
     "gulp-watch": "^0.6.7",
     "gutil": "^1.2.0",
     "secret": "git://github.com/nkostelnik/node.secret.git#master",
-    "underscore": "^1.6.0"
+    "underscore": "^1.6.0",
+    "yargs": "~1.2.6"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

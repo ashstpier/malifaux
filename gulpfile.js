@@ -9,11 +9,34 @@ var gulp 					= require('gulp'),
 	flatten					= require('gulp-flatten')
   bodyParser      = require('body-parser'),
   secret          = require( 'secret' ),
-  _               = require('underscore')
+  _               = require('underscore'),
+	argv						= require('yargs').argv
 	;
+
+var guid = (function() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+               .toString(16)
+               .substring(1);
+  }
+  return function() {
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+           s4() + '-' + s4() + s4() + s4();
+  };
+})();
 
 gulp.task('default', function() {
 	console.log("Default isn't implemented");
+});
+
+gulp.task('sideload', function() {
+	if (argv.template) {
+		fs.readFile(argv.template, 'utf8', function (err, body) {
+		  if (err) { return console.log(err); }
+			var data = JSON.parse(body)
+			secret.set(data.key, data)
+		});
+	}
 });
 
 gulp.task("vendor", function() {
