@@ -83,6 +83,10 @@ body {
   left: 25px;
 }
 
+#orientation {
+  width: 300px;
+}
+
 #page {
   z-index: 1;
   position: relative;
@@ -102,7 +106,6 @@ body {
   width: 1344px;
   height: 960px;
 }
-
 
 .add-widget {
   display: inline-block;
@@ -133,7 +136,6 @@ body {
   font-weight: 100;
   font-size: 14px;
 }
-
 
 .hidden {
   display: none !important;
