@@ -1,10 +1,12 @@
-var __hasProp = {}.hasOwnProperty,
+var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+  __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 window.DatatableContent = (function(_super) {
   __extends(DatatableContent, _super);
 
   function DatatableContent() {
+    this.filter_subjects = __bind(this.filter_subjects, this);
     return DatatableContent.__super__.constructor.apply(this, arguments);
   }
 
@@ -35,11 +37,12 @@ window.DatatableContent = (function(_super) {
 
   DatatableContent.prototype.initWithConfig = function(config) {
     this.columns = this.get(config.columns, []);
-    return this.style = $.extend({}, DatatableContent.STYLE_DEFAULTS, this.get(config.style, {}));
+    this.style = $.extend({}, DatatableContent.STYLE_DEFAULTS, this.get(config.style, {}));
+    return this.exclusions = this.get(config.exclusions, '');
   };
 
   DatatableContent.prototype.render_layout = function(data) {
-    var col, columnTitles, columnValues, i, name, node, subject, _i, _len, _ref;
+    var col, columnTitles, columnValues, filteredSubjects, i, name, node, subject, _i, _len, _ref;
     name = utils.escape(data.name);
     columnTitles = (function() {
       var _i, _len, _ref, _results;
@@ -55,7 +58,8 @@ window.DatatableContent = (function(_super) {
       'font-family': utils.fontMap[this.style.font],
       'font-size': utils.sizeMap[this.style.size]
     })) + "\">\n  <thead>\n    <tr>\n      <th style=\"" + (this.headingStyles()) + "\"></th>\n      " + (columnTitles.join("\n")) + "\n    </tr>\n  </thead>\n  <tbody>\n  </tbody>\n</table>");
-    _ref = this.orderdSubjects(data.subjects);
+    filteredSubjects = this.filter_subjects(data.subjects);
+    _ref = this.orderdSubjects(filteredSubjects);
     for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
       subject = _ref[i];
       columnValues = (function() {
@@ -73,12 +77,22 @@ window.DatatableContent = (function(_super) {
     return node;
   };
 
+  DatatableContent.prototype.filter_subjects = function(subjects) {
+    return _.filter(subjects, (function(_this) {
+      return function(subject) {
+        var exclusions;
+        exclusions = _this.exclusions.split(",");
+        return !_.contains(exclusions, subject.subjectName);
+      };
+    })(this));
+  };
+
   DatatableContent.prototype.render_edit = function(data) {
     var col, node, table, _i, _len, _ref;
     node = $("<div class=\"datatable-edit\">\n  <h4>Columns</h4>\n  <table>\n    <thead>\n      <tr>\n        <th>Title</th>\n        <th>Value</th>\n      </tr>\n    </thead>\n    <tbody class=\"edit-rows\">\n    </tbody>\n  </table>\n\n  <h4>Style</h4>\n  " + (this.styleOption('select', 'subject_order', "Order of Subjects", {
       alphabetical: "Alphabetical",
       core_first: 'Core First'
-    })) + "\n  " + (this.styleOption('font', 'font', "Font")) + "\n  " + (this.styleOption('size', 'size', "Text Size")) + "\n  " + (this.styleOption('color', 'heading_text_color', "Heading Text Color")) + "\n  " + (this.styleOption('color', 'heading_background_color', "Heading Background Color")) + "\n  " + (this.styleOption('color', 'cell_text_color', "Cell Text Color")) + "\n  " + (this.styleOption('color', 'cell_background_color_odd', "Cell Background Color (odd rows)")) + "\n  " + (this.styleOption('color', 'cell_background_color_even', "Cell Background Color (even rows)")) + "\n</div>");
+    })) + "\n  " + (this.styleOption('font', 'font', "Font")) + "\n  " + (this.styleOption('size', 'size', "Text Size")) + "\n  " + (this.styleOption('color', 'heading_text_color', "Heading Text Color")) + "\n  " + (this.styleOption('color', 'heading_background_color', "Heading Background Color")) + "\n  " + (this.styleOption('color', 'cell_text_color', "Cell Text Color")) + "\n  " + (this.styleOption('color', 'cell_background_color_odd', "Cell Background Color (odd rows)")) + "\n  " + (this.styleOption('color', 'cell_background_color_even', "Cell Background Color (even rows)")) + "\n\n  <h4>Exclude Subjects</h4>\n  <input id=\"exclusions\" type=\"text\" value=\"" + this.exclusions + "\">\n</div>");
     table = node.find('.edit-rows');
     _ref = this.columns;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -137,7 +151,6 @@ window.DatatableContent = (function(_super) {
     }
     numVal = ((_ref1 = subject.internalPoints) != null ? _ref1[col.value] : void 0) || 0;
     compareTo = ((_ref2 = subject.internalPoints) != null ? _ref2[col.compare_to] : void 0) || 0;
-    console.log(col.value, col.compare_to, val, numVal, compareTo);
     tlClass = 'amber';
     if (numVal < compareTo) {
       tlClass = 'red';
@@ -167,7 +180,12 @@ window.DatatableContent = (function(_super) {
 
   DatatableContent.prototype.saveConfig = function() {
     this.saveColumns();
-    return this.saveStyle();
+    this.saveStyle();
+    return this.saveExclusions();
+  };
+
+  DatatableContent.prototype.saveExclusions = function() {
+    return this.exclusions = $('#exclusions').val();
   };
 
   DatatableContent.prototype.saveColumns = function() {
@@ -246,7 +264,8 @@ window.DatatableContent = (function(_super) {
   DatatableContent.prototype.serialize = function() {
     return {
       columns: this.columns,
-      style: this.style
+      style: this.style,
+      exclusions: this.exclusions
     };
   };
 

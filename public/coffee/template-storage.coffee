@@ -1,7 +1,7 @@
 class TemplateStore
 
   ENDPOINT_URL = "#{TEMPLATE_ENDPOINTS[utils.environment]}"
-  
+
   @all: (cb) ->
     $.get "#{ENDPOINT_URL}", (data) -> cb(data)
 
@@ -9,7 +9,6 @@ class TemplateStore
     $.get "#{ENDPOINT_URL}/#{key}", (data) -> cb(data)
 
   @delete: (key) ->
-    console.log key
     $.ajax({
       type: 'DELETE',
       url: "#{ENDPOINT_URL}/#{key}",
@@ -17,7 +16,7 @@ class TemplateStore
     });
 
   @save: (key, data, cb) ->
-    $.ajax({ 
+    $.ajax({
       type: 'PUT',
       url: "#{ENDPOINT_URL}/#{key}",
       contentType: "application/json",

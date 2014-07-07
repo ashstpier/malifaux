@@ -20,7 +20,6 @@ TemplateStore = (function() {
   };
 
   TemplateStore["delete"] = function(key) {
-    console.log(key);
     return $.ajax({
       type: 'DELETE',
       url: "" + ENDPOINT_URL + "/" + key,

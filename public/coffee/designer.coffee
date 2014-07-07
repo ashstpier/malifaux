@@ -37,7 +37,7 @@ window.Designer = {
   bindEvents: ->
     $('#save').click => @saveAndExit()
     $('#discard').click => @discard()
-    $('#exit a').click => @exit() 
+    $('#exit a').click => @exit()
     $('#page').click (e) => if e.target is $('#page')[0] then @clearEditWidget()
     $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())
     $('#name').blur => @updateName()
@@ -91,16 +91,16 @@ window.Designer = {
     window.location.href = if redirect then redirect else "./index.html"
 
   saveAndExit: ->
-    @template.save => 
+    @template.save =>
     @exitDesigner()
 
   discard: ->
     @exitDesigner()
-    
+
   exit: ->
     $('#save-modal').modal()
     false
-    
+
 }
 
 $ -> Designer.init()

@@ -21,6 +21,7 @@ class window.DatatableContent extends WidgetContent
   initWithConfig: (config) ->
     @columns = @get(config.columns, [])
     @style = $.extend({}, DatatableContent.STYLE_DEFAULTS, @get(config.style, {}))
+    @exclusions = @get(config.exclusions, '')
 
   render_layout: (data) ->
     name = utils.escape(data.name)
@@ -38,7 +39,8 @@ class window.DatatableContent extends WidgetContent
         </tbody>
       </table>
     """)
-    for subject, i in @orderdSubjects(data.subjects)
+    filteredSubjects = @filter_subjects(data.subjects)
+    for subject, i in @orderdSubjects(filteredSubjects)
       columnValues = for col in @columns
         """<td style="#{@cellStyles(i+1)}">#{@cellContent(subject, col)}</td>"""
       node.find("tbody").append("""
@@ -51,6 +53,11 @@ class window.DatatableContent extends WidgetContent
         </tr>
       """)
     node
+
+  filter_subjects: (subjects) =>
+    _.filter subjects, (subject) =>
+      exclusions = @exclusions.split(",")
+      !_.contains(exclusions, subject.subjectName)
 
   render_edit: (data) ->
     node = $("""
@@ -76,6 +83,9 @@ class window.DatatableContent extends WidgetContent
         #{@styleOption('color', 'cell_text_color', "Cell Text Color")}
         #{@styleOption('color', 'cell_background_color_odd', "Cell Background Color (odd rows)")}
         #{@styleOption('color', 'cell_background_color_even', "Cell Background Color (even rows)")}
+
+        <h4>Exclude Subjects</h4>
+        <input id="exclusions" type="text" value="#{@exclusions}">
       </div>
     """)
     table = node.find('.edit-rows')
@@ -117,7 +127,6 @@ class window.DatatableContent extends WidgetContent
     return val unless col.compare_to and col.compare_to.length > 0
     numVal = subject.internalPoints?[col.value] or 0
     compareTo = subject.internalPoints?[col.compare_to] or 0
-    console.log col.value, col.compare_to, val, numVal, compareTo
     tlClass = 'amber'
     tlClass = 'red' if numVal < compareTo
     tlClass = 'green' if numVal > compareTo
@@ -135,6 +144,10 @@ class window.DatatableContent extends WidgetContent
   saveConfig: ->
     @saveColumns()
     @saveStyle()
+    @saveExclusions()
+
+  saveExclusions: ->
+    @exclusions = $('#exclusions').val()
 
   saveColumns: ->
     columns = for col in @el.find('.column-setting')
@@ -165,4 +178,4 @@ class window.DatatableContent extends WidgetContent
     alphabetical
 
   serialize: ->
-    {columns: @columns, style: @style}
+    {columns: @columns, style: @style, exclusions: @exclusions}
