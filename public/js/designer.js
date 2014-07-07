@@ -1,5 +1,6 @@
 window.Designer = {
   currentEditWidget: null,
+  propertyPanel: null,
   loadAll: function(template) {
     this.template = template;
     this.templateKey = template.key;
@@ -29,6 +30,14 @@ window.Designer = {
     }
   },
   renderControls: function() {
+    this.renderWidgetButtons();
+    return this.renderPropertyPanel();
+  },
+  renderPropertyPanel: function() {
+    this.propertyPanel = new Properties();
+    return this.propertyPanel.render();
+  },
+  renderWidgetButtons: function() {
     var className, name, type, _ref, _results;
     _ref = Widget.WIDGETS;
     _results = [];
@@ -187,6 +196,8 @@ window.Designer = {
     return false;
   }
 };
+
+MicroEvent.mixin(Designer);
 
 $(function() {
   return Designer.init();

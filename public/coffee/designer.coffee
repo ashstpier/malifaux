@@ -1,6 +1,7 @@
 window.Designer = {
 
   currentEditWidget: null
+  propertyPanel: null
 
   loadAll: (template) ->
     @template = template
@@ -20,6 +21,14 @@ window.Designer = {
       Template.load templateKey, (template) => @loadAll(template)
 
   renderControls: ->
+    @renderWidgetButtons()
+    @renderPropertyPanel()
+
+  renderPropertyPanel: ->
+    @propertyPanel = new Properties()
+    @propertyPanel.render()
+
+  renderWidgetButtons: ->
     for name, className of Widget.WIDGETS
       type = window[className]
       $("#gallery").append """
@@ -103,6 +112,9 @@ window.Designer = {
     @takeScreenShot() if !utils.is_production
     $('#save-modal').modal()
     false
+
 }
+
+MicroEvent.mixin(Designer)
 
 $ -> Designer.init()

@@ -16,6 +16,7 @@
 		<script type="text/javascript" src="vendor/store.js/store.min.js"></script>
 		<script type="text/javascript" src="vendor/underscore/underscore.js"></script>
 		<script type="text/javascript" src="vendor/html2canvas/build/html2canvas.min.js"></script>
+		<script type="text/javascript" src="vendor/microevent/microevent.js"></script>
 
 		<script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 
@@ -27,6 +28,7 @@
 		<script type="text/javascript" src="js/widget-content.js"></script>
 		<script type="text/javascript" src="js/template-storage.js"></script>
 		<script type="text/javascript" src="js/template.js"></script>
+		<script type="text/javascript" src="js/properties.js"></script>
 		<script type="text/javascript" src="js/designer.js"></script>
 	</head>
 	<body>
@@ -58,7 +60,10 @@
 			</ul>
 		</header>
 
-		<div id="page"></div>
+		<div id="viewport">
+			<div id="page"></div>
+		</div>
+		<div id="properties"></div>
 
 		<div class="modal fade" id="save-modal" tabindex="-1" role="dialog" aria-labelledby="label" aria-hidden="true">
 		  <div class="modal-dialog">

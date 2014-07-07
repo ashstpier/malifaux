@@ -25,6 +25,7 @@
     "vex": "~2.1.1",
     "bootstrap": "~3.2.0",
     "html2canvas": "~0.4.1"
+    "microevent": "~1.1.1"
   },
   "overrides": {
     "jquery": {
@@ -81,6 +82,11 @@
     "html2canvas": {
       "main": [
         "build/html2canvas.min.js"
+      ]
+    },
+    "microevent": {
+      "main": [
+        "microevent.js"
       ]
     }
   }

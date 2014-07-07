@@ -32,7 +32,7 @@ class window.Widget
     height = if config.height? then config.height else @content.defaultHeight()
     @origin = {
       x: if config.x? then config.x else ((960/2) - (width/2))
-      y: if config.y? then config.y else 300
+      y: if config.y? then config.y else 100
       width: width
       height: height
     }
@@ -77,21 +77,25 @@ class window.Widget
     @el.remove()
 
   serialize: ->
-    position = @el.position()
     {
       guid: @guid
-      x: position.left
-      y: position.top
-      width: @el.width()
-      height: @el.height()
+      x: @x()
+      y: @y()
+      width: @width()
+      height: @height()
       type: @content.constructor.name
       content: @content.serialize()
     }
 
-  saveConfig: -> 
+  saveConfig: ->
     @content.saveConfig()
 
   setAspectRatio: (ratio) ->
     @el.resizable('destroy')
     @el.height(@el.width()/ratio)
     @el.resizable(grid: Widget.GRID_SIZE, containment: Widget.PAGE_SELECTOR, aspectRatio: ratio)
+
+  width: -> @el.width()
+  height: -> @el.height()
+  x: -> @el.position().left
+  y: -> @el.position().top

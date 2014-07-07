@@ -48,7 +48,7 @@ window.Widget = (function() {
     height = config.height != null ? config.height : this.content.defaultHeight();
     this.origin = {
       x: config.x != null ? config.x : (960 / 2) - (width / 2),
-      y: config.y != null ? config.y : 300,
+      y: config.y != null ? config.y : 100,
       width: width,
       height: height
     };
@@ -114,14 +114,12 @@ window.Widget = (function() {
   };
 
   Widget.prototype.serialize = function() {
-    var position;
-    position = this.el.position();
     return {
       guid: this.guid,
-      x: position.left,
-      y: position.top,
-      width: this.el.width(),
-      height: this.el.height(),
+      x: this.x(),
+      y: this.y(),
+      width: this.width(),
+      height: this.height(),
       type: this.content.constructor.name,
       content: this.content.serialize()
     };
@@ -139,6 +137,22 @@ window.Widget = (function() {
       containment: Widget.PAGE_SELECTOR,
       aspectRatio: ratio
     });
+  };
+
+  Widget.prototype.width = function() {
+    return this.el.width();
+  };
+
+  Widget.prototype.height = function() {
+    return this.el.height();
+  };
+
+  Widget.prototype.x = function() {
+    return this.el.position().left;
+  };
+
+  Widget.prototype.y = function() {
+    return this.el.position().top;
   };
 
   return Widget;
