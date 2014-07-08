@@ -32,11 +32,12 @@ class window.Template
     @name = description.name
     @layout = description.layout
     @orientation = description.orientation
-    @screenshoot = ''
+    @screenshot = ''
 
   render: (mode, data) ->
     for widgetConfig in @layout
       @addWidget(widgetConfig, mode, data)
+    @layout = []
 
   addWidget: (widgetConfig, mode, data) ->
     widget = new Widget(widgetConfig, data)

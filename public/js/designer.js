@@ -140,9 +140,6 @@ window.Designer = {
     }
     return this.template.removeWidget(widget);
   },
-  clear: function() {
-    return this.template.removeAllWidgets();
-  },
   load: function() {
     $('#name').text(this.template.name);
     $("#orientation input:radio[value='" + this.template.orientation + "']").attr('checked', true);
@@ -151,6 +148,12 @@ window.Designer = {
   },
   save: function() {
     return this.template.save;
+  },
+  discard: function() {
+    return this.exitDesigner();
+  },
+  clear: function() {
+    return this.template.removeAllWidgets();
   },
   exitDesigner: function() {
     var redirect;
@@ -164,21 +167,21 @@ window.Designer = {
       };
     })(this));
   },
-  discard: function() {
-    return this.exitDesigner();
+  takeScreenShot: function() {
+    return html2canvas(document.getElementById('page'), {
+      allowTaint: false,
+      taintTest: false,
+      useCORS: true,
+      onrendered: (function(_this) {
+        return function(canvas) {
+          return _this.template.screenshot = canvas.toDataURL();
+        };
+      })(this)
+    });
   },
   exit: function() {
     if (!utils.is_production) {
-      html2canvas(document.getElementById('page'), {
-        allowTaint: false,
-        taintTest: false,
-        useCORS: true,
-        onrendered: (function(_this) {
-          return function(canvas) {
-            return _this.template.screenshot = canvas.toDataURL();
-          };
-        })(this)
-      });
+      this.takeScreenShot();
     }
     $('#save-modal').modal();
     return false;

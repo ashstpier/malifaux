@@ -74,17 +74,15 @@ window.Designer = {
     @currentEditWidget = null if @currentEditWidget is widget
     @template.removeWidget(widget)
 
-  clear: ->
-    @template.removeAllWidgets()
-
   load: ->
     $('#name').text(@template.name)
     $("#orientation input:radio[value='#{@template.orientation}']").attr('checked', true)
     $('#page').attr("class", @template.orientation)
     @template.render("layout")
 
-  save: ->
-    @template.save
+  save: -> @template.save
+  discard: -> @exitDesigner()
+  clear: -> @template.removeAllWidgets()
 
   exitDesigner: ->
     redirect = utils.querystring("return")
@@ -93,18 +91,16 @@ window.Designer = {
   saveAndExit: ->
     @template.save => @exitDesigner()
 
-  discard: ->
-    @exitDesigner()
+  takeScreenShot: ->
+    html2canvas document.getElementById('page'), {
+      allowTaint: false,
+      taintTest: false,
+      useCORS: true,
+      onrendered: (canvas) => @template.screenshot = canvas.toDataURL()
+    }
 
   exit: ->
-    if !utils.is_production
-      html2canvas document.getElementById('page'), {
-        allowTaint: false,
-        taintTest: false,
-        useCORS: true,
-        onrendered: (canvas) =>
-          @template.screenshot = canvas.toDataURL()
-        }
+    @takeScreenShot() if !utils.is_production
     $('#save-modal').modal()
     false
 }

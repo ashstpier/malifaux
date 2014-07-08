@@ -41,18 +41,17 @@ window.Template = (function() {
     this.name = description.name;
     this.layout = description.layout;
     this.orientation = description.orientation;
-    this.screenshoot = '';
+    this.screenshot = '';
   }
 
   Template.prototype.render = function(mode, data) {
-    var widgetConfig, _i, _len, _ref, _results;
+    var widgetConfig, _i, _len, _ref;
     _ref = this.layout;
-    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       widgetConfig = _ref[_i];
-      _results.push(this.addWidget(widgetConfig, mode, data));
+      this.addWidget(widgetConfig, mode, data);
     }
-    return _results;
+    return this.layout = [];
   };
 
   Template.prototype.addWidget = function(widgetConfig, mode, data) {
