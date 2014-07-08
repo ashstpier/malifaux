@@ -41,7 +41,6 @@ window.Template = (function() {
     this.name = description.name;
     this.layout = description.layout;
     this.orientation = description.orientation;
-    this.screenshot = '';
   }
 
   Template.prototype.render = function(mode, data) {

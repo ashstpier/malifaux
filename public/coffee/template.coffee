@@ -32,7 +32,6 @@ class window.Template
     @name = description.name
     @layout = description.layout
     @orientation = description.orientation
-    @screenshot = ''
 
   render: (mode, data) ->
     for widgetConfig in @layout
