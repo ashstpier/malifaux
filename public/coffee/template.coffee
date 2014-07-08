@@ -1,24 +1,23 @@
 class window.Template
 
-  @load: (templateName, cb) -> 
-    TemplateStore.get templateName, (templateData) =>
-      templateData.layout ||= []
-
-      template = new Template(templateData)
-      template.key = templateName
-      template.name = templateData.name 
-      
+  @clone: (templateData, cb) ->
+    @deserialize templateData, (template) ->
+      template.key = utils.guid()
       cb(template)
+
+  @load: (templateName, cb) ->
+    TemplateStore.get templateName, (templateData) =>
+      @deserialize(templateData, cb)
 
   @delete: (templateKey) ->
     TemplateStore.delete(templateKey)
 
   @create: ->
-    template = new Template({ 
+    template = new Template({
       key: utils.guid(),
       name: "Untitled Template",
       layout: [],
-      orientation: 'portrait' 
+      orientation: 'portrait'
     })
     template.save()
     return template
@@ -56,10 +55,14 @@ class window.Template
     TemplateStore.save(@key, data, cb)
 
   serialize: ->
-    layout = (widget.serialize() for widget in @widgets)
-    data = { 
+    layout = if @layout.length then @layout else (widget.serialize() for widget in @widgets)
+    data = {
       layout: layout,
       name: @name,
       orientation: @orientation
     }
     data
+
+  @deserialize: (templateData, cb) ->
+    template = new Template(templateData)
+    cb(template)

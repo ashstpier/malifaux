@@ -1,13 +1,15 @@
 window.Template = (function() {
+  Template.clone = function(templateData, cb) {
+    return this.deserialize(templateData, function(template) {
+      template.key = utils.guid();
+      return cb(template);
+    });
+  };
+
   Template.load = function(templateName, cb) {
     return TemplateStore.get(templateName, (function(_this) {
       return function(templateData) {
-        var template;
-        templateData.layout || (templateData.layout = []);
-        template = new Template(templateData);
-        template.key = templateName;
-        template.name = templateData.name;
-        return cb(template);
+        return _this.deserialize(templateData, cb);
       };
     })(this));
   };
@@ -96,7 +98,7 @@ window.Template = (function() {
 
   Template.prototype.serialize = function() {
     var data, layout, widget;
-    layout = (function() {
+    layout = this.layout.length ? this.layout : (function() {
       var _i, _len, _ref, _results;
       _ref = this.widgets;
       _results = [];
@@ -112,6 +114,12 @@ window.Template = (function() {
       orientation: this.orientation
     };
     return data;
+  };
+
+  Template.deserialize = function(templateData, cb) {
+    var template;
+    template = new Template(templateData);
+    return cb(template);
   };
 
   return Template;
