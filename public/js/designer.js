@@ -168,16 +168,18 @@ window.Designer = {
     return this.exitDesigner();
   },
   exit: function() {
-    html2canvas(document.getElementById('page'), {
-      allowTaint: false,
-      taintTest: false,
-      useCORS: true,
-      onrendered: (function(_this) {
-        return function(canvas) {
-          return _this.template.screenshot = canvas.toDataURL();
-        };
-      })(this)
-    });
+    if (!utils.is_production) {
+      html2canvas(document.getElementById('page'), {
+        allowTaint: false,
+        taintTest: false,
+        useCORS: true,
+        onrendered: (function(_this) {
+          return function(canvas) {
+            return _this.template.screenshot = canvas.toDataURL();
+          };
+        })(this)
+      });
+    }
     $('#save-modal').modal();
     return false;
   }
