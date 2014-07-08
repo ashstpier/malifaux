@@ -23,7 +23,8 @@
     "normalize-css": "~3.0.1",
     "underscore": "~1.6.0",
     "vex": "~2.1.1",
-    "bootstrap": "~3.2.0"
+    "bootstrap": "~3.2.0",
+    "html2canvas": "~0.4.1"
   },
   "overrides": {
     "jquery": {
@@ -75,6 +76,11 @@
       "main": [
         "dist/js/bootstrap.min.js",
         "dist/css/bootstrap.min.css"
+      ]
+    },
+    "html2canvas": {
+      "main": [
+        "build/html2canvas.min.js"
       ]
     }
   }

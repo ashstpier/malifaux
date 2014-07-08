@@ -157,3 +157,39 @@ nav {
   color: white;
   padding: 10px;
 }
+
+#templates {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.template {
+  display: inline-block;
+  text-align: center;
+  width: 250px;
+  margin: 5px;
+}
+
+.template {
+  text-decoration: none;
+  color: #999;
+}
+
+.template p {
+  margin-bottom: 5px;
+}
+
+.template .thumbnail {
+  width: 100%;
+  box-shadow: 0px 0px 2px #888888;
+}
+
+.template:hover .thumbnail{
+  box-shadow: 0px 0px 5px #888888;
+  transition: all 0.15s linear;
+}
+
+.template:hover {
+  text-decoration: none;
+  /*color: #666;*/
+}

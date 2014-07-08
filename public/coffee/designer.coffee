@@ -91,16 +91,22 @@ window.Designer = {
     window.location.href = if redirect then redirect else "./index.html"
 
   saveAndExit: ->
-    @template.save =>
-    @exitDesigner()
+    @template.save => @exitDesigner()
 
   discard: ->
     @exitDesigner()
 
   exit: ->
+    if !utils.is_production
+      html2canvas document.getElementById('page'), {
+        allowTaint: false,
+        taintTest: false,
+        useCORS: true,
+        onrendered: (canvas) =>
+          @template.screenshot = canvas.toDataURL()
+        }
     $('#save-modal').modal()
     false
-
 }
 
 $ -> Designer.init()

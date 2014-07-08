@@ -1,12 +1,13 @@
 window.Templates = {
 
   addTemplateRow: (template) ->
-    $("#templates tbody").append("""
-      <tr>
-        <td>
-          <a href="./designer.html?template=#{template.key}">#{template.name}</a>
-        </td>
-      </tr>
+    $("#templates").append("""
+      <a href="./designer.html?template=#{template.key}">
+        <div class="template">
+          <p>#{template.name}</p>
+          <img class="thumbnail" src="#{utils.screenshot_url(template.screenshot)}">
+        </div>
+      </a>
       """)
 
   initDropZone: (element_id) ->
