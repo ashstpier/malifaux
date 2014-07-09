@@ -74,31 +74,39 @@ class window.Properties
 
   setAppearanceOptions: ->
     options = @selected.renderAppearanceOptions()
+    options = $(options) if typeof options is 'string'
     if options is false
       @clearAppearanceOptions()
     else
-      @el.find('.prop-appearance').html """
+      appearance = @el.find('.prop-appearance')
+      appearance.html """
           <h3 class="prop-section-header">Appearance</h3>
           <div class="prop-content">
-            #{options}
           </div>
         </section>
       """
+      appearance.find('.prop-content').append(options)
 
   clearAppearanceOptions: -> @el.find('.prop-appearance').html('')
 
   setConfigOptions: ->
     options = @selected.renderConfigOptions()
-    if options is false
+    options = [options] unless $.isArray(options)
+    if options is [false]
       @clearConfigOptions()
     else
-      @el.find('.prop-config').html """
+      options = for o in options
+        if typeof o is 'string' then $(o) else o
+
+      config = @el.find('.prop-config')
+      config.html """
           <h3 class="prop-section-header">Configuration</h3>
           <div class="prop-content">
-            #{options}
           </div>
         </section>
       """
+      for option in options
+        config.find('.prop-content').append(option)
 
   clearConfigOptions: -> @el.find('.prop-config').html('')
 

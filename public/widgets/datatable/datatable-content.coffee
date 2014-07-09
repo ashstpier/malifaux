@@ -130,12 +130,14 @@ class window.DatatableContent extends WidgetContent
       @_exclusions
 
   renderConfigOptions: ->
-    @option('select', 'subject_order', "Subject Order", options: {alphabetical: "Alphabetical", core_first: 'Core First'}) +
-    @columSettings() +
-    @option('text', 'exclusions', 'Subject Blacklist', hint: "A comma seperated, case insensitive, list of subject names to be excluded from reports.")
+    [
+      @option('select', 'subject_order', "Subject Order", options: {alphabetical: "Alphabetical", core_first: 'Core First'})
+      @columSettings()
+      @option('text', 'exclusions', 'Subject Blacklist', hint: "A comma seperated, case insensitive, list of subject names to be excluded from reports.")
+    ]
 
   columSettings: ->
-    ""
+    @render_edit()
 
 
   headingStyles: ->

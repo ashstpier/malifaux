@@ -82,12 +82,17 @@ window.Properties = (function() {
   };
 
   Properties.prototype.setAppearanceOptions = function() {
-    var options;
+    var appearance, options;
     options = this.selected.renderAppearanceOptions();
+    if (typeof options === 'string') {
+      options = $(options);
+    }
     if (options === false) {
       return this.clearAppearanceOptions();
     } else {
-      return this.el.find('.prop-appearance').html("  <h3 class=\"prop-section-header\">Appearance</h3>\n  <div class=\"prop-content\">\n    " + options + "\n  </div>\n</section>");
+      appearance = this.el.find('.prop-appearance');
+      appearance.html("  <h3 class=\"prop-section-header\">Appearance</h3>\n  <div class=\"prop-content\">\n  </div>\n</section>");
+      return appearance.find('.prop-content').append(options);
     }
   };
 
@@ -96,12 +101,35 @@ window.Properties = (function() {
   };
 
   Properties.prototype.setConfigOptions = function() {
-    var options;
+    var config, o, option, options, _i, _len, _results;
     options = this.selected.renderConfigOptions();
-    if (options === false) {
+    if (!$.isArray(options)) {
+      options = [options];
+    }
+    if (options === [false]) {
       return this.clearConfigOptions();
     } else {
-      return this.el.find('.prop-config').html("  <h3 class=\"prop-section-header\">Configuration</h3>\n  <div class=\"prop-content\">\n    " + options + "\n  </div>\n</section>");
+      options = (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = options.length; _i < _len; _i++) {
+          o = options[_i];
+          if (typeof o === 'string') {
+            _results.push($(o));
+          } else {
+            _results.push(o);
+          }
+        }
+        return _results;
+      })();
+      config = this.el.find('.prop-config');
+      config.html("  <h3 class=\"prop-section-header\">Configuration</h3>\n  <div class=\"prop-content\">\n  </div>\n</section>");
+      _results = [];
+      for (_i = 0, _len = options.length; _i < _len; _i++) {
+        option = options[_i];
+        _results.push(config.find('.prop-content').append(option));
+      }
+      return _results;
     }
   };
 

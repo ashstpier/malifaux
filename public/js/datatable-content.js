@@ -170,18 +170,20 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.renderConfigOptions = function() {
-    return this.option('select', 'subject_order', "Subject Order", {
-      options: {
-        alphabetical: "Alphabetical",
-        core_first: 'Core First'
-      }
-    }) + this.columSettings() + this.option('text', 'exclusions', 'Subject Blacklist', {
-      hint: "A comma seperated, case insensitive, list of subject names to be excluded from reports."
-    });
+    return [
+      this.option('select', 'subject_order', "Subject Order", {
+        options: {
+          alphabetical: "Alphabetical",
+          core_first: 'Core First'
+        }
+      }), this.columSettings(), this.option('text', 'exclusions', 'Subject Blacklist', {
+        hint: "A comma seperated, case insensitive, list of subject names to be excluded from reports."
+      })
+    ];
   };
 
   DatatableContent.prototype.columSettings = function() {
-    return "";
+    return this.render_edit();
   };
 
   DatatableContent.prototype.headingStyles = function() {
