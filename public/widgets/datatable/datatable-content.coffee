@@ -17,7 +17,6 @@ class window.DatatableContent extends WidgetContent
 
   defaultWidth: -> 640
   defaultHeight: -> 480
-  editable: -> true
 
   initWithConfig: (config) ->
     @columns = @get(config.columns, [])
@@ -61,46 +60,25 @@ class window.DatatableContent extends WidgetContent
       exclusions = ($.trim(e).toLowerCase() for e in @_exclusions.split(","))
       !_.contains(exclusions, subject.subjectName.toLowerCase())
 
-  render_edit: (data) ->
-    node = $("""
-      <div class="datatable-edit">
-        <h4>Columns</h4>
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Value</th>
-            </tr>
-          </thead>
-          <tbody class="edit-rows">
-          </tbody>
-        </table>
-      </div>
-    """)
-    table = node.find('.edit-rows')
-    table.append(@buildEditRow(col)) for col in @columns
-    table.append(@buildEditRow())
-    node
-
   buildEditRow: (col={title:'', value:'', compare_to:''}) ->
     options = (val) =>
       for point in @assessmentPoints()
         """<option value="#{point.code}" #{if point.code is val then 'selected="selected"' else ''}>#{point.name} | #{point.longName}</option>"""
 
     """<tr class="column-setting">
-      <td><input class="col-title" name="col-title" type="text" value="#{col.title}" /></td>
       <td>
-        <select class="col-value" name="col-value" style="max-width: 400px">
+        <input class="col-title" name="col-title" type="text" value="#{col.title}" placeholder="Untitled..." />
+        <span class="col-comp-label">compared to:</span>
+      </td>
+      <td>
+        <select class="col-value" name="col-value">
           <option value="" #{if col.value is "" then 'selected="selected"' else ''}></option>
           #{options(col.value).join("\n")}
         </select>
-        <p class="comparison">
-          compared to
-          <select class="col-compare-to" name="col-compare-to" style="max-width: 300px">
-            <option value="" #{if col.compare_to is "" then 'selected="selected"' else ''}></option>
-            #{options(col.compare_to).join("\n")}
-          </select>
-        </p>
+        <select class="col-compare-to" name="col-compare-to">
+          <option value="" #{if col.compare_to is "" then 'selected="selected"' else ''}></option>
+          #{options(col.compare_to).join("\n")}
+        </select>
       </td>
     </tr>"""
 
@@ -137,7 +115,33 @@ class window.DatatableContent extends WidgetContent
     ]
 
   columSettings: ->
-    @render_edit()
+    node = $("""
+      <div class="datatable-cols prop-table-config">
+        <h4>Columns</h4>
+        <div class="prop-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody class="edit-rows">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    """)
+    table = node.find('.edit-rows')
+    table.append(@buildEditRow(col)) for col in @columns
+    table.append(@buildEditRow())
+    table.on "input", ".col-title, .col-value, .col-compare-to", =>
+      console.log "changed!"
+      @maybeAddEditRow(table)
+      @saveColumns(table)
+      @redraw()
+    node
+
 
 
   headingStyles: ->
@@ -157,33 +161,22 @@ class window.DatatableContent extends WidgetContent
     tlClass = 'green' if numVal > compareTo
     """<span class="traffic-light #{tlClass}">#{val}</span>"""
 
-  bindEvents: (el) ->
-    el.on "change", ".col-title, .col-value", => @maybeAddEditRow()
-
-  maybeAddEditRow: ->
-    rows = @el.find('.column-setting')
+  maybeAddEditRow: (el) ->
+    rows = el.find('.column-setting')
     lastRow = $(rows[rows.length-1])
-    if lastRow.find('.col-title').val() isnt ''
+    if lastRow.find('.col-value').val() isnt ''
       lastRow.after(@buildEditRow())
 
-  saveConfig: ->
-    @saveColumns()
-    @saveStyle()
-
-  saveColumns: ->
-    columns = for col in @el.find('.column-setting')
+  saveColumns: (el) ->
+    columns = for col in el.find('.column-setting')
       $col = $(col)
       {
         title:            $col.find('.col-title').val()
         value:            $col.find('.col-value').val()
         compare_to:       $col.find('.col-compare-to').val()
       }
-    @columns = (col for col in columns when col.title isnt '' and col.value? and col.value isnt '')
+    @columns = (col for col in columns when col.value? and col.value isnt '')
 
-  saveStyle: ->
-    for el in @el.find('.style-option')
-      name = $(el).attr('name')
-      @style[name] = $(el).val()
 
   orderdSubjects: (subjects) ->
     subjects = (v for k,v of subjects)

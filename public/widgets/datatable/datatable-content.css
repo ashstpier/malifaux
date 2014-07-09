@@ -70,6 +70,27 @@
   text-align: right;
 }
 
+.datatable-cols .prop-table-wrap {
+  max-height: 240px;
+  overflow-y: scroll;
+}
+.datatable-cols .col-title {
+  width: 100px;
+  font-weight: bold;
+}
+.datatable-cols .col-value {
+  width: 150px;
+}
+.datatable-cols .col-comp-label {
+  display: block;
+  margin-top: 5px;
+  text-align: right;
+  font-style: italic;
+}
+.datatable-cols .col-compare-to {
+  width: 150px;
+}
+
 
 /*.style-option {
   margin: 0 0 1em 0;

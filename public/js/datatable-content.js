@@ -35,10 +35,6 @@ window.DatatableContent = (function(_super) {
     return 480;
   };
 
-  DatatableContent.prototype.editable = function() {
-    return true;
-  };
-
   DatatableContent.prototype.initWithConfig = function(config) {
     this.columns = this.get(config.columns, []);
     this.style = $.extend({}, DatatableContent.STYLE_DEFAULTS, this.get(config.style, {}));
@@ -103,19 +99,6 @@ window.DatatableContent = (function(_super) {
     })(this));
   };
 
-  DatatableContent.prototype.render_edit = function(data) {
-    var col, node, table, _i, _len, _ref;
-    node = $("<div class=\"datatable-edit\">\n  <h4>Columns</h4>\n  <table>\n    <thead>\n      <tr>\n        <th>Title</th>\n        <th>Value</th>\n      </tr>\n    </thead>\n    <tbody class=\"edit-rows\">\n    </tbody>\n  </table>\n</div>");
-    table = node.find('.edit-rows');
-    _ref = this.columns;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      col = _ref[_i];
-      table.append(this.buildEditRow(col));
-    }
-    table.append(this.buildEditRow());
-    return node;
-  };
-
   DatatableContent.prototype.buildEditRow = function(col) {
     var options;
     if (col == null) {
@@ -137,7 +120,7 @@ window.DatatableContent = (function(_super) {
         return _results;
       };
     })(this);
-    return "<tr class=\"column-setting\">\n  <td><input class=\"col-title\" name=\"col-title\" type=\"text\" value=\"" + col.title + "\" /></td>\n  <td>\n    <select class=\"col-value\" name=\"col-value\" style=\"max-width: 400px\">\n      <option value=\"\" " + (col.value === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.value).join("\n")) + "\n    </select>\n    <p class=\"comparison\">\n      compared to\n      <select class=\"col-compare-to\" name=\"col-compare-to\" style=\"max-width: 300px\">\n        <option value=\"\" " + (col.compare_to === "" ? 'selected="selected"' : '') + "></option>\n        " + (options(col.compare_to).join("\n")) + "\n      </select>\n    </p>\n  </td>\n</tr>";
+    return "<tr class=\"column-setting\">\n  <td>\n    <input class=\"col-title\" name=\"col-title\" type=\"text\" value=\"" + col.title + "\" placeholder=\"Untitled...\" />\n    <span class=\"col-comp-label\">compared to:</span>\n  </td>\n  <td>\n    <select class=\"col-value\" name=\"col-value\">\n      <option value=\"\" " + (col.value === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.value).join("\n")) + "\n    </select>\n    <select class=\"col-compare-to\" name=\"col-compare-to\">\n      <option value=\"\" " + (col.compare_to === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.compare_to).join("\n")) + "\n    </select>\n  </td>\n</tr>";
   };
 
   DatatableContent.prototype.renderAppearanceOptions = function() {
@@ -183,7 +166,24 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.columSettings = function() {
-    return this.render_edit();
+    var col, node, table, _i, _len, _ref;
+    node = $("<div class=\"datatable-cols prop-table-config\">\n  <h4>Columns</h4>\n  <div class=\"prop-table-wrap\">\n    <table>\n      <thead>\n        <tr>\n          <th>Title</th>\n          <th>Value</th>\n        </tr>\n      </thead>\n      <tbody class=\"edit-rows\">\n      </tbody>\n    </table>\n  </div>\n</div>");
+    table = node.find('.edit-rows');
+    _ref = this.columns;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      col = _ref[_i];
+      table.append(this.buildEditRow(col));
+    }
+    table.append(this.buildEditRow());
+    table.on("input", ".col-title, .col-value, .col-compare-to", (function(_this) {
+      return function() {
+        console.log("changed!");
+        _this.maybeAddEditRow(table);
+        _this.saveColumns(table);
+        return _this.redraw();
+      };
+    })(this));
+    return node;
   };
 
   DatatableContent.prototype.headingStyles = function() {
@@ -220,33 +220,20 @@ window.DatatableContent = (function(_super) {
     return "<span class=\"traffic-light " + tlClass + "\">" + val + "</span>";
   };
 
-  DatatableContent.prototype.bindEvents = function(el) {
-    return el.on("change", ".col-title, .col-value", (function(_this) {
-      return function() {
-        return _this.maybeAddEditRow();
-      };
-    })(this));
-  };
-
-  DatatableContent.prototype.maybeAddEditRow = function() {
+  DatatableContent.prototype.maybeAddEditRow = function(el) {
     var lastRow, rows;
-    rows = this.el.find('.column-setting');
+    rows = el.find('.column-setting');
     lastRow = $(rows[rows.length - 1]);
-    if (lastRow.find('.col-title').val() !== '') {
+    if (lastRow.find('.col-value').val() !== '') {
       return lastRow.after(this.buildEditRow());
     }
   };
 
-  DatatableContent.prototype.saveConfig = function() {
-    this.saveColumns();
-    return this.saveStyle();
-  };
-
-  DatatableContent.prototype.saveColumns = function() {
+  DatatableContent.prototype.saveColumns = function(el) {
     var $col, col, columns;
     columns = (function() {
       var _i, _len, _ref, _results;
-      _ref = this.el.find('.column-setting');
+      _ref = el.find('.column-setting');
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         col = _ref[_i];
@@ -258,30 +245,18 @@ window.DatatableContent = (function(_super) {
         });
       }
       return _results;
-    }).call(this);
+    })();
     return this.columns = (function() {
       var _i, _len, _results;
       _results = [];
       for (_i = 0, _len = columns.length; _i < _len; _i++) {
         col = columns[_i];
-        if (col.title !== '' && (col.value != null) && col.value !== '') {
+        if ((col.value != null) && col.value !== '') {
           _results.push(col);
         }
       }
       return _results;
     })();
-  };
-
-  DatatableContent.prototype.saveStyle = function() {
-    var el, name, _i, _len, _ref, _results;
-    _ref = this.el.find('.style-option');
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      el = _ref[_i];
-      name = $(el).attr('name');
-      _results.push(this.style[name] = $(el).val());
-    }
-    return _results;
   };
 
   DatatableContent.prototype.orderdSubjects = function(subjects) {
