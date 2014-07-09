@@ -180,16 +180,22 @@ class window.DatatableContent extends WidgetContent
 
   orderdSubjects: (subjects) ->
     subjects = (v for k,v of subjects)
-    alphabetical = subjects.sort (a,b) =>
-      if @style.subject_order is 'core_first'
-        if a.subjectName is 'English' or a.subjectName is 'Maths' or a.subjectName is 'Science'
-          return -1
+    alphabetical = subjects.sort (a,b) => if a.subjectName >= b.subjectName then 1 else -1
+    console.log @style.subject_order
+    return alphabetical if @style.subject_order is 'alphabetical'
+    rank = {
+      'english':     1
+      'maths':       2
+      'mathematics': 2
+      'science':     3
+    }
+    _.sortBy alphabetical, (subject) ->
+        name = subject.subjectName.toLowerCase()
+        console.log name
+        if rank[name]
+          rank[name]
         else
-          return 1
-      else
-        if a.subjectName >= b.subjectName then 1 else -1
-
-    alphabetical
+          name.charCodeAt(0)
 
   serialize: ->
     {columns: @columns, style: @style, exclusions: @_exclusions}

@@ -260,7 +260,7 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.orderdSubjects = function(subjects) {
-    var alphabetical, k, v;
+    var alphabetical, k, rank, v;
     subjects = (function() {
       var _results;
       _results = [];
@@ -272,22 +272,33 @@ window.DatatableContent = (function(_super) {
     })();
     alphabetical = subjects.sort((function(_this) {
       return function(a, b) {
-        if (_this.style.subject_order === 'core_first') {
-          if (a.subjectName === 'English' || a.subjectName === 'Maths' || a.subjectName === 'Science') {
-            return -1;
-          } else {
-            return 1;
-          }
+        if (a.subjectName >= b.subjectName) {
+          return 1;
         } else {
-          if (a.subjectName >= b.subjectName) {
-            return 1;
-          } else {
-            return -1;
-          }
+          return -1;
         }
       };
     })(this));
-    return alphabetical;
+    console.log(this.style.subject_order);
+    if (this.style.subject_order === 'alphabetical') {
+      return alphabetical;
+    }
+    rank = {
+      'english': 1,
+      'maths': 2,
+      'mathematics': 2,
+      'science': 3
+    };
+    return _.sortBy(alphabetical, function(subject) {
+      var name;
+      name = subject.subjectName.toLowerCase();
+      console.log(name);
+      if (rank[name]) {
+        return rank[name];
+      } else {
+        return name.charCodeAt(0);
+      }
+    });
   };
 
   DatatableContent.prototype.serialize = function() {
