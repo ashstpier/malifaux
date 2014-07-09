@@ -57,6 +57,10 @@ window.Widget = (function() {
     };
   }
 
+  Widget.prototype.displayName = function() {
+    return this.content.constructor.displayName;
+  };
+
   Widget.prototype.originStyles = function() {
     return "position:absolute; top:" + this.origin.y + "px; left:" + this.origin.x + "px; width:" + this.origin.width + "px; height:" + this.origin.height + "px;";
   };
@@ -128,6 +132,18 @@ window.Widget = (function() {
     return this.contentContainer.html(this.content.render(mode, this.data));
   };
 
+  Widget.prototype.redraw = function() {
+    return this.renderContent(this.currentMode);
+  };
+
+  Widget.prototype.renderAppearanceOptions = function() {
+    return this.content.renderAppearanceOptions();
+  };
+
+  Widget.prototype.renderConfigOptions = function() {
+    return this.content.renderConfigOptions();
+  };
+
   Widget.prototype.layoutMode = function() {
     this.el.draggable('enable');
     return this.renderContent('layout');
@@ -185,7 +201,6 @@ window.Widget = (function() {
   };
 
   Widget.prototype.x = function(n) {
-    console.log(n);
     if (n != null) {
       return this.el.css('left', "" + n + "px");
     } else {

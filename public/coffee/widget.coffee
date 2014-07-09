@@ -37,6 +37,8 @@ class window.Widget
       height: height
     }
 
+  displayName: -> @content.constructor.displayName
+
   originStyles: -> """position:absolute; top:#{@origin.y}px; left:#{@origin.x}px; width:#{@origin.width}px; height:#{@origin.height}px;"""
 
   bindEvents: ->
@@ -76,6 +78,11 @@ class window.Widget
     @el.addClass("widget-#{mode}-mode")
     @contentContainer.html(@content.render(mode, @data))
 
+  redraw: -> @renderContent(@currentMode)
+
+  renderAppearanceOptions: -> @content.renderAppearanceOptions()
+  renderConfigOptions: -> @content.renderConfigOptions()
+
   layoutMode: ->
     @el.draggable('enable')
     @renderContent('layout')
@@ -108,9 +115,7 @@ class window.Widget
 
   width: (n) -> if n? then @el.width(n) else @el.width()
   height: (n) -> if n? then @el.height(n) else @el.height()
-  x: (n) ->
-    console.log n
-    if n? then @el.css('left', "#{n}px") else @el.position().left
+  x: (n) -> if n? then @el.css('left', "#{n}px") else @el.position().left
   y: (n) -> if n? then @el.css('top', "#{n}px") else @el.position().top
 
   updateSelectedState: (selection) =>

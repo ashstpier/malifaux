@@ -92,7 +92,8 @@ window.Designer = {
     @trigger('selection:change', @currentEditWidget)
 
   addWidget: (widgetConfig={}) ->
-    @template.addWidget(widgetConfig, 'layout')
+    widget = @template.addWidget(widgetConfig, 'layout')
+    @select(widget)
 
   removeWidget: (widget) ->
     @currentEditWidget = null if @currentEditWidget is widget

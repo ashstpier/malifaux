@@ -29,7 +29,7 @@ window.FieldContent = (function(_super) {
   };
 
   FieldContent.prototype.initWithConfig = function(config) {
-    this.field = this.get(config.field, this.metrics()[0]);
+    this._field = this.get(config.field, this.metrics()[0]);
     return this.style = $.extend({}, FieldContent.STYLE_DEFAULTS, this.get(config.style, {}));
   };
 
@@ -37,19 +37,22 @@ window.FieldContent = (function(_super) {
     return $("<div class=\"field-widget\" style=\"" + (this.textStyles()) + "\">" + (this.fieldFrom(data)) + "</div>");
   };
 
-  FieldContent.prototype.render_edit = function(data) {
-    var metric, options;
-    options = (function() {
-      var _i, _len, _ref, _results;
-      _ref = this.metrics();
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        metric = _ref[_i];
-        _results.push("<option " + (this.field === metric ? 'selected' : '') + ">" + metric + "</option>");
-      }
-      return _results;
-    }).call(this);
-    return $("<div class=\"field-edit\">\n  <select id=\"field-selector\">" + (options.join("\n")) + "</select>\n\n  <h4>Style</h4>\n  " + (this.styleOption('font', 'font', "Font")) + "\n  " + (this.styleOption('size', 'size', "Text Size")) + "\n  " + (this.styleOption('color', 'color', "Text Color")) + "\n</div>");
+  FieldContent.prototype.renderAppearanceOptions = function() {
+    return this.option('font', 'font', "Font") + this.option('size', 'size', "Text Size") + this.option('color', 'color', "Text Color");
+  };
+
+  FieldContent.prototype.renderConfigOptions = function() {
+    var metric, options, _i, _len, _ref;
+    options = {};
+    _ref = this.metrics();
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      metric = _ref[_i];
+      options[metric] = metric;
+    }
+    return this.option('select', 'field', "Field", {
+      options: options,
+      hint: "This is the CCR field you would like to be merged, the data shown is only a sample of the final output."
+    });
   };
 
   FieldContent.prototype.textStyles = function() {
@@ -60,13 +63,9 @@ window.FieldContent = (function(_super) {
     });
   };
 
-  FieldContent.prototype.bindEvents = function(el) {
-    return {};
-  };
-
   FieldContent.prototype.fieldFrom = function(data) {
     var key, _i, _len, _ref;
-    _ref = this.field.split('.');
+    _ref = this._field.split('.');
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       key = _ref[_i];
       data = data[key];
@@ -74,30 +73,45 @@ window.FieldContent = (function(_super) {
     return data;
   };
 
-  FieldContent.prototype.saveText = function() {
-    return this.field = this.el.find('#field-selector').val();
-  };
-
-  FieldContent.prototype.saveConfig = function() {
-    this.saveText();
-    return this.saveStyle();
-  };
-
-  FieldContent.prototype.saveStyle = function() {
-    var el, name, _i, _len, _ref, _results;
-    _ref = this.el.find('.style-option');
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      el = _ref[_i];
-      name = $(el).attr('name');
-      _results.push(this.style[name] = $(el).val());
+  FieldContent.prototype.font = function(n) {
+    if (n != null) {
+      this.style.font = n;
+      return this.redraw();
+    } else {
+      return this.style.font;
     }
-    return _results;
+  };
+
+  FieldContent.prototype.size = function(n) {
+    if (n != null) {
+      this.style.size = n;
+      return this.redraw();
+    } else {
+      return this.style.size;
+    }
+  };
+
+  FieldContent.prototype.color = function(n) {
+    if (n != null) {
+      this.style.color = n;
+      return this.redraw();
+    } else {
+      return this.style.color;
+    }
+  };
+
+  FieldContent.prototype.field = function(n) {
+    if (n != null) {
+      this._field = n;
+      return this.redraw();
+    } else {
+      return this._field;
+    }
   };
 
   FieldContent.prototype.serialize = function() {
     return {
-      field: this.field,
+      field: this._field,
       style: this.style
     };
   };

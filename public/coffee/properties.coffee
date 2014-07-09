@@ -6,6 +6,7 @@ class window.Properties
 
   render: ->
     @el.append """
+      <h2 class="prop-selection"></h2>
       <section class="prop-section prop-layout">
         <h3 class="prop-section-header">Layout</h3>
         <div class="prop-content">
@@ -20,35 +21,35 @@ class window.Properties
         </div>
       </section>
 
-      <section class="prop-section prop-appearance">
-        <h3 class="prop-section-header">Appearance</h3>
-        <div class="prop-content">
-          no selection
-        </div>
-      </section>
+      <section class="prop-section prop-appearance"></section>
+      <section class="prop-section prop-config"></section>
     """
     @bindEvents()
     @updateLayoutValues()
+    @disable()
 
 
   bindEvents: ->
-    @el.find('.prop-layout .prop-input').change (e) =>
+    @el.on 'input', '.prop-input', (e) =>
       input = $(e.target)
-      @selected[input.data('fn')](input.val())
+      @selected.content[input.data('fn')].call(@selected.content, input.val())
 
   selectionChanged: (newSelection) ->
+    return if @selected is newSelection
     if @selected
       @selected.unbind "widget:move", @selectionMoved
     @selected = newSelection
     @updateLayoutValues()
     if @selected
       @selected.bind "widget:move", @selectionMoved
+      @enable()
+    else
+      @disable()
 
 
   selectionMoved: => @updateLayoutValues()
 
-  updateLayoutValues: ->
-    if @selected then @enable() else @disable()
+  updateLayoutValues: () ->
     @el.find('#prop-value-x').val(@x())
     @el.find('#prop-value-y').val(@y())
     @el.find('#prop-value-width').val(@width())
@@ -57,10 +58,46 @@ class window.Properties
   enable: ->
     @el.removeClass('disabled')
     @el.find('.prop-input').prop('disabled', false)
+    @el.find('.prop-selection').text(@selected.displayName())
+    @setAppearanceOptions()
+    @setConfigOptions()
 
   disable: ->
     @el.addClass('disabled')
     @el.find('.prop-input').prop('disabled', true)
+    @el.find('.prop-selection').html('Nothing Selected')
+    @clearAppearanceOptions()
+    @clearConfigOptions()
+
+  setAppearanceOptions: ->
+    options = @selected.renderAppearanceOptions()
+    if options is false
+      @clearAppearanceOptions()
+    else
+      @el.find('.prop-appearance').html """
+          <h3 class="prop-section-header">Appearance</h3>
+          <div class="prop-content">
+            #{options}
+          </div>
+        </section>
+      """
+
+  clearAppearanceOptions: -> @el.find('.prop-appearance').html('')
+
+  setConfigOptions: ->
+    options = @selected.renderConfigOptions()
+    if options is false
+      @clearConfigOptions()
+    else
+      @el.find('.prop-config').html """
+          <h3 class="prop-section-header">Configuration</h3>
+          <div class="prop-content">
+            #{options}
+          </div>
+        </section>
+      """
+
+  clearConfigOptions: -> @el.find('.prop-config').html('')
 
 
   x: -> @selected?.x() or ''

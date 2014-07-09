@@ -42,6 +42,7 @@ class window.Template
     widget = new Widget(widgetConfig, data)
     @widgets.push(widget)
     @page.append(widget.render(mode))
+    widget
 
   removeWidget: (widget) ->
     widget.remove()

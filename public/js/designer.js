@@ -152,10 +152,12 @@ window.Designer = {
     return this.trigger('selection:change', this.currentEditWidget);
   },
   addWidget: function(widgetConfig) {
+    var widget;
     if (widgetConfig == null) {
       widgetConfig = {};
     }
-    return this.template.addWidget(widgetConfig, 'layout');
+    widget = this.template.addWidget(widgetConfig, 'layout');
+    return this.select(widget);
   },
   removeWidget: function(widget) {
     if (this.currentEditWidget === widget) {

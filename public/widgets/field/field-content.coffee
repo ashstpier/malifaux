@@ -14,46 +14,56 @@ class window.FieldContent extends WidgetContent
   }
 
   initWithConfig: (config) ->
-    @field = @get(config.field, @metrics()[0])
+    @_field = @get(config.field, @metrics()[0])
     @style = $.extend({}, FieldContent.STYLE_DEFAULTS, @get(config.style, {}))
 
   render_layout: (data) ->
     $("""<div class="field-widget" style="#{@textStyles()}">#{@fieldFrom(data)}</div>""")
 
-  render_edit: (data) ->
-    options = for metric in @metrics()
-      """<option #{if @field is metric then 'selected' else ''}>#{metric}</option>"""
-    $ """
-      <div class="field-edit">
-        <select id="field-selector">#{options.join("\n")}</select>
+  renderAppearanceOptions: ->
+    @option('font',  'font', "Font") +
+    @option('size',  'size', "Text Size") +
+    @option('color', 'color', "Text Color")
 
-        <h4>Style</h4>
-        #{@styleOption('font',  'font', "Font")}
-        #{@styleOption('size',  'size', "Text Size")}
-        #{@styleOption('color', 'color', "Text Color")}
-      </div>
-    """
+  renderConfigOptions: ->
+    options = {}
+    options[metric] = metric for metric in @metrics()
+    @option('select', 'field', "Field", options: options, hint: "This is the CCR field you would like to be merged, the data shown is only a sample of the final output.")
 
   textStyles: ->
     @styleString('color': @style.color, 'font-family': @style.font, 'font-size': @style.size)
 
-  bindEvents: (el) -> {}
-
   fieldFrom: (data) ->
-    data = data[key] for key in @field.split('.')
+    data = data[key] for key in @_field.split('.')
     data
 
-  saveText: ->
-    @field = @el.find('#field-selector').val()
+  font: (n) ->
+    if n?
+      @style.font = n
+      @redraw()
+    else
+      @style.font
 
-  saveConfig: ->
-    @saveText()
-    @saveStyle()
+  size: (n) ->
+    if n?
+      @style.size = n
+      @redraw()
+    else
+      @style.size
 
-  saveStyle: ->
-    for el in @el.find('.style-option')
-      name = $(el).attr('name')
-      @style[name] = $(el).val()
+  color: (n) ->
+    if n?
+      @style.color = n
+      @redraw()
+    else
+      @style.color
+
+  field: (n) ->
+    if n?
+      @_field = n
+      @redraw()
+    else
+      @_field
 
   serialize: ->
-    {field: @field, style: @style}
+    {field: @_field, style: @style}

@@ -1,16 +1,29 @@
+.prop-selection {
+  font-size: 18px;
+  margin: 0;
+  padding: 10px;
+  line-height: 1;
+  background-color: #888;
+  color: #fff;
+}
+.disabled .prop-selection {
+  background-color: #888;
+}
+
+
 .prop-section-header {
   margin: 0;
   padding: 7px 10px;
   line-height: 1;
   font-size: 12px;
   font-weight: 600;
-  background-color: #ccc;
+  background-color: #bfbfbf;
   color: #666;
 }
 
 .prop-content {
-  margin: 10px;
-  font-size: 12px;
+  padding: 20px 10px;
+  font-size: 13px;
   color: #333;
 }
 .disabled .prop-content {
@@ -22,8 +35,36 @@
   width: 20%;
   text-align: right;
   margin-right: 3%;
+  font-weight: bold;
 }
 .prop-layout .prop-coord-input {
   display: inline-block;
   width: 22%;
+}
+
+
+.prop-option {
+  margin: 10px 0 0 0;
+  padding: 0;
+}
+.prop-option:first-child {
+  margin-top: 0;
+}
+.prop-label {
+  box-sizing: border-box;
+  display: inline-block;
+  width: 40%;
+  padding-right: 5px;
+  font-weight: bold;
+}
+.prop-input {
+  box-sizing: border-box;
+  display: inline-block;
+  max-width: 57%;
+}
+.prop-hint {
+  font-size: 12px;
+  color: #666;
+  margin: 5px 0 0 0;
+  padding: 0;
 }

@@ -39,6 +39,10 @@ window.WidgetContent = (function() {
     return this.render_layout(data);
   };
 
+  WidgetContent.prototype.redraw = function() {
+    return this.widget.redraw();
+  };
+
   WidgetContent.prototype.bindEvents = function(el) {};
 
   WidgetContent.prototype.cancelEditing = function() {
@@ -96,14 +100,14 @@ window.WidgetContent = (function() {
     return API.metrics();
   };
 
-  WidgetContent.prototype.styleOption = function(type, key, label, options) {
+  WidgetContent.prototype.option = function(type, key, label, config) {
     if (label == null) {
       label = key;
     }
-    if (options == null) {
-      options = {};
+    if (config == null) {
+      config = {};
     }
-    return new StyleOptionRenderer(type, key, label, options).render(this.style);
+    return new OptionRenderer(this, type, key, label, config).render(this.style);
   };
 
   WidgetContent.prototype.styleString = function(styles) {
@@ -126,23 +130,40 @@ window.WidgetContent = (function() {
     return this.widget.setAspectRatio(ratio);
   };
 
+  WidgetContent.prototype.renderAppearanceOptions = function() {
+    return false;
+  };
+
+  WidgetContent.prototype.renderConfigOptions = function() {
+    return false;
+  };
+
   return WidgetContent;
 
 })();
 
-window.StyleOptionRenderer = (function() {
-  function StyleOptionRenderer(type, key, label, options) {
+window.OptionRenderer = (function() {
+  function OptionRenderer(receiver, type, key, label, config) {
+    this.receiver = receiver;
     this.type = type;
     this.key = key;
     this.label = label;
-    this.options = options != null ? options : {};
+    this.config = config != null ? config : {};
   }
 
-  StyleOptionRenderer.prototype.render = function(styles) {
-    return "<p class=\"style-option\">\n  <label for=\"" + this.key + "\">" + this.label + "</label>\n  " + (this.renderInput(styles)) + "\n</p>";
+  OptionRenderer.prototype.render = function(styles) {
+    return "<div class=\"prop-option\">\n  <label class=\"prop-label\" for=\"" + this.key + "\">" + this.label + "</label>\n  " + (this.renderInput(styles)) + "\n  " + (this.renderHint()) + "\n</div>";
   };
 
-  StyleOptionRenderer.prototype.renderInput = function(styles) {
+  OptionRenderer.prototype.renderHint = function() {
+    if (!this.config.hint) {
+      return '';
+    }
+    return "<p class=\"prop-hint\">" + this.config.hint + "</p>";
+  };
+
+  OptionRenderer.prototype.renderInput = function(styles) {
+    this.value = this.receiver[this.key].call(this.receiver);
     switch (this.type) {
       case 'font':
         return this.renderFontInput(styles);
@@ -151,11 +172,11 @@ window.StyleOptionRenderer = (function() {
       case 'select':
         return this.renderSelectInput(styles);
       default:
-        return "<input name=\"" + this.key + "\" class=\"style-option\" name=\"" + this.key + "\" type=\"" + this.type + "\" value=\"" + styles[this.key] + "\" />";
+        return "<input name=\"" + this.key + "\" class=\"prop-input\" name=\"" + this.key + "\" type=\"" + this.type + "\" value=\"" + this.value + "\" data-fn=\"" + this.key + "\" />";
     }
   };
 
-  StyleOptionRenderer.prototype.renderFontInput = function(styles) {
+  OptionRenderer.prototype.renderFontInput = function(styles) {
     var desc, fontName, options;
     options = (function() {
       var _ref, _results;
@@ -163,14 +184,14 @@ window.StyleOptionRenderer = (function() {
       _results = [];
       for (fontName in _ref) {
         desc = _ref[fontName];
-        _results.push("<option " + (styles[this.key] === fontName ? 'selected' : '') + ">" + fontName + "</option>");
+        _results.push("<option " + (this.value === fontName ? 'selected' : '') + ">" + fontName + "</option>");
       }
       return _results;
     }).call(this);
-    return "<select name=\"" + this.key + "\" class=\"style-option\" name=\"" + this.key + "\">\n  " + (options.join("\n")) + "\n</select>";
+    return "<select name=\"" + this.key + "\" class=\"prop-input\" data-fn=\"" + this.key + "\">\n  " + (options.join("\n")) + "\n</select>";
   };
 
-  StyleOptionRenderer.prototype.renderSizeInput = function(styles) {
+  OptionRenderer.prototype.renderSizeInput = function(styles) {
     var options, size, sizeName;
     options = (function() {
       var _ref, _results;
@@ -178,28 +199,28 @@ window.StyleOptionRenderer = (function() {
       _results = [];
       for (sizeName in _ref) {
         size = _ref[sizeName];
-        _results.push("<option " + (styles[this.key] === sizeName ? 'selected' : '') + ">" + sizeName + "</option>");
+        _results.push("<option " + (this.value === sizeName ? 'selected' : '') + ">" + sizeName + "</option>");
       }
       return _results;
     }).call(this);
-    return "<select name=\"" + this.key + "\" class=\"style-option\" name=\"" + this.key + "\">\n  " + (options.join("\n")) + "\n</select>";
+    return "<select name=\"" + this.key + "\" class=\"prop-input\" data-fn=\"" + this.key + "\">\n  " + (options.join("\n")) + "\n</select>";
   };
 
-  StyleOptionRenderer.prototype.renderSelectInput = function(styles) {
+  OptionRenderer.prototype.renderSelectInput = function(styles) {
     var name, options, value;
     options = (function() {
       var _ref, _results;
-      _ref = this.options;
+      _ref = this.config.options;
       _results = [];
       for (value in _ref) {
         name = _ref[value];
-        _results.push("<option value=\"" + value + "\" " + (styles[this.key] === value ? 'selected' : '') + ">" + name + "</option>");
+        _results.push("<option value=\"" + value + "\" " + (this.value === value ? 'selected' : '') + ">" + name + "</option>");
       }
       return _results;
     }).call(this);
-    return "<select name=\"" + this.key + "\" class=\"style-option\" name=\"" + this.key + "\">\n  " + (options.join("\n")) + "\n</select>";
+    return "<select name=\"" + this.key + "\" class=\"prop-input\" data-fn=\"" + this.key + "\">\n  " + (options.join("\n")) + "\n</select>";
   };
 
-  return StyleOptionRenderer;
+  return OptionRenderer;
 
 })();

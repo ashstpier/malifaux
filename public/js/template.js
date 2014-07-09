@@ -57,7 +57,8 @@ window.Template = (function() {
     var widget;
     widget = new Widget(widgetConfig, data);
     this.widgets.push(widget);
-    return this.page.append(widget.render(mode));
+    this.page.append(widget.render(mode));
+    return widget;
   };
 
   Template.prototype.removeWidget = function(widget) {
