@@ -135,6 +135,7 @@ class window.DatatableContent extends WidgetContent
     @option('text', 'exclusions', 'Subject Blacklist', hint: "A comma seperated, case insensitive, list of subject names to be excluded from reports.")
 
   columSettings: ->
+    ""
 
 
   headingStyles: ->
@@ -166,10 +167,6 @@ class window.DatatableContent extends WidgetContent
   saveConfig: ->
     @saveColumns()
     @saveStyle()
-    @saveExclusions()
-
-  saveExclusions: ->
-    @_exclusions = $('#exclusions').val()
 
   saveColumns: ->
     columns = for col in @el.find('.column-setting')

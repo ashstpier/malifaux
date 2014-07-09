@@ -180,7 +180,9 @@ window.DatatableContent = (function(_super) {
     });
   };
 
-  DatatableContent.prototype.columSettings = function() {};
+  DatatableContent.prototype.columSettings = function() {
+    return "";
+  };
 
   DatatableContent.prototype.headingStyles = function() {
     return this.styleString({
@@ -235,12 +237,7 @@ window.DatatableContent = (function(_super) {
 
   DatatableContent.prototype.saveConfig = function() {
     this.saveColumns();
-    this.saveStyle();
-    return this.saveExclusions();
-  };
-
-  DatatableContent.prototype.saveExclusions = function() {
-    return this._exclusions = $('#exclusions').val();
+    return this.saveStyle();
   };
 
   DatatableContent.prototype.saveColumns = function() {

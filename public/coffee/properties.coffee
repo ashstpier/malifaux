@@ -11,13 +11,13 @@ class window.Properties
         <h3 class="prop-section-header">Layout</h3>
         <div class="prop-content">
           <label for="prop-value-x">x</label>
-          <input type="text" id="prop-value-x" class="prop-input prop-coord-input" data-fn="x" />
+          <input type="text" id="prop-value-x" class="prop-coord-input" data-fn="x" />
           <label for="prop-value-y">y</label>
-          <input type="text" id="prop-value-y" class="prop-input prop-coord-input" data-fn="y" />
+          <input type="text" id="prop-value-y" class="prop-coord-input" data-fn="y" />
           <label for="prop-value-width">width</label>
-          <input type="text" id="prop-value-width" class="prop-input prop-coord-input" data-fn="width" />
+          <input type="text" id="prop-value-width" class="prop-coord-input" data-fn="width" />
           <label for="prop-value-height">height</label>
-          <input type="text" id="prop-value-height" class="prop-input prop-coord-input"  data-fn="height"/>
+          <input type="text" id="prop-value-height" class="prop-coord-input"  data-fn="height"/>
         </div>
       </section>
 
@@ -30,6 +30,9 @@ class window.Properties
 
 
   bindEvents: ->
+    @el.on 'input', '.prop-coord-input', (e) =>
+      input = $(e.target)
+      @selected[input.data('fn')].call(@selected, input.val())
     @el.on 'input', '.prop-input', (e) =>
       input = $(e.target)
       @selected.content[input.data('fn')].call(@selected.content, input.val())
