@@ -113,6 +113,7 @@ body {
   width: 300px;
   background-color: #ddd;
   border-left: 1px solid #ccc;
+  overflow: scroll;
 }
 
  /* A4 Ratio is ~ 1:1.4 */
