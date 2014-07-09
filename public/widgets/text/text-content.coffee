@@ -6,6 +6,7 @@ class window.TextContent extends WidgetContent
 
   defaultWidth: -> 360
   defaultHeight: -> 240
+  editable: -> true
 
   @EDITOR_CONFIG: {
     imageUpload: false

@@ -22,6 +22,10 @@ window.TextContent = (function(_super) {
     return 240;
   };
 
+  TextContent.prototype.editable = function() {
+    return true;
+  };
+
   TextContent.EDITOR_CONFIG = {
     imageUpload: false,
     inlineMode: true,

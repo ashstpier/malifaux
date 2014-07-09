@@ -17,11 +17,12 @@ class window.DatatableContent extends WidgetContent
 
   defaultWidth: -> 640
   defaultHeight: -> 480
+  editable: -> true
 
   initWithConfig: (config) ->
     @columns = @get(config.columns, [])
     @style = $.extend({}, DatatableContent.STYLE_DEFAULTS, @get(config.style, {}))
-    @exclusions = @get(config.exclusions, '')
+    @_exclusions = @get(config.exclusions, '')
 
   render_layout: (data) ->
     name = utils.escape(data.name)
@@ -56,8 +57,8 @@ class window.DatatableContent extends WidgetContent
 
   filter_subjects: (subjects) =>
     _.filter subjects, (subject) =>
-      exclusions = @exclusions.split(",")
-      !_.contains(exclusions, subject.subjectName)
+      exclusions = ($.trim(e).toLowerCase() for e in @_exclusions.split(","))
+      !_.contains(exclusions, subject.subjectName.toLowerCase())
 
   render_edit: (data) ->
     node = $("""
@@ -73,19 +74,6 @@ class window.DatatableContent extends WidgetContent
           <tbody class="edit-rows">
           </tbody>
         </table>
-
-        <h4>Style</h4>
-        #{@styleOption('select', 'subject_order', "Order of Subjects", alphabetical: "Alphabetical", core_first: 'Core First')}
-        #{@styleOption('font',  'font', "Font")}
-        #{@styleOption('size',  'size', "Text Size")}
-        #{@styleOption('color', 'heading_text_color', "Heading Text Color")}
-        #{@styleOption('color', 'heading_background_color', "Heading Background Color")}
-        #{@styleOption('color', 'cell_text_color', "Cell Text Color")}
-        #{@styleOption('color', 'cell_background_color_odd', "Cell Background Color (odd rows)")}
-        #{@styleOption('color', 'cell_background_color_even', "Cell Background Color (even rows)")}
-
-        <h4>Exclude Subjects</h4>
-        <input id="exclusions" type="text" value="#{@exclusions}">
       </div>
     """)
     table = node.find('.edit-rows')
@@ -114,6 +102,39 @@ class window.DatatableContent extends WidgetContent
         </p>
       </td>
     </tr>"""
+
+  renderAppearanceOptions: ->
+    @option('font',  'font', "Font") +
+    @option('size',  'size', "Text Size") +
+    @option('color', 'heading_text_color', "Heading Text") +
+    @option('color', 'heading_background_color', "Heading Bg") +
+    @option('color', 'cell_text_color', "Cell Text") +
+    @option('color', 'cell_background_color_odd', "Cell Bg Odd") +
+    @option('color', 'cell_background_color_even', "Cell Bg Even")
+
+  subject_order: @styleProperty('subject_order')
+  font: @styleProperty('font')
+  size: @styleProperty('size')
+  heading_text_color: @styleProperty('heading_text_color')
+  heading_background_color: @styleProperty('heading_background_color')
+  cell_text_color: @styleProperty('cell_text_color')
+  cell_background_color_odd: @styleProperty('cell_background_color_odd')
+  cell_background_color_even: @styleProperty('cell_background_color_even')
+
+  exclusions: (n) ->
+    if n?
+      @_exclusions = n
+      @redraw()
+    else
+      @_exclusions
+
+  renderConfigOptions: ->
+    @option('select', 'subject_order', "Subject Order", options: {alphabetical: "Alphabetical", core_first: 'Core First'}) +
+    @columSettings() +
+    @option('text', 'exclusions', 'Subject Blacklist', hint: "A comma seperated, case insensitive, list of subject names to be excluded from reports.")
+
+  columSettings: ->
+
 
   headingStyles: ->
     @styleString('background-color': @style.heading_background_color, color: @style.heading_text_color)
@@ -147,7 +168,7 @@ class window.DatatableContent extends WidgetContent
     @saveExclusions()
 
   saveExclusions: ->
-    @exclusions = $('#exclusions').val()
+    @_exclusions = $('#exclusions').val()
 
   saveColumns: ->
     columns = for col in @el.find('.column-setting')
@@ -178,4 +199,4 @@ class window.DatatableContent extends WidgetContent
     alphabetical
 
   serialize: ->
-    {columns: @columns, style: @style, exclusions: @exclusions}
+    {columns: @columns, style: @style, exclusions: @_exclusions}

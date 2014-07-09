@@ -35,10 +35,14 @@ window.DatatableContent = (function(_super) {
     return 480;
   };
 
+  DatatableContent.prototype.editable = function() {
+    return true;
+  };
+
   DatatableContent.prototype.initWithConfig = function(config) {
     this.columns = this.get(config.columns, []);
     this.style = $.extend({}, DatatableContent.STYLE_DEFAULTS, this.get(config.style, {}));
-    return this.exclusions = this.get(config.exclusions, '');
+    return this._exclusions = this.get(config.exclusions, '');
   };
 
   DatatableContent.prototype.render_layout = function(data) {
@@ -80,19 +84,25 @@ window.DatatableContent = (function(_super) {
   DatatableContent.prototype.filter_subjects = function(subjects) {
     return _.filter(subjects, (function(_this) {
       return function(subject) {
-        var exclusions;
-        exclusions = _this.exclusions.split(",");
-        return !_.contains(exclusions, subject.subjectName);
+        var e, exclusions;
+        exclusions = (function() {
+          var _i, _len, _ref, _results;
+          _ref = this._exclusions.split(",");
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            e = _ref[_i];
+            _results.push($.trim(e).toLowerCase());
+          }
+          return _results;
+        }).call(_this);
+        return !_.contains(exclusions, subject.subjectName.toLowerCase());
       };
     })(this));
   };
 
   DatatableContent.prototype.render_edit = function(data) {
     var col, node, table, _i, _len, _ref;
-    node = $("<div class=\"datatable-edit\">\n  <h4>Columns</h4>\n  <table>\n    <thead>\n      <tr>\n        <th>Title</th>\n        <th>Value</th>\n      </tr>\n    </thead>\n    <tbody class=\"edit-rows\">\n    </tbody>\n  </table>\n\n  <h4>Style</h4>\n  " + (this.styleOption('select', 'subject_order', "Order of Subjects", {
-      alphabetical: "Alphabetical",
-      core_first: 'Core First'
-    })) + "\n  " + (this.styleOption('font', 'font', "Font")) + "\n  " + (this.styleOption('size', 'size', "Text Size")) + "\n  " + (this.styleOption('color', 'heading_text_color', "Heading Text Color")) + "\n  " + (this.styleOption('color', 'heading_background_color', "Heading Background Color")) + "\n  " + (this.styleOption('color', 'cell_text_color', "Cell Text Color")) + "\n  " + (this.styleOption('color', 'cell_background_color_odd', "Cell Background Color (odd rows)")) + "\n  " + (this.styleOption('color', 'cell_background_color_even', "Cell Background Color (even rows)")) + "\n\n  <h4>Exclude Subjects</h4>\n  <input id=\"exclusions\" type=\"text\" value=\"" + this.exclusions + "\">\n</div>");
+    node = $("<div class=\"datatable-edit\">\n  <h4>Columns</h4>\n  <table>\n    <thead>\n      <tr>\n        <th>Title</th>\n        <th>Value</th>\n      </tr>\n    </thead>\n    <tbody class=\"edit-rows\">\n    </tbody>\n  </table>\n</div>");
     table = node.find('.edit-rows');
     _ref = this.columns;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -126,6 +136,48 @@ window.DatatableContent = (function(_super) {
     })(this);
     return "<tr class=\"column-setting\">\n  <td><input class=\"col-title\" name=\"col-title\" type=\"text\" value=\"" + col.title + "\" /></td>\n  <td>\n    <select class=\"col-value\" name=\"col-value\" style=\"max-width: 400px\">\n      <option value=\"\" " + (col.value === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.value).join("\n")) + "\n    </select>\n    <p class=\"comparison\">\n      compared to\n      <select class=\"col-compare-to\" name=\"col-compare-to\" style=\"max-width: 300px\">\n        <option value=\"\" " + (col.compare_to === "" ? 'selected="selected"' : '') + "></option>\n        " + (options(col.compare_to).join("\n")) + "\n      </select>\n    </p>\n  </td>\n</tr>";
   };
+
+  DatatableContent.prototype.renderAppearanceOptions = function() {
+    return this.option('font', 'font', "Font") + this.option('size', 'size', "Text Size") + this.option('color', 'heading_text_color', "Heading Text") + this.option('color', 'heading_background_color', "Heading Bg") + this.option('color', 'cell_text_color', "Cell Text") + this.option('color', 'cell_background_color_odd', "Cell Bg Odd") + this.option('color', 'cell_background_color_even', "Cell Bg Even");
+  };
+
+  DatatableContent.prototype.subject_order = DatatableContent.styleProperty('subject_order');
+
+  DatatableContent.prototype.font = DatatableContent.styleProperty('font');
+
+  DatatableContent.prototype.size = DatatableContent.styleProperty('size');
+
+  DatatableContent.prototype.heading_text_color = DatatableContent.styleProperty('heading_text_color');
+
+  DatatableContent.prototype.heading_background_color = DatatableContent.styleProperty('heading_background_color');
+
+  DatatableContent.prototype.cell_text_color = DatatableContent.styleProperty('cell_text_color');
+
+  DatatableContent.prototype.cell_background_color_odd = DatatableContent.styleProperty('cell_background_color_odd');
+
+  DatatableContent.prototype.cell_background_color_even = DatatableContent.styleProperty('cell_background_color_even');
+
+  DatatableContent.prototype.exclusions = function(n) {
+    if (n != null) {
+      this._exclusions = n;
+      return this.redraw();
+    } else {
+      return this._exclusions;
+    }
+  };
+
+  DatatableContent.prototype.renderConfigOptions = function() {
+    return this.option('select', 'subject_order', "Subject Order", {
+      options: {
+        alphabetical: "Alphabetical",
+        core_first: 'Core First'
+      }
+    }) + this.columSettings() + this.option('text', 'exclusions', 'Subject Blacklist', {
+      hint: "A comma seperated, case insensitive, list of subject names to be excluded from reports."
+    });
+  };
+
+  DatatableContent.prototype.columSettings = function() {};
 
   DatatableContent.prototype.headingStyles = function() {
     return this.styleString({
@@ -185,7 +237,7 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.saveExclusions = function() {
-    return this.exclusions = $('#exclusions').val();
+    return this._exclusions = $('#exclusions').val();
   };
 
   DatatableContent.prototype.saveColumns = function() {
@@ -265,7 +317,7 @@ window.DatatableContent = (function(_super) {
     return {
       columns: this.columns,
       style: this.style,
-      exclusions: this.exclusions
+      exclusions: this._exclusions
     };
   };
 

@@ -74,7 +74,9 @@ window.Widget = (function() {
     })(this));
     this.el.dblclick((function(_this) {
       return function() {
-        return Designer.editWidget(_this);
+        if (_this.content.editable()) {
+          return Designer.editWidget(_this);
+        }
       };
     })(this));
     this.el.find('.widget-delete').click((function(_this) {

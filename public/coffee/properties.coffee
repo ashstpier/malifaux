@@ -21,8 +21,8 @@ class window.Properties
         </div>
       </section>
 
-      <section class="prop-section prop-appearance"></section>
       <section class="prop-section prop-config"></section>
+      <section class="prop-section prop-appearance"></section>
     """
     @bindEvents()
     @updateLayoutValues()

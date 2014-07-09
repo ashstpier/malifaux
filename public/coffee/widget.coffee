@@ -44,7 +44,7 @@ class window.Widget
   bindEvents: ->
     Designer.bind 'selection:change', @updateSelectedState
     @el.click => Designer.select(this)
-    @el.dblclick => Designer.editWidget(this)
+    @el.dblclick => Designer.editWidget(this) if this.content.editable()
     @el.find('.widget-delete').click  => Designer.removeWidget(this)
     @el.resizable
       grid:         Widget.GRID_SIZE

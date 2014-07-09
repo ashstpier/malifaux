@@ -5,6 +5,7 @@
   line-height: 1;
   background-color: #888;
   color: #fff;
+  font-weight: 300;
 }
 .disabled .prop-selection {
   background-color: #888;
@@ -37,7 +38,7 @@
   margin-right: 3%;
   font-weight: bold;
 }
-.prop-layout .prop-coord-input {
+.prop-layout .prop-input.prop-coord-input {
   display: inline-block;
   width: 22%;
 }
@@ -62,8 +63,12 @@
   display: inline-block;
   max-width: 57%;
 }
+.prop-input[type='text'] {
+  width: 57%;
+}
 .prop-hint {
-  font-size: 12px;
+  font-size: 11px;
+  line-height: 1.4;
   color: #666;
   margin: 5px 0 0 0;
   padding: 0;

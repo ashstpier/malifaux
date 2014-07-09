@@ -5,6 +5,17 @@ window.WidgetContent = (function() {
 
   WidgetContent.icon = "wrench";
 
+  WidgetContent.styleProperty = function(key) {
+    return function(val) {
+      if (val != null) {
+        this.style[key] = val;
+        return this.redraw();
+      } else {
+        return this.style[key];
+      }
+    };
+  };
+
   function WidgetContent(widget, config) {
     this.widget = widget;
     if (config == null) {
@@ -71,6 +82,10 @@ window.WidgetContent = (function() {
 
   WidgetContent.prototype.defaultHeight = function() {
     return 160;
+  };
+
+  WidgetContent.prototype.editable = function() {
+    return false;
   };
 
   WidgetContent.prototype.assessmentPoints = function() {

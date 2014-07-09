@@ -73,32 +73,11 @@ window.FieldContent = (function(_super) {
     return data;
   };
 
-  FieldContent.prototype.font = function(n) {
-    if (n != null) {
-      this.style.font = n;
-      return this.redraw();
-    } else {
-      return this.style.font;
-    }
-  };
+  FieldContent.prototype.font = FieldContent.styleProperty('font');
 
-  FieldContent.prototype.size = function(n) {
-    if (n != null) {
-      this.style.size = n;
-      return this.redraw();
-    } else {
-      return this.style.size;
-    }
-  };
+  FieldContent.prototype.size = FieldContent.styleProperty('size');
 
-  FieldContent.prototype.color = function(n) {
-    if (n != null) {
-      this.style.color = n;
-      return this.redraw();
-    } else {
-      return this.style.color;
-    }
-  };
+  FieldContent.prototype.color = FieldContent.styleProperty('color');
 
   FieldContent.prototype.field = function(n) {
     if (n != null) {

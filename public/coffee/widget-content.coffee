@@ -4,6 +4,14 @@ class window.WidgetContent
   @description: "An element that can be added to the page."
   @icon:        "wrench"
 
+  @styleProperty: (key) ->
+    (val) ->
+      if val?
+        @style[key] = val
+        @redraw()
+      else
+        @style[key]
+
   constructor: (@widget, config={}) ->
     @initWithConfig(config)
 
@@ -34,6 +42,7 @@ class window.WidgetContent
 
   defaultWidth: -> 160
   defaultHeight: -> 160
+  editable: -> false
 
   assessmentPoints: ->
     points = ($.extend({}, obj, {code: key}) for key, obj of API.assessmentPoints())

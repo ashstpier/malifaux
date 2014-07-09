@@ -37,26 +37,9 @@ class window.FieldContent extends WidgetContent
     data = data[key] for key in @_field.split('.')
     data
 
-  font: (n) ->
-    if n?
-      @style.font = n
-      @redraw()
-    else
-      @style.font
-
-  size: (n) ->
-    if n?
-      @style.size = n
-      @redraw()
-    else
-      @style.size
-
-  color: (n) ->
-    if n?
-      @style.color = n
-      @redraw()
-    else
-      @style.color
+  font: @styleProperty('font')
+  size: @styleProperty('size')
+  color: @styleProperty('color')
 
   field: (n) ->
     if n?
