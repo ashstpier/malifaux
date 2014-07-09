@@ -85,6 +85,9 @@ window.DatatableContent = (function(_super) {
     return _.filter(subjects, (function(_this) {
       return function(subject) {
         var e, exclusions;
+        if (!_this._exclusions) {
+          return true;
+        }
         exclusions = (function() {
           var _i, _len, _ref, _results;
           _ref = this._exclusions.split(",");
