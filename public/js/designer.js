@@ -1,4 +1,5 @@
 window.Designer = {
+  selection: null,
   currentEditWidget: null,
   propertyPanel: null,
   loadAll: function(template) {
@@ -34,7 +35,7 @@ window.Designer = {
     return this.renderPropertyPanel();
   },
   renderPropertyPanel: function() {
-    this.propertyPanel = new Properties();
+    this.propertyPanel = new Properties(this);
     return this.propertyPanel.render();
   },
   renderWidgetButtons: function() {
@@ -71,9 +72,7 @@ window.Designer = {
     })(this));
     $('#page').click((function(_this) {
       return function(e) {
-        if (e.target === $('#page')[0]) {
-          return _this.clearEditWidget();
-        }
+        return _this.maybeClearSelection(e.target);
       };
     })(this));
     $('#orientation input:radio').change((function(_this) {
@@ -125,17 +124,32 @@ window.Designer = {
     this.template.name = name;
     return this.save();
   },
+  select: function(widget) {
+    this.selection = widget;
+    return this.trigger('selection:change', this.selection);
+  },
+  clearSelection: function() {
+    return this.select(null);
+  },
+  maybeClearSelection: function(target) {
+    if (target === $('#page')[0]) {
+      this.clearSelection();
+      return this.clearEditWidget();
+    }
+  },
   clearEditWidget: function() {
     if (this.currentEditWidget) {
       this.currentEditWidget.saveConfig();
       this.currentEditWidget.layoutMode();
-      return this.currentEditWidget = null;
+      this.currentEditWidget = null;
+      return this.trigger('selection:change', null);
     }
   },
   editWidget: function(widget) {
     this.clearEditWidget();
     this.currentEditWidget = widget;
-    return widget.editMode();
+    widget.editMode();
+    return this.trigger('selection:change', this.currentEditWidget);
   },
   addWidget: function(widgetConfig) {
     if (widgetConfig == null) {
@@ -147,6 +161,7 @@ window.Designer = {
     if (this.currentEditWidget === widget) {
       this.currentEditWidget = null;
     }
+    this.clearSelection();
     return this.template.removeWidget(widget);
   },
   load: function() {

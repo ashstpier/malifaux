@@ -1,5 +1,6 @@
 window.Designer = {
 
+  selection: null
   currentEditWidget: null
   propertyPanel: null
 
@@ -25,7 +26,7 @@ window.Designer = {
     @renderPropertyPanel()
 
   renderPropertyPanel: ->
-    @propertyPanel = new Properties()
+    @propertyPanel = new Properties(this)
     @propertyPanel.render()
 
   renderWidgetButtons: ->
@@ -47,7 +48,7 @@ window.Designer = {
     $('#save').click => @saveAndExit()
     $('#discard').click => @discard()
     $('#exit a').click => @exit()
-    $('#page').click (e) => if e.target is $('#page')[0] then @clearEditWidget()
+    $('#page').click (e) => @maybeClearSelection(e.target)
     $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())
     $('#name').blur => @updateName()
     $('#name').keypress (e) => $('#name').blur() if e.which == 13
@@ -65,22 +66,37 @@ window.Designer = {
     @template.name = name
     @save()
 
+  select: (widget) ->
+    @selection = widget
+    @trigger('selection:change', @selection)
+
+  clearSelection: -> @select(null)
+
+  maybeClearSelection: (target) ->
+    if target is $('#page')[0]
+      @clearSelection()
+      @clearEditWidget()
+
+
   clearEditWidget: ->
     if @currentEditWidget
       @currentEditWidget.saveConfig()
       @currentEditWidget.layoutMode()
       @currentEditWidget = null
+      @trigger('selection:change', null)
 
   editWidget: (widget) ->
     @clearEditWidget()
     @currentEditWidget = widget
     widget.editMode()
+    @trigger('selection:change', @currentEditWidget)
 
   addWidget: (widgetConfig={}) ->
     @template.addWidget(widgetConfig, 'layout')
 
   removeWidget: (widget) ->
     @currentEditWidget = null if @currentEditWidget is widget
+    @clearSelection()
     @template.removeWidget(widget)
 
   load: ->

@@ -1,3 +1,5 @@
+var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
 window.Widget = (function() {
   Widget.PAGE_SELECTOR = '#page';
 
@@ -41,6 +43,7 @@ window.Widget = (function() {
       config = {};
     }
     this.data = data != null ? data : null;
+    this.updateSelectedState = __bind(this.updateSelectedState, this);
     this.currentMode = 'layout';
     this.guid = config.guid || utils.guid();
     this.content = config.type != null ? new window[config.type](this, config.content) : new TextContent();
@@ -59,6 +62,12 @@ window.Widget = (function() {
   };
 
   Widget.prototype.bindEvents = function() {
+    Designer.bind('selection:change', this.updateSelectedState);
+    this.el.click((function(_this) {
+      return function() {
+        return Designer.select(_this);
+      };
+    })(this));
     this.el.dblclick((function(_this) {
       return function() {
         return Designer.editWidget(_this);
@@ -72,11 +81,31 @@ window.Widget = (function() {
     this.el.resizable({
       grid: Widget.GRID_SIZE,
       containment: Widget.PAGE_SELECTOR,
-      handles: 'n, e, s, w, ne, se, sw, nw'
+      handles: 'n, e, s, w, ne, se, sw, nw',
+      resize: (function(_this) {
+        return function() {
+          return _this.trigger('widget:move', _this);
+        };
+      })(this),
+      start: (function(_this) {
+        return function() {
+          return Designer.select(_this);
+        };
+      })(this)
     });
     return this.el.draggable({
       grid: Widget.GRID_SIZE,
-      containment: Widget.PAGE_SELECTOR
+      containment: Widget.PAGE_SELECTOR,
+      drag: (function(_this) {
+        return function() {
+          return _this.trigger('widget:move', _this);
+        };
+      })(this),
+      start: (function(_this) {
+        return function() {
+          return Designer.select(_this);
+        };
+      })(this)
     });
   };
 
@@ -139,22 +168,49 @@ window.Widget = (function() {
     });
   };
 
-  Widget.prototype.width = function() {
-    return this.el.width();
+  Widget.prototype.width = function(n) {
+    if (n != null) {
+      return this.el.width(n);
+    } else {
+      return this.el.width();
+    }
   };
 
-  Widget.prototype.height = function() {
-    return this.el.height();
+  Widget.prototype.height = function(n) {
+    if (n != null) {
+      return this.el.height(n);
+    } else {
+      return this.el.height();
+    }
   };
 
-  Widget.prototype.x = function() {
-    return this.el.position().left;
+  Widget.prototype.x = function(n) {
+    console.log(n);
+    if (n != null) {
+      return this.el.css('left', "" + n + "px");
+    } else {
+      return this.el.position().left;
+    }
   };
 
-  Widget.prototype.y = function() {
-    return this.el.position().top;
+  Widget.prototype.y = function(n) {
+    if (n != null) {
+      return this.el.css('top', "" + n + "px");
+    } else {
+      return this.el.position().top;
+    }
+  };
+
+  Widget.prototype.updateSelectedState = function(selection) {
+    if (this === selection) {
+      return this.el.addClass('selected');
+    } else {
+      return this.el.removeClass('selected');
+    }
   };
 
   return Widget;
 
 })();
+
+MicroEvent.mixin(window.Widget);

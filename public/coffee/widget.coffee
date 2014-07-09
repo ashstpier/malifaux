@@ -40,10 +40,21 @@ class window.Widget
   originStyles: -> """position:absolute; top:#{@origin.y}px; left:#{@origin.x}px; width:#{@origin.width}px; height:#{@origin.height}px;"""
 
   bindEvents: ->
+    Designer.bind 'selection:change', @updateSelectedState
+    @el.click => Designer.select(this)
     @el.dblclick => Designer.editWidget(this)
     @el.find('.widget-delete').click  => Designer.removeWidget(this)
-    @el.resizable(grid: Widget.GRID_SIZE, containment: Widget.PAGE_SELECTOR, handles: 'n, e, s, w, ne, se, sw, nw')
-    @el.draggable(grid: Widget.GRID_SIZE, containment: Widget.PAGE_SELECTOR)
+    @el.resizable
+      grid:         Widget.GRID_SIZE
+      containment:  Widget.PAGE_SELECTOR
+      handles:      'n, e, s, w, ne, se, sw, nw'
+      resize:       => @trigger 'widget:move', this
+      start:        => Designer.select(this)
+    @el.draggable
+      grid:         Widget.GRID_SIZE
+      containment:  Widget.PAGE_SELECTOR
+      drag:         => @trigger 'widget:move', this
+      start:        => Designer.select(this)
 
   render: (mode) ->
     @el = $("""
@@ -95,7 +106,17 @@ class window.Widget
     @el.height(@el.width()/ratio)
     @el.resizable(grid: Widget.GRID_SIZE, containment: Widget.PAGE_SELECTOR, aspectRatio: ratio)
 
-  width: -> @el.width()
-  height: -> @el.height()
-  x: -> @el.position().left
-  y: -> @el.position().top
+  width: (n) -> if n? then @el.width(n) else @el.width()
+  height: (n) -> if n? then @el.height(n) else @el.height()
+  x: (n) ->
+    console.log n
+    if n? then @el.css('left', "#{n}px") else @el.position().left
+  y: (n) -> if n? then @el.css('top', "#{n}px") else @el.position().top
+
+  updateSelectedState: (selection) =>
+    if this is selection
+      @el.addClass('selected')
+    else
+      @el.removeClass('selected')
+
+MicroEvent.mixin(window.Widget)

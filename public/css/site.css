@@ -82,6 +82,9 @@ body {
 .widget.widget-edit-mode {
   outline: 1px solid #666;
 }
+.widget.widget-layout-mode.selected {
+  outline: 1px solid #4184D3;
+}
 
 .widget .ui-icon-gripsmall-diagonal-se {
   opacity: 0;
