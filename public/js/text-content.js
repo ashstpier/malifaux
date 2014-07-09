@@ -53,9 +53,6 @@ window.TextContent = (function(_super) {
   };
 
   TextContent.prototype.bindEvents = function(el) {
-    el.click(function() {
-      return false;
-    });
     return el.on('input', (function(_this) {
       return function() {
         return _this.html = _this.el.editable("getHTML");

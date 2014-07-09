@@ -48,7 +48,7 @@ window.Designer = {
     $('#save').click => @saveAndExit()
     $('#discard').click => @discard()
     $('#exit a').click => @exit()
-    $('#page').click (e) => @maybeClearSelection(e.target)
+    $('#page').on 'mousedown', (e) => @maybeClearSelection(e.target)
     $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())
     $('#name').blur => @updateName()
     $('#name').keypress (e) => $('#name').blur() if e.which == 13

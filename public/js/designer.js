@@ -70,7 +70,7 @@ window.Designer = {
         return _this.exit();
       };
     })(this));
-    $('#page').click((function(_this) {
+    $('#page').on('mousedown', (function(_this) {
       return function(e) {
         return _this.maybeClearSelection(e.target);
       };

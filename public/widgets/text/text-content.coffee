@@ -38,7 +38,6 @@ class window.TextContent extends WidgetContent
     node
 
   bindEvents: (el) ->
-    el.click -> false
     el.on 'input', => @html = @el.editable("getHTML")
 
   serialize: -> { html: @html }
