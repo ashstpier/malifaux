@@ -17,12 +17,39 @@
   margin-bottom: 5px;
 }
 
-#templates .template .thumbnail {
+#templates .template .thumbnail img {
   width: 100%;
+}
+
+#templates .template:hover .content   {
+  box-shadow: 0px 0px 5px #888888;
+  transition: all 0.15s linear;
+}
+
+#templates .template .content {
   box-shadow: 0px 0px 2px #888888;
 }
 
-#templates .template:hover .thumbnail {
-  box-shadow: 0px 0px 5px #888888;
-  transition: all 0.15s linear;
+#templates .template .content .thumbnail {
+  position: relative;
+  overflow: hidden;
+}
+
+#templates .template .actions {
+  background-color: rgba(0, 0, 0, 0.65);
+  line-height: 30px;
+  position: absolute;
+  bottom: -30px;
+  left: 0; right: 0;
+}
+
+#templates .template:hover .actions {
+  bottom: 0px;
+  transition: bottom 0.2s;
+}
+
+#templates .template .actions {
+  text-decoration: none;
+  text-transform: uppercase;
+  color: white;
 }

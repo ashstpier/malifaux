@@ -2,7 +2,7 @@ window.API = {
   _config: null
   config: (cb) ->
     cb(@_config) if @_config
-    $.get CONFIGURATION_ENDPOINTS[utils.environment], (data) =>
+    $.get CONFIGURATION_ENDPOINTS[environment.name], (data) =>
       @_config = data
       cb(data)
 
@@ -15,7 +15,7 @@ window.API = {
       "production" : "",
       "development" : ".json"
     }
-    studentUrl = "#{STUDENT_ENDPOINTS[utils.environment]}/#{id}#{extensions[utils.environment]}"
+    studentUrl = "#{STUDENT_ENDPOINTS[environment.name]}/#{id}#{extensions[environment.name]}"
     $.get studentUrl, (data) =>
       @_students[id] = data
       cb(data)

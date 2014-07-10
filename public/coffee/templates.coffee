@@ -4,9 +4,16 @@ window.Templates = {
     $("#templates").append("""
       <div class="template">
         <p>#{template.name}</p>
-        <a href="./designer.html?template=#{template.key}">
-          <img class="thumbnail" src="#{utils.screenshot_url(template.screenshot)}">
-        </a>
+        <div class="content">
+          <div class="thumbnail">
+            <a href="./designer.html?template=#{template.key}">
+              <img class="image" src="#{utils.screenshot_url(template.screenshot)}">
+            </a>
+            <a class="actions" href="./run.html">Run</a>
+              
+            </a>
+          </div>
+        </div>
       </div>
       """)
 
