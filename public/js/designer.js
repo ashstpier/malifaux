@@ -190,7 +190,7 @@ window.Designer = {
   },
   exitDesigner: function() {
     var redirect;
-    redirect = utils.is_ccr ? "../parentReports/" : "./index.html";
+    redirect = environment.is_ccr ? "../parentReports/" : "./index.html";
     return window.location.href = redirect;
   },
   saveAndExit: function() {

@@ -1,8 +1,11 @@
+window.environment = {
+  name: window.location.port === "9000" ? "development" : "production",
+  is_production: this.name === "production",
+  is_development: this.name === "development",
+  is_ccr: this.is_production
+};
+
 window.utils = {
-  environment: window.location.port === "9000" ? "development" : "production",
-  is_production: this.environment === "production",
-  is_development: this.environment === "development",
-  is_ccr: this.is_production,
   fontMap: {
     'Arial': 'Arial, "Helvetica Neue", Helvetica, sans-serif',
     'Helvetica': '"Helvetica Neue", Helvetica, Arial, sans-serif',

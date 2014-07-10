@@ -1,10 +1,11 @@
-window.utils = {
-
-  environment: if window.location.port == "9000" then "development" else "production"
-  is_production: @environment == "production"
-  is_development: @environment == "development"
+window.environment = {
+  name: if window.location.port == "9000" then "development" else "production"
+  is_production: @name == "production"
+  is_development: @name == "development"
   is_ccr: @is_production
+}
 
+window.utils = {
   fontMap: {
     'Arial':            'Arial, "Helvetica Neue", Helvetica, sans-serif'
     'Helvetica':        '"Helvetica Neue", Helvetica, Arial, sans-serif'

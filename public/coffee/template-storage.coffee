@@ -1,6 +1,6 @@
 class TemplateStore
 
-  ENDPOINT_URL = "#{TEMPLATE_ENDPOINTS[utils.environment]}"
+  ENDPOINT_URL = "#{TEMPLATE_ENDPOINTS[environment.name]}"
 
   @all: (cb) ->
     $.get "#{ENDPOINT_URL}", (data) -> cb(data)

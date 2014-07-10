@@ -5,7 +5,7 @@ TemplateStore = (function() {
 
   function TemplateStore() {}
 
-  ENDPOINT_URL = "" + TEMPLATE_ENDPOINTS[utils.environment];
+  ENDPOINT_URL = "" + TEMPLATE_ENDPOINTS[environment.name];
 
   TemplateStore.all = function(cb) {
     return $.get("" + ENDPOINT_URL, function(data) {
