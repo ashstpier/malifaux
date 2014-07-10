@@ -1,6 +1,6 @@
 window.Templates = {
   addTemplateRow: function(template) {
-    return $("#templates").append("<a href=\"./designer.html?template=" + template.key + "\">\n  <div class=\"template\">\n    <p>" + template.name + "</p>\n    <img class=\"thumbnail\" src=\"" + (utils.screenshot_url(template.screenshot)) + "\">\n  </div>\n</a>");
+    return $("#templates").append("<div class=\"template\">\n  <p>" + template.name + "</p>\n  <a href=\"./designer.html?template=" + template.key + "\">\n    <img class=\"thumbnail\" src=\"" + (utils.screenshot_url(template.screenshot)) + "\">\n  </a>\n</div>");
   },
   initDropZone: function(element_id) {
     var dropzone;

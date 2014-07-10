@@ -2,12 +2,12 @@ window.Templates = {
 
   addTemplateRow: (template) ->
     $("#templates").append("""
-      <a href="./designer.html?template=#{template.key}">
-        <div class="template">
-          <p>#{template.name}</p>
+      <div class="template">
+        <p>#{template.name}</p>
+        <a href="./designer.html?template=#{template.key}">
           <img class="thumbnail" src="#{utils.screenshot_url(template.screenshot)}">
-        </div>
-      </a>
+        </a>
+      </div>
       """)
 
   initDropZone: (element_id) ->

@@ -1,0 +1,28 @@
+#templates {
+  margin-top: 40px;
+  text-align: center;
+}
+
+#templates .template {
+  display: inline-block;
+  width: 250px;
+  margin: 5px;
+
+  text-decoration: none;
+  color: #999;
+  position: relative;
+}
+
+#templates .template p {
+  margin-bottom: 5px;
+}
+
+#templates .template .thumbnail {
+  width: 100%;
+  box-shadow: 0px 0px 2px #888888;
+}
+
+#templates .template:hover .thumbnail {
+  box-shadow: 0px 0px 5px #888888;
+  transition: all 0.15s linear;
+}
