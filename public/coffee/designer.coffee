@@ -47,7 +47,7 @@ window.Designer = {
   bindEvents: ->
     $('#save').click => @saveAndExit()
     $('#discard').click => @discard()
-    $('#exit a').click => @exit()
+    $('#exit a').click => @promptSave()
     $('#page').on 'mousedown', (e) => @maybeClearSelection(e.target)
     $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())
     $('#name').blur => @updateName()
@@ -110,25 +110,23 @@ window.Designer = {
   discard: -> @exitDesigner()
   clear: -> @template.removeAllWidgets()
 
+  promptSave: ->
+    @takeScreenShot() if !utils.is_ccr
+    $('#save-modal').modal()
+    false
+
   exitDesigner: ->
-    redirect = utils.querystring("return")
-    window.location.href = if redirect then redirect else "./index.html"
+    redirect = if utils.is_ccr then "../parentReports/" else "./index.html"
+    window.location.href = redirect
 
   saveAndExit: ->
     @template.save => @exitDesigner()
 
   takeScreenShot: ->
-    html2canvas document.getElementById('page'), {
-      allowTaint: false,
-      taintTest: false,
-      useCORS: true,
-      onrendered: (canvas) => @template.screenshot = canvas.toDataURL()
-    }
-
-  exit: ->
-    @takeScreenShot() if !utils.is_production
-    $('#save-modal').modal()
-    false
+    $('#viewport').addClass('screenshot')
+    utils.screenshot 'page', (data_url) =>
+      @template.screenshot = data_url
+      $('#viewport').removeClass('screenshot')
 
 }
 

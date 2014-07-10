@@ -161,3 +161,9 @@ body {
 .hidden {
   display: none !important;
 }
+
+#viewport.screenshot {
+  position: relative;
+  overflow: auto;
+  margin-right: 300px;
+}

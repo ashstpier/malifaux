@@ -67,7 +67,7 @@ window.Designer = {
     })(this));
     $('#exit a').click((function(_this) {
       return function() {
-        return _this.exit();
+        return _this.promptSave();
       };
     })(this));
     $('#page').on('mousedown', (function(_this) {
@@ -181,10 +181,17 @@ window.Designer = {
   clear: function() {
     return this.template.removeAllWidgets();
   },
+  promptSave: function() {
+    if (!utils.is_ccr) {
+      this.takeScreenShot();
+    }
+    $('#save-modal').modal();
+    return false;
+  },
   exitDesigner: function() {
     var redirect;
-    redirect = utils.querystring("return");
-    return window.location.href = redirect ? redirect : "./index.html";
+    redirect = utils.is_ccr ? "../parentReports/" : "./index.html";
+    return window.location.href = redirect;
   },
   saveAndExit: function() {
     return this.template.save((function(_this) {
@@ -194,23 +201,13 @@ window.Designer = {
     })(this));
   },
   takeScreenShot: function() {
-    return html2canvas(document.getElementById('page'), {
-      allowTaint: false,
-      taintTest: false,
-      useCORS: true,
-      onrendered: (function(_this) {
-        return function(canvas) {
-          return _this.template.screenshot = canvas.toDataURL();
-        };
-      })(this)
-    });
-  },
-  exit: function() {
-    if (!utils.is_production) {
-      this.takeScreenShot();
-    }
-    $('#save-modal').modal();
-    return false;
+    $('#viewport').addClass('screenshot');
+    return utils.screenshot('page', (function(_this) {
+      return function(data_url) {
+        _this.template.screenshot = data_url;
+        return $('#viewport').removeClass('screenshot');
+      };
+    })(this));
   }
 };
 
