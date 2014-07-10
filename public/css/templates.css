@@ -1,3 +1,39 @@
+html, body {
+  height: 100%;
+}
+
+#dragzone {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+}
+
+#dropzone {
+  position: fixed;
+  right: 0; left: 0; top: 0;
+  text-align: center;
+  display: table-cell;
+  line-height: 45px;
+  height: 44px;
+  border: 3px;
+  border-style: dashed;
+  border-color: white;
+  color: white;
+  text-transform: uppercase;
+  background-color: #FFB935;
+}
+
+.visible {
+  opacity: 100;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+#dropzone.hover {
+  background-color: #4A0;
+}
+
 #templates {
   margin-top: 40px;
   text-align: center;
