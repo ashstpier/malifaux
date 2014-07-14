@@ -82,14 +82,27 @@ window.Properties = (function() {
   };
 
   Properties.prototype.setAppearanceOptions = function() {
-    var appearance, options;
+    var appearance, o, options;
     options = this.selected.renderAppearanceOptions();
-    if (typeof options === 'string') {
-      options = $(options);
-    }
     if (options === false) {
       return this.clearAppearanceOptions();
     } else {
+      if (!$.isArray(options)) {
+        options = [options];
+      }
+      options = (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = options.length; _i < _len; _i++) {
+          o = options[_i];
+          if (typeof o === 'string') {
+            _results.push($(o));
+          } else {
+            _results.push(o);
+          }
+        }
+        return _results;
+      })();
       appearance = this.el.find('.prop-appearance');
       appearance.html("  <h3 class=\"prop-section-header\">Appearance</h3>\n  <div class=\"prop-content\">\n  </div>\n</section>");
       return appearance.find('.prop-content').append(options);
@@ -103,12 +116,12 @@ window.Properties = (function() {
   Properties.prototype.setConfigOptions = function() {
     var config, o, option, options, _i, _len, _results;
     options = this.selected.renderConfigOptions();
-    if (!$.isArray(options)) {
-      options = [options];
-    }
-    if (options === [false]) {
+    if (options === false) {
       return this.clearConfigOptions();
     } else {
+      if (!$.isArray(options)) {
+        options = [options];
+      }
       options = (function() {
         var _i, _len, _results;
         _results = [];

@@ -74,10 +74,13 @@ class window.Properties
 
   setAppearanceOptions: ->
     options = @selected.renderAppearanceOptions()
-    options = $(options) if typeof options is 'string'
     if options is false
       @clearAppearanceOptions()
     else
+      options = [options] unless $.isArray(options)
+      options = for o in options
+        if typeof o is 'string' then $(o) else o
+
       appearance = @el.find('.prop-appearance')
       appearance.html """
           <h3 class="prop-section-header">Appearance</h3>
@@ -91,10 +94,10 @@ class window.Properties
 
   setConfigOptions: ->
     options = @selected.renderConfigOptions()
-    options = [options] unless $.isArray(options)
-    if options is [false]
+    if options is false
       @clearConfigOptions()
     else
+      options = [options] unless $.isArray(options)
       options = for o in options
         if typeof o is 'string' then $(o) else o
 
