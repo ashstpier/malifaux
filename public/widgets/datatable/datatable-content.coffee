@@ -42,8 +42,7 @@ class window.DatatableContent extends WidgetContent
     filteredSubjects = @filter_subjects(data.subjects)
     for subject, i in @orderdSubjects(filteredSubjects)
       columnValues = for col in @columns
-        content = @cellContent(subject, col)
-        """<td style="#{@cellStyles(i+1, content)}">#{content}</td>"""
+        """<td style="#{@cellStyles(i+1, @cellValue(subject, col))}">#{@cellContent(subject, col)}</td>"""
       node.find("tbody").append("""
         <tr>
           <th style="#{@headingStyles()}">
@@ -155,8 +154,10 @@ class window.DatatableContent extends WidgetContent
     text_align = if content.split(' ').length > 1 then 'left' else 'center'
     @styleString('background-color': bg_color, color: @style.cell_text_color, 'text-align': text_align)
 
+  cellValue: (subject, col) -> subject.results?[col.value] or ''
+
   cellContent: (subject, col) ->
-    val = subject.results?[col.value] or ''
+    val = @cellValue(subject, col)
     return val unless col.compare_to and col.compare_to.length > 0
     numVal = subject.internalPoints?[col.value] or 0
     compareTo = subject.internalPoints?[col.compare_to] or 0

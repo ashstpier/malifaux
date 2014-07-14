@@ -42,7 +42,7 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.render_layout = function(data) {
-    var col, columnTitles, columnValues, content, filteredSubjects, i, name, node, subject, _i, _len, _ref;
+    var col, columnTitles, columnValues, filteredSubjects, i, name, node, subject, _i, _len, _ref;
     name = utils.escape(data.name);
     columnTitles = (function() {
       var _i, _len, _ref, _results;
@@ -68,8 +68,7 @@ window.DatatableContent = (function(_super) {
         _results = [];
         for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
           col = _ref1[_j];
-          content = this.cellContent(subject, col);
-          _results.push("<td style=\"" + (this.cellStyles(i + 1, content)) + "\">" + content + "</td>");
+          _results.push("<td style=\"" + (this.cellStyles(i + 1, this.cellValue(subject, col))) + "\">" + (this.cellContent(subject, col)) + "</td>");
         }
         return _results;
       }).call(this);
@@ -205,14 +204,19 @@ window.DatatableContent = (function(_super) {
     });
   };
 
+  DatatableContent.prototype.cellValue = function(subject, col) {
+    var _ref;
+    return ((_ref = subject.results) != null ? _ref[col.value] : void 0) || '';
+  };
+
   DatatableContent.prototype.cellContent = function(subject, col) {
-    var compareTo, numVal, tlClass, val, _ref, _ref1, _ref2;
-    val = ((_ref = subject.results) != null ? _ref[col.value] : void 0) || '';
+    var compareTo, numVal, tlClass, val, _ref, _ref1;
+    val = this.cellValue(subject, col);
     if (!(col.compare_to && col.compare_to.length > 0)) {
       return val;
     }
-    numVal = ((_ref1 = subject.internalPoints) != null ? _ref1[col.value] : void 0) || 0;
-    compareTo = ((_ref2 = subject.internalPoints) != null ? _ref2[col.compare_to] : void 0) || 0;
+    numVal = ((_ref = subject.internalPoints) != null ? _ref[col.value] : void 0) || 0;
+    compareTo = ((_ref1 = subject.internalPoints) != null ? _ref1[col.compare_to] : void 0) || 0;
     tlClass = 'amber';
     if (numVal < compareTo) {
       tlClass = 'red';
