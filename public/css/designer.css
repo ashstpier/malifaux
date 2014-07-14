@@ -25,10 +25,11 @@ body {
 
 #template-name .file {
   top:  12px;
+  display: block;
 }
 
 #name {
-  margin: 10px 0 10px 40px;
+  margin: 10px 0 10px 30px;
   padding: 0 5px;
   color: #fff;
   font-size: 24px;
