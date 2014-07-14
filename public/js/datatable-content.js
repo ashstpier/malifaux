@@ -124,7 +124,7 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.renderAppearanceOptions = function() {
-    return this.option('font', 'font', "Font") + this.option('size', 'size', "Text Size") + this.option('color', 'heading_text_color', "Heading Text") + this.option('color', 'heading_background_color', "Heading Bg") + this.option('color', 'cell_text_color', "Cell Text") + this.option('color', 'cell_background_color_odd', "Cell Bg Odd") + this.option('color', 'cell_background_color_even', "Cell Bg Even");
+    return [this.option('font', 'font', "Font"), this.option('size', 'size', "Text Size"), this.option('color', 'heading_text_color', "Heading Text"), this.option('color', 'heading_background_color', "Heading Bg"), this.option('color', 'cell_text_color', "Cell Text"), this.option('color', 'cell_background_color_odd', "Cell Bg Odd"), this.option('color', 'cell_background_color_even', "Cell Bg Even")];
   };
 
   DatatableContent.prototype.subject_order = DatatableContent.styleProperty('subject_order');

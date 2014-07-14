@@ -19,7 +19,6 @@ class window.Template
       layout: [],
       orientation: 'portrait'
     })
-    template.save()
     return template
 
   @all: (cb) ->

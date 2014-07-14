@@ -83,13 +83,15 @@ class window.DatatableContent extends WidgetContent
     </tr>"""
 
   renderAppearanceOptions: ->
-    @option('font',  'font', "Font") +
-    @option('size',  'size', "Text Size") +
-    @option('color', 'heading_text_color', "Heading Text") +
-    @option('color', 'heading_background_color', "Heading Bg") +
-    @option('color', 'cell_text_color', "Cell Text") +
-    @option('color', 'cell_background_color_odd', "Cell Bg Odd") +
-    @option('color', 'cell_background_color_even', "Cell Bg Even")
+    [
+      @option('font',  'font', "Font")
+      @option('size',  'size', "Text Size")
+      @option('color', 'heading_text_color', "Heading Text")
+      @option('color', 'heading_background_color', "Heading Bg")
+      @option('color', 'cell_text_color', "Cell Text")
+      @option('color', 'cell_background_color_odd', "Cell Bg Odd")
+      @option('color', 'cell_background_color_even', "Cell Bg Even")
+    ]
 
   subject_order: @styleProperty('subject_order')
   font: @styleProperty('font')

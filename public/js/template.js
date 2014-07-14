@@ -26,7 +26,6 @@ window.Template = (function() {
       layout: [],
       orientation: 'portrait'
     });
-    template.save();
     return template;
   };
 
