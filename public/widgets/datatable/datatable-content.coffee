@@ -42,7 +42,8 @@ class window.DatatableContent extends WidgetContent
     filteredSubjects = @filter_subjects(data.subjects)
     for subject, i in @orderdSubjects(filteredSubjects)
       columnValues = for col in @columns
-        """<td style="#{@cellStyles(i+1)}">#{@cellContent(subject, col)}</td>"""
+        content = @cellContent(subject, col)
+        """<td style="#{@cellStyles(i+1, content)}">#{content}</td>"""
       node.find("tbody").append("""
         <tr>
           <th style="#{@headingStyles()}">
@@ -149,9 +150,10 @@ class window.DatatableContent extends WidgetContent
   headingStyles: ->
     @styleString('background-color': @style.heading_background_color, color: @style.heading_text_color)
 
-  cellStyles: (row) ->
+  cellStyles: (row, content) ->
     bg_color = if row % 2 is 0 then @style.cell_background_color_even else @style.cell_background_color_odd
-    @styleString('background-color': bg_color, color: @style.cell_text_color)
+    text_align = if content.split(' ').length > 1 then 'left' else 'center'
+    @styleString('background-color': bg_color, color: @style.cell_text_color, 'text-align': text_align)
 
   cellContent: (subject, col) ->
     val = subject.results?[col.value] or ''

@@ -42,7 +42,7 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.render_layout = function(data) {
-    var col, columnTitles, columnValues, filteredSubjects, i, name, node, subject, _i, _len, _ref;
+    var col, columnTitles, columnValues, content, filteredSubjects, i, name, node, subject, _i, _len, _ref;
     name = utils.escape(data.name);
     columnTitles = (function() {
       var _i, _len, _ref, _results;
@@ -68,7 +68,8 @@ window.DatatableContent = (function(_super) {
         _results = [];
         for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
           col = _ref1[_j];
-          _results.push("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(subject, col)) + "</td>");
+          content = this.cellContent(subject, col);
+          _results.push("<td style=\"" + (this.cellStyles(i + 1, content)) + "\">" + content + "</td>");
         }
         return _results;
       }).call(this);
@@ -193,12 +194,14 @@ window.DatatableContent = (function(_super) {
     });
   };
 
-  DatatableContent.prototype.cellStyles = function(row) {
-    var bg_color;
+  DatatableContent.prototype.cellStyles = function(row, content) {
+    var bg_color, text_align;
     bg_color = row % 2 === 0 ? this.style.cell_background_color_even : this.style.cell_background_color_odd;
+    text_align = content.split(' ').length > 1 ? 'left' : 'center';
     return this.styleString({
       'background-color': bg_color,
-      color: this.style.cell_text_color
+      color: this.style.cell_text_color,
+      'text-align': text_align
     });
   };
 
