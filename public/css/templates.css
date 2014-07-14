@@ -22,11 +22,7 @@ html, body {
   background-color: #FFB935;
 }
 
-.visible {
-  opacity: 100;
-}
-
-.hidden {
+#dropzone.hidden {
   opacity: 0;
 }
 
