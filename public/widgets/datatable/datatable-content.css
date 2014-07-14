@@ -72,14 +72,15 @@
 
 .datatable-cols .prop-table-wrap {
   max-height: 240px;
-  overflow-y: scroll;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 .datatable-cols .col-title {
-  width: 100px;
+  width: 95px;
   font-weight: bold;
 }
 .datatable-cols .col-value {
-  width: 150px;
+  width: 130px;
 }
 .datatable-cols .col-comp-label {
   display: block;
@@ -88,7 +89,7 @@
   font-style: italic;
 }
 .datatable-cols .col-compare-to {
-  width: 150px;
+  width: 130px;
 }
 
 

@@ -94,7 +94,7 @@ body {
   left: 0;
   right: 300px;
   padding: 0;
-  overflow: scroll;
+  overflow: auto;
 }
 
 #page {
@@ -113,7 +113,8 @@ body {
   width: 300px;
   background-color: #ddd;
   border-left: 1px solid #ccc;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
  /* A4 Ratio is ~ 1:1.4 */
