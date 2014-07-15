@@ -11,6 +11,7 @@ window.Widget = (function() {
     'name': 'NameContent',
     'datatable': 'DatatableContent',
     'field': 'FieldContent',
+    'subject-field': 'SubjectFieldContent',
     'attendance': 'AttendanceContent'
   };
 
