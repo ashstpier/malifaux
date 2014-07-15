@@ -53,10 +53,17 @@ window.ImageContent = (function(_super) {
     reader = new FileReader();
     reader.onload = (function(_this) {
       return function(e) {
-        return _this.setImage(e.target.result);
+        return _this.updateImage(e.target.result);
       };
     })(this);
     return reader.readAsDataURL(file);
+  };
+
+  ImageContent.prototype.updateImage = function(data) {
+    var oldSrc;
+    oldSrc = this.src;
+    this.setImage(data);
+    return Designer.history.push(this, 'setImage', oldSrc, this.src);
   };
 
   ImageContent.prototype.setImage = function(data) {

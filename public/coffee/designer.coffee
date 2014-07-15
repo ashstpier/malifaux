@@ -3,6 +3,7 @@ window.Designer = {
   selection: null
   currentEditWidget: null
   propertyPanel: null
+  history: new UndoHistory()
 
   NUDGE_SIZE: 10
 
@@ -55,6 +56,9 @@ window.Designer = {
     $('#name').blur => @updateName()
     $('#name').keypress (e) => $('#name').blur() if e.which == 13
     $('#name').click (e) => $(e.currentTarget).selectText()
+    $('#undo').click => @history.undo()
+    $('#redo').click => @history.redo()
+    @history.bind 'history:change', => @updateHistoryButtonState()
     @bindKeyboardEvents()
 
     for name, className of Widget.WIDGETS
@@ -65,6 +69,12 @@ window.Designer = {
         false
 
   bindKeyboardEvents: ->
+    Mousetrap.bind ['command+z', 'ctrl+z'], =>
+      @history.undo()
+      false
+    Mousetrap.bind ['command+shift+z', 'ctrl+shift+z'], =>
+      @history.redo()
+      false
     Mousetrap.bind ['backspace', 'del'], =>
       @removeWidget(@selection) if @selection
       false
@@ -123,14 +133,22 @@ window.Designer = {
     widget.editMode()
     @trigger('selection:change', @currentEditWidget)
 
-  addWidget: (widgetConfig={}) ->
+  addWidget: (widgetConfig={}, withHistory=true) ->
     widget = @template.addWidget(widgetConfig, 'layout')
     @select(widget)
+    if withHistory
+      Designer.history.push(this, 'addRemoveWidget', {remove:widget}, {add:widget})
 
-  removeWidget: (widget) ->
+  removeWidget: (widget, withHistory=true) ->
     @currentEditWidget = null if @currentEditWidget is widget
     @clearSelection()
     @template.removeWidget(widget)
+    if withHistory
+      Designer.history.push(this, 'addRemoveWidget', {add:widget}, {remove:widget})
+
+  addRemoveWidget: (action) ->
+    @addWidget(action.add, false) if action.add?
+    @removeWidget(action.remove, false) if action.remove?
 
   load: ->
     $('#name').text(@template.name)
@@ -159,6 +177,20 @@ window.Designer = {
     utils.screenshot 'page', (data_url) =>
       @template.screenshot = data_url
       $('#viewport').removeClass('screenshot')
+
+  updateHistoryButtonState: ->
+    if @history.canUndo()
+      $('#undo').addClass('enabled')
+      $('#undo').removeClass('disabled')
+    else
+      $('#undo').removeClass('enabled')
+      $('#undo').addClass('disabled')
+    if @history.canRedo()
+      $('#redo').addClass('enabled')
+      $('#redo').removeClass('disabled')
+    else
+      $('#redo').removeClass('enabled')
+      $('#redo').addClass('disabled')
 
 }
 

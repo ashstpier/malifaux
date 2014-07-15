@@ -37,6 +37,34 @@ body {
   line-height: 30px;
 }
 
+#undo {
+  position: relative;
+  display: inline-block;
+  margin: 3px 0 10px 30px;
+  text-decoration: none;
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+#undo i {
+  position: relative;
+  top: 0px;
+}
+#redo {
+  display: inline-block;
+  margin: 3px 10px 10px 0;
+  text-decoration: none;
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+#redo i {
+  position: relative;
+  top: 0px;
+}
+#undo.enabled, #redo.enabled {
+  opacity: 1;
+  cursor: pointer;
+}
+
 #nav {
   float: right;
   margin: 0;

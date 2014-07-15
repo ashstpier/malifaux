@@ -38,7 +38,6 @@ class window.Properties
       @selected.content[input.data('fn')].call(@selected.content, input.val())
 
   selectionChanged: (newSelection) ->
-    return if @selected is newSelection
     if @selected
       @selected.unbind "widget:move", @selectionMoved
     @selected = newSelection
@@ -58,12 +57,15 @@ class window.Properties
     @el.find('#prop-value-width').val(@width())
     @el.find('#prop-value-height').val(@height())
 
+  redraw: ->
+    @setAppearanceOptions()
+    @setConfigOptions()
+
   enable: ->
     @el.removeClass('disabled')
     @el.find('.prop-input').prop('disabled', false)
     @el.find('.prop-selection').text(@selected.displayName())
-    @setAppearanceOptions()
-    @setConfigOptions()
+    @redraw()
 
   disable: ->
     @el.addClass('disabled')

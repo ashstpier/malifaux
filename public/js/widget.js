@@ -56,6 +56,7 @@ window.Widget = (function() {
       width: width,
       height: height
     };
+    this.position = this.origin;
   }
 
   Widget.prototype.displayName = function() {
@@ -98,6 +99,11 @@ window.Widget = (function() {
         return function() {
           return Designer.select(_this);
         };
+      })(this),
+      stop: (function(_this) {
+        return function() {
+          return _this.moved();
+        };
       })(this)
     });
     return this.el.draggable({
@@ -111,6 +117,11 @@ window.Widget = (function() {
       start: (function(_this) {
         return function() {
           return Designer.select(_this);
+        };
+      })(this),
+      stop: (function(_this) {
+        return function() {
+          return _this.moved();
         };
       })(this)
     });
@@ -147,6 +158,22 @@ window.Widget = (function() {
     return this.content.renderConfigOptions();
   };
 
+  Widget.prototype.moved = function() {
+    var oldPosition;
+    oldPosition = this.position;
+    this.cachePosition();
+    return Designer.history.push(this, 'moveTo', oldPosition, this.position);
+  };
+
+  Widget.prototype.cachePosition = function() {
+    return this.position = {
+      x: this.x(),
+      y: this.y(),
+      width: this.width(),
+      height: this.height()
+    };
+  };
+
   Widget.prototype.layoutMode = function() {
     this.el.draggable('enable');
     return this.renderContent('layout');
@@ -173,13 +200,33 @@ window.Widget = (function() {
     };
   };
 
+  Widget.prototype.moveTo = function(coords) {
+    if (coords.x != null) {
+      this.x(coords.x);
+    }
+    if (coords.y != null) {
+      this.y(coords.y);
+    }
+    if (coords.width != null) {
+      this.width(coords.width);
+    }
+    if (coords.height != null) {
+      this.height(coords.height);
+    }
+    return this.trigger('widget:move', this);
+  };
+
   Widget.prototype.nudge = function(x, y) {
+    var oldPosition;
+    oldPosition = this.position;
     if (x !== 0) {
       this.x(this.x() + x);
     }
     if (y !== 0) {
       this.y(this.y() + y);
     }
+    this.cachePosition();
+    Designer.history.push(this, 'moveTo', oldPosition, this.position);
     return this.trigger('widget:move', this);
   };
 

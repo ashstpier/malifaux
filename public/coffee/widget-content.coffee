@@ -6,17 +6,31 @@ class window.WidgetContent
 
   @property: (obj, key=null) ->
     (val) ->
-      if val?
-        if key
-          @[obj][key] = val
-        else
-          @[obj] = val
-        @redraw()
-      else
+
+      read = =>
         if key
           @[obj][key]
         else
           @[obj]
+
+      write = (v) =>
+        if key
+          @[obj][key] = v
+        else
+          @[obj] = v
+
+      if val?
+        old = read()
+        write(val)
+        @redraw()
+        Designer.history.push(this, 'runPropertyUndoSetter', {fn:write, v:old}, {fn:write, v:val})
+      else
+        read()
+
+  runPropertyUndoSetter: (o) ->
+    o.fn.call(this, o.v)
+    Designer.select(@widget)
+    @redraw()
 
   constructor: (@widget, config={}) ->
     @initWithConfig(config)

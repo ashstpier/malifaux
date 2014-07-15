@@ -38,9 +38,6 @@ window.Properties = (function() {
   };
 
   Properties.prototype.selectionChanged = function(newSelection) {
-    if (this.selected === newSelection) {
-      return;
-    }
     if (this.selected) {
       this.selected.unbind("widget:move", this.selectionMoved);
     }
@@ -65,12 +62,16 @@ window.Properties = (function() {
     return this.el.find('#prop-value-height').val(this.height());
   };
 
+  Properties.prototype.redraw = function() {
+    this.setAppearanceOptions();
+    return this.setConfigOptions();
+  };
+
   Properties.prototype.enable = function() {
     this.el.removeClass('disabled');
     this.el.find('.prop-input').prop('disabled', false);
     this.el.find('.prop-selection').text(this.selected.displayName());
-    this.setAppearanceOptions();
-    return this.setConfigOptions();
+    return this.redraw();
   };
 
   Properties.prototype.disable = function() {

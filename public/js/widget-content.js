@@ -10,21 +10,46 @@ window.WidgetContent = (function() {
       key = null;
     }
     return function(val) {
+      var old, read, write;
+      read = (function(_this) {
+        return function() {
+          if (key) {
+            return _this[obj][key];
+          } else {
+            return _this[obj];
+          }
+        };
+      })(this);
+      write = (function(_this) {
+        return function(v) {
+          if (key) {
+            return _this[obj][key] = v;
+          } else {
+            return _this[obj] = v;
+          }
+        };
+      })(this);
       if (val != null) {
-        if (key) {
-          this[obj][key] = val;
-        } else {
-          this[obj] = val;
-        }
-        return this.redraw();
+        old = read();
+        write(val);
+        this.redraw();
+        return Designer.history.push(this, 'runPropertyUndoSetter', {
+          fn: write,
+          v: old
+        }, {
+          fn: write,
+          v: val
+        });
       } else {
-        if (key) {
-          return this[obj][key];
-        } else {
-          return this[obj];
-        }
+        return read();
       }
     };
+  };
+
+  WidgetContent.prototype.runPropertyUndoSetter = function(o) {
+    o.fn.call(this, o.v);
+    Designer.select(this.widget);
+    return this.redraw();
   };
 
   function WidgetContent(widget, config) {

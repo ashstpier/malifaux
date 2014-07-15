@@ -133,7 +133,6 @@ class window.DatatableContent extends WidgetContent
     table.append(@buildEditRow(col)) for col in @columns
     table.append(@buildEditRow())
     table.on "input", ".col-title, .col-value, .col-compare-to", =>
-      console.log "changed!"
       @maybeAddEditRow(table)
       @saveColumns(table)
       @redraw()
@@ -168,6 +167,7 @@ class window.DatatableContent extends WidgetContent
       lastRow.after(@buildEditRow())
 
   saveColumns: (el) ->
+    oldColumns = @columns
     columns = for col in el.find('.column-setting')
       $col = $(col)
       {
@@ -176,12 +176,17 @@ class window.DatatableContent extends WidgetContent
         compare_to:       $col.find('.col-compare-to').val()
       }
     @columns = (col for col in columns when col.value? and col.value isnt '')
+    Designer.history.push(this, 'setColumnsFromUndo', oldColumns, @columns)
+
+  setColumnsFromUndo: (cols) ->
+    @columns = cols
+    @redraw()
+    Designer.select(@widget)
 
 
   orderdSubjects: (subjects) ->
     subjects = (v for k,v of subjects)
     alphabetical = subjects.sort (a,b) => if a.subjectName >= b.subjectName then 1 else -1
-    console.log @style.subject_order
     return alphabetical if @style.subject_order is 'alphabetical'
     rank = {
       'english':     1

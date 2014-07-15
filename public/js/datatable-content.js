@@ -170,7 +170,6 @@ window.DatatableContent = (function(_super) {
     table.append(this.buildEditRow());
     table.on("input", ".col-title, .col-value, .col-compare-to", (function(_this) {
       return function() {
-        console.log("changed!");
         _this.maybeAddEditRow(table);
         _this.saveColumns(table);
         return _this.redraw();
@@ -230,7 +229,8 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.saveColumns = function(el) {
-    var $col, col, columns;
+    var $col, col, columns, oldColumns;
+    oldColumns = this.columns;
     columns = (function() {
       var _i, _len, _ref, _results;
       _ref = el.find('.column-setting');
@@ -246,7 +246,7 @@ window.DatatableContent = (function(_super) {
       }
       return _results;
     })();
-    return this.columns = (function() {
+    this.columns = (function() {
       var _i, _len, _results;
       _results = [];
       for (_i = 0, _len = columns.length; _i < _len; _i++) {
@@ -257,6 +257,13 @@ window.DatatableContent = (function(_super) {
       }
       return _results;
     })();
+    return Designer.history.push(this, 'setColumnsFromUndo', oldColumns, this.columns);
+  };
+
+  DatatableContent.prototype.setColumnsFromUndo = function(cols) {
+    this.columns = cols;
+    this.redraw();
+    return Designer.select(this.widget);
   };
 
   DatatableContent.prototype.orderdSubjects = function(subjects) {
@@ -279,7 +286,6 @@ window.DatatableContent = (function(_super) {
         }
       };
     })(this));
-    console.log(this.style.subject_order);
     if (this.style.subject_order === 'alphabetical') {
       return alphabetical;
     }

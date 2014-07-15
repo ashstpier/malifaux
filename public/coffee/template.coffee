@@ -38,7 +38,7 @@ class window.Template
     @layout = []
 
   addWidget: (widgetConfig, mode, data) ->
-    widget = new Widget(widgetConfig, data)
+    widget = if widgetConfig.constructor.name is 'Widget' then widgetConfig else new Widget(widgetConfig, data)
     @widgets.push(widget)
     @page.append(widget.render(mode))
     widget

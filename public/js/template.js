@@ -54,7 +54,7 @@ window.Template = (function() {
 
   Template.prototype.addWidget = function(widgetConfig, mode, data) {
     var widget;
-    widget = new Widget(widgetConfig, data);
+    widget = widgetConfig.constructor.name === 'Widget' ? widgetConfig : new Widget(widgetConfig, data);
     this.widgets.push(widget);
     this.page.append(widget.render(mode));
     return widget;

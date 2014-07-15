@@ -2,6 +2,7 @@ window.Designer = {
   selection: null,
   currentEditWidget: null,
   propertyPanel: null,
+  history: new UndoHistory(),
   NUDGE_SIZE: 10,
   loadAll: function(template) {
     this.template = template;
@@ -98,6 +99,21 @@ window.Designer = {
         return $(e.currentTarget).selectText();
       };
     })(this));
+    $('#undo').click((function(_this) {
+      return function() {
+        return _this.history.undo();
+      };
+    })(this));
+    $('#redo').click((function(_this) {
+      return function() {
+        return _this.history.redo();
+      };
+    })(this));
+    this.history.bind('history:change', (function(_this) {
+      return function() {
+        return _this.updateHistoryButtonState();
+      };
+    })(this));
     this.bindKeyboardEvents();
     _ref = Widget.WIDGETS;
     _results = [];
@@ -121,6 +137,18 @@ window.Designer = {
     return _results;
   },
   bindKeyboardEvents: function() {
+    Mousetrap.bind(['command+z', 'ctrl+z'], (function(_this) {
+      return function() {
+        _this.history.undo();
+        return false;
+      };
+    })(this));
+    Mousetrap.bind(['command+shift+z', 'ctrl+shift+z'], (function(_this) {
+      return function() {
+        _this.history.redo();
+        return false;
+      };
+    })(this));
     Mousetrap.bind(['backspace', 'del'], (function(_this) {
       return function() {
         if (_this.selection) {
@@ -227,20 +255,48 @@ window.Designer = {
     widget.editMode();
     return this.trigger('selection:change', this.currentEditWidget);
   },
-  addWidget: function(widgetConfig) {
+  addWidget: function(widgetConfig, withHistory) {
     var widget;
     if (widgetConfig == null) {
       widgetConfig = {};
     }
+    if (withHistory == null) {
+      withHistory = true;
+    }
     widget = this.template.addWidget(widgetConfig, 'layout');
-    return this.select(widget);
+    this.select(widget);
+    if (withHistory) {
+      return Designer.history.push(this, 'addRemoveWidget', {
+        remove: widget
+      }, {
+        add: widget
+      });
+    }
   },
-  removeWidget: function(widget) {
+  removeWidget: function(widget, withHistory) {
+    if (withHistory == null) {
+      withHistory = true;
+    }
     if (this.currentEditWidget === widget) {
       this.currentEditWidget = null;
     }
     this.clearSelection();
-    return this.template.removeWidget(widget);
+    this.template.removeWidget(widget);
+    if (withHistory) {
+      return Designer.history.push(this, 'addRemoveWidget', {
+        add: widget
+      }, {
+        remove: widget
+      });
+    }
+  },
+  addRemoveWidget: function(action) {
+    if (action.add != null) {
+      this.addWidget(action.add, false);
+    }
+    if (action.remove != null) {
+      return this.removeWidget(action.remove, false);
+    }
   },
   load: function() {
     $('#name').text(this.template.name);
@@ -284,6 +340,22 @@ window.Designer = {
         return $('#viewport').removeClass('screenshot');
       };
     })(this));
+  },
+  updateHistoryButtonState: function() {
+    if (this.history.canUndo()) {
+      $('#undo').addClass('enabled');
+      $('#undo').removeClass('disabled');
+    } else {
+      $('#undo').removeClass('enabled');
+      $('#undo').addClass('disabled');
+    }
+    if (this.history.canRedo()) {
+      $('#redo').addClass('enabled');
+      return $('#redo').removeClass('disabled');
+    } else {
+      $('#redo').removeClass('enabled');
+      return $('#redo').addClass('disabled');
+    }
   }
 };
 

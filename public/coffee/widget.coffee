@@ -37,6 +37,7 @@ class window.Widget
       width: width
       height: height
     }
+    @position = @origin
 
   displayName: -> @content.constructor.displayName
 
@@ -53,11 +54,13 @@ class window.Widget
       handles:      'n, e, s, w, ne, se, sw, nw'
       resize:       => @trigger 'widget:move', this
       start:        => Designer.select(this)
+      stop:         => @moved()
     @el.draggable
       grid:         Widget.GRID_SIZE
       containment:  Widget.PAGE_SELECTOR
       drag:         => @trigger 'widget:move', this
       start:        => Designer.select(this)
+      stop:         => @moved()
 
   render: (mode) ->
     @el = $("""
@@ -84,6 +87,14 @@ class window.Widget
   renderAppearanceOptions: -> @content.renderAppearanceOptions()
   renderConfigOptions: -> @content.renderConfigOptions()
 
+  moved: ->
+    oldPosition = @position
+    @cachePosition()
+    Designer.history.push(this, 'moveTo', oldPosition, @position)
+
+  cachePosition: ->
+    @position = {x: @x(), y: @y(), width: @width(), height: @height()}
+
   layoutMode: ->
     @el.draggable('enable')
     @renderContent('layout')
@@ -106,9 +117,19 @@ class window.Widget
       content: @content.serialize()
     }
 
+  moveTo: (coords) ->
+    @x(coords.x) if coords.x?
+    @y(coords.y) if coords.y?
+    @width(coords.width) if coords.width?
+    @height(coords.height) if coords.height?
+    @trigger 'widget:move', this
+
   nudge: (x,y) ->
+    oldPosition = @position
     @x(@x()+x) unless x is 0
     @y(@y()+y) unless y is 0
+    @cachePosition()
+    Designer.history.push(this, 'moveTo', oldPosition, @position)
     @trigger 'widget:move', this
 
   saveConfig: ->

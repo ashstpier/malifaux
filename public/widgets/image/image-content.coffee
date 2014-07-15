@@ -23,8 +23,13 @@ class window.ImageContent extends WidgetContent
 
   setImageFromFile: (file) ->
     reader = new FileReader()
-    reader.onload = (e) => @setImage(e.target.result)
+    reader.onload = (e) => @updateImage(e.target.result)
     reader.readAsDataURL(file)
+
+  updateImage: (data) ->
+    oldSrc = @src
+    @setImage(data)
+    Designer.history.push(this, 'setImage', oldSrc, @src)
 
   setImage: (data) ->
     @src = data
