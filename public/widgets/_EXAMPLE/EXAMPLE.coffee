@@ -97,8 +97,14 @@ class window._EXAMPLEContent extends WidgetContent
   # attribute `key` of the current widget.
   # `key` should exist as a function on the Widget that can take
   # 0 or 1 arguments to act as a getter/setter.
-  # e.g. @font(newFont) to set and @font() to get.
+  # e.g. @font(newFont) to set and @font() to get. (see @property())
   # Optional human readable label and type dependant configuration.
+
+  # field: @property(obj, [key])
+  # -----
+  # creates a getter/setter for a Widget confiugration property.
+  # Takes one or two String arguments. single arg accesses a var
+  # two args access a var within an object. e.g. `font: @property('style', 'font')`
 
   # @styleString(styles)
   # -----

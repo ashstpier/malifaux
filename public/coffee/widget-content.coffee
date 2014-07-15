@@ -4,13 +4,19 @@ class window.WidgetContent
   @description: "An element that can be added to the page."
   @icon:        "wrench"
 
-  @styleProperty: (key) ->
+  @property: (obj, key=null) ->
     (val) ->
       if val?
-        @style[key] = val
+        if key
+          @[obj][key] = val
+        else
+          @[obj] = val
         @redraw()
       else
-        @style[key]
+        if key
+          @[obj][key]
+        else
+          @[obj]
 
   constructor: (@widget, config={}) ->
     @initWithConfig(config)

@@ -5,13 +5,24 @@ window.WidgetContent = (function() {
 
   WidgetContent.icon = "wrench";
 
-  WidgetContent.styleProperty = function(key) {
+  WidgetContent.property = function(obj, key) {
+    if (key == null) {
+      key = null;
+    }
     return function(val) {
       if (val != null) {
-        this.style[key] = val;
+        if (key) {
+          this[obj][key] = val;
+        } else {
+          this[obj] = val;
+        }
         return this.redraw();
       } else {
-        return this.style[key];
+        if (key) {
+          return this[obj][key];
+        } else {
+          return this[obj];
+        }
       }
     };
   };

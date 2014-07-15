@@ -37,16 +37,11 @@ class window.FieldContent extends WidgetContent
     data = data[key] for key in @_field.split('.')
     data
 
-  font: @styleProperty('font')
-  size: @styleProperty('size')
-  color: @styleProperty('color')
+  font: @property('style', 'font')
+  size: @property('style', 'size')
+  color: @property('style', 'color')
 
-  field: (n) ->
-    if n?
-      @_field = n
-      @redraw()
-    else
-      @_field
+  field: @property('_field')
 
   serialize: ->
     {field: @_field, style: @style}

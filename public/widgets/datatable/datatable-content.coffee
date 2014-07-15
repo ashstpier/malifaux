@@ -93,21 +93,16 @@ class window.DatatableContent extends WidgetContent
       @option('color', 'cell_background_color_even', "Cell Bg Even")
     ]
 
-  subject_order: @styleProperty('subject_order')
-  font: @styleProperty('font')
-  size: @styleProperty('size')
-  heading_text_color: @styleProperty('heading_text_color')
-  heading_background_color: @styleProperty('heading_background_color')
-  cell_text_color: @styleProperty('cell_text_color')
-  cell_background_color_odd: @styleProperty('cell_background_color_odd')
-  cell_background_color_even: @styleProperty('cell_background_color_even')
+  subject_order: @property('style', 'subject_order')
+  font: @property('style', 'font')
+  size: @property('style', 'size')
+  heading_text_color: @property('style', 'heading_text_color')
+  heading_background_color: @property('style', 'heading_background_color')
+  cell_text_color: @property('style', 'cell_text_color')
+  cell_background_color_odd: @property('style', 'cell_background_color_odd')
+  cell_background_color_even: @property('style', 'cell_background_color_even')
 
-  exclusions: (n) ->
-    if n?
-      @_exclusions = n
-      @redraw()
-    else
-      @_exclusions
+  exclusions: @property('_exclusions')
 
   renderConfigOptions: ->
     [

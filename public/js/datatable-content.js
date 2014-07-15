@@ -127,30 +127,23 @@ window.DatatableContent = (function(_super) {
     return [this.option('font', 'font', "Font"), this.option('size', 'size', "Text Size"), this.option('color', 'heading_text_color', "Heading Text"), this.option('color', 'heading_background_color', "Heading Bg"), this.option('color', 'cell_text_color', "Cell Text"), this.option('color', 'cell_background_color_odd', "Cell Bg Odd"), this.option('color', 'cell_background_color_even', "Cell Bg Even")];
   };
 
-  DatatableContent.prototype.subject_order = DatatableContent.styleProperty('subject_order');
+  DatatableContent.prototype.subject_order = DatatableContent.property('style', 'subject_order');
 
-  DatatableContent.prototype.font = DatatableContent.styleProperty('font');
+  DatatableContent.prototype.font = DatatableContent.property('style', 'font');
 
-  DatatableContent.prototype.size = DatatableContent.styleProperty('size');
+  DatatableContent.prototype.size = DatatableContent.property('style', 'size');
 
-  DatatableContent.prototype.heading_text_color = DatatableContent.styleProperty('heading_text_color');
+  DatatableContent.prototype.heading_text_color = DatatableContent.property('style', 'heading_text_color');
 
-  DatatableContent.prototype.heading_background_color = DatatableContent.styleProperty('heading_background_color');
+  DatatableContent.prototype.heading_background_color = DatatableContent.property('style', 'heading_background_color');
 
-  DatatableContent.prototype.cell_text_color = DatatableContent.styleProperty('cell_text_color');
+  DatatableContent.prototype.cell_text_color = DatatableContent.property('style', 'cell_text_color');
 
-  DatatableContent.prototype.cell_background_color_odd = DatatableContent.styleProperty('cell_background_color_odd');
+  DatatableContent.prototype.cell_background_color_odd = DatatableContent.property('style', 'cell_background_color_odd');
 
-  DatatableContent.prototype.cell_background_color_even = DatatableContent.styleProperty('cell_background_color_even');
+  DatatableContent.prototype.cell_background_color_even = DatatableContent.property('style', 'cell_background_color_even');
 
-  DatatableContent.prototype.exclusions = function(n) {
-    if (n != null) {
-      this._exclusions = n;
-      return this.redraw();
-    } else {
-      return this._exclusions;
-    }
-  };
+  DatatableContent.prototype.exclusions = DatatableContent.property('_exclusions');
 
   DatatableContent.prototype.renderConfigOptions = function() {
     return [
