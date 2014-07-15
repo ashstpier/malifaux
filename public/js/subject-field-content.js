@@ -29,7 +29,6 @@ window.SubjectFieldContent = (function(_super) {
   };
 
   SubjectFieldContent.prototype.render_layout = function(data) {
-    console.log(data);
     return $("<div class=\"subject-field-widget\" style=\"" + (this.textStyles()) + "\">" + (this.fieldFrom(data)) + "</div>");
   };
 

@@ -13,7 +13,6 @@ class window.SubjectFieldContent extends FieldContent
     @_field = @get(config.field, 'A_KS4_STA#A_Y11a_V3#Aut2_Comm')
 
   render_layout: (data) ->
-    console.log data
     $("""<div class="subject-field-widget" style="#{@textStyles()}">#{@fieldFrom(data)}</div>""")
 
   renderConfigOptions: ->
