@@ -106,6 +106,11 @@ class window.Widget
       content: @content.serialize()
     }
 
+  nudge: (x,y) ->
+    @x(@x()+x) unless x is 0
+    @y(@y()+y) unless y is 0
+    @trigger 'widget:move', this
+
   saveConfig: ->
     @content.saveConfig()
 

@@ -2,6 +2,7 @@ window.Designer = {
   selection: null,
   currentEditWidget: null,
   propertyPanel: null,
+  NUDGE_SIZE: 10,
   loadAll: function(template) {
     this.template = template;
     this.templateKey = template.key;
@@ -97,6 +98,7 @@ window.Designer = {
         return $(e.currentTarget).selectText();
       };
     })(this));
+    this.bindKeyboardEvents();
     _ref = Widget.WIDGETS;
     _results = [];
     for (name in _ref) {
@@ -117,6 +119,80 @@ window.Designer = {
       })(this)(className));
     }
     return _results;
+  },
+  bindKeyboardEvents: function() {
+    Mousetrap.bind(['backspace', 'del'], (function(_this) {
+      return function() {
+        if (_this.selection) {
+          _this.removeWidget(_this.selection);
+        }
+        return false;
+      };
+    })(this));
+    Mousetrap.bind('left', (function(_this) {
+      return function() {
+        if (_this.selection) {
+          _this.selection.nudge(-1, 0);
+        }
+        return false;
+      };
+    })(this));
+    Mousetrap.bind(['command+left', 'ctrl+left'], (function(_this) {
+      return function() {
+        if (_this.selection) {
+          _this.selection.nudge(-_this.NUDGE_SIZE, 0);
+        }
+        return false;
+      };
+    })(this));
+    Mousetrap.bind('right', (function(_this) {
+      return function() {
+        if (_this.selection) {
+          _this.selection.nudge(1, 0);
+        }
+        return false;
+      };
+    })(this));
+    Mousetrap.bind(['command+right', 'ctrl+right'], (function(_this) {
+      return function() {
+        if (_this.selection) {
+          _this.selection.nudge(_this.NUDGE_SIZE, 0);
+        }
+        return false;
+      };
+    })(this));
+    Mousetrap.bind('up', (function(_this) {
+      return function() {
+        if (_this.selection) {
+          _this.selection.nudge(0, -1);
+        }
+        return false;
+      };
+    })(this));
+    Mousetrap.bind(['command+up', 'ctrl+up'], (function(_this) {
+      return function() {
+        if (_this.selection) {
+          _this.selection.nudge(0, -_this.NUDGE_SIZE);
+        }
+        return false;
+      };
+    })(this));
+    Mousetrap.bind('down', (function(_this) {
+      return function() {
+        if (_this.selection) {
+          _this.selection.nudge(0, 1);
+        }
+        return false;
+      };
+    })(this));
+    return Mousetrap.bind(['command+down', 'ctrl+down'], (function(_this) {
+      return function() {
+        if (_this.selection) {
+          _this.selection.nudge(0, _this.NUDGE_SIZE);
+        }
+        return false;
+      };
+    })(this));
   },
   updateName: function() {
     var name;

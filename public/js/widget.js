@@ -173,6 +173,16 @@ window.Widget = (function() {
     };
   };
 
+  Widget.prototype.nudge = function(x, y) {
+    if (x !== 0) {
+      this.x(this.x() + x);
+    }
+    if (y !== 0) {
+      this.y(this.y() + y);
+    }
+    return this.trigger('widget:move', this);
+  };
+
   Widget.prototype.saveConfig = function() {
     return this.content.saveConfig();
   };

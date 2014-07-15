@@ -24,8 +24,9 @@
     "underscore": "~1.6.0",
     "vex": "~2.1.1",
     "bootstrap": "~3.2.0",
-    "html2canvas": "~0.4.1"
-    "microevent": "~1.1.1"
+    "html2canvas": "~0.4.1",
+    "microevent": "~1.1.1",
+    "mousetrap": "~1.4.6"
   },
   "overrides": {
     "jquery": {
@@ -87,6 +88,11 @@
     "microevent": {
       "main": [
         "microevent.js"
+      ]
+    },
+    "mousetrap": {
+      "main": [
+        "mousetrap.min.js"
       ]
     }
   }

@@ -4,6 +4,8 @@ window.Designer = {
   currentEditWidget: null
   propertyPanel: null
 
+  NUDGE_SIZE: 10
+
   loadAll: (template) ->
     @template = template
     @templateKey = template.key
@@ -53,6 +55,7 @@ window.Designer = {
     $('#name').blur => @updateName()
     $('#name').keypress (e) => $('#name').blur() if e.which == 13
     $('#name').click (e) => $(e.currentTarget).selectText()
+    @bindKeyboardEvents()
 
     for name, className of Widget.WIDGETS
       do (className) => $("#add-#{name}").click =>
@@ -60,6 +63,35 @@ window.Designer = {
         setTimeout (-> $('#gallery').removeClass('hidden')), 500
         @addWidget(type: className)
         false
+
+  bindKeyboardEvents: ->
+    Mousetrap.bind ['backspace', 'del'], =>
+      @removeWidget(@selection) if @selection
+      false
+    Mousetrap.bind 'left', =>
+      @selection.nudge(-1, 0) if @selection
+      false
+    Mousetrap.bind ['command+left','ctrl+left'], =>
+      @selection.nudge(-@NUDGE_SIZE, 0) if @selection
+      false
+    Mousetrap.bind 'right', =>
+      @selection.nudge(1, 0) if @selection
+      false
+    Mousetrap.bind ['command+right','ctrl+right'], =>
+      @selection.nudge(@NUDGE_SIZE, 0) if @selection
+      false
+    Mousetrap.bind 'up', =>
+      @selection.nudge(0, -1) if @selection
+      false
+    Mousetrap.bind ['command+up','ctrl+up'], =>
+      @selection.nudge(0, -@NUDGE_SIZE) if @selection
+      false
+    Mousetrap.bind 'down', =>
+      @selection.nudge(0, 1) if @selection
+      false
+    Mousetrap.bind ['command+down','ctrl+down'], =>
+      @selection.nudge(0, @NUDGE_SIZE) if @selection
+      false
 
   updateName: ->
     name = $('#name').text()
