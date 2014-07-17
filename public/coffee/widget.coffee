@@ -113,7 +113,7 @@ class window.Widget
       y: @y()
       width: @width()
       height: @height()
-      type: @content.constructor.name
+      type: @content.className()
       content: @content.serialize()
     }
 

@@ -8,6 +8,8 @@ window.ImageContent = (function(_super) {
     return ImageContent.__super__.constructor.apply(this, arguments);
   }
 
+  ImageContent.className = "ImageContent";
+
   ImageContent.displayName = "Image";
 
   ImageContent.description = "A static photograph, logo or graphic";

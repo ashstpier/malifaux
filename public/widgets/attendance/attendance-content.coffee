@@ -1,5 +1,5 @@
 class window.AttendanceContent extends WidgetContent
-
+  @className:   "AttendanceContent"
   @displayName: "Attendance Chart"
   @description: "Show a visual representation of student attendance."
   @icon:        "bell"

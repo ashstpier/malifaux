@@ -1,5 +1,5 @@
 class window.WidgetContent
-
+  @className:   "WidgetContent"
   @displayName: "A Widget"
   @description: "An element that can be added to the page."
   @icon:        "wrench"
@@ -26,6 +26,8 @@ class window.WidgetContent
         Designer.history.push(this, 'runPropertyUndoSetter', {fn:write, v:old}, {fn:write, v:val})
       else
         read()
+
+  className: -> @constructor.className
 
   runPropertyUndoSetter: (o) ->
     o.fn.call(this, o.v)
@@ -135,4 +137,3 @@ class window.OptionRenderer
         #{options.join("\n")}
       </select>
     """
-

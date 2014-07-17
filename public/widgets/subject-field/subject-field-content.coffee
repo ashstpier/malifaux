@@ -1,5 +1,5 @@
 class window.SubjectFieldContent extends FieldContent
-
+  @className:   "SubjectFieldContent"
   @displayName: "Subject Dynamic Text"
   @description: "Pull a text field from a specific subject and style it for display."
   @icon:        "book"

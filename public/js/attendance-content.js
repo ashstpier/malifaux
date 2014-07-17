@@ -8,6 +8,8 @@ window.AttendanceContent = (function(_super) {
     return AttendanceContent.__super__.constructor.apply(this, arguments);
   }
 
+  AttendanceContent.className = "AttendanceContent";
+
   AttendanceContent.displayName = "Attendance Chart";
 
   AttendanceContent.description = "Show a visual representation of student attendance.";

@@ -10,6 +10,8 @@ window.DatatableContent = (function(_super) {
     return DatatableContent.__super__.constructor.apply(this, arguments);
   }
 
+  DatatableContent.className = "DatatableContent";
+
   DatatableContent.displayName = "Subjects Data Table";
 
   DatatableContent.description = "Showing assessment points, one row per subject.";

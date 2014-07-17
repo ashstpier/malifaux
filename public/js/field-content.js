@@ -8,6 +8,8 @@ window.FieldContent = (function(_super) {
     return FieldContent.__super__.constructor.apply(this, arguments);
   }
 
+  FieldContent.className = "FieldContent";
+
   FieldContent.displayName = "Dynamic Text";
 
   FieldContent.description = "Pull a text field from a student record and style it for display.";

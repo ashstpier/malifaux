@@ -195,7 +195,7 @@ window.Widget = (function() {
       y: this.y(),
       width: this.width(),
       height: this.height(),
-      type: this.content.constructor.name,
+      type: this.content.className(),
       content: this.content.serialize()
     };
   };

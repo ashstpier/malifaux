@@ -8,6 +8,8 @@ window.TextContent = (function(_super) {
     return TextContent.__super__.constructor.apply(this, arguments);
   }
 
+  TextContent.className = "TextContent";
+
   TextContent.displayName = "Free Text";
 
   TextContent.description = "A block of static text with formatting options.";

@@ -1,4 +1,6 @@
 window.WidgetContent = (function() {
+  WidgetContent.className = "WidgetContent";
+
   WidgetContent.displayName = "A Widget";
 
   WidgetContent.description = "An element that can be added to the page.";
@@ -44,6 +46,10 @@ window.WidgetContent = (function() {
         return read();
       }
     };
+  };
+
+  WidgetContent.prototype.className = function() {
+    return this.constructor.className;
   };
 
   WidgetContent.prototype.runPropertyUndoSetter = function(o) {

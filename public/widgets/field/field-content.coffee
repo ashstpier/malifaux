@@ -1,5 +1,5 @@
 class window.FieldContent extends WidgetContent
-
+  @className:   "FieldContent"
   @displayName: "Dynamic Text"
   @description: "Pull a text field from a student record and style it for display."
   @icon:        "nameplate"

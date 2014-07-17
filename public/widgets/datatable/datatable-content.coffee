@@ -1,5 +1,5 @@
 class window.DatatableContent extends WidgetContent
-
+  @className:   "DatatableContent"
   @displayName: "Subjects Data Table"
   @description: "Showing assessment points, one row per subject."
   @icon:        "table"

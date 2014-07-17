@@ -8,6 +8,8 @@ window.NameContent = (function(_super) {
     return NameContent.__super__.constructor.apply(this, arguments);
   }
 
+  NameContent.className = "NameContent";
+
   NameContent.displayName = "Student Name";
 
   NameContent.description = "Name of the student in the format \"last, first\"";

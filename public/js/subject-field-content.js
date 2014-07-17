@@ -8,6 +8,8 @@ window.SubjectFieldContent = (function(_super) {
     return SubjectFieldContent.__super__.constructor.apply(this, arguments);
   }
 
+  SubjectFieldContent.className = "SubjectFieldContent";
+
   SubjectFieldContent.displayName = "Subject Dynamic Text";
 
   SubjectFieldContent.description = "Pull a text field from a specific subject and style it for display.";

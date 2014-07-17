@@ -1,5 +1,5 @@
 class window.ImageContent extends WidgetContent
-
+  @className:   "ImageContent"
   @displayName: "Image"
   @description: "A static photograph, logo or graphic"
   @icon:        "picture"
@@ -58,5 +58,3 @@ class window.ImageContent extends WidgetContent
 
   serialize: ->
     { src: @src }
-
-

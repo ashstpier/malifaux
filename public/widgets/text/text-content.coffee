@@ -1,5 +1,5 @@
 class window.TextContent extends WidgetContent
-
+  @className:   "TextContent"
   @displayName: "Free Text"
   @description: "A block of static text with formatting options."
   @icon:        "font"
