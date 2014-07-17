@@ -213,7 +213,8 @@ window.Widget = (function() {
     if (coords.height != null) {
       this.height(coords.height);
     }
-    return this.trigger('widget:move', this);
+    this.trigger('widget:move', this);
+    return Designer.select(this);
   };
 
   Widget.prototype.nudge = function(x, y) {

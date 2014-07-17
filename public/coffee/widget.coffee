@@ -123,6 +123,7 @@ class window.Widget
     @width(coords.width) if coords.width?
     @height(coords.height) if coords.height?
     @trigger 'widget:move', this
+    Designer.select(this)
 
   nudge: (x,y) ->
     oldPosition = @position
