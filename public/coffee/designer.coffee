@@ -161,8 +161,14 @@ window.Designer = {
   clear: -> @template.removeAllWidgets()
 
   promptSave: ->
-    @takeScreenShot() if !utils.is_ccr
-    $('#save-modal').modal()
+    shouldPrompt = @history.canUndo()
+
+    if shouldPrompt
+      @takeScreenShot() if !utils.is_ccr
+      $('#save-modal').modal()
+    else
+      @exitDesigner()
+
     false
 
   exitDesigner: ->

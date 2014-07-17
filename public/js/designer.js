@@ -314,10 +314,16 @@ window.Designer = {
     return this.template.removeAllWidgets();
   },
   promptSave: function() {
-    if (!utils.is_ccr) {
-      this.takeScreenShot();
+    var shouldPrompt;
+    shouldPrompt = this.history.canUndo();
+    if (shouldPrompt) {
+      if (!utils.is_ccr) {
+        this.takeScreenShot();
+      }
+      $('#save-modal').modal();
+    } else {
+      this.exitDesigner();
     }
-    $('#save-modal').modal();
     return false;
   },
   exitDesigner: function() {
