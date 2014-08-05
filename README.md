@@ -20,7 +20,7 @@ You will need [Node.JS](http://nodejs.org) installed to build this project. Then
 
 Development Storage
 -------------------
-In development all template data is stored in memory on the server so there is no percsistance once you kill the process. Local template JSON files can be dragged and dropped onto the index page to upload them into the current session.
+In development all template data is stored in memory on the server so there is no percsistance once you kill the process. Local template JSON files can be dragged and dropped onto the index page to upload them into the current session. There is a sample JSON template in `docs/sample_real_WA_report.json` that can be dragged onto the web interface to load into the current session.
 
 
 Production Deployment
