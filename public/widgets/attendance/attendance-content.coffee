@@ -5,20 +5,102 @@ class window.AttendanceContent extends WidgetContent
   @icon:        "bell"
 
   defaultWidth: -> 400
-  defaultHeight: -> 200
+  defaultHeight: -> 300
 
-  initWithConfig: (config) -> {}
+  @STYLE_DEFAULTS: {
+    color1: '#3498db'
+    color2: '#2ecc71'
+    color3: '#e67e22'
+    color4: '#9b59b6'
+    chartstyle: 'twoD'
+    color: '#000000'
+    font: 'Helvetica'
+    size: 'Medium'
+  }
+
+  initWithConfig: (config) ->
+    @style = $.extend({}, AttendanceContent.STYLE_DEFAULTS, @get(config.style, {}))
+    @_title = @get(config.title, 'Attendance')
+    @_label1 = @get(config.title, 'Present')
+    @_label2 = @get(config.title, 'Late')
+    @_label3 = @get(config.title, 'Authorised')
+    @_label4 = @get(config.title, 'Unauthorised')
 
   render_layout: (data) ->
-    $("""<div class="attendance-widget"><img src="#{@chartUrl(data)}"/></div>""")
 
-  chartUrl: (data)->
-    a = data.attendance
-    params = [
-      "cht=p"
-      "chd=t:" + [a.present, a.late, a.authorised, a.nonAuthorised].join(',')
-      "chs=400x200"
-      "chdl=Present%20%28#{a.present}%25%29|Late%20%28#{a.late}%25%29|Authorised%20%28#{a.authorised}%25%29|Unauthorised%20%28#{a.nonAuthorised}%25%29"
-      "chco=99D953,EBDC1E,EB9F1E,B63242"
+    @widget.bind 'widget:move', => @drawChart()
+    @attendance = data.attendance
+    google.load('visualization', '1.0', {'packages':['corechart'], callback: => @drawChart() })
+
+    $("""<div class="attendance-widget"></div>""")
+
+  renderConfigOptions: ->
+    [
+      @option('text', 'title', "Chart title")
+      @option('text', 'label1', "Label 1")
+      @option('text', 'label2', "Label 2")
+      @option('text', 'label3', "Label 3")
+      @option('text', 'label4', "Label 4")
     ]
-    "https://chart.googleapis.com/chart?#{params.join('&amp;')}"
+
+  renderAppearanceOptions: ->
+    [
+      @option('color', 'color1', "Color 1")
+      @option('color', 'color2', "Color 2")
+      @option('color', 'color3', "Color 3")
+      @option('color', 'color4', "Color 4")
+      @option('select', 'chartstyle', "Chart style", options: {twoD: '2D', threeD: '3D'})
+      @option('font',  'font', "Font")
+      @option('size',  'size', "Text Size")
+      @option('color', 'color', "Text Color")
+    ]
+
+  drawChart: () ->
+    data = new google.visualization.DataTable()
+    data.addColumn('string', 'Attendance')
+    data.addColumn('number', 'Percent')
+    data.addRows([
+      [@_label1, parseFloat(@attendance.present)],
+      [@_label2, parseFloat(@attendance.late)],
+      [@_label3, parseFloat(@attendance.authorised)],
+      [@_label4, parseFloat(@attendance.nonAuthorised)]
+    ])
+
+    fontsize = {
+      'Small': 12,
+      'Medium': 14,
+      'Large': 18
+    }
+
+    options = {
+      title: @_title,
+      width: @widget.width(),
+      height: @widget.height(),
+      colors: [@style.color1, @style.color2, @style.color3, @style.color4]
+      is3D: @style.chartstyle == 'threeD',
+      chartArea: {left: 0, top: 60, bottom: 0, width: '100%', height: '70%'},
+      pieSliceBorderColor: "transparent",
+      enableInteractivity: false,
+      fontSize: fontsize[@style.size],
+      fontName: @style.font,
+      titleTextStyle: {color: @style.color, fontSize: fontsize[@style.size] + 4},
+      legend: {textStyle: {color: @style.color}}
+    }
+
+    chart = new google.visualization.PieChart(@el[0])
+    chart.draw(data, options)
+
+  color1: @property('style', 'color1')
+  color2: @property('style', 'color2')
+  color3: @property('style', 'color3')
+  color4: @property('style', 'color4')
+  chartstyle: @property('style', 'chartstyle')
+  chartstyle: @property('style', 'chartstyle')
+  title: @property('_title')
+  font: @property('style', 'font')
+  size: @property('style', 'size')
+  color: @property('style', 'color')
+  label1: @property('_label1')
+  label2: @property('_label2')
+  label3: @property('_label3')
+  label4: @property('_label4')
