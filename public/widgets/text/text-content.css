@@ -1,5 +1,6 @@
 .text-widget {
   text-align: left;
+  font-size: 16px;
 }
 
 .widget-edit-mode .text-widget {
@@ -7,7 +8,12 @@
 }
 
 
-.text-widget p {
+.text-widget p, .text-widget span {
+  margin: 0;
+  line-height: 1em
+}
+
+.text-widget ul, .text-widget ol {
   margin: 0;
 }
 

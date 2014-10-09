@@ -8,9 +8,9 @@ window.Widget = (function() {
   Widget.WIDGETS = {
     'image': 'ImageContent',
     'text': 'TextContent',
-    'name': 'NameContent',
     'datatable': 'DatatableContent',
     'field': 'FieldContent',
+    'name': 'NameContent',
     'subject-field': 'SubjectFieldContent',
     'attendance': 'AttendanceContent'
   };

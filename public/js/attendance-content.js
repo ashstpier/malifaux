@@ -25,10 +25,11 @@ window.AttendanceContent = (function(_super) {
   };
 
   AttendanceContent.STYLE_DEFAULTS = {
-    color1: '#3498db',
-    color2: '#2ecc71',
+    color1: '#77cc33',
+    color2: '#cc0000',
     color3: '#e67e22',
     color4: '#9b59b6',
+    labels: 'right',
     chartstyle: 'twoD',
     color: '#000000',
     font: 'Helvetica',
@@ -37,7 +38,6 @@ window.AttendanceContent = (function(_super) {
 
   AttendanceContent.prototype.initWithConfig = function(config) {
     this.style = $.extend({}, AttendanceContent.STYLE_DEFAULTS, this.get(config.style, {}));
-    this._title = this.get(config.title, 'Attendance');
     this._label1 = this.get(config.title, 'Present');
     this._label2 = this.get(config.title, 'Late');
     this._label3 = this.get(config.title, 'Authorised');
@@ -63,12 +63,17 @@ window.AttendanceContent = (function(_super) {
   };
 
   AttendanceContent.prototype.renderConfigOptions = function() {
-    return [this.option('text', 'title', "Chart title"), this.option('text', 'label1', "Label 1"), this.option('text', 'label2', "Label 2"), this.option('text', 'label3', "Label 3"), this.option('text', 'label4', "Label 4")];
+    return [this.option('text', 'label1', "Present label"), this.option('text', 'label2', "Late label"), this.option('text', 'label3', "Authorised label"), this.option('text', 'label4', "Unauthorised label")];
   };
 
   AttendanceContent.prototype.renderAppearanceOptions = function() {
     return [
-      this.option('color', 'color1', "Color 1"), this.option('color', 'color2', "Color 2"), this.option('color', 'color3', "Color 3"), this.option('color', 'color4', "Color 4"), this.option('select', 'chartstyle', "Chart style", {
+      this.option('color', 'color1', "Present"), this.option('color', 'color2', "Late"), this.option('color', 'color3', "Authorised"), this.option('color', 'color4', "Unauthorised"), this.option('select', 'labels', "Labels", {
+        options: {
+          right: 'show',
+          none: 'hide'
+        }
+      }), this.option('select', 'chartstyle', "Chart style", {
         options: {
           twoD: '2D',
           threeD: '3D'
@@ -84,22 +89,20 @@ window.AttendanceContent = (function(_super) {
     data.addColumn('number', 'Percent');
     data.addRows([[this._label1, parseFloat(this.attendance.present)], [this._label2, parseFloat(this.attendance.late)], [this._label3, parseFloat(this.attendance.authorised)], [this._label4, parseFloat(this.attendance.nonAuthorised)]]);
     fontsize = {
-      'Small': 12,
-      'Medium': 14,
-      'Large': 18
+      'Small': 10,
+      'Medium': 12,
+      'Large': 16
     };
     options = {
-      title: this._title,
       width: this.widget.width(),
       height: this.widget.height(),
       colors: [this.style.color1, this.style.color2, this.style.color3, this.style.color4],
       is3D: this.style.chartstyle === 'threeD',
       chartArea: {
         left: 0,
-        top: 60,
-        bottom: 0,
+        top: 0,
         width: '100%',
-        height: '70%'
+        height: '100%'
       },
       pieSliceBorderColor: "transparent",
       enableInteractivity: false,
@@ -112,7 +115,8 @@ window.AttendanceContent = (function(_super) {
       legend: {
         textStyle: {
           color: this.style.color
-        }
+        },
+        position: this.style.labels
       }
     };
     chart = new google.visualization.PieChart(this.el[0]);
@@ -129,9 +133,7 @@ window.AttendanceContent = (function(_super) {
 
   AttendanceContent.prototype.chartstyle = AttendanceContent.property('style', 'chartstyle');
 
-  AttendanceContent.prototype.chartstyle = AttendanceContent.property('style', 'chartstyle');
-
-  AttendanceContent.prototype.title = AttendanceContent.property('_title');
+  AttendanceContent.prototype.labels = AttendanceContent.property('style', 'labels');
 
   AttendanceContent.prototype.font = AttendanceContent.property('style', 'font');
 

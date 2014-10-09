@@ -3,6 +3,7 @@ class window.WidgetContent
   @displayName: "A Widget"
   @description: "An element that can be added to the page."
   @icon:        "wrench"
+  @active:      true
 
   @property: (obj, key=null) ->
     (val) ->

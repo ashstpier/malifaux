@@ -8,10 +8,11 @@ class window.AttendanceContent extends WidgetContent
   defaultHeight: -> 300
 
   @STYLE_DEFAULTS: {
-    color1: '#3498db'
-    color2: '#2ecc71'
+    color1: '#77cc33'
+    color2: '#cc0000'
     color3: '#e67e22'
     color4: '#9b59b6'
+    labels: 'right'
     chartstyle: 'twoD'
     color: '#000000'
     font: 'Helvetica'
@@ -20,7 +21,6 @@ class window.AttendanceContent extends WidgetContent
 
   initWithConfig: (config) ->
     @style = $.extend({}, AttendanceContent.STYLE_DEFAULTS, @get(config.style, {}))
-    @_title = @get(config.title, 'Attendance')
     @_label1 = @get(config.title, 'Present')
     @_label2 = @get(config.title, 'Late')
     @_label3 = @get(config.title, 'Authorised')
@@ -36,19 +36,19 @@ class window.AttendanceContent extends WidgetContent
 
   renderConfigOptions: ->
     [
-      @option('text', 'title', "Chart title")
-      @option('text', 'label1', "Label 1")
-      @option('text', 'label2', "Label 2")
-      @option('text', 'label3', "Label 3")
-      @option('text', 'label4', "Label 4")
+      @option('text', 'label1', "Present label")
+      @option('text', 'label2', "Late label")
+      @option('text', 'label3', "Authorised label")
+      @option('text', 'label4', "Unauthorised label")
     ]
 
   renderAppearanceOptions: ->
     [
-      @option('color', 'color1', "Color 1")
-      @option('color', 'color2', "Color 2")
-      @option('color', 'color3', "Color 3")
-      @option('color', 'color4', "Color 4")
+      @option('color', 'color1', "Present")
+      @option('color', 'color2', "Late")
+      @option('color', 'color3', "Authorised")
+      @option('color', 'color4', "Unauthorised")
+      @option('select', 'labels', "Labels", options: {right: 'show', none: 'hide'})
       @option('select', 'chartstyle', "Chart style", options: {twoD: '2D', threeD: '3D'})
       @option('font',  'font', "Font")
       @option('size',  'size', "Text Size")
@@ -67,24 +67,23 @@ class window.AttendanceContent extends WidgetContent
     ])
 
     fontsize = {
-      'Small': 12,
-      'Medium': 14,
-      'Large': 18
+      'Small': 10,
+      'Medium': 12,
+      'Large': 16
     }
 
     options = {
-      title: @_title,
       width: @widget.width(),
       height: @widget.height(),
       colors: [@style.color1, @style.color2, @style.color3, @style.color4]
       is3D: @style.chartstyle == 'threeD',
-      chartArea: {left: 0, top: 60, bottom: 0, width: '100%', height: '70%'},
+      chartArea: {left: 0, top: 0, width: '100%', height: '100%'},
       pieSliceBorderColor: "transparent",
       enableInteractivity: false,
       fontSize: fontsize[@style.size],
       fontName: @style.font,
       titleTextStyle: {color: @style.color, fontSize: fontsize[@style.size] + 4},
-      legend: {textStyle: {color: @style.color}}
+      legend: {textStyle: {color: @style.color}, position: @style.labels}
     }
 
     chart = new google.visualization.PieChart(@el[0])
@@ -95,8 +94,7 @@ class window.AttendanceContent extends WidgetContent
   color3: @property('style', 'color3')
   color4: @property('style', 'color4')
   chartstyle: @property('style', 'chartstyle')
-  chartstyle: @property('style', 'chartstyle')
-  title: @property('_title')
+  labels: @property('style', 'labels')
   font: @property('style', 'font')
   size: @property('style', 'size')
   color: @property('style', 'color')

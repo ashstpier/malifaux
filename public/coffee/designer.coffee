@@ -35,13 +35,14 @@ window.Designer = {
   renderWidgetButtons: ->
     for name, className of Widget.WIDGETS
       type = window[className]
-      $("#gallery").append """
-        <div id="add-#{name}" class="add-widget">
-          <i class="glyphicons white #{type.icon}"></i>
-          <h4>#{type.displayName}</h4>
-          <p>#{type.description}</p>
-        </div>
-      """
+      if type.active
+        $("#gallery").append """
+          <div id="add-#{name}" class="add-widget">
+            <i class="glyphicons white #{type.icon}"></i>
+            <h4>#{type.displayName}</h4>
+            <p>#{type.description}</p>
+          </div>
+        """
 
   setOrientation: (orientation) ->
     $('#page').attr('class', orientation)
