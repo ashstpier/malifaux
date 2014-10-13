@@ -60,15 +60,15 @@ class window.DatatableContent extends WidgetContent
       exclusions = ($.trim(e).toLowerCase() for e in @_exclusions.split(","))
       !_.contains(exclusions, subject.subjectName.toLowerCase())
 
-  buildEditRow: (col={title:'', value:'', compare_to:''}) ->
+  buildEditRow: (col={title:'', value:'', compare_to:'', mappings:{}}) ->
     options = (val) =>
       for point in @assessmentPoints()
         """<option value="#{point.code}" #{if point.code is val then 'selected="selected"' else ''}>#{point.name} | #{point.longName}</option>"""
 
-    """<tr class="column-setting">
+    """<tr class="column-setting" data-mappings="#{JSON.stringify(col.mappings or {}).replace(/\"/g,'&quot;')}">
       <td>
         <input class="col-title" name="col-title" type="text" value="#{col.title}" placeholder="Untitled..." />
-        <span class="col-comp-label">compared to:</span>
+        <span class="col-comp-label">compared to:</ span>
       </td>
       <td>
         <select class="col-value" name="col-value">
@@ -79,6 +79,7 @@ class window.DatatableContent extends WidgetContent
           <option value="" #{if col.compare_to is "" then 'selected="selected"' else ''}></option>
           #{options(col.compare_to).join("\n")}
         </select>
+        <a href="#" class="mapping">Add mappings...</a>
       </td>
     </tr>"""
 
@@ -136,9 +137,10 @@ class window.DatatableContent extends WidgetContent
       @maybeAddEditRow(table)
       @saveColumns(table)
       @redraw()
+    self = this
+    table.on "click", ".mapping", ->
+      self.openModal(this)
     node
-
-
 
   headingStyles: ->
     @styleString('background-color': @style.heading_background_color, color: @style.heading_text_color)
@@ -148,7 +150,9 @@ class window.DatatableContent extends WidgetContent
     text_align = if content.split(' ').length > 1 then 'left' else 'center'
     @styleString('background-color': bg_color, color: @style.cell_text_color, 'text-align': text_align)
 
-  cellValue: (subject, col) -> subject.results?[col.value] or ''
+  cellValue: (subject, col) ->
+    originalValue = subject.results?[col.value] or ''
+    col.mappings?[originalValue] or originalValue
 
   cellContent: (subject, col) ->
     val = @cellValue(subject, col)
@@ -174,6 +178,7 @@ class window.DatatableContent extends WidgetContent
         title:            $col.find('.col-title').val()
         value:            $col.find('.col-value').val()
         compare_to:       $col.find('.col-compare-to').val()
+        mappings:         $col.data('mappings')
       }
     @columns = (col for col in columns when col.value? and col.value isnt '')
     Designer.history.push(this, 'setColumnsFromUndo', oldColumns, @columns)
@@ -196,11 +201,74 @@ class window.DatatableContent extends WidgetContent
     }
     _.sortBy alphabetical, (subject) ->
         name = subject.subjectName.toLowerCase()
-        console.log name
         if rank[name]
           rank[name]
         else
           name.charCodeAt(0)
+
+  openModal: (el) ->
+    index = $(el).parents('.column-setting').index()
+    savedMappings = $(el).parents(".edit-rows").find(".column-setting:eq(#{index})").data('mappings')
+
+    inputrows = for k, v of savedMappings
+      """<div class="mapping-row">
+          <input type="text" name="mapping-input" class="mapping-input" value="#{k}">
+          <input type="text" name="mapping-output" class="mapping-output" value="#{v}">
+        </div>"""
+    inputrow = inputrows.join("\n")
+
+    extrarow = """<div class="mapping-row">
+          <input type="text" name="mapping-input" class="mapping-input">
+          <input type="text" name="mapping-output" class="mapping-output">
+        </div>"""
+
+    modal = """<div class="modal fade" id="mapping-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Word mapping</h4>
+          </div>
+          <div class="modal-body">
+            <h4 class="mapping-heading">Replace</h4>
+            <h4 class="mapping-heading right">With</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success pull-left" id="add-mapping">+ Add</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>"""
+
+    $('body').append(modal)
+    $('#mapping-modal').modal('show')
+
+    modalbody = $('#mapping-modal .modal-body')
+    if $.isEmptyObject(savedMappings)
+      modalbody.append(extrarow)
+    else
+      modalbody.append(inputrow)
+
+    $('#add-mapping').on "click", ->
+      modalbody.append(extrarow)
+
+    $('#mapping-modal').on 'hidden.bs.modal', =>
+      @closeModal(index, el)
+      $('#mapping-modal').remove()
+
+  closeModal: (index, el) ->
+    mappings = {}
+    rows = $('.mapping-row')
+    for row in rows
+      input = $(row).find('.mapping-input').val()
+      output = $(row).find('.mapping-output').val()
+      mappings[input] = output
+
+    editrows = $(el).parents(".edit-rows")
+    editrows.find(".column-setting:eq(#{index})").data('mappings', mappings)
+
+    @saveColumns(editrows)
+    @redraw()
 
   serialize: ->
     {columns: @columns, style: @style, exclusions: @_exclusions}
