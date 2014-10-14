@@ -61,11 +61,12 @@ class window.DatatableContent extends WidgetContent
       !_.contains(exclusions, subject.subjectName.toLowerCase())
 
   buildEditRow: (col={title:'', value:'', compare_to:'', mappings:{}}) ->
+    col.mappings = {} unless col.mappings
     options = (val) =>
       for point in @assessmentPoints()
         """<option value="#{point.code}" #{if point.code is val then 'selected="selected"' else ''}>#{point.name} | #{point.longName}</option>"""
 
-    """<tr class="column-setting" data-mappings="#{JSON.stringify(col.mappings or {}).replace(/\"/g,'&quot;')}">
+    """<tr class="column-setting" data-mappings="#{JSON.stringify(col.mappings).replace(/\"/g,'&quot;')}">
       <td>
         <input class="col-title" name="col-title" type="text" value="#{col.title}" placeholder="Untitled..." />
         <span class="col-comp-label">compared to:</ span>
@@ -79,7 +80,7 @@ class window.DatatableContent extends WidgetContent
           <option value="" #{if col.compare_to is "" then 'selected="selected"' else ''}></option>
           #{options(col.compare_to).join("\n")}
         </select>
-        <a href="#" class="mapping">Add mappings...</a>
+        <a href="#" class="mapping">#{if $.isEmptyObject(col.mappings) then 'Add mappings...' else 'Edit mappings...'}</a>
       </td>
     </tr>"""
 
@@ -234,7 +235,8 @@ class window.DatatableContent extends WidgetContent
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-success pull-left" id="add-mapping">+ Add</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" id="save-mapping">Save</button>
           </div>
         </div>
       </div>
@@ -252,8 +254,10 @@ class window.DatatableContent extends WidgetContent
     $('#add-mapping').on "click", ->
       modalbody.append(extrarow)
 
-    $('#mapping-modal').on 'hidden.bs.modal', =>
+    $('#save-mapping').on "click", =>
       @closeModal(index, el)
+
+    $('#mapping-modal').on 'hidden.bs.modal', =>
       $('#mapping-modal').remove()
 
   closeModal: (index, el) ->
@@ -262,13 +266,15 @@ class window.DatatableContent extends WidgetContent
     for row in rows
       input = $(row).find('.mapping-input').val()
       output = $(row).find('.mapping-output').val()
-      mappings[input] = output
+      unless $(row).find('.mapping-input').val() == "" && $(row).find('.mapping-output').val() == ""
+        mappings[input] = output
 
     editrows = $(el).parents(".edit-rows")
     editrows.find(".column-setting:eq(#{index})").data('mappings', mappings)
 
     @saveColumns(editrows)
     @redraw()
+    Designer.trigger('sidebar:redraw')
 
   serialize: ->
     {columns: @columns, style: @style, exclusions: @_exclusions}

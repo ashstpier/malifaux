@@ -3,6 +3,7 @@ class window.Properties
     @el = $("#properties")
     @selected = null
     @designer.bind "selection:change", (newSelection) => @selectionChanged(newSelection)
+    @designer.bind "sidebar:redraw",  => @redraw()
 
   render: ->
     @el.append """
