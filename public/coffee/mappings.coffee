@@ -49,6 +49,7 @@ class window.MappingModal
 
     $('#mapping-modal').on 'hidden.bs.modal', =>
       $('#mapping-modal').remove()
+      Designer.trigger('sidebar:redraw')
 
   close: ->
     newMappings = {}

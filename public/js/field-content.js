@@ -65,7 +65,7 @@ window.FieldContent = (function(_super) {
 
   FieldContent.prototype.mappingSettings = function() {
     var node, self;
-    node = $("<div class=\"mapping-option\"><a href=\"#\" class=\"mapping\">Add word mappings...</a></div>");
+    node = $("<div class=\"mapping-option\"><a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(this.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a></div>");
     self = this;
     node.on("click", ".mapping", (function(_this) {
       return function() {

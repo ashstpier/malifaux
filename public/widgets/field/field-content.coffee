@@ -35,7 +35,7 @@ class window.FieldContent extends WidgetContent
     ]
 
   mappingSettings: ->
-    node = $("""<div class="mapping-option"><a href="#" class="mapping">Add word mappings...</a></div>""")
+    node = $("""<div class="mapping-option"><a href="#" class="mapping">#{if $.isEmptyObject(@mappings) then 'Add word mappings...' else 'Edit word mappings...'}</a></div>""")
     self = this
     node.on "click", ".mapping", =>
       new MappingModal(@mappings, @changeMapping)

@@ -34,7 +34,8 @@ window.MappingModal = (function() {
     })(this));
     $('#mapping-modal').on('hidden.bs.modal', (function(_this) {
       return function() {
-        return $('#mapping-modal').remove();
+        $('#mapping-modal').remove();
+        return Designer.trigger('sidebar:redraw');
       };
     })(this));
   }

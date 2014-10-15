@@ -22,6 +22,7 @@ class window.DatatableContent extends WidgetContent
     @columns = @get(config.columns, [])
     @style = $.extend({}, DatatableContent.STYLE_DEFAULTS, @get(config.style, {}))
     @_exclusions = @get(config.exclusions, '')
+    @mappingIndex = 0
 
   render_layout: (data) ->
     name = utils.escape(data.name)
@@ -80,7 +81,7 @@ class window.DatatableContent extends WidgetContent
           <option value="" #{if col.compare_to is "" then 'selected="selected"' else ''}></option>
           #{options(col.compare_to).join("\n")}
         </select>
-        <a href="#" class="mapping">#{if $.isEmptyObject(col.mappings) then 'Add mappings...' else 'Edit mappings...'}</a>
+        <a href="#" class="mapping">#{if $.isEmptyObject(col.mappings) then 'Add word mappings...' else 'Edit word mappings...'}</a>
       </td>
     </tr>"""
 
@@ -140,8 +141,18 @@ class window.DatatableContent extends WidgetContent
       @redraw()
     self = this
     table.on "click", ".mapping", ->
-      self.openModal(this)
+      element = this
+      self.mappingIndex = $(this).parents('.column-setting').index()
+      mappings = $(element).parents(".edit-rows").find(".column-setting:eq(#{self.mappingIndex})").data('mappings')
+      new MappingModal(mappings, self.updateMapping)
     node
+
+  updateMapping: (newMappings) =>
+    editrows = $(".edit-rows")
+    editrows.find(".column-setting:eq(#{@mappingIndex})").data('mappings', newMappings)
+
+    @saveColumns(editrows)
+    @redraw()
 
   headingStyles: ->
     @styleString('background-color': @style.heading_background_color, color: @style.heading_text_color)
@@ -206,75 +217,6 @@ class window.DatatableContent extends WidgetContent
           rank[name]
         else
           name.charCodeAt(0)
-
-  openModal: (el) ->
-    index = $(el).parents('.column-setting').index()
-    savedMappings = $(el).parents(".edit-rows").find(".column-setting:eq(#{index})").data('mappings')
-
-    inputrows = for k, v of savedMappings
-      """<div class="mapping-row">
-          <input type="text" name="mapping-input" class="mapping-input" value="#{k}">
-          <input type="text" name="mapping-output" class="mapping-output" value="#{v}">
-        </div>"""
-    inputrow = inputrows.join("\n")
-
-    extrarow = """<div class="mapping-row">
-          <input type="text" name="mapping-input" class="mapping-input">
-          <input type="text" name="mapping-output" class="mapping-output">
-        </div>"""
-
-    modal = """<div class="modal fade" id="mapping-modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Word mapping</h4>
-          </div>
-          <div class="modal-body">
-            <h4 class="mapping-heading">Replace</h4>
-            <h4 class="mapping-heading right">With</h4>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-success pull-left" id="add-mapping">+ Add</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" id="save-mapping">Save</button>
-          </div>
-        </div>
-      </div>
-    </div>"""
-
-    $('body').append(modal)
-    $('#mapping-modal').modal('show')
-
-    modalbody = $('#mapping-modal .modal-body')
-    if $.isEmptyObject(savedMappings)
-      modalbody.append(extrarow)
-    else
-      modalbody.append(inputrow)
-
-    $('#add-mapping').on "click", ->
-      modalbody.append(extrarow)
-
-    $('#save-mapping').on "click", =>
-      @closeModal(index, el)
-
-    $('#mapping-modal').on 'hidden.bs.modal', =>
-      $('#mapping-modal').remove()
-
-  closeModal: (index, el) ->
-    mappings = {}
-    rows = $('.mapping-row')
-    for row in rows
-      input = $(row).find('.mapping-input').val()
-      output = $(row).find('.mapping-output').val()
-      unless $(row).find('.mapping-input').val() == "" && $(row).find('.mapping-output').val() == ""
-        mappings[input] = output
-
-    editrows = $(el).parents(".edit-rows")
-    editrows.find(".column-setting:eq(#{index})").data('mappings', mappings)
-
-    @saveColumns(editrows)
-    @redraw()
-    Designer.trigger('sidebar:redraw')
 
   serialize: ->
     {columns: @columns, style: @style, exclusions: @_exclusions}

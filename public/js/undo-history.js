@@ -20,7 +20,6 @@ window.UndoHistory = (function() {
       fromState: fromState,
       toState: toState
     });
-    console.log(this.past.length, UndoHistory.LIMIT);
     if (this.past.length > UndoHistory.LIMIT) {
       this.past.shift();
     }

@@ -9,7 +9,7 @@ class window.UndoHistory
   push: (target, fn, fromState=null, toState=null) ->
     @future = []
     @past.push({target: target, fn: fn, fromState: fromState, toState:toState})
-    console.log @past.length, UndoHistory.LIMIT
+    # console.log @past.length, UndoHistory.LIMIT
     @past.shift() if @past.length > UndoHistory.LIMIT
     @trigger('history:change')
 

@@ -6,6 +6,7 @@ window.DatatableContent = (function(_super) {
   __extends(DatatableContent, _super);
 
   function DatatableContent() {
+    this.updateMapping = __bind(this.updateMapping, this);
     this.filter_subjects = __bind(this.filter_subjects, this);
     return DatatableContent.__super__.constructor.apply(this, arguments);
   }
@@ -40,7 +41,8 @@ window.DatatableContent = (function(_super) {
   DatatableContent.prototype.initWithConfig = function(config) {
     this.columns = this.get(config.columns, []);
     this.style = $.extend({}, DatatableContent.STYLE_DEFAULTS, this.get(config.style, {}));
-    return this._exclusions = this.get(config.exclusions, '');
+    this._exclusions = this.get(config.exclusions, '');
+    return this.mappingIndex = 0;
   };
 
   DatatableContent.prototype.render_layout = function(data) {
@@ -126,7 +128,7 @@ window.DatatableContent = (function(_super) {
         return _results;
       };
     })(this);
-    return "<tr class=\"column-setting\" data-mappings=\"" + (JSON.stringify(col.mappings).replace(/\"/g, '&quot;')) + "\">\n  <td>\n    <input class=\"col-title\" name=\"col-title\" type=\"text\" value=\"" + col.title + "\" placeholder=\"Untitled...\" />\n    <span class=\"col-comp-label\">compared to:</ span>\n  </td>\n  <td>\n    <select class=\"col-value\" name=\"col-value\">\n      <option value=\"\" " + (col.value === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.value).join("\n")) + "\n    </select>\n    <select class=\"col-compare-to\" name=\"col-compare-to\">\n      <option value=\"\" " + (col.compare_to === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.compare_to).join("\n")) + "\n    </select>\n    <a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(col.mappings) ? 'Add mappings...' : 'Edit mappings...') + "</a>\n  </td>\n</tr>";
+    return "<tr class=\"column-setting\" data-mappings=\"" + (JSON.stringify(col.mappings).replace(/\"/g, '&quot;')) + "\">\n  <td>\n    <input class=\"col-title\" name=\"col-title\" type=\"text\" value=\"" + col.title + "\" placeholder=\"Untitled...\" />\n    <span class=\"col-comp-label\">compared to:</ span>\n  </td>\n  <td>\n    <select class=\"col-value\" name=\"col-value\">\n      <option value=\"\" " + (col.value === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.value).join("\n")) + "\n    </select>\n    <select class=\"col-compare-to\" name=\"col-compare-to\">\n      <option value=\"\" " + (col.compare_to === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.compare_to).join("\n")) + "\n    </select>\n    <a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(col.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a>\n  </td>\n</tr>";
   };
 
   DatatableContent.prototype.renderAppearanceOptions = function() {
@@ -183,9 +185,21 @@ window.DatatableContent = (function(_super) {
     })(this));
     self = this;
     table.on("click", ".mapping", function() {
-      return self.openModal(this);
+      var element, mappings;
+      element = this;
+      self.mappingIndex = $(this).parents('.column-setting').index();
+      mappings = $(element).parents(".edit-rows").find(".column-setting:eq(" + self.mappingIndex + ")").data('mappings');
+      return new MappingModal(mappings, self.updateMapping);
     });
     return node;
+  };
+
+  DatatableContent.prototype.updateMapping = function(newMappings) {
+    var editrows;
+    editrows = $(".edit-rows");
+    editrows.find(".column-setting:eq(" + this.mappingIndex + ")").data('mappings', newMappings);
+    this.saveColumns(editrows);
+    return this.redraw();
   };
 
   DatatableContent.prototype.headingStyles = function() {
@@ -316,64 +330,6 @@ window.DatatableContent = (function(_super) {
         return name.charCodeAt(0);
       }
     });
-  };
-
-  DatatableContent.prototype.openModal = function(el) {
-    var extrarow, index, inputrow, inputrows, k, modal, modalbody, savedMappings, v;
-    index = $(el).parents('.column-setting').index();
-    savedMappings = $(el).parents(".edit-rows").find(".column-setting:eq(" + index + ")").data('mappings');
-    inputrows = (function() {
-      var _results;
-      _results = [];
-      for (k in savedMappings) {
-        v = savedMappings[k];
-        _results.push("<div class=\"mapping-row\">\n  <input type=\"text\" name=\"mapping-input\" class=\"mapping-input\" value=\"" + k + "\">\n  <input type=\"text\" name=\"mapping-output\" class=\"mapping-output\" value=\"" + v + "\">\n</div>");
-      }
-      return _results;
-    })();
-    inputrow = inputrows.join("\n");
-    extrarow = "<div class=\"mapping-row\">\n  <input type=\"text\" name=\"mapping-input\" class=\"mapping-input\">\n  <input type=\"text\" name=\"mapping-output\" class=\"mapping-output\">\n</div>";
-    modal = "<div class=\"modal fade\" id=\"mapping-modal\">\n  <div class=\"modal-dialog\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <h4 class=\"modal-title\">Word mapping</h4>\n      </div>\n      <div class=\"modal-body\">\n        <h4 class=\"mapping-heading\">Replace</h4>\n        <h4 class=\"mapping-heading right\">With</h4>\n      </div>\n      <div class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-success pull-left\" id=\"add-mapping\">+ Add</button>\n        <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n        <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" id=\"save-mapping\">Save</button>\n      </div>\n    </div>\n  </div>\n</div>";
-    $('body').append(modal);
-    $('#mapping-modal').modal('show');
-    modalbody = $('#mapping-modal .modal-body');
-    if ($.isEmptyObject(savedMappings)) {
-      modalbody.append(extrarow);
-    } else {
-      modalbody.append(inputrow);
-    }
-    $('#add-mapping').on("click", function() {
-      return modalbody.append(extrarow);
-    });
-    $('#save-mapping').on("click", (function(_this) {
-      return function() {
-        return _this.closeModal(index, el);
-      };
-    })(this));
-    return $('#mapping-modal').on('hidden.bs.modal', (function(_this) {
-      return function() {
-        return $('#mapping-modal').remove();
-      };
-    })(this));
-  };
-
-  DatatableContent.prototype.closeModal = function(index, el) {
-    var editrows, input, mappings, output, row, rows, _i, _len;
-    mappings = {};
-    rows = $('.mapping-row');
-    for (_i = 0, _len = rows.length; _i < _len; _i++) {
-      row = rows[_i];
-      input = $(row).find('.mapping-input').val();
-      output = $(row).find('.mapping-output').val();
-      if (!($(row).find('.mapping-input').val() === "" && $(row).find('.mapping-output').val() === "")) {
-        mappings[input] = output;
-      }
-    }
-    editrows = $(el).parents(".edit-rows");
-    editrows.find(".column-setting:eq(" + index + ")").data('mappings', mappings);
-    this.saveColumns(editrows);
-    this.redraw();
-    return Designer.trigger('sidebar:redraw');
   };
 
   DatatableContent.prototype.serialize = function() {
