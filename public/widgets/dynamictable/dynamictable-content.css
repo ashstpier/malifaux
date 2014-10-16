@@ -1,0 +1,30 @@
+.widget-edit-mode .dynamictable {
+  cursor: text;
+}
+.dynamictable {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  font-size: 14px;
+  width: 100%;
+}
+.dynamictable th {
+  border: 1px solid #999;
+  margin: 0;
+  padding: .5em;
+}
+.dynamictable td {
+  border: 1px solid #999;
+  padding: 0.5em;
+}
+.dynamictable.edited td, .dynamictable.edited th {
+  padding: 0;
+}
+.dynamictable input {
+  width: 100%;
+  padding: .5em;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 14px;
+  border: none;
+}

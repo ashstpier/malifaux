@@ -17,7 +17,7 @@ window.DatatableContent = (function(_super) {
 
   DatatableContent.description = "Showing assessment points, one row per subject.";
 
-  DatatableContent.icon = "table";
+  DatatableContent.icon = "book_open";
 
   DatatableContent.STYLE_DEFAULTS = {
     subject_order: 'alphabetical',
@@ -41,8 +41,7 @@ window.DatatableContent = (function(_super) {
   DatatableContent.prototype.initWithConfig = function(config) {
     this.columns = this.get(config.columns, []);
     this.style = $.extend({}, DatatableContent.STYLE_DEFAULTS, this.get(config.style, {}));
-    this._exclusions = this.get(config.exclusions, '');
-    return this.mappingIndex = 0;
+    return this._exclusions = this.get(config.exclusions, '');
   };
 
   DatatableContent.prototype.render_layout = function(data) {
@@ -185,19 +184,23 @@ window.DatatableContent = (function(_super) {
     })(this));
     self = this;
     table.on("click", ".mapping", function() {
-      var element, mappings;
+      var element, mappingIndex, mappings;
       element = this;
-      self.mappingIndex = $(this).parents('.column-setting').index();
-      mappings = $(element).parents(".edit-rows").find(".column-setting:eq(" + self.mappingIndex + ")").data('mappings');
-      return new MappingModal(mappings, self.updateMapping);
+      mappingIndex = $(this).parents('.column-setting').index();
+      mappings = $(element).parents(".edit-rows").find(".column-setting:eq(" + mappingIndex + ")").data('mappings');
+      return new MappingModal(mappings, (function(_this) {
+        return function(newMappings) {
+          return self.updateMapping(mappingIndex, newMappings);
+        };
+      })(this));
     });
     return node;
   };
 
-  DatatableContent.prototype.updateMapping = function(newMappings) {
+  DatatableContent.prototype.updateMapping = function(index, newMappings) {
     var editrows;
     editrows = $(".edit-rows");
-    editrows.find(".column-setting:eq(" + this.mappingIndex + ")").data('mappings', newMappings);
+    editrows.find(".column-setting:eq(" + index + ")").data('mappings', newMappings);
     this.saveColumns(editrows);
     return this.redraw();
   };

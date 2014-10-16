@@ -12,7 +12,8 @@ window.Widget = (function() {
     'field': 'FieldContent',
     'name': 'NameContent',
     'subject-field': 'SubjectFieldContent',
-    'attendance': 'AttendanceContent'
+    'attendance': 'AttendanceContent',
+    'dynamictable': 'DynamicTableContent'
   };
 
   Widget.loadAll = function(cb) {

@@ -2,7 +2,7 @@ class window.DatatableContent extends WidgetContent
   @className:   "DatatableContent"
   @displayName: "Subjects Data Table"
   @description: "Showing assessment points, one row per subject."
-  @icon:        "table"
+  @icon:        "book_open"
 
   @STYLE_DEFAULTS: {
     subject_order: 'alphabetical'
@@ -22,7 +22,6 @@ class window.DatatableContent extends WidgetContent
     @columns = @get(config.columns, [])
     @style = $.extend({}, DatatableContent.STYLE_DEFAULTS, @get(config.style, {}))
     @_exclusions = @get(config.exclusions, '')
-    @mappingIndex = 0
 
   render_layout: (data) ->
     name = utils.escape(data.name)
@@ -142,14 +141,14 @@ class window.DatatableContent extends WidgetContent
     self = this
     table.on "click", ".mapping", ->
       element = this
-      self.mappingIndex = $(this).parents('.column-setting').index()
-      mappings = $(element).parents(".edit-rows").find(".column-setting:eq(#{self.mappingIndex})").data('mappings')
-      new MappingModal(mappings, self.updateMapping)
+      mappingIndex = $(this).parents('.column-setting').index()
+      mappings = $(element).parents(".edit-rows").find(".column-setting:eq(#{mappingIndex})").data('mappings')
+      new MappingModal mappings, (newMappings) => self.updateMapping(mappingIndex, newMappings)
     node
 
-  updateMapping: (newMappings) =>
+  updateMapping: (index, newMappings) =>
     editrows = $(".edit-rows")
-    editrows.find(".column-setting:eq(#{@mappingIndex})").data('mappings', newMappings)
+    editrows.find(".column-setting:eq(#{index})").data('mappings', newMappings)
 
     @saveColumns(editrows)
     @redraw()
