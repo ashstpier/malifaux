@@ -14,6 +14,8 @@ window.UndoHistory = (function() {
       toState = null;
     }
     this.future = [];
+    fromState = this.clone(fromState);
+    toState = this.clone(toState);
     this.past.push({
       target: target,
       fn: fn,
@@ -40,7 +42,7 @@ window.UndoHistory = (function() {
       return false;
     }
     step = this.past.pop();
-    step.target[step.fn].call(step.target, step.fromState);
+    step.target[step.fn].call(step.target, this.clone(step.fromState));
     this.future.push(step);
     this.trigger('history:change');
     this.trigger('history:undo');
@@ -53,11 +55,21 @@ window.UndoHistory = (function() {
       return false;
     }
     step = this.future.pop();
-    step.target[step.fn].call(step.target, step.toState);
+    step.target[step.fn].call(step.target, this.clone(step.toState));
     this.past.push(step);
     this.trigger('history:change');
     this.trigger('history:redo');
     return this.canRedo();
+  };
+
+  UndoHistory.prototype.clone = function(obj) {
+    var copy, empty;
+    if (typeof obj === 'object') {
+      empty = $.isArray(obj) ? new Array() : new Object();
+      return copy = $.extend(true, empty, obj);
+    } else {
+      return obj;
+    }
   };
 
   return UndoHistory;

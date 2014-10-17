@@ -8,12 +8,6 @@ class window.DynamicTableContent extends WidgetContent
   defaultHeight: -> 160
   editable: -> true
 
-  @DEFAULT_CONTENT: [
-      ['', '', ''],
-      ['', '', ''],
-      ['', '', '']
-    ]
-
   @STYLE_DEFAULTS: {
     header_position: 'top'
     heading_text_color: '#000000'
@@ -24,6 +18,9 @@ class window.DynamicTableContent extends WidgetContent
     font: 'Helvetica'
     size: 'Medium'
   }
+
+  @DEFAULT_COLUMNS = 3
+  @DEFAULT_ROWS = 3
 
   header_position: @property('style', 'header_position')
   font: @property('style', 'font')
@@ -36,7 +33,11 @@ class window.DynamicTableContent extends WidgetContent
 
   initWithConfig: (config) ->
     @style = $.extend({}, DynamicTableContent.STYLE_DEFAULTS, @get(config.style, {}))
-    @tabledata = @get(config.tabledata, DynamicTableContent.DEFAULT_CONTENT)
+    @tabledata = @get(config.tabledata, @makeDefaultTable())
+
+  makeDefaultTable: ->
+    for r in [1..DynamicTableContent.DEFAULT_ROWS]
+      @makeCell() for c in [1..DynamicTableContent.DEFAULT_COLUMNS]
 
   render_layout: (data, edit=false) ->
     table = $("""<div class="dynamictable-widget">
@@ -50,24 +51,30 @@ class window.DynamicTableContent extends WidgetContent
       if @style.header_position == 'top'
         if i == 0
           for column in row
-            tr.append("""<th style="#{@headingStyles()}">#{@cellContent(column, edit)}</th>""")
+            tr.append("""<th style="#{@headingStyles()}">#{@cellContent(column, data, edit)}</th>""")
         else
           for column in row
-            tr.append("""<td style="#{@cellStyles(i+1)}">#{@cellContent(column, edit)}</td>""")
+            tr.append("""<td style="#{@cellStyles(i+1)}">#{@cellContent(column, data, edit)}</td>""")
       else
         for column, c in row
           if c == 0
-            tr.append("""<th style="#{@headingStyles()}">#{@cellContent(column, edit)}</th>""")
+            tr.append("""<th style="#{@headingStyles()}">#{@cellContent(column, data, edit)}</th>""")
           else
-            tr.append("""<td style="#{@cellStyles(i+1)}">#{@cellContent(column, edit)}</td>""")
+            tr.append("""<td style="#{@cellStyles(i+1)}">#{@cellContent(column, data, edit)}</td>""")
       tbody.append(tr)
     table
 
-  cellContent: (cell, edit) ->
+  cellContent: (cell, data, edit) ->
     if edit
-      """<input type="text" value="#{cell}">"""
+      """<input type="text" data-dynamic="#{cell.dynamic}" data-key="#{cell.value}" value="#{@cellValue(cell, data)}">"""
     else
-      cell
+      @cellValue(cell, data)
+
+  cellValue: (cell, data) ->
+    if cell.dynamic
+      @fieldFrom(cell.value, data)
+    else
+      cell.value
 
   renderAppearanceOptions: ->
     [
@@ -109,27 +116,34 @@ class window.DynamicTableContent extends WidgetContent
     @tabledata[0].length
 
   setRows: (rowCount) ->
-    return @redraw() if rowCount is @numberOfRows()
-    if @numberOfRows() > rowCount
-      unless @numberOfRows() == 0 then @tabledata.pop()
-    else
-      @tabledata.push(@makeRow())
-    @setRows(rowCount)
+    return if rowCount is @numberOfRows()
+    oldTabledata = $.extend(true, [], @tabledata)
+    until rowCount is @numberOfRows()
+      if @numberOfRows() > rowCount
+        unless @numberOfRows() == 0 then @tabledata.pop()
+      else
+        @tabledata.push(@makeRow())
+    Designer.history.push(this, 'updateTable', oldTabledata, @tabledata)
+    @redraw()
 
-  makeRow: -> ('' for c in [1..@numberOfColumns()])
+
+  makeRow: -> (@makeCell() for c in [1..@numberOfColumns()])
 
   setColumns: (columnCount) ->
-    return @redraw() if columnCount is @numberOfColumns()
-    if @numberOfColumns() > columnCount
-      unless @numberOfColumns() == 0
+    return if columnCount is @numberOfColumns()
+    oldTabledata = $.extend(true, [], @tabledata)
+    until columnCount is @numberOfColumns()
+      if @numberOfColumns() > columnCount
+        unless @numberOfColumns() == 0
+          for row in @tabledata
+            row.pop()
+      else
         for row in @tabledata
-          row.pop()
-    else
-      for row in @tabledata
-        row.push(@makeColumn())
-    @setColumns(columnCount)
+          row.push(@makeCell())
+    Designer.history.push(this, 'updateTable', oldTabledata, @tabledata)
+    @redraw()
 
-  makeColumn: -> ('')
+  makeCell: (value='', dynamic=false) -> {dynamic: dynamic, value: value}
 
   render_edit: (data) ->
     @render_layout(data, true)
@@ -148,7 +162,11 @@ class window.DynamicTableContent extends WidgetContent
       cells = $(row).find('input')
       cellArray = []
       for cell in cells
-        cellArray.push($(cell).val())
+        $cell = $(cell)
+        if $cell.data('dynamic')
+          cellArray.push(@makeCell($cell.data('key'), true))
+        else
+          cellArray.push(@makeCell($cell.val(), false))
       newTabledata.push(cellArray)
 
     Designer.history.push(this, 'updateTable', @tabledata, newTabledata)
@@ -158,5 +176,9 @@ class window.DynamicTableContent extends WidgetContent
     @tabledata = newTabledata
     @redraw()
     Designer.select(@widget)
+
+  fieldFrom: (field, data) ->
+    data = data[key] for key in field.split('.')
+    data
 
   serialize: -> { tabledata: @tabledata }

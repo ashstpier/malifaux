@@ -30,8 +30,6 @@ window.DynamicTableContent = (function(_super) {
     return true;
   };
 
-  DynamicTableContent.DEFAULT_CONTENT = [['', '', ''], ['', '', ''], ['', '', '']];
-
   DynamicTableContent.STYLE_DEFAULTS = {
     header_position: 'top',
     heading_text_color: '#000000',
@@ -42,6 +40,10 @@ window.DynamicTableContent = (function(_super) {
     font: 'Helvetica',
     size: 'Medium'
   };
+
+  DynamicTableContent.DEFAULT_COLUMNS = 3;
+
+  DynamicTableContent.DEFAULT_ROWS = 3;
 
   DynamicTableContent.prototype.header_position = DynamicTableContent.property('style', 'header_position');
 
@@ -61,7 +63,23 @@ window.DynamicTableContent = (function(_super) {
 
   DynamicTableContent.prototype.initWithConfig = function(config) {
     this.style = $.extend({}, DynamicTableContent.STYLE_DEFAULTS, this.get(config.style, {}));
-    return this.tabledata = this.get(config.tabledata, DynamicTableContent.DEFAULT_CONTENT);
+    return this.tabledata = this.get(config.tabledata, this.makeDefaultTable());
+  };
+
+  DynamicTableContent.prototype.makeDefaultTable = function() {
+    var c, r, _i, _ref, _results;
+    _results = [];
+    for (r = _i = 1, _ref = DynamicTableContent.DEFAULT_ROWS; 1 <= _ref ? _i <= _ref : _i >= _ref; r = 1 <= _ref ? ++_i : --_i) {
+      _results.push((function() {
+        var _j, _ref1, _results1;
+        _results1 = [];
+        for (c = _j = 1, _ref1 = DynamicTableContent.DEFAULT_COLUMNS; 1 <= _ref1 ? _j <= _ref1 : _j >= _ref1; c = 1 <= _ref1 ? ++_j : --_j) {
+          _results1.push(this.makeCell());
+        }
+        return _results1;
+      }).call(this));
+    }
+    return _results;
   };
 
   DynamicTableContent.prototype.render_layout = function(data, edit) {
@@ -83,21 +101,21 @@ window.DynamicTableContent = (function(_super) {
         if (i === 0) {
           for (_j = 0, _len1 = row.length; _j < _len1; _j++) {
             column = row[_j];
-            tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, edit)) + "</th>");
+            tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, data, edit)) + "</th>");
           }
         } else {
           for (_k = 0, _len2 = row.length; _k < _len2; _k++) {
             column = row[_k];
-            tr.append("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(column, edit)) + "</td>");
+            tr.append("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(column, data, edit)) + "</td>");
           }
         }
       } else {
         for (c = _l = 0, _len3 = row.length; _l < _len3; c = ++_l) {
           column = row[c];
           if (c === 0) {
-            tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, edit)) + "</th>");
+            tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, data, edit)) + "</th>");
           } else {
-            tr.append("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(column, edit)) + "</td>");
+            tr.append("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(column, data, edit)) + "</td>");
           }
         }
       }
@@ -106,11 +124,19 @@ window.DynamicTableContent = (function(_super) {
     return table;
   };
 
-  DynamicTableContent.prototype.cellContent = function(cell, edit) {
+  DynamicTableContent.prototype.cellContent = function(cell, data, edit) {
     if (edit) {
-      return "<input type=\"text\" value=\"" + cell + "\">";
+      return "<input type=\"text\" data-dynamic=\"" + cell.dynamic + "\" data-key=\"" + cell.value + "\" value=\"" + (this.cellValue(cell, data)) + "\">";
     } else {
-      return cell;
+      return this.cellValue(cell, data);
+    }
+  };
+
+  DynamicTableContent.prototype.cellValue = function(cell, data) {
+    if (cell.dynamic) {
+      return this.fieldFrom(cell.value, data);
+    } else {
+      return cell.value;
     }
   };
 
@@ -172,53 +198,71 @@ window.DynamicTableContent = (function(_super) {
   };
 
   DynamicTableContent.prototype.setRows = function(rowCount) {
+    var oldTabledata;
     if (rowCount === this.numberOfRows()) {
-      return this.redraw();
+      return;
     }
-    if (this.numberOfRows() > rowCount) {
-      if (this.numberOfRows() !== 0) {
-        this.tabledata.pop();
+    oldTabledata = $.extend(true, [], this.tabledata);
+    while (rowCount !== this.numberOfRows()) {
+      if (this.numberOfRows() > rowCount) {
+        if (this.numberOfRows() !== 0) {
+          this.tabledata.pop();
+        }
+      } else {
+        this.tabledata.push(this.makeRow());
       }
-    } else {
-      this.tabledata.push(this.makeRow());
     }
-    return this.setRows(rowCount);
+    Designer.history.push(this, 'updateTable', oldTabledata, this.tabledata);
+    return this.redraw();
   };
 
   DynamicTableContent.prototype.makeRow = function() {
     var c, _i, _ref, _results;
     _results = [];
     for (c = _i = 1, _ref = this.numberOfColumns(); 1 <= _ref ? _i <= _ref : _i >= _ref; c = 1 <= _ref ? ++_i : --_i) {
-      _results.push('');
+      _results.push(this.makeCell());
     }
     return _results;
   };
 
   DynamicTableContent.prototype.setColumns = function(columnCount) {
-    var row, _i, _j, _len, _len1, _ref, _ref1;
+    var oldTabledata, row, _i, _j, _len, _len1, _ref, _ref1;
     if (columnCount === this.numberOfColumns()) {
-      return this.redraw();
+      return;
     }
-    if (this.numberOfColumns() > columnCount) {
-      if (this.numberOfColumns() !== 0) {
-        _ref = this.tabledata;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          row = _ref[_i];
-          row.pop();
+    oldTabledata = $.extend(true, [], this.tabledata);
+    while (columnCount !== this.numberOfColumns()) {
+      if (this.numberOfColumns() > columnCount) {
+        if (this.numberOfColumns() !== 0) {
+          _ref = this.tabledata;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            row = _ref[_i];
+            row.pop();
+          }
+        }
+      } else {
+        _ref1 = this.tabledata;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          row = _ref1[_j];
+          row.push(this.makeCell());
         }
       }
-    } else {
-      _ref1 = this.tabledata;
-      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-        row = _ref1[_j];
-        row.push(this.makeColumn());
-      }
     }
-    return this.setColumns(columnCount);
+    Designer.history.push(this, 'updateTable', oldTabledata, this.tabledata);
+    return this.redraw();
   };
 
-  DynamicTableContent.prototype.makeColumn = function() {
-    return '';
+  DynamicTableContent.prototype.makeCell = function(value, dynamic) {
+    if (value == null) {
+      value = '';
+    }
+    if (dynamic == null) {
+      dynamic = false;
+    }
+    return {
+      dynamic: dynamic,
+      value: value
+    };
   };
 
   DynamicTableContent.prototype.render_edit = function(data) {
@@ -238,7 +282,7 @@ window.DynamicTableContent = (function(_super) {
   };
 
   DynamicTableContent.prototype.buildTabledata = function(el) {
-    var cell, cellArray, cells, newTabledata, row, rows, _i, _j, _len, _len1;
+    var $cell, cell, cellArray, cells, newTabledata, row, rows, _i, _j, _len, _len1;
     newTabledata = [];
     rows = $(el).find('tr');
     for (_i = 0, _len = rows.length; _i < _len; _i++) {
@@ -247,7 +291,12 @@ window.DynamicTableContent = (function(_super) {
       cellArray = [];
       for (_j = 0, _len1 = cells.length; _j < _len1; _j++) {
         cell = cells[_j];
-        cellArray.push($(cell).val());
+        $cell = $(cell);
+        if ($cell.data('dynamic')) {
+          cellArray.push(this.makeCell($cell.data('key'), true));
+        } else {
+          cellArray.push(this.makeCell($cell.val(), false));
+        }
       }
       newTabledata.push(cellArray);
     }
@@ -259,6 +308,16 @@ window.DynamicTableContent = (function(_super) {
     this.tabledata = newTabledata;
     this.redraw();
     return Designer.select(this.widget);
+  };
+
+  DynamicTableContent.prototype.fieldFrom = function(field, data) {
+    var key, _i, _len, _ref;
+    _ref = field.split('.');
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      key = _ref[_i];
+      data = data[key];
+    }
+    return data;
   };
 
   DynamicTableContent.prototype.serialize = function() {
