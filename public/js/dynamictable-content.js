@@ -23,14 +23,14 @@ window.DynamicTableContent = (function(_super) {
   };
 
   DynamicTableContent.prototype.defaultHeight = function() {
-    return 240;
+    return 160;
   };
 
   DynamicTableContent.prototype.editable = function() {
     return true;
   };
 
-  DynamicTableContent.DEFAULT_CONTENT = [['test', 'test', 'test'], ['test', 'test', 'test'], ['test', 'test', 'test']];
+  DynamicTableContent.DEFAULT_CONTENT = [['', '', ''], ['', '', ''], ['', '', '']];
 
   DynamicTableContent.STYLE_DEFAULTS = {
     header_position: 'top',
@@ -66,7 +66,10 @@ window.DynamicTableContent = (function(_super) {
 
   DynamicTableContent.prototype.render_layout = function(data, edit) {
     var c, column, i, row, table, tbody, tr, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref;
-    table = $("<div class=\"dynamictable-widget\">\n  <table class=\"dynamictable " + (edit != null ? edit : edit = '') + "\" contenteditable=\"true\" style=\"" + (this.styleString({
+    if (edit == null) {
+      edit = false;
+    }
+    table = $("<div class=\"dynamictable-widget\">\n  <table class=\"dynamictable " + (edit ? "edited" : void 0) + "\" style=\"" + (this.styleString({
       'font-family': utils.fontMap[this.style.font],
       'font-size': utils.sizeMap[this.style.size],
       'color': this.style.color
@@ -80,27 +83,35 @@ window.DynamicTableContent = (function(_super) {
         if (i === 0) {
           for (_j = 0, _len1 = row.length; _j < _len1; _j++) {
             column = row[_j];
-            tr.append(edit ? "<th style=\"" + (this.headingStyles()) + "\"><input type=\"text\" value=\"" + column + "\"></th>" : "<th style=\"" + (this.headingStyles()) + "\">" + column + "</th>");
+            tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, edit)) + "</th>");
           }
         } else {
           for (_k = 0, _len2 = row.length; _k < _len2; _k++) {
             column = row[_k];
-            tr.append(edit ? "<td style=\"" + (this.cellStyles(i + 1)) + "\"><input type=\"text\" value=\"" + column + "\"></td>" : "<td style=\"" + (this.cellStyles(i + 1)) + "\">" + column + "</td>");
+            tr.append("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(column, edit)) + "</td>");
           }
         }
       } else {
         for (c = _l = 0, _len3 = row.length; _l < _len3; c = ++_l) {
           column = row[c];
           if (c === 0) {
-            tr.append(edit ? "<th style=\"" + (this.headingStyles()) + "\"><input type=\"text\" value=\"" + column + "\"></th>" : "<th style=\"" + (this.headingStyles()) + "\">" + column + "</th>");
+            tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, edit)) + "</th>");
           } else {
-            tr.append(edit ? "<td style=\"" + (this.cellStyles(i + 1)) + "\"><input type=\"text\" value=\"" + column + "\"></td>" : "<td style=\"" + (this.cellStyles(i + 1)) + "\">" + column + "</td>");
+            tr.append("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(column, edit)) + "</td>");
           }
         }
       }
       tbody.append(tr);
     }
     return table;
+  };
+
+  DynamicTableContent.prototype.cellContent = function(cell, edit) {
+    if (edit) {
+      return "<input type=\"text\" value=\"" + cell + "\">";
+    } else {
+      return cell;
+    }
   };
 
   DynamicTableContent.prototype.renderAppearanceOptions = function() {
@@ -178,7 +189,7 @@ window.DynamicTableContent = (function(_super) {
     var c, _i, _ref, _results;
     _results = [];
     for (c = _i = 1, _ref = this.numberOfColumns(); 1 <= _ref ? _i <= _ref : _i >= _ref; c = 1 <= _ref ? ++_i : --_i) {
-      _results.push('test');
+      _results.push('');
     }
     return _results;
   };
@@ -207,33 +218,41 @@ window.DynamicTableContent = (function(_super) {
   };
 
   DynamicTableContent.prototype.makeColumn = function() {
-    return 'test';
+    return '';
   };
 
   DynamicTableContent.prototype.render_edit = function(data) {
-    return this.render_layout(data, 'edited');
+    return this.render_layout(data, true);
   };
 
   DynamicTableContent.prototype.bindEvents = function(el) {
-    return el.on('input', (function(_this) {
+    var updateFn;
+    updateFn = (function(_this) {
       return function() {
-        var cell, cellArray, cells, newTabledata, row, rows, _i, _j, _len, _len1;
-        newTabledata = [];
-        rows = $(el).find('tr');
-        for (_i = 0, _len = rows.length; _i < _len; _i++) {
-          row = rows[_i];
-          cells = $(row).find('input');
-          cellArray = [];
-          for (_j = 0, _len1 = cells.length; _j < _len1; _j++) {
-            cell = cells[_j];
-            cellArray.push($(cell).val());
-          }
-          newTabledata.push(cellArray);
-        }
-        _this.tabledata = newTabledata;
-        return Designer.history.push(_this, 'updateTable', _this.tabledata, newTabledata);
+        return _this.buildTabledata(el);
       };
-    })(this));
+    })(this);
+    el.on('change', updateFn);
+    this.widget.unbind('widget:layout-switching', updateFn);
+    return this.widget.bind('widget:layout-switching', updateFn);
+  };
+
+  DynamicTableContent.prototype.buildTabledata = function(el) {
+    var cell, cellArray, cells, newTabledata, row, rows, _i, _j, _len, _len1;
+    newTabledata = [];
+    rows = $(el).find('tr');
+    for (_i = 0, _len = rows.length; _i < _len; _i++) {
+      row = rows[_i];
+      cells = $(row).find('input');
+      cellArray = [];
+      for (_j = 0, _len1 = cells.length; _j < _len1; _j++) {
+        cell = cells[_j];
+        cellArray.push($(cell).val());
+      }
+      newTabledata.push(cellArray);
+    }
+    Designer.history.push(this, 'updateTable', this.tabledata, newTabledata);
+    return this.tabledata = newTabledata;
   };
 
   DynamicTableContent.prototype.updateTable = function(newTabledata) {

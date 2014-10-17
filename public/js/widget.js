@@ -176,13 +176,23 @@ window.Widget = (function() {
   };
 
   Widget.prototype.layoutMode = function() {
+    if (this.currentMode === 'layout') {
+      return;
+    }
+    this.trigger('widget:layout-switching', this);
     this.el.draggable('enable');
-    return this.renderContent('layout');
+    this.renderContent('layout');
+    return this.trigger('widget:layout-switched', this);
   };
 
   Widget.prototype.editMode = function() {
+    if (this.currentMode === 'edit') {
+      return;
+    }
+    this.trigger('widget:edit-switching', this);
     this.el.draggable('disable');
-    return this.renderContent('edit');
+    this.renderContent('edit');
+    return this.trigger('widget:edit-switched', this);
   };
 
   Widget.prototype.remove = function() {
