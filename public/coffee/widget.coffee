@@ -65,7 +65,7 @@ class window.Widget
 
   render: (mode) ->
     @el = $("""
-      <div data-guid="#{@guid}" class="widget" style="#{@originStyles()}">
+      <div data-guid="#{@guid}" class="widget widget-#{@cssClass()}" style="#{@originStyles()}">
         <div class="widget-content"></div>
       </div>
     """)
@@ -75,6 +75,9 @@ class window.Widget
       @el.append("""<button class="widget-button widget-delete">x</button>""")
       @bindEvents()
     @el
+
+  cssClass: ->
+    @content.className().toLowerCase().replace('content','')
 
   renderContent: (mode) ->
     @currentMode = mode

@@ -5,7 +5,7 @@ class window.DynamicTableContent extends WidgetContent
   @icon:        "table"
 
   defaultWidth: -> 360
-  defaultHeight: -> 160
+  defaultHeight: -> 110
   editable: -> true
 
   @STYLE_DEFAULTS: {
@@ -33,6 +33,7 @@ class window.DynamicTableContent extends WidgetContent
 
   initWithConfig: (config) ->
     @style = $.extend({}, DynamicTableContent.STYLE_DEFAULTS, @get(config.style, {}))
+    @mappings = @get(config.mappings, {})
     @tabledata = @get(config.tabledata, @makeDefaultTable())
 
   makeDefaultTable: ->
@@ -62,6 +63,21 @@ class window.DynamicTableContent extends WidgetContent
           else
             tr.append("""<td style="#{@cellStyles(i+1)}">#{@cellContent(column, data, edit)}</td>""")
       tbody.append(tr)
+
+    self = this
+    table.on "click", "input", ->
+      el = $(this)
+      $('.dynamic-list').remove()
+      el.parent().append(self.dynamicOptions(el))
+
+      $('.dynamic-list').css('top', el.height() + 1)
+
+      $('.dynamic-list').on "click", "li", ->
+        option = $(this).text()
+        el.attr('data-dynamic', true)
+        el.attr('data-key', option)
+        $('.dynamic-list').remove()
+        el.val(self.fieldFrom($(this).text(), data))
     table
 
   cellContent: (cell, data, edit) ->
@@ -72,9 +88,20 @@ class window.DynamicTableContent extends WidgetContent
 
   cellValue: (cell, data) ->
     if cell.dynamic
-      @fieldFrom(cell.value, data)
+      value = @fieldFrom(cell.value, data)
+      console.log @mappings
+      @mappings[value] or value
     else
       cell.value
+
+  dynamicOptions: (el) ->
+    list = """<ul class="dynamic-list">"""
+    for option in @metrics()
+      if el.attr('data-key') is option
+        list += """<li>#{option}<i class="glyphicons ok_2"></i></li>"""
+      else
+        list += """<li>#{option}</li>"""
+    list += """</ul>"""
 
   renderAppearanceOptions: ->
     [
@@ -92,7 +119,24 @@ class window.DynamicTableContent extends WidgetContent
       @option('select', 'header_position', "Header position", options: {top: "Top", left: 'Left'})
       @option('text', 'numberOfColumns', "No. of columns")
       @option('text', 'numberOfRows', "No. of rows")
+      @mappingSettings()
     ]
+
+  mappingSettings: ->
+    node = $("""<div class="mapping-option"><a href="#" class="mapping">#{if $.isEmptyObject(@mappings) then 'Add word mappings...' else 'Edit word mappings...'}</a></div>""")
+    self = this
+    node.on "click", ".mapping", =>
+      new MappingModal(@mappings, @changeMapping)
+    node
+
+  changeMapping: (newMappings) =>
+    oldMappings = @mappings
+    @updateMapping(newMappings)
+    Designer.history.push(this, 'updateMapping', oldMappings, newMappings)
+
+  updateMapping: (mappings) =>
+    @mappings = mappings
+    @redraw()
 
   headingStyles: ->
     @styleString('background-color': @style.heading_background_color, color: @style.heading_text_color)
@@ -108,7 +152,7 @@ class window.DynamicTableContent extends WidgetContent
         @setRows(val)
     @tabledata.length
 
-  numberOfColumns: (val=null) ->
+  numberOfColumns: (val=null) =>
     if val? and val.length > 0 and Number(val)
       val = Number(val)
       if val > 0
@@ -143,13 +187,16 @@ class window.DynamicTableContent extends WidgetContent
     Designer.history.push(this, 'updateTable', oldTabledata, @tabledata)
     @redraw()
 
-  makeCell: (value='', dynamic=false) -> {dynamic: dynamic, value: value}
+  makeCell: (value='', dynamic=false) => {dynamic: dynamic, value: value}
 
   render_edit: (data) ->
     @render_layout(data, true)
 
   bindEvents: (el) ->
     updateFn = => @buildTabledata(el)
+    el.on 'input', 'input', ->
+      $(this).attr('data-dynamic', false)
+      $(this).attr('data-key', '')
     el.on 'change', updateFn
     @widget.unbind 'widget:layout-switching', updateFn
     @widget.bind 'widget:layout-switching', updateFn
@@ -181,4 +228,4 @@ class window.DynamicTableContent extends WidgetContent
     data = data[key] for key in field.split('.')
     data
 
-  serialize: -> { tabledata: @tabledata }
+  serialize: -> { tabledata: @tabledata, style: @style, mappings: @mappings }

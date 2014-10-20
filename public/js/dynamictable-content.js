@@ -7,6 +7,10 @@ window.DynamicTableContent = (function(_super) {
 
   function DynamicTableContent() {
     this.updateTable = __bind(this.updateTable, this);
+    this.makeCell = __bind(this.makeCell, this);
+    this.numberOfColumns = __bind(this.numberOfColumns, this);
+    this.updateMapping = __bind(this.updateMapping, this);
+    this.changeMapping = __bind(this.changeMapping, this);
     return DynamicTableContent.__super__.constructor.apply(this, arguments);
   }
 
@@ -23,7 +27,7 @@ window.DynamicTableContent = (function(_super) {
   };
 
   DynamicTableContent.prototype.defaultHeight = function() {
-    return 160;
+    return 110;
   };
 
   DynamicTableContent.prototype.editable = function() {
@@ -63,6 +67,7 @@ window.DynamicTableContent = (function(_super) {
 
   DynamicTableContent.prototype.initWithConfig = function(config) {
     this.style = $.extend({}, DynamicTableContent.STYLE_DEFAULTS, this.get(config.style, {}));
+    this.mappings = this.get(config.mappings, {});
     return this.tabledata = this.get(config.tabledata, this.makeDefaultTable());
   };
 
@@ -83,7 +88,7 @@ window.DynamicTableContent = (function(_super) {
   };
 
   DynamicTableContent.prototype.render_layout = function(data, edit) {
-    var c, column, i, row, table, tbody, tr, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref;
+    var c, column, i, row, self, table, tbody, tr, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref;
     if (edit == null) {
       edit = false;
     }
@@ -121,6 +126,22 @@ window.DynamicTableContent = (function(_super) {
       }
       tbody.append(tr);
     }
+    self = this;
+    table.on("click", "input", function() {
+      var el;
+      el = $(this);
+      $('.dynamic-list').remove();
+      el.parent().append(self.dynamicOptions(el));
+      $('.dynamic-list').css('top', el.height() + 1);
+      return $('.dynamic-list').on("click", "li", function() {
+        var option;
+        option = $(this).text();
+        el.attr('data-dynamic', true);
+        el.attr('data-key', option);
+        $('.dynamic-list').remove();
+        return el.val(self.fieldFrom($(this).text(), data));
+      });
+    });
     return table;
   };
 
@@ -133,11 +154,29 @@ window.DynamicTableContent = (function(_super) {
   };
 
   DynamicTableContent.prototype.cellValue = function(cell, data) {
+    var value;
     if (cell.dynamic) {
-      return this.fieldFrom(cell.value, data);
+      value = this.fieldFrom(cell.value, data);
+      console.log(this.mappings);
+      return this.mappings[value] || value;
     } else {
       return cell.value;
     }
+  };
+
+  DynamicTableContent.prototype.dynamicOptions = function(el) {
+    var list, option, _i, _len, _ref;
+    list = "<ul class=\"dynamic-list\">";
+    _ref = this.metrics();
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      option = _ref[_i];
+      if (el.attr('data-key') === option) {
+        list += "<li>" + option + "<i class=\"glyphicons ok_2\"></i></li>";
+      } else {
+        list += "<li>" + option + "</li>";
+      }
+    }
+    return list += "</ul>";
   };
 
   DynamicTableContent.prototype.renderAppearanceOptions = function() {
@@ -151,8 +190,32 @@ window.DynamicTableContent = (function(_super) {
           top: "Top",
           left: 'Left'
         }
-      }), this.option('text', 'numberOfColumns', "No. of columns"), this.option('text', 'numberOfRows', "No. of rows")
+      }), this.option('text', 'numberOfColumns', "No. of columns"), this.option('text', 'numberOfRows', "No. of rows"), this.mappingSettings()
     ];
+  };
+
+  DynamicTableContent.prototype.mappingSettings = function() {
+    var node, self;
+    node = $("<div class=\"mapping-option\"><a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(this.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a></div>");
+    self = this;
+    node.on("click", ".mapping", (function(_this) {
+      return function() {
+        return new MappingModal(_this.mappings, _this.changeMapping);
+      };
+    })(this));
+    return node;
+  };
+
+  DynamicTableContent.prototype.changeMapping = function(newMappings) {
+    var oldMappings;
+    oldMappings = this.mappings;
+    this.updateMapping(newMappings);
+    return Designer.history.push(this, 'updateMapping', oldMappings, newMappings);
+  };
+
+  DynamicTableContent.prototype.updateMapping = function(mappings) {
+    this.mappings = mappings;
+    return this.redraw();
   };
 
   DynamicTableContent.prototype.headingStyles = function() {
@@ -276,6 +339,10 @@ window.DynamicTableContent = (function(_super) {
         return _this.buildTabledata(el);
       };
     })(this);
+    el.on('input', 'input', function() {
+      $(this).attr('data-dynamic', false);
+      return $(this).attr('data-key', '');
+    });
     el.on('change', updateFn);
     this.widget.unbind('widget:layout-switching', updateFn);
     return this.widget.bind('widget:layout-switching', updateFn);
@@ -322,7 +389,9 @@ window.DynamicTableContent = (function(_super) {
 
   DynamicTableContent.prototype.serialize = function() {
     return {
-      tabledata: this.tabledata
+      tabledata: this.tabledata,
+      style: this.style,
+      mappings: this.mappings
     };
   };
 
