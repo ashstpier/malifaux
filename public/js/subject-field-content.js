@@ -35,18 +35,24 @@ window.SubjectFieldContent = (function(_super) {
   };
 
   SubjectFieldContent.prototype.renderConfigOptions = function() {
-    return [
-      this.option('text', 'subject', "Subject", {
-        hint: "The 2 or 3 letter CCR subject code you would like to pull from."
-      }), this.option('text', 'field', "Field", {
+    var options;
+    options = [
+      this.option('text', 'field', "Field", {
         hint: "The subject scoped CCR field you would like to be merged, the data shown is only a sample of the final output and the selected field may not have any data."
       })
     ];
+    if (this.widget.subject === null) {
+      options.unshift(this.option('text', 'subject', "Subject", {
+        hint: "The 2 or 3 letter CCR subject code you would like to pull from."
+      }));
+    }
+    return options;
   };
 
   SubjectFieldContent.prototype.fieldFrom = function(data) {
-    var _ref;
-    return ((_ref = data.subjects[this.subject()]) != null ? _ref.results[this.field()] : void 0) || "? No Value ?";
+    var subject, _ref;
+    subject = this.widget.subject ? this.widget.subject : this.subject();
+    return ((_ref = data.subjects[subject]) != null ? _ref.results[this.field()] : void 0) || "? No Value ?";
   };
 
   SubjectFieldContent.prototype.subject = SubjectFieldContent.property('_subject');

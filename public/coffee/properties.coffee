@@ -8,6 +8,19 @@ class window.Properties
   render: ->
     @el.append """
       <h2 class="prop-selection"></h2>
+      <section class="prop-section prop-page-options">
+        <h3 class="prop-section-header">Options</h3>
+        <div class="prop-content">
+          <form id="orientation">
+            <input type="radio" name="orientation" value="portrait"> Portrait
+            <input type="radio" name="orientation" value="landscape"> Landscape
+          </form>
+          <form id="pagetype">
+            <input type="radio" name="pagetype" value="student">Student per page
+            <input type="radio" name="pagetype" value="subject">Subject per page
+          </form>
+        </div>
+      </section>
       <section class="prop-section prop-layout">
         <h3 class="prop-section-header">Layout</h3>
         <div class="prop-content">
@@ -63,15 +76,18 @@ class window.Properties
     @setConfigOptions()
 
   enable: ->
+    @el.find('.prop-page-options').hide()
+    @el.find('.prop-layout').show()
     @el.removeClass('disabled')
     @el.find('.prop-input').prop('disabled', false)
     @el.find('.prop-selection').text(@selected.displayName())
     @redraw()
 
   disable: ->
-    @el.addClass('disabled')
+    @el.find('.prop-layout').hide()
+    @el.find('.prop-page-options').show()
     @el.find('.prop-input').prop('disabled', true)
-    @el.find('.prop-selection').html('Nothing Selected')
+    @el.find('.prop-selection').html('Page')
     @clearAppearanceOptions()
     @clearConfigOptions()
 

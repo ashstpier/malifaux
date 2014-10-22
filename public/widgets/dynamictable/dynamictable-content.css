@@ -64,16 +64,20 @@
   -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
   padding: 0;
   margin: 0;
+  overflow: auto;
+  height: 300px;
 }
 .dynamic-list li {
   cursor: pointer;
   padding: 5px 30px 5px 10px;
   font-weight: normal;
   font-size: 14px;
+  white-space: nowrap;
 }
 .dynamic-list li:hover {
   background-color: #ddd;
 }
 .mapping {
   margin-top: 10px;
+  font-size: 11px;
 }

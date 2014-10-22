@@ -16,13 +16,16 @@ class window.SubjectFieldContent extends FieldContent
     $("""<div class="subject-field-widget" style="#{@textStyles()}">#{@fieldFrom(data)}</div>""")
 
   renderConfigOptions: ->
-    [
-      @option('text', 'subject', "Subject", hint: "The 2 or 3 letter CCR subject code you would like to pull from.")
+    options = [
       @option('text', 'field', "Field", hint: "The subject scoped CCR field you would like to be merged, the data shown is only a sample of the final output and the selected field may not have any data.")
     ]
+    if @widget.subject is null
+      options.unshift(@option('text', 'subject', "Subject", hint: "The 2 or 3 letter CCR subject code you would like to pull from."))
+    options
 
   fieldFrom: (data) ->
-    data.subjects[@subject()]?.results[@field()] or "? No Value ?"
+    subject = if @widget.subject then @widget.subject else @subject()
+    data.subjects[subject]?.results[@field()] or "? No Value ?"
 
   subject: @property('_subject')
 

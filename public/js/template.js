@@ -24,7 +24,8 @@ window.Template = (function() {
       key: utils.guid(),
       name: "Untitled Template",
       layout: [],
-      orientation: 'portrait'
+      orientation: 'portrait',
+      pagetype: 'student'
     });
     return template;
   };
@@ -40,24 +41,50 @@ window.Template = (function() {
     this.name = description.name;
     this.layout = description.layout;
     this.orientation = description.orientation;
+    this.pagetype = description.pagetype;
   }
 
-  Template.prototype.render = function(mode, data) {
+  Template.prototype.render = function(mode, data, subject) {
     var widgetConfig, _i, _len, _ref;
+    if (data == null) {
+      data = null;
+    }
+    if (subject == null) {
+      subject = null;
+    }
     _ref = this.layout;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       widgetConfig = _ref[_i];
-      this.addWidget(widgetConfig, mode, data);
+      this.addWidget(widgetConfig, mode, data, subject);
     }
     return this.layout = [];
   };
 
-  Template.prototype.addWidget = function(widgetConfig, mode, data) {
+  Template.prototype.addWidget = function(widgetConfig, mode, data, subject) {
     var widget;
-    widget = widgetConfig.constructor.name === 'Widget' ? widgetConfig : new Widget(widgetConfig, data);
+    if (data == null) {
+      data = null;
+    }
+    if (subject == null) {
+      subject = null;
+    }
+    data = data || utils.fakeStudentData();
+    subject = subject || utils.subject(this.pagetype);
+    widget = widgetConfig.constructor.name === 'Widget' ? widgetConfig : new Widget(widgetConfig, data, subject);
     this.widgets.push(widget);
     this.page.append(widget.render(mode));
     return widget;
+  };
+
+  Template.prototype.redraw = function() {
+    var widget, _i, _len, _ref, _results;
+    _ref = this.widgets;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      widget = _ref[_i];
+      _results.push(widget.redraw());
+    }
+    return _results;
   };
 
   Template.prototype.removeWidget = function(widget) {
@@ -111,6 +138,7 @@ window.Template = (function() {
       layout: layout,
       name: this.name,
       orientation: this.orientation,
+      pagetype: this.pagetype,
       screenshot: this.screenshot
     };
     return data;

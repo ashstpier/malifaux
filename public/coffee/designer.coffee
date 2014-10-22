@@ -45,8 +45,32 @@ window.Designer = {
         """
 
   setOrientation: (orientation) ->
-    $('#page').attr('class', orientation)
     @template.orientation = orientation
+    @addPageClass()
+
+  setPageType: (pagetype) ->
+    if pagetype is "subject"
+      @template.pagetype = "subject"
+    else
+      @template.pagetype = "student"
+    @addPageClass()
+    @reloadTemplate()
+
+  reloadTemplate: ->
+    config = @template.serialize()
+    @template.removeAllWidgets()
+    @template = new Template(config)
+    @template.render('layout')
+
+
+  addPageClass: ->
+    $('#page').attr('class', '')
+    $('#page').addClass("#{@template.orientation} #{@template.pagetype}")
+
+  isSubjectPage: -> (@template.pagetype is 'subject')
+
+  isStudentPage: -> (@template.pagetype is 'student')
+
 
   bindEvents: ->
     $('#save').click => @saveAndExit()
@@ -54,6 +78,7 @@ window.Designer = {
     $('#exit a').click => @promptSave()
     $('#page').on 'mousedown', (e) => @maybeClearSelection(e.target)
     $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())
+    $('#pagetype input:radio').change (e) => @setPageType($(e.currentTarget).val())
     $('#name').blur => @updateName()
     $('#name').keypress (e) => $('#name').blur() if e.which == 13
     $('#name').click (e) => $(e.currentTarget).selectText()
@@ -154,10 +179,11 @@ window.Designer = {
   load: ->
     $('#name').text(@template.name)
     $("#orientation input:radio[value='#{@template.orientation}']").attr('checked', true)
-    $('#page').attr("class", @template.orientation)
+    $("#pagetype input:radio[value='#{@template.pagetype}']").attr('checked', true)
+    $('#page').addClass("#{@template.orientation} #{@template.pagetype}")
+    subject = if @isSubjectPage() then utils.fakeSubject() else null
     @template.render("layout")
 
-  save: -> @template.save
   discard: -> @exitDesigner()
   clear: -> @template.removeAllWidgets()
 

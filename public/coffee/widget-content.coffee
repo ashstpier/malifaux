@@ -38,7 +38,7 @@ class window.WidgetContent
   constructor: (@widget, config={}) ->
     @initWithConfig(config)
 
-  render: (mode= 'layout', data=utils.fakeStudentData()) ->
+  render: (mode, data) ->
     @el = @["render_#{mode}"].call(this, data)
     @bindEvents(@el) unless mode is 'display'
     @el

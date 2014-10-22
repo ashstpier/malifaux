@@ -69,12 +69,6 @@ window.WidgetContent = (function() {
   }
 
   WidgetContent.prototype.render = function(mode, data) {
-    if (mode == null) {
-      mode = 'layout';
-    }
-    if (data == null) {
-      data = utils.fakeStudentData();
-    }
     this.el = this["render_" + mode].call(this, data);
     if (mode !== 'display') {
       this.bindEvents(this.el);
