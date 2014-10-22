@@ -45,14 +45,23 @@ window.Designer = {
         """
 
   setOrientation: (orientation) ->
+    Designer.history.push(this, 'updateOrientation', @template.orientation, orientation)
+    @updateOrientation(orientation)
+
+  updateOrientation: (orientation) ->
     @template.orientation = orientation
+    $("#orientation input:radio").removeAttr('checked')
+    $("#orientation input:radio[value='#{@template.orientation}']").prop('checked', true)
     @addPageClass()
 
   setPageType: (pagetype) ->
-    if pagetype is "subject"
-      @template.pagetype = "subject"
-    else
-      @template.pagetype = "student"
+    Designer.history.push(this, 'updatePageType', @template.pagetype, pagetype)
+    @updatePageType(pagetype)
+
+  updatePageType: (pagetype) ->
+    @template.pagetype = pagetype
+    $("#pagetype input:radio").removeAttr('checked')
+    $("#pagetype input:radio[value='#{@template.pagetype}']").prop('checked', true)
     @addPageClass()
     @reloadTemplate()
 

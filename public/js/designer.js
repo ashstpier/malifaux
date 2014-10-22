@@ -56,15 +56,23 @@ window.Designer = {
     return _results;
   },
   setOrientation: function(orientation) {
+    Designer.history.push(this, 'updateOrientation', this.template.orientation, orientation);
+    return this.updateOrientation(orientation);
+  },
+  updateOrientation: function(orientation) {
     this.template.orientation = orientation;
+    $("#orientation input:radio").removeAttr('checked');
+    $("#orientation input:radio[value='" + this.template.orientation + "']").prop('checked', true);
     return this.addPageClass();
   },
   setPageType: function(pagetype) {
-    if (pagetype === "subject") {
-      this.template.pagetype = "subject";
-    } else {
-      this.template.pagetype = "student";
-    }
+    Designer.history.push(this, 'updatePageType', this.template.pagetype, pagetype);
+    return this.updatePageType(pagetype);
+  },
+  updatePageType: function(pagetype) {
+    this.template.pagetype = pagetype;
+    $("#pagetype input:radio").removeAttr('checked');
+    $("#pagetype input:radio[value='" + this.template.pagetype + "']").prop('checked', true);
     this.addPageClass();
     return this.reloadTemplate();
   },
