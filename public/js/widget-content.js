@@ -7,6 +7,8 @@ window.WidgetContent = (function() {
 
   WidgetContent.icon = "wrench";
 
+  WidgetContent.active = true;
+
   WidgetContent.property = function(obj, key) {
     if (key == null) {
       key = null;

@@ -16,22 +16,8 @@ window.NameContent = (function(_super) {
 
   NameContent.icon = "girl";
 
-  NameContent.prototype.defaultWidth = function() {
-    return 280;
-  };
-
-  NameContent.prototype.defaultHeight = function() {
-    return 40;
-  };
-
-  NameContent.prototype.initWithConfig = function(config) {};
-
-  NameContent.prototype.render_layout = function(data) {
-    var name;
-    name = utils.escape(data.name);
-    return $("<p>" + name + "</p>");
-  };
+  NameContent.active = false;
 
   return NameContent;
 
-})(WidgetContent);
+})(FieldContent);

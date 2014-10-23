@@ -14,14 +14,14 @@
 .datatable td {
   border: 1px solid #666;
   margin: 0;
-  padding: 1em;
+  padding: .2em;
   text-align: center;
 }
 
 .datatable .subject, .datatable .teacher {
   display: block;
   text-align: left;
-  line-height: 1.2;
+  line-height: 1;
 }
 .datatable .teacher {
   font-weight: normal;

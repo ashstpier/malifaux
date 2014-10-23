@@ -8,11 +8,12 @@ window.Widget = (function() {
   Widget.WIDGETS = {
     'image': 'ImageContent',
     'text': 'TextContent',
-    'name': 'NameContent',
     'datatable': 'DatatableContent',
     'field': 'FieldContent',
+    'name': 'NameContent',
     'subject-field': 'SubjectFieldContent',
-    'attendance': 'AttendanceContent'
+    'attendance': 'AttendanceContent',
+    'dynamictable': 'DynamicTableContent'
   };
 
   Widget.loadAll = function(cb) {
@@ -128,7 +129,7 @@ window.Widget = (function() {
   };
 
   Widget.prototype.render = function(mode) {
-    this.el = $("<div data-guid=\"" + this.guid + "\" class=\"widget\" style=\"" + (this.originStyles()) + "\">\n  <div class=\"widget-content\"></div>\n</div>");
+    this.el = $("<div data-guid=\"" + this.guid + "\" class=\"widget widget-" + (this.cssClass()) + "\" style=\"" + (this.originStyles()) + "\">\n  <div class=\"widget-content\"></div>\n</div>");
     this.contentContainer = this.el.find('.widget-content');
     this.renderContent(mode);
     if (mode !== 'display') {
@@ -136,6 +137,10 @@ window.Widget = (function() {
       this.bindEvents();
     }
     return this.el;
+  };
+
+  Widget.prototype.cssClass = function() {
+    return this.content.className().toLowerCase().replace('content', '');
   };
 
   Widget.prototype.renderContent = function(mode) {
@@ -175,13 +180,23 @@ window.Widget = (function() {
   };
 
   Widget.prototype.layoutMode = function() {
+    if (this.currentMode === 'layout') {
+      return;
+    }
+    this.trigger('widget:layout-switching', this);
     this.el.draggable('enable');
-    return this.renderContent('layout');
+    this.renderContent('layout');
+    return this.trigger('widget:layout-switched', this);
   };
 
   Widget.prototype.editMode = function() {
+    if (this.currentMode === 'edit') {
+      return;
+    }
+    this.trigger('widget:edit-switching', this);
     this.el.draggable('disable');
-    return this.renderContent('edit');
+    this.renderContent('edit');
+    return this.trigger('widget:edit-switched', this);
   };
 
   Widget.prototype.remove = function() {

@@ -16,6 +16,7 @@ class window.FieldContent extends WidgetContent
   initWithConfig: (config) ->
     @_field = @get(config.field, @metrics()[0])
     @style = $.extend({}, FieldContent.STYLE_DEFAULTS, @get(config.style, {}))
+    @mappings = @get(config.mappings, {})
 
   render_layout: (data) ->
     $("""<div class="field-widget" style="#{@textStyles()}">#{@fieldFrom(data)}</div>""")
@@ -28,14 +29,33 @@ class window.FieldContent extends WidgetContent
   renderConfigOptions: ->
     options = {}
     options[metric] = metric for metric in @metrics()
-    @option('select', 'field', "Field", options: options, hint: "This is the CCR field you would like to be merged, the data shown is only a sample of the final output.")
+    [
+      @option('select', 'field', "Field", options: options, hint: "This is the CCR field you would like to be merged, the data shown is only a sample of the final output.")
+      @mappingSettings()
+    ]
+
+  mappingSettings: ->
+    node = $("""<div class="mapping-option"><a href="#" class="mapping">#{if $.isEmptyObject(@mappings) then 'Add word mappings...' else 'Edit word mappings...'}</a></div>""")
+    self = this
+    node.on "click", ".mapping", =>
+      new MappingModal(@mappings, @changeMapping)
+    node
+
+  changeMapping: (newMappings) =>
+    oldMappings = @mappings
+    @updateMapping(newMappings)
+    Designer.history.push(this, 'updateMapping', oldMappings, newMappings)
+
+  updateMapping: (mappings) =>
+    @mappings = mappings
+    @redraw()
 
   textStyles: ->
     @styleString('color': @style.color, 'font-family': @style.font, 'font-size': @style.size)
 
   fieldFrom: (data) ->
     data = data[key] for key in @_field.split('.')
-    data
+    @mappings[data] or data
 
   font: @property('style', 'font')
   size: @property('style', 'size')
@@ -44,4 +64,4 @@ class window.FieldContent extends WidgetContent
   field: @property('_field')
 
   serialize: ->
-    {field: @_field, style: @style}
+    {field: @_field, style: @style, mappings: @mappings}

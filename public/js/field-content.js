@@ -1,10 +1,13 @@
-var __hasProp = {}.hasOwnProperty,
+var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+  __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 window.FieldContent = (function(_super) {
   __extends(FieldContent, _super);
 
   function FieldContent() {
+    this.updateMapping = __bind(this.updateMapping, this);
+    this.changeMapping = __bind(this.changeMapping, this);
     return FieldContent.__super__.constructor.apply(this, arguments);
   }
 
@@ -32,7 +35,8 @@ window.FieldContent = (function(_super) {
 
   FieldContent.prototype.initWithConfig = function(config) {
     this._field = this.get(config.field, this.metrics()[0]);
-    return this.style = $.extend({}, FieldContent.STYLE_DEFAULTS, this.get(config.style, {}));
+    this.style = $.extend({}, FieldContent.STYLE_DEFAULTS, this.get(config.style, {}));
+    return this.mappings = this.get(config.mappings, {});
   };
 
   FieldContent.prototype.render_layout = function(data) {
@@ -51,10 +55,36 @@ window.FieldContent = (function(_super) {
       metric = _ref[_i];
       options[metric] = metric;
     }
-    return this.option('select', 'field', "Field", {
-      options: options,
-      hint: "This is the CCR field you would like to be merged, the data shown is only a sample of the final output."
-    });
+    return [
+      this.option('select', 'field', "Field", {
+        options: options,
+        hint: "This is the CCR field you would like to be merged, the data shown is only a sample of the final output."
+      }), this.mappingSettings()
+    ];
+  };
+
+  FieldContent.prototype.mappingSettings = function() {
+    var node, self;
+    node = $("<div class=\"mapping-option\"><a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(this.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a></div>");
+    self = this;
+    node.on("click", ".mapping", (function(_this) {
+      return function() {
+        return new MappingModal(_this.mappings, _this.changeMapping);
+      };
+    })(this));
+    return node;
+  };
+
+  FieldContent.prototype.changeMapping = function(newMappings) {
+    var oldMappings;
+    oldMappings = this.mappings;
+    this.updateMapping(newMappings);
+    return Designer.history.push(this, 'updateMapping', oldMappings, newMappings);
+  };
+
+  FieldContent.prototype.updateMapping = function(mappings) {
+    this.mappings = mappings;
+    return this.redraw();
   };
 
   FieldContent.prototype.textStyles = function() {
@@ -72,7 +102,7 @@ window.FieldContent = (function(_super) {
       key = _ref[_i];
       data = data[key];
     }
-    return data;
+    return this.mappings[data] || data;
   };
 
   FieldContent.prototype.font = FieldContent.property('style', 'font');
@@ -86,7 +116,8 @@ window.FieldContent = (function(_super) {
   FieldContent.prototype.serialize = function() {
     return {
       field: this._field,
-      style: this.style
+      style: this.style,
+      mappings: this.mappings
     };
   };
 
