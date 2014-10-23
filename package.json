@@ -5,9 +5,9 @@
   "main": "gulpfile.js",
   "devDependencies": {
     "alfred": "^0.5.4",
-    "body-parser": "^1.4.3",
-    "express": "^4.4.3",
-    "gulp": "^3.8.1",
+    "body-parser": "^1.9.1",
+    "express": "^4.9.8",
+    "gulp": "^3.8.9",
     "gulp-bower-files": "^0.2.5",
     "gulp-coffee": "^2.0.1",
     "gulp-flatten": "0.0.2",
