@@ -10,7 +10,8 @@ class window.ImageContent extends WidgetContent
   @DEFAULT_IMAGE: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
 
   initWithConfig: (config) ->
-    @src = @get(config.src, ImageContent.DEFAULT_IMAGE)
+    @setImage(@get(config.src, ImageContent.DEFAULT_IMAGE))
+    @_maintainAspectRatio = @get(config.maintainAspectRatio, true)
 
   bindEvents: (el) ->
     el.find(".picker").change (e) => @setImageFromFile(e.currentTarget.files[0])
@@ -30,20 +31,21 @@ class window.ImageContent extends WidgetContent
     oldSrc = @src
     @setImage(data)
     Designer.history.push(this, 'setImage', oldSrc, @src)
+    @redraw()
 
   setImage: (data) ->
     @src = data
-    @el.find(".content").attr('src', @src)
-    @el.removeClass('image-blank')
-    ratio = @aspectRatio()
-    @setAspectRatio(ratio)
 
   aspectRatio: ->
-    img = new Image()
-    img.src = @src
-    img.width / img.height
+    if @maintainAspectRatio()
+      img = new Image()
+      img.src = @src
+      img.width / img.height
+    else
+      false
 
   render_layout: (data) ->
+    setTimeout (=> @setAspectRatio(@aspectRatio())), 0
     $("""
       <div class="image-widget #{if @src is ImageContent.DEFAULT_IMAGE then 'image-blank'}">
         <img class="content" src="#{@src}">
@@ -56,5 +58,12 @@ class window.ImageContent extends WidgetContent
     @bindEvents(node)
     node
 
+  renderConfigOptions: ->
+    [
+      @option('checkbox', 'maintainAspectRatio', "Maintain Aspect Ratio")
+    ]
+
+  maintainAspectRatio: @property('_maintainAspectRatio')
+
   serialize: ->
-    { src: @src }
+    { src: @src, maintainAspectRatio: @maintainAspectRatio() }

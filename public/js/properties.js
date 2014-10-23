@@ -33,11 +33,18 @@ window.Properties = (function() {
         return _this.selected[input.data('fn')].call(_this.selected, input.val());
       };
     })(this));
-    return this.el.on('input', '.prop-input', (function(_this) {
+    this.el.on('input', '.prop-input', (function(_this) {
       return function(e) {
         var input;
         input = $(e.target);
         return _this.selected.content[input.data('fn')].call(_this.selected.content, input.val());
+      };
+    })(this));
+    return this.el.on('change', '.prop-input-checkbox', (function(_this) {
+      return function(e) {
+        var input;
+        input = $(e.target);
+        return _this.selected.content[input.data('fn')].call(_this.selected.content, input.is(":checked"));
       };
     })(this));
   };

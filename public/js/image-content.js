@@ -27,7 +27,8 @@ window.ImageContent = (function(_super) {
   ImageContent.DEFAULT_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
   ImageContent.prototype.initWithConfig = function(config) {
-    return this.src = this.get(config.src, ImageContent.DEFAULT_IMAGE);
+    this.setImage(this.get(config.src, ImageContent.DEFAULT_IMAGE));
+    return this._maintainAspectRatio = this.get(config.maintainAspectRatio, true);
   };
 
   ImageContent.prototype.bindEvents = function(el) {
@@ -65,26 +66,31 @@ window.ImageContent = (function(_super) {
     var oldSrc;
     oldSrc = this.src;
     this.setImage(data);
-    return Designer.history.push(this, 'setImage', oldSrc, this.src);
+    Designer.history.push(this, 'setImage', oldSrc, this.src);
+    return this.redraw();
   };
 
   ImageContent.prototype.setImage = function(data) {
-    var ratio;
-    this.src = data;
-    this.el.find(".content").attr('src', this.src);
-    this.el.removeClass('image-blank');
-    ratio = this.aspectRatio();
-    return this.setAspectRatio(ratio);
+    return this.src = data;
   };
 
   ImageContent.prototype.aspectRatio = function() {
     var img;
-    img = new Image();
-    img.src = this.src;
-    return img.width / img.height;
+    if (this.maintainAspectRatio()) {
+      img = new Image();
+      img.src = this.src;
+      return img.width / img.height;
+    } else {
+      return false;
+    }
   };
 
   ImageContent.prototype.render_layout = function(data) {
+    setTimeout(((function(_this) {
+      return function() {
+        return _this.setAspectRatio(_this.aspectRatio());
+      };
+    })(this)), 0);
     return $("<div class=\"image-widget " + (this.src === ImageContent.DEFAULT_IMAGE ? 'image-blank' : void 0) + "\">\n  <img class=\"content\" src=\"" + this.src + "\">\n  <input class=\"picker\" type=\"file\" accept=\"image/png, image/gif, image/jpeg\">\n</div>");
   };
 
@@ -95,9 +101,16 @@ window.ImageContent = (function(_super) {
     return node;
   };
 
+  ImageContent.prototype.renderConfigOptions = function() {
+    return [this.option('checkbox', 'maintainAspectRatio', "Maintain Aspect Ratio")];
+  };
+
+  ImageContent.prototype.maintainAspectRatio = ImageContent.property('_maintainAspectRatio');
+
   ImageContent.prototype.serialize = function() {
     return {
-      src: this.src
+      src: this.src,
+      maintainAspectRatio: this.maintainAspectRatio()
     };
   };
 

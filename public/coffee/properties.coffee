@@ -50,6 +50,10 @@ class window.Properties
     @el.on 'input', '.prop-input', (e) =>
       input = $(e.target)
       @selected.content[input.data('fn')].call(@selected.content, input.val())
+    @el.on 'change', '.prop-input-checkbox', (e) =>
+      input = $(e.target)
+      @selected.content[input.data('fn')].call(@selected.content, input.is(":checked"))
+
 
   selectionChanged: (newSelection) ->
     if @selected
