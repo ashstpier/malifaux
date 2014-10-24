@@ -30,7 +30,7 @@ class window.FieldContent extends WidgetContent
     options = {}
     options[metric] = metric for metric in @metrics()
     [
-      @option('select', 'field', "Field", options: options, hint: "This is the CCR field you would like to be merged, the data shown is only a sample of the final output.")
+      @option('select', 'field', "Field", options: options, hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output.")
       @mappingSettings()
     ]
 

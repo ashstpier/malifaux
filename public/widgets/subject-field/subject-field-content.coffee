@@ -20,11 +20,11 @@ class window.SubjectFieldContent extends FieldContent
     options = {}
     options[point.name] = point.longName for point in @assessmentPoints()
     options = [
-      @option('select', 'field', "Field", options: options, hint: "This is the CCR field you would like to be merged, the data shown is only a sample of the final output.")
+      @option('select', 'field', "Field", options: options, hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output.")
       @mappingSettings()
     ]
     if @widget.subject is null
-      options.unshift(@option('text', 'subject', "Subject", hint: "The 2 or 3 letter CCR subject code you would like to pull from."))
+      options.unshift(@option('text', 'subject', "Subject", hint: "The 2 or 3 letter CCR! subject code you would like to pull from."))
     options
 
   mappingSettings: ->

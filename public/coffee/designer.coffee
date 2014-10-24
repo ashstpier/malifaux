@@ -208,7 +208,7 @@ window.Designer = {
     false
 
   exitDesigner: ->
-    redirect = if environment.is_ccr then "/ccr2s/parentReports/" else "./index.html"
+    redirect = if environment.is_ccr then "/ccr2/parentReports/" else "./index.html"
     window.location.href = redirect
 
   saveAndExit: ->

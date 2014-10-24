@@ -58,7 +58,7 @@ window.FieldContent = (function(_super) {
     return [
       this.option('select', 'field', "Field", {
         options: options,
-        hint: "This is the CCR field you would like to be merged, the data shown is only a sample of the final output."
+        hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output."
       }), this.mappingSettings()
     ];
   };

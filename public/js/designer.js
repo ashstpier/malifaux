@@ -371,7 +371,7 @@ window.Designer = {
   },
   exitDesigner: function() {
     var redirect;
-    redirect = environment.is_ccr ? "/ccr2s/parentReports/" : "./index.html";
+    redirect = environment.is_ccr ? "/ccr2/parentReports/" : "./index.html";
     return window.location.href = redirect;
   },
   saveAndExit: function() {

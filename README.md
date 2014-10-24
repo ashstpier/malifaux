@@ -1,7 +1,7 @@
 Parent Reports Layout Tool
 ==========================
 
-This repo houses a tool for interactively building parent reports. It is designed to integrate with Ark's CCR portal for extracting student data and running reports.
+This repo houses a tool for interactively building parent reports. It is designed to integrate with Ark's CCR! portal for extracting student data and running reports.
 
 The code project is mainly authored in [CoffeeScript](http://coffeescript.org) which can be found in `public/coffee`. Dependancies are managed using a combination of Bower and NPM.
 
@@ -25,12 +25,12 @@ In development all template data is stored in memory on the server so there is n
 
 Production Deployment
 ---------------------
-The project is deployed to `/ccr2s/ccr-parentreports/public/designer.html`. See Jose for deployment instructions.
+The project is deployed to `/ccr2/ccr-parentreports/public/designer.html`. See Jose for deployment instructions.
 
 
-CCR API
--------
-In development the reports all operate on sample data. Student data isn't checked into version control for data protection reasons so you will need to place some sample data in the `./private` folder. There should be a `configuration.json` file and several `[STUDENTID].json` files. See the CCR API output for full format examples. The endpoints are listed in `public/coffee/endpoints.coffee`.
+CCR! API
+--------
+In development the reports all operate on sample data. Student data isn't checked into version control for data protection reasons so you will need to place some sample data in the `./private` folder. There should be a `configuration.json` file and several `[STUDENTID].json` files. See the CCR! API output for full format examples. The endpoints are listed in `public/coffee/endpoints.coffee`.
 
 
 Developing Widgets

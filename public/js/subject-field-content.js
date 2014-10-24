@@ -49,12 +49,12 @@ window.SubjectFieldContent = (function(_super) {
     options = [
       this.option('select', 'field', "Field", {
         options: options,
-        hint: "This is the CCR field you would like to be merged, the data shown is only a sample of the final output."
+        hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output."
       }), this.mappingSettings()
     ];
     if (this.widget.subject === null) {
       options.unshift(this.option('text', 'subject', "Subject", {
-        hint: "The 2 or 3 letter CCR subject code you would like to pull from."
+        hint: "The 2 or 3 letter CCR! subject code you would like to pull from."
       }));
     }
     return options;
