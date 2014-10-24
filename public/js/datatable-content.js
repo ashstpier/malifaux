@@ -81,6 +81,9 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.filter_subjects = function(subjects) {
+    if (this.widget.subject) {
+      return [subjects[this.widget.subject]];
+    }
     return _.filter(subjects, (function(_this) {
       return function(subject) {
         var e, exclusions;

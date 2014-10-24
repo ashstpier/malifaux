@@ -56,8 +56,42 @@ window.Designer = {
     return _results;
   },
   setOrientation: function(orientation) {
-    $('#page').attr('class', orientation);
-    return this.template.orientation = orientation;
+    Designer.history.push(this, 'updateOrientation', this.template.orientation, orientation);
+    return this.updateOrientation(orientation);
+  },
+  updateOrientation: function(orientation) {
+    this.template.orientation = orientation;
+    $("#orientation input:radio").removeAttr('checked');
+    $("#orientation input:radio[value='" + this.template.orientation + "']").prop('checked', true);
+    return this.addPageClass();
+  },
+  setPageType: function(pagetype) {
+    Designer.history.push(this, 'updatePageType', this.template.pagetype, pagetype);
+    return this.updatePageType(pagetype);
+  },
+  updatePageType: function(pagetype) {
+    this.template.pagetype = pagetype;
+    $("#pagetype input:radio").removeAttr('checked');
+    $("#pagetype input:radio[value='" + this.template.pagetype + "']").prop('checked', true);
+    this.addPageClass();
+    return this.reloadTemplate();
+  },
+  reloadTemplate: function() {
+    var config;
+    config = this.template.serialize();
+    this.template.removeAllWidgets();
+    this.template = new Template(config);
+    return this.template.render('layout');
+  },
+  addPageClass: function() {
+    $('#page').attr('class', '');
+    return $('#page').addClass("" + this.template.orientation + " " + this.template.pagetype);
+  },
+  isSubjectPage: function() {
+    return this.template.pagetype === 'subject';
+  },
+  isStudentPage: function() {
+    return this.template.pagetype === 'student';
   },
   bindEvents: function() {
     var className, name, _ref, _results;
@@ -84,6 +118,11 @@ window.Designer = {
     $('#orientation input:radio').change((function(_this) {
       return function(e) {
         return _this.setOrientation($(e.currentTarget).val());
+      };
+    })(this));
+    $('#pagetype input:radio').change((function(_this) {
+      return function(e) {
+        return _this.setPageType($(e.currentTarget).val());
       };
     })(this));
     $('#name').blur((function(_this) {
@@ -303,13 +342,13 @@ window.Designer = {
     }
   },
   load: function() {
+    var subject;
     $('#name').text(this.template.name);
     $("#orientation input:radio[value='" + this.template.orientation + "']").attr('checked', true);
-    $('#page').attr("class", this.template.orientation);
+    $("#pagetype input:radio[value='" + this.template.pagetype + "']").attr('checked', true);
+    $('#page').addClass("" + this.template.orientation + " " + this.template.pagetype);
+    subject = this.isSubjectPage() ? utils.fakeSubject() : null;
     return this.template.render("layout");
-  },
-  save: function() {
-    return this.template.save;
   },
   discard: function() {
     return this.exitDesigner();

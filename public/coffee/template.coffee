@@ -17,7 +17,8 @@ class window.Template
       key: utils.guid(),
       name: "Untitled Template",
       layout: [],
-      orientation: 'portrait'
+      orientation: 'portrait',
+      pagetype: 'student'
     })
     return template
 
@@ -31,17 +32,22 @@ class window.Template
     @name = description.name
     @layout = description.layout
     @orientation = description.orientation
+    @pagetype = description.pagetype
 
-  render: (mode, data) ->
+  render: (mode, data=null, subject=null) ->
     for widgetConfig in @layout
-      @addWidget(widgetConfig, mode, data)
+      @addWidget(widgetConfig, mode, data, subject)
     @layout = []
 
-  addWidget: (widgetConfig, mode, data) ->
-    widget = if widgetConfig.constructor.name is 'Widget' then widgetConfig else new Widget(widgetConfig, data)
+  addWidget: (widgetConfig, mode, data=null, subject=null) ->
+    data = data or utils.fakeStudentData()
+    subject = subject or utils.subject(@pagetype)
+    widget = if widgetConfig.constructor.name is 'Widget' then widgetConfig else new Widget(widgetConfig, data, subject)
     @widgets.push(widget)
     @page.append(widget.render(mode))
     widget
+
+  redraw: -> widget.redraw() for widget in @widgets
 
   removeWidget: (widget) ->
     widget.remove()
@@ -61,6 +67,7 @@ class window.Template
       layout: layout,
       name: @name,
       orientation: @orientation,
+      pagetype: @pagetype,
       screenshot: @screenshot
     }
     data

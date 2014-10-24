@@ -1,9 +1,12 @@
 window.environment = {
-  name: window.location.port === "9000" ? "development" : "production",
-  is_production: this.name === "production",
-  is_development: this.name === "development",
-  is_ccr: this.is_production
+  name: window.location.port === "9000" ? "development" : "production"
 };
+
+window.environment.is_production = window.environment.name === "production";
+
+window.environment.is_development = window.environment.name === "development";
+
+window.environment.is_ccr = window.environment.is_production;
 
 window.utils = {
   fontMap: {
@@ -100,6 +103,19 @@ window.utils = {
         return cb();
       }
     });
+  },
+  subject: function(pagetype) {
+    if (pagetype !== 'subject') {
+      return null;
+    }
+    if (window.environment.is_development) {
+      return this.fakeSubject();
+    } else {
+      return utils.querystring('subject');
+    }
+  },
+  fakeSubject: function() {
+    return 'PH';
   },
   fakeStudentData: function() {
     return {

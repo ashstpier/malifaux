@@ -38,7 +38,7 @@ class window.WidgetContent
   constructor: (@widget, config={}) ->
     @initWithConfig(config)
 
-  render: (mode= 'layout', data=utils.fakeStudentData()) ->
+  render: (mode, data) ->
     @el = @["render_#{mode}"].call(this, data)
     @bindEvents(@el) unless mode is 'display'
     @el
@@ -106,9 +106,10 @@ class window.OptionRenderer
   renderInput: (styles) ->
     @value = @receiver[@key].call(@receiver)
     switch @type
-      when 'font'   then @renderFontInput(styles)
-      when 'size'   then @renderSizeInput(styles)
-      when 'select' then @renderSelectInput(styles)
+      when 'font'     then @renderFontInput(styles)
+      when 'size'     then @renderSizeInput(styles)
+      when 'select'   then @renderSelectInput(styles)
+      when 'checkbox' then @renderCheckboxInput(styles)
       else
         """<input name="#{@key}" class="prop-input" name="#{@key}" type="#{@type}" value="#{@value}" data-fn="#{@key}" />"""
 
@@ -138,3 +139,7 @@ class window.OptionRenderer
         #{options.join("\n")}
       </select>
     """
+
+  renderCheckboxInput: (styles) ->
+    """<input name="#{@key}" class="prop-input prop-input-checkbox" name="#{@key}" type="#{@type}" value="1" data-fn="#{@key}"
+      #{if @value then 'checked="checked"' else ''} />"""

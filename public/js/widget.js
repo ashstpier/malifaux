@@ -39,12 +39,13 @@ window.Widget = (function() {
     return utils.loadCoffeeScript("js/" + name + "-content.js", cb);
   };
 
-  function Widget(config, data) {
+  function Widget(config, data, subject) {
     var height, width;
     if (config == null) {
       config = {};
     }
     this.data = data != null ? data : null;
+    this.subject = subject != null ? subject : null;
     this.updateSelectedState = __bind(this.updateSelectedState, this);
     this.currentMode = 'layout';
     this.guid = config.guid || utils.guid();

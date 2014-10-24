@@ -1,9 +1,9 @@
 window.environment = {
   name: if window.location.port == "9000" then "development" else "production"
-  is_production: @name == "production"
-  is_development: @name == "development"
-  is_ccr: @is_production
 }
+window.environment.is_production    = window.environment.name == "production"
+window.environment.is_development   = window.environment.name == "development"
+window.environment.is_ccr           = window.environment.is_production
 
 window.utils = {
   fontMap: {
@@ -79,6 +79,15 @@ window.utils = {
     $.get path, (data) ->
       eval(data)
       cb() if cb?
+
+  subject: (pagetype) ->
+    return null if pagetype isnt 'subject'
+    if window.environment.is_development
+      @fakeSubject()
+    else
+      utils.querystring('subject')
+
+  fakeSubject: -> 'PH'
 
   fakeStudentData: ->
     {

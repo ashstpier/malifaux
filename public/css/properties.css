@@ -114,3 +114,7 @@
   border: 1px solid #666;
   background-color: #fff;
 }
+
+#orientation, #multipage {
+  margin: 10px 0;
+}

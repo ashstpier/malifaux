@@ -69,12 +69,6 @@ window.WidgetContent = (function() {
   }
 
   WidgetContent.prototype.render = function(mode, data) {
-    if (mode == null) {
-      mode = 'layout';
-    }
-    if (data == null) {
-      data = utils.fakeStudentData();
-    }
     this.el = this["render_" + mode].call(this, data);
     if (mode !== 'display') {
       this.bindEvents(this.el);
@@ -230,6 +224,8 @@ window.OptionRenderer = (function() {
         return this.renderSizeInput(styles);
       case 'select':
         return this.renderSelectInput(styles);
+      case 'checkbox':
+        return this.renderCheckboxInput(styles);
       default:
         return "<input name=\"" + this.key + "\" class=\"prop-input\" name=\"" + this.key + "\" type=\"" + this.type + "\" value=\"" + this.value + "\" data-fn=\"" + this.key + "\" />";
     }
@@ -278,6 +274,10 @@ window.OptionRenderer = (function() {
       return _results;
     }).call(this);
     return "<select name=\"" + this.key + "\" class=\"prop-input\" data-fn=\"" + this.key + "\">\n  " + (options.join("\n")) + "\n</select>";
+  };
+
+  OptionRenderer.prototype.renderCheckboxInput = function(styles) {
+    return "<input name=\"" + this.key + "\" class=\"prop-input prop-input-checkbox\" name=\"" + this.key + "\" type=\"" + this.type + "\" value=\"1\" data-fn=\"" + this.key + "\"\n" + (this.value ? 'checked="checked"' : '') + " />";
   };
 
   return OptionRenderer;

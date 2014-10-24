@@ -73,11 +73,15 @@ class window.DynamicTableContent extends WidgetContent
       $('.dynamic-list').css('top', el.height() + 1)
 
       $('.dynamic-list').on "click", "li", ->
-        option = $(this).text()
+        option = $(this).attr('data-key')
         el.attr('data-dynamic', true)
         el.attr('data-key', option)
         $('.dynamic-list').remove()
-        el.val(self.fieldFrom($(this).text(), data))
+        value = $(this).attr('data-key')
+        if self.metrics().indexOf(value) is -1
+          el.val(data.subjects[self.widget.subject].results?[value] or '')
+        else
+          el.val(self.fieldFrom($(this).text(), data))
     table
 
   cellContent: (cell, data, edit) ->
@@ -88,8 +92,13 @@ class window.DynamicTableContent extends WidgetContent
 
   cellValue: (cell, data) ->
     if cell.dynamic
-      value = @fieldFrom(cell.value, data)
-      console.log @mappings
+      if @metrics().indexOf(cell.value) is -1
+        if @widget.subject
+          value = data.subjects[@widget.subject].results?[cell.value]
+        else
+          value = ''
+      else
+        value = @fieldFrom(cell.value, data)
       @mappings[value] or value
     else
       cell.value
@@ -98,9 +107,15 @@ class window.DynamicTableContent extends WidgetContent
     list = """<ul class="dynamic-list">"""
     for option in @metrics()
       if el.attr('data-key') is option
-        list += """<li>#{option}<i class="glyphicons ok_2"></i></li>"""
+        list += """<li data-key="#{option}">#{option}<i class="glyphicons ok_2"></i></li>"""
       else
-        list += """<li>#{option}</li>"""
+        list += """<li data-key="#{option}">#{option}</li>"""
+    if @widget.subject
+      for point in @assessmentPoints()
+        if el.attr('data-key') is point.name
+          list += """<li data-key="#{point.name}">#{point.longName}<i class="glyphicons ok_2"></i></li>"""
+        else
+          list += """<li data-key="#{point.name}">#{point.longName}</li>"""
     list += """</ul>"""
 
   renderAppearanceOptions: ->

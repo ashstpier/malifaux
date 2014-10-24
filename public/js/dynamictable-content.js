@@ -134,12 +134,17 @@ window.DynamicTableContent = (function(_super) {
       el.parent().append(self.dynamicOptions(el));
       $('.dynamic-list').css('top', el.height() + 1);
       return $('.dynamic-list').on("click", "li", function() {
-        var option;
-        option = $(this).text();
+        var option, value, _ref1;
+        option = $(this).attr('data-key');
         el.attr('data-dynamic', true);
         el.attr('data-key', option);
         $('.dynamic-list').remove();
-        return el.val(self.fieldFrom($(this).text(), data));
+        value = $(this).attr('data-key');
+        if (self.metrics().indexOf(value) === -1) {
+          return el.val(((_ref1 = data.subjects[self.widget.subject].results) != null ? _ref1[value] : void 0) || '');
+        } else {
+          return el.val(self.fieldFrom($(this).text(), data));
+        }
       });
     });
     return table;
@@ -154,10 +159,17 @@ window.DynamicTableContent = (function(_super) {
   };
 
   DynamicTableContent.prototype.cellValue = function(cell, data) {
-    var value;
+    var value, _ref;
     if (cell.dynamic) {
-      value = this.fieldFrom(cell.value, data);
-      console.log(this.mappings);
+      if (this.metrics().indexOf(cell.value) === -1) {
+        if (this.widget.subject) {
+          value = (_ref = data.subjects[this.widget.subject].results) != null ? _ref[cell.value] : void 0;
+        } else {
+          value = '';
+        }
+      } else {
+        value = this.fieldFrom(cell.value, data);
+      }
       return this.mappings[value] || value;
     } else {
       return cell.value;
@@ -165,15 +177,26 @@ window.DynamicTableContent = (function(_super) {
   };
 
   DynamicTableContent.prototype.dynamicOptions = function(el) {
-    var list, option, _i, _len, _ref;
+    var list, option, point, _i, _j, _len, _len1, _ref, _ref1;
     list = "<ul class=\"dynamic-list\">";
     _ref = this.metrics();
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       option = _ref[_i];
       if (el.attr('data-key') === option) {
-        list += "<li>" + option + "<i class=\"glyphicons ok_2\"></i></li>";
+        list += "<li data-key=\"" + option + "\">" + option + "<i class=\"glyphicons ok_2\"></i></li>";
       } else {
-        list += "<li>" + option + "</li>";
+        list += "<li data-key=\"" + option + "\">" + option + "</li>";
+      }
+    }
+    if (this.widget.subject) {
+      _ref1 = this.assessmentPoints();
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        point = _ref1[_j];
+        if (el.attr('data-key') === point.name) {
+          list += "<li data-key=\"" + point.name + "\">" + point.longName + "<i class=\"glyphicons ok_2\"></i></li>";
+        } else {
+          list += "<li data-key=\"" + point.name + "\">" + point.longName + "</li>";
+        }
       }
     }
     return list += "</ul>";

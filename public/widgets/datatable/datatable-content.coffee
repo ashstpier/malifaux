@@ -55,6 +55,8 @@ class window.DatatableContent extends WidgetContent
     node
 
   filter_subjects: (subjects) =>
+    if @widget.subject
+      return [subjects[@widget.subject]]
     _.filter subjects, (subject) =>
       return true unless @_exclusions
       exclusions = ($.trim(e).toLowerCase() for e in @_exclusions.split(","))

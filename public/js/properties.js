@@ -19,7 +19,7 @@ window.Properties = (function() {
   }
 
   Properties.prototype.render = function() {
-    this.el.append("<h2 class=\"prop-selection\"></h2>\n<section class=\"prop-section prop-layout\">\n  <h3 class=\"prop-section-header\">Layout</h3>\n  <div class=\"prop-content\">\n    <label for=\"prop-value-x\">x</label>\n    <input type=\"text\" id=\"prop-value-x\" class=\"prop-coord-input\" data-fn=\"x\" />\n    <label for=\"prop-value-y\">y</label>\n    <input type=\"text\" id=\"prop-value-y\" class=\"prop-coord-input\" data-fn=\"y\" />\n    <label for=\"prop-value-width\">width</label>\n    <input type=\"text\" id=\"prop-value-width\" class=\"prop-coord-input\" data-fn=\"width\" />\n    <label for=\"prop-value-height\">height</label>\n    <input type=\"text\" id=\"prop-value-height\" class=\"prop-coord-input\"  data-fn=\"height\"/>\n  </div>\n</section>\n\n<section class=\"prop-section prop-config\"></section>\n<section class=\"prop-section prop-appearance\"></section>");
+    this.el.append("<h2 class=\"prop-selection\"></h2>\n<section class=\"prop-section prop-page-options\">\n  <h3 class=\"prop-section-header\">Options</h3>\n  <div class=\"prop-content\">\n    <form id=\"orientation\">\n      <input type=\"radio\" name=\"orientation\" value=\"portrait\"> Portrait\n      <input type=\"radio\" name=\"orientation\" value=\"landscape\"> Landscape\n    </form>\n    <form id=\"pagetype\">\n      <input type=\"radio\" name=\"pagetype\" value=\"student\">Student per page\n      <input type=\"radio\" name=\"pagetype\" value=\"subject\">Subject per page\n    </form>\n  </div>\n</section>\n<section class=\"prop-section prop-layout\">\n  <h3 class=\"prop-section-header\">Layout</h3>\n  <div class=\"prop-content\">\n    <label for=\"prop-value-x\">x</label>\n    <input type=\"text\" id=\"prop-value-x\" class=\"prop-coord-input\" data-fn=\"x\" />\n    <label for=\"prop-value-y\">y</label>\n    <input type=\"text\" id=\"prop-value-y\" class=\"prop-coord-input\" data-fn=\"y\" />\n    <label for=\"prop-value-width\">width</label>\n    <input type=\"text\" id=\"prop-value-width\" class=\"prop-coord-input\" data-fn=\"width\" />\n    <label for=\"prop-value-height\">height</label>\n    <input type=\"text\" id=\"prop-value-height\" class=\"prop-coord-input\"  data-fn=\"height\"/>\n  </div>\n</section>\n\n<section class=\"prop-section prop-config\"></section>\n<section class=\"prop-section prop-appearance\"></section>");
     this.bindEvents();
     this.updateLayoutValues();
     return this.disable();
@@ -33,11 +33,18 @@ window.Properties = (function() {
         return _this.selected[input.data('fn')].call(_this.selected, input.val());
       };
     })(this));
-    return this.el.on('input', '.prop-input', (function(_this) {
+    this.el.on('input', '.prop-input', (function(_this) {
       return function(e) {
         var input;
         input = $(e.target);
         return _this.selected.content[input.data('fn')].call(_this.selected.content, input.val());
+      };
+    })(this));
+    return this.el.on('change', '.prop-input-checkbox', (function(_this) {
+      return function(e) {
+        var input;
+        input = $(e.target);
+        return _this.selected.content[input.data('fn')].call(_this.selected.content, input.is(":checked"));
       };
     })(this));
   };
@@ -73,6 +80,8 @@ window.Properties = (function() {
   };
 
   Properties.prototype.enable = function() {
+    this.el.find('.prop-page-options').hide();
+    this.el.find('.prop-layout').show();
     this.el.removeClass('disabled');
     this.el.find('.prop-input').prop('disabled', false);
     this.el.find('.prop-selection').text(this.selected.displayName());
@@ -80,9 +89,10 @@ window.Properties = (function() {
   };
 
   Properties.prototype.disable = function() {
-    this.el.addClass('disabled');
+    this.el.find('.prop-layout').hide();
+    this.el.find('.prop-page-options').show();
     this.el.find('.prop-input').prop('disabled', true);
-    this.el.find('.prop-selection').html('Nothing Selected');
+    this.el.find('.prop-selection').html('Page');
     this.clearAppearanceOptions();
     return this.clearConfigOptions();
   };
