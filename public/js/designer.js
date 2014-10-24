@@ -47,7 +47,11 @@ window.Designer = {
     for (name in _ref) {
       className = _ref[name];
       type = window[className];
-      _results.push($("#gallery").append("<div id=\"add-" + name + "\" class=\"add-widget\">\n  <i class=\"glyphicons white " + type.icon + "\"></i>\n  <h4>" + type.displayName + "</h4>\n  <p>" + type.description + "</p>\n</div>"));
+      if (type.active) {
+        _results.push($("#gallery").append("<div id=\"add-" + name + "\" class=\"add-widget\">\n  <i class=\"glyphicons white " + type.icon + "\"></i>\n  <h4>" + type.displayName + "</h4>\n  <p>" + type.description + "</p>\n</div>"));
+      } else {
+        _results.push(void 0);
+      }
     }
     return _results;
   },

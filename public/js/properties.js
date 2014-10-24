@@ -11,6 +11,11 @@ window.Properties = (function() {
         return _this.selectionChanged(newSelection);
       };
     })(this));
+    this.designer.bind("sidebar:redraw", (function(_this) {
+      return function() {
+        return _this.redraw();
+      };
+    })(this));
   }
 
   Properties.prototype.render = function() {

@@ -6,11 +6,12 @@ class window.Widget
   @WIDGETS: {
     'image':          'ImageContent'
     'text':           'TextContent'
-    'name':           'NameContent'
     'datatable':      'DatatableContent'
     'field':          'FieldContent'
+    'name':           'NameContent'
     'subject-field':  'SubjectFieldContent'
     'attendance':     'AttendanceContent'
+    'dynamictable':     'DynamicTableContent'
   }
 
   @loadAll: (cb) ->
@@ -64,7 +65,7 @@ class window.Widget
 
   render: (mode) ->
     @el = $("""
-      <div data-guid="#{@guid}" class="widget" style="#{@originStyles()}">
+      <div data-guid="#{@guid}" class="widget widget-#{@cssClass()}" style="#{@originStyles()}">
         <div class="widget-content"></div>
       </div>
     """)
@@ -74,6 +75,9 @@ class window.Widget
       @el.append("""<button class="widget-button widget-delete">x</button>""")
       @bindEvents()
     @el
+
+  cssClass: ->
+    @content.className().toLowerCase().replace('content','')
 
   renderContent: (mode) ->
     @currentMode = mode
@@ -96,12 +100,18 @@ class window.Widget
     @position = {x: @x(), y: @y(), width: @width(), height: @height()}
 
   layoutMode: ->
+    return if @currentMode is 'layout'
+    @trigger 'widget:layout-switching', this
     @el.draggable('enable')
     @renderContent('layout')
+    @trigger 'widget:layout-switched', this
 
   editMode: ->
+    return if @currentMode is 'edit'
+    @trigger 'widget:edit-switching', this
     @el.draggable('disable')
     @renderContent('edit')
+    @trigger 'widget:edit-switched', this
 
   remove: ->
     @el.remove()

@@ -6,6 +6,7 @@ window.DatatableContent = (function(_super) {
   __extends(DatatableContent, _super);
 
   function DatatableContent() {
+    this.updateMapping = __bind(this.updateMapping, this);
     this.filter_subjects = __bind(this.filter_subjects, this);
     return DatatableContent.__super__.constructor.apply(this, arguments);
   }
@@ -16,7 +17,7 @@ window.DatatableContent = (function(_super) {
 
   DatatableContent.description = "Showing assessment points, one row per subject.";
 
-  DatatableContent.icon = "table";
+  DatatableContent.icon = "book_open";
 
   DatatableContent.STYLE_DEFAULTS = {
     subject_order: 'alphabetical',
@@ -107,8 +108,12 @@ window.DatatableContent = (function(_super) {
       col = {
         title: '',
         value: '',
-        compare_to: ''
+        compare_to: '',
+        mappings: {}
       };
+    }
+    if (!col.mappings) {
+      col.mappings = {};
     }
     options = (function(_this) {
       return function(val) {
@@ -122,7 +127,7 @@ window.DatatableContent = (function(_super) {
         return _results;
       };
     })(this);
-    return "<tr class=\"column-setting\">\n  <td>\n    <input class=\"col-title\" name=\"col-title\" type=\"text\" value=\"" + col.title + "\" placeholder=\"Untitled...\" />\n    <span class=\"col-comp-label\">compared to:</span>\n  </td>\n  <td>\n    <select class=\"col-value\" name=\"col-value\">\n      <option value=\"\" " + (col.value === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.value).join("\n")) + "\n    </select>\n    <select class=\"col-compare-to\" name=\"col-compare-to\">\n      <option value=\"\" " + (col.compare_to === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.compare_to).join("\n")) + "\n    </select>\n  </td>\n</tr>";
+    return "<tr class=\"column-setting\" data-mappings=\"" + (JSON.stringify(col.mappings).replace(/\"/g, '&quot;')) + "\">\n  <td>\n    <input class=\"col-title\" name=\"col-title\" type=\"text\" value=\"" + col.title + "\" placeholder=\"Untitled...\" />\n    <span class=\"col-comp-label\">compared to:</ span>\n  </td>\n  <td>\n    <select class=\"col-value\" name=\"col-value\">\n      <option value=\"\" " + (col.value === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.value).join("\n")) + "\n    </select>\n    <select class=\"col-compare-to\" name=\"col-compare-to\">\n      <option value=\"\" " + (col.compare_to === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.compare_to).join("\n")) + "\n    </select>\n    <a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(col.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a>\n  </td>\n</tr>";
   };
 
   DatatableContent.prototype.renderAppearanceOptions = function() {
@@ -161,7 +166,7 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.columSettings = function() {
-    var col, node, table, _i, _len, _ref;
+    var col, node, self, table, _i, _len, _ref;
     node = $("<div class=\"datatable-cols prop-table-config\">\n  <h4>Columns</h4>\n  <div class=\"prop-table-wrap\">\n    <table>\n      <thead>\n        <tr>\n          <th>Title</th>\n          <th>Value</th>\n        </tr>\n      </thead>\n      <tbody class=\"edit-rows\">\n      </tbody>\n    </table>\n  </div>\n</div>");
     table = node.find('.edit-rows');
     _ref = this.columns;
@@ -177,7 +182,27 @@ window.DatatableContent = (function(_super) {
         return _this.redraw();
       };
     })(this));
+    self = this;
+    table.on("click", ".mapping", function() {
+      var element, mappingIndex, mappings;
+      element = this;
+      mappingIndex = $(this).parents('.column-setting').index();
+      mappings = $(element).parents(".edit-rows").find(".column-setting:eq(" + mappingIndex + ")").data('mappings');
+      return new MappingModal(mappings, (function(_this) {
+        return function(newMappings) {
+          return self.updateMapping(mappingIndex, newMappings);
+        };
+      })(this));
+    });
     return node;
+  };
+
+  DatatableContent.prototype.updateMapping = function(index, newMappings) {
+    var editrows;
+    editrows = $(".edit-rows");
+    editrows.find(".column-setting:eq(" + index + ")").data('mappings', newMappings);
+    this.saveColumns(editrows);
+    return this.redraw();
   };
 
   DatatableContent.prototype.headingStyles = function() {
@@ -199,8 +224,9 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.cellValue = function(subject, col) {
-    var _ref;
-    return ((_ref = subject.results) != null ? _ref[col.value] : void 0) || '';
+    var originalValue, _ref, _ref1;
+    originalValue = ((_ref = subject.results) != null ? _ref[col.value] : void 0) || '';
+    return ((_ref1 = col.mappings) != null ? _ref1[originalValue] : void 0) || originalValue;
   };
 
   DatatableContent.prototype.cellContent = function(subject, col) {
@@ -243,7 +269,8 @@ window.DatatableContent = (function(_super) {
         _results.push({
           title: $col.find('.col-title').val(),
           value: $col.find('.col-value').val(),
-          compare_to: $col.find('.col-compare-to').val()
+          compare_to: $col.find('.col-compare-to').val(),
+          mappings: $col.data('mappings')
         });
       }
       return _results;
@@ -300,7 +327,6 @@ window.DatatableContent = (function(_super) {
     return _.sortBy(alphabetical, function(subject) {
       var name;
       name = subject.subjectName.toLowerCase();
-      console.log(name);
       if (rank[name]) {
         return rank[name];
       } else {

@@ -2,7 +2,7 @@ class window.DatatableContent extends WidgetContent
   @className:   "DatatableContent"
   @displayName: "Subjects Data Table"
   @description: "Showing assessment points, one row per subject."
-  @icon:        "table"
+  @icon:        "book_open"
 
   @STYLE_DEFAULTS: {
     subject_order: 'alphabetical'
@@ -60,15 +60,16 @@ class window.DatatableContent extends WidgetContent
       exclusions = ($.trim(e).toLowerCase() for e in @_exclusions.split(","))
       !_.contains(exclusions, subject.subjectName.toLowerCase())
 
-  buildEditRow: (col={title:'', value:'', compare_to:''}) ->
+  buildEditRow: (col={title:'', value:'', compare_to:'', mappings:{}}) ->
+    col.mappings = {} unless col.mappings
     options = (val) =>
       for point in @assessmentPoints()
         """<option value="#{point.code}" #{if point.code is val then 'selected="selected"' else ''}>#{point.name} | #{point.longName}</option>"""
 
-    """<tr class="column-setting">
+    """<tr class="column-setting" data-mappings="#{JSON.stringify(col.mappings).replace(/\"/g,'&quot;')}">
       <td>
         <input class="col-title" name="col-title" type="text" value="#{col.title}" placeholder="Untitled..." />
-        <span class="col-comp-label">compared to:</span>
+        <span class="col-comp-label">compared to:</ span>
       </td>
       <td>
         <select class="col-value" name="col-value">
@@ -79,6 +80,7 @@ class window.DatatableContent extends WidgetContent
           <option value="" #{if col.compare_to is "" then 'selected="selected"' else ''}></option>
           #{options(col.compare_to).join("\n")}
         </select>
+        <a href="#" class="mapping">#{if $.isEmptyObject(col.mappings) then 'Add word mappings...' else 'Edit word mappings...'}</a>
       </td>
     </tr>"""
 
@@ -136,9 +138,20 @@ class window.DatatableContent extends WidgetContent
       @maybeAddEditRow(table)
       @saveColumns(table)
       @redraw()
+    self = this
+    table.on "click", ".mapping", ->
+      element = this
+      mappingIndex = $(this).parents('.column-setting').index()
+      mappings = $(element).parents(".edit-rows").find(".column-setting:eq(#{mappingIndex})").data('mappings')
+      new MappingModal mappings, (newMappings) => self.updateMapping(mappingIndex, newMappings)
     node
 
+  updateMapping: (index, newMappings) =>
+    editrows = $(".edit-rows")
+    editrows.find(".column-setting:eq(#{index})").data('mappings', newMappings)
 
+    @saveColumns(editrows)
+    @redraw()
 
   headingStyles: ->
     @styleString('background-color': @style.heading_background_color, color: @style.heading_text_color)
@@ -148,7 +161,9 @@ class window.DatatableContent extends WidgetContent
     text_align = if content.split(' ').length > 1 then 'left' else 'center'
     @styleString('background-color': bg_color, color: @style.cell_text_color, 'text-align': text_align)
 
-  cellValue: (subject, col) -> subject.results?[col.value] or ''
+  cellValue: (subject, col) ->
+    originalValue = subject.results?[col.value] or ''
+    col.mappings?[originalValue] or originalValue
 
   cellContent: (subject, col) ->
     val = @cellValue(subject, col)
@@ -174,6 +189,7 @@ class window.DatatableContent extends WidgetContent
         title:            $col.find('.col-title').val()
         value:            $col.find('.col-value').val()
         compare_to:       $col.find('.col-compare-to').val()
+        mappings:         $col.data('mappings')
       }
     @columns = (col for col in columns when col.value? and col.value isnt '')
     Designer.history.push(this, 'setColumnsFromUndo', oldColumns, @columns)
@@ -196,7 +212,6 @@ class window.DatatableContent extends WidgetContent
     }
     _.sortBy alphabetical, (subject) ->
         name = subject.subjectName.toLowerCase()
-        console.log name
         if rank[name]
           rank[name]
         else
