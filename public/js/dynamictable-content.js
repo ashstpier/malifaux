@@ -130,6 +130,7 @@ window.DynamicTableContent = (function(_super) {
     table.on("click", "input", function() {
       var el;
       el = $(this);
+      self.el.parents('.widget-dynamictable').css('overflow', 'visible');
       $('.dynamic-list').remove();
       el.parent().append(self.dynamicOptions(el));
       $('.dynamic-list').css('top', el.height() + 1);
@@ -373,6 +374,7 @@ window.DynamicTableContent = (function(_super) {
 
   DynamicTableContent.prototype.buildTabledata = function(el) {
     var $cell, cell, cellArray, cells, newTabledata, row, rows, _i, _j, _len, _len1;
+    el.parents('.widget-dynamictable').css('overflow', 'hidden');
     newTabledata = [];
     rows = $(el).find('tr');
     for (_i = 0, _len = rows.length; _i < _len; _i++) {

@@ -1,5 +1,5 @@
 .widget-dynamictable {
-  overflow: visible;
+  overflow: hidden;
 }
 .dynamictable-widget {
   height: 100%;

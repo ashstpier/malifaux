@@ -67,6 +67,7 @@ class window.DynamicTableContent extends WidgetContent
     self = this
     table.on "click", "input", ->
       el = $(this)
+      self.el.parents('.widget-dynamictable').css('overflow', 'visible')
       $('.dynamic-list').remove()
       el.parent().append(self.dynamicOptions(el))
 
@@ -217,6 +218,7 @@ class window.DynamicTableContent extends WidgetContent
     @widget.bind 'widget:layout-switching', updateFn
 
   buildTabledata: (el) ->
+    el.parents('.widget-dynamictable').css('overflow', 'hidden')
     newTabledata = []
 
     rows = $(el).find('tr')
