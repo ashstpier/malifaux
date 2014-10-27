@@ -36,6 +36,7 @@ window.DynamicTableContent = (function(_super) {
 
   DynamicTableContent.STYLE_DEFAULTS = {
     header_position: 'top',
+    alignment: 'left',
     heading_text_color: '#000000',
     heading_background_color: '#DDDDDD',
     cell_text_color: '#000000',
@@ -50,6 +51,8 @@ window.DynamicTableContent = (function(_super) {
   DynamicTableContent.DEFAULT_ROWS = 3;
 
   DynamicTableContent.prototype.header_position = DynamicTableContent.property('style', 'header_position');
+
+  DynamicTableContent.prototype.alignment = DynamicTableContent.property('style', 'alignment');
 
   DynamicTableContent.prototype.font = DynamicTableContent.property('style', 'font');
 
@@ -95,7 +98,8 @@ window.DynamicTableContent = (function(_super) {
     table = $("<div class=\"dynamictable-widget\">\n  <table class=\"dynamictable " + (edit ? "edited" : void 0) + "\" style=\"" + (this.styleString({
       'font-family': utils.fontMap[this.style.font],
       'font-size': utils.sizeMap[this.style.size],
-      'color': this.style.color
+      'color': this.style.color,
+      'text-align': this.style.alignment
     })) + "\">\n    <tbody></tbody>\n  </table>\n</div>");
     tbody = table.find('tbody');
     _ref = this.tabledata;
@@ -155,7 +159,7 @@ window.DynamicTableContent = (function(_super) {
     if (edit) {
       return "<input type=\"text\" data-dynamic=\"" + cell.dynamic + "\" data-key=\"" + cell.value + "\" value=\"" + (this.cellValue(cell, data)) + "\">";
     } else {
-      return this.cellValue(cell, data);
+      return this.cellValue(cell, data) || "&nbsp;";
     }
   };
 
@@ -213,6 +217,12 @@ window.DynamicTableContent = (function(_super) {
         options: {
           top: "Top",
           left: 'Left'
+        }
+      }), this.option('select', 'alignment', "Cell alignment", {
+        options: {
+          left: "Left",
+          center: 'Center',
+          right: 'Right'
         }
       }), this.option('text', 'numberOfColumns', "No. of columns"), this.option('text', 'numberOfRows', "No. of rows"), this.mappingSettings()
     ];

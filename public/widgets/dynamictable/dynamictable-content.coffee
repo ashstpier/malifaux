@@ -10,6 +10,7 @@ class window.DynamicTableContent extends WidgetContent
 
   @STYLE_DEFAULTS: {
     header_position: 'top'
+    alignment: 'left'
     heading_text_color: '#000000'
     heading_background_color: '#DDDDDD'
     cell_text_color: '#000000'
@@ -23,6 +24,7 @@ class window.DynamicTableContent extends WidgetContent
   @DEFAULT_ROWS = 3
 
   header_position: @property('style', 'header_position')
+  alignment: @property('style', 'alignment')
   font: @property('style', 'font')
   size: @property('style', 'size')
   heading_text_color: @property('style', 'heading_text_color')
@@ -42,7 +44,7 @@ class window.DynamicTableContent extends WidgetContent
 
   render_layout: (data, edit=false) ->
     table = $("""<div class="dynamictable-widget">
-      <table class="dynamictable #{if edit then "edited"}" style="#{@styleString('font-family': utils.fontMap[@style.font], 'font-size': utils.sizeMap[@style.size], 'color': @style.color)}">
+      <table class="dynamictable #{if edit then "edited"}" style="#{@styleString('font-family': utils.fontMap[@style.font], 'font-size': utils.sizeMap[@style.size], 'color': @style.color, 'text-align': @style.alignment)}">
         <tbody></tbody>
       </table>
     </div>""")
@@ -89,7 +91,7 @@ class window.DynamicTableContent extends WidgetContent
     if edit
       """<input type="text" data-dynamic="#{cell.dynamic}" data-key="#{cell.value}" value="#{@cellValue(cell, data)}">"""
     else
-      @cellValue(cell, data)
+      @cellValue(cell, data) or "&nbsp;"
 
   cellValue: (cell, data) ->
     if cell.dynamic
@@ -133,6 +135,7 @@ class window.DynamicTableContent extends WidgetContent
   renderConfigOptions: ->
     [
       @option('select', 'header_position', "Header position", options: {top: "Top", left: 'Left'})
+      @option('select', 'alignment', "Cell alignment", options: {left: "Left", center: 'Center', right: 'Right'})
       @option('text', 'numberOfColumns', "No. of columns")
       @option('text', 'numberOfRows', "No. of rows")
       @mappingSettings()
