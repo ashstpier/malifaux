@@ -2,13 +2,15 @@ window.Report = {
   init: function() {
     return Widget.loadAll((function(_this) {
       return function() {
-        _this.studentId = utils.querystring("studentid");
-        _this.templateName = utils.querystring('template');
-        _this.debug = utils.querystring('debug') === '1';
-        return Template.load(_this.templateName, function(template) {
-          _this.template = template;
-          return API.student(_this.studentId, function(data) {
-            return _this.render(data);
+        return API.loadConfig(function() {
+          _this.studentId = utils.querystring("studentid");
+          _this.templateName = utils.querystring('template');
+          _this.debug = utils.querystring('debug') === '1';
+          return Template.load(_this.templateName, function(template) {
+            _this.template = template;
+            return API.student(_this.studentId, function(data) {
+              return _this.render(data);
+            });
           });
         });
       };

@@ -85,9 +85,10 @@ window.SubjectFieldContent = (function(_super) {
   };
 
   SubjectFieldContent.prototype.fieldFrom = function(data) {
-    var subject, value, _ref;
+    var defaultValue, subject, value, _ref;
     subject = this.widget.subject ? this.widget.subject : this.subject();
-    value = ((_ref = data.subjects[subject]) != null ? _ref.results[this.field()] : void 0) || "? No Value ?";
+    defaultValue = this.widget.currentMode === 'display' ? '' : "? No Value ?";
+    value = ((_ref = data.subjects[subject]) != null ? _ref.results[this.field()] : void 0) || defaultValue;
     return this.mappings[value] || value;
   };
 

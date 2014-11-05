@@ -9,7 +9,7 @@ window.Templates = {
             <a href="./designer.html?template=#{template.key}">
               <img class="image" src="#{utils.screenshot_url(template.screenshot)}">
             </a>
-            <a class="actions" href="./report.html?studentid=15315&template=#{template.key}">Run</a></a>
+            <a class="actions" href="./report.html?studentid=15318&template=#{template.key}">Run</a></a>
           </div>
         </div>
       </div>
