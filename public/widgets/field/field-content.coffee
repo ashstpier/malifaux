@@ -14,7 +14,7 @@ class window.FieldContent extends WidgetContent
   }
 
   initWithConfig: (config) ->
-    @_field = @get(config.field, @metrics()[0])
+    @_field = @get(config.field, Object.keys(@metrics())[0])
     @style = $.extend({}, FieldContent.STYLE_DEFAULTS, @get(config.style, {}))
     @mappings = @get(config.mappings, {})
 
@@ -27,10 +27,8 @@ class window.FieldContent extends WidgetContent
     @option('color', 'color', "Text Color")
 
   renderConfigOptions: ->
-    options = {}
-    options[metric] = metric for metric in @metrics()
     [
-      @option('select', 'field', "Field", options: options, hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output.")
+      @option('select', 'field', "Field", options: @metrics(), hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output.")
       @mappingSettings()
     ]
 

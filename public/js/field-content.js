@@ -34,7 +34,7 @@ window.FieldContent = (function(_super) {
   };
 
   FieldContent.prototype.initWithConfig = function(config) {
-    this._field = this.get(config.field, this.metrics()[0]);
+    this._field = this.get(config.field, Object.keys(this.metrics())[0]);
     this.style = $.extend({}, FieldContent.STYLE_DEFAULTS, this.get(config.style, {}));
     return this.mappings = this.get(config.mappings, {});
   };
@@ -48,16 +48,9 @@ window.FieldContent = (function(_super) {
   };
 
   FieldContent.prototype.renderConfigOptions = function() {
-    var metric, options, _i, _len, _ref;
-    options = {};
-    _ref = this.metrics();
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      metric = _ref[_i];
-      options[metric] = metric;
-    }
     return [
       this.option('select', 'field', "Field", {
-        options: options,
+        options: this.metrics(),
         hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output."
       }), this.mappingSettings()
     ];

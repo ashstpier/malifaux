@@ -21,18 +21,6 @@ window.API = {
       cb(data)
 
   assessmentPoints: -> @_config.assessmentPoints
-  metrics: -> [
-    "name"
-    "attendance.present"
-    "attendance.late"
-    "attendance.authorised"
-    "attendance.nonAuthorised"
-    "classGroup.classGroupCode"
-    "classGroup.classGroupName"
-    "classGroup.tutors"
-    "year.yearCode"
-    "year.yearName"
-    "year.yearLongName"
-  ]
+  metrics: -> @_config.data
 
 }

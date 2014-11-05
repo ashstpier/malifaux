@@ -81,10 +81,10 @@ class window.DynamicTableContent extends WidgetContent
         el.attr('data-key', option)
         $('.dynamic-list').remove()
         value = $(this).attr('data-key')
-        if self.metrics().indexOf(value) is -1
+        if Object.keys(self.metrics()).indexOf(value) is -1
           el.val(data.subjects[self.widget.subject].results?[value] or '')
         else
-          el.val(self.fieldFrom($(this).text(), data))
+          el.val(self.fieldFrom($(this).attr('data-key'), data))
     table
 
   cellContent: (cell, data, edit) ->
@@ -95,7 +95,7 @@ class window.DynamicTableContent extends WidgetContent
 
   cellValue: (cell, data) ->
     if cell.dynamic
-      if @metrics().indexOf(cell.value) is -1
+      if Object.keys(@metrics()).indexOf(cell.value) is -1
         if @widget.subject
           value = data.subjects[@widget.subject].results?[cell.value]
         else
@@ -108,11 +108,11 @@ class window.DynamicTableContent extends WidgetContent
 
   dynamicOptions: (el) ->
     list = """<ul class="dynamic-list">"""
-    for option in @metrics()
+    for option, name of @metrics()
       if el.attr('data-key') is option
-        list += """<li data-key="#{option}">#{option}<i class="glyphicons ok_2"></i></li>"""
+        list += """<li data-key="#{option}">#{name}<i class="glyphicons ok_2"></i></li>"""
       else
-        list += """<li data-key="#{option}">#{option}</li>"""
+        list += """<li data-key="#{option}">#{name}</li>"""
     if @widget.subject
       for point in @assessmentPoints()
         if el.attr('data-key') is point.name

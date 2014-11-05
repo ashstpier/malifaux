@@ -93,20 +93,21 @@ window.utils = {
     {
         "name": "Bloggs, Joe",
         "attendance": {
-            "present": "94.5",
-            "late": "0.8",
-            "authorised": "3.9",
-            "nonAuthorised": "0.8"
+          "present":"83.8",
+          "late":"13.5",
+          "authorised":"2.7",
+          "nonAuthorised":"0.0"
+        },
+        "demographics": {
+          "gender":"M"
         },
         "classGroup": {
-            "classGroupCode": "12/3",
-            "classGroupName": "12/3",
-            "tutors": "Mr A. Fake"
+          "classGroupCode":"13/3",
+          "classGroupName":"13/3",
+          "tutors":"TT1"
         },
-        "year": {
-            "yearCode": "12",
-            "yearName": "Yr 12",
-            "yearLongName": "Year 12"
+        "year":{
+          "yearCode":"13"
         },
         "subjects": {
             "#REG": {

@@ -38,6 +38,6 @@ window.API = {
     return this._config.assessmentPoints;
   },
   metrics: function() {
-    return ["name", "attendance.present", "attendance.late", "attendance.authorised", "attendance.nonAuthorised", "classGroup.classGroupCode", "classGroup.classGroupName", "classGroup.tutors", "year.yearCode", "year.yearName", "year.yearLongName"];
+    return this._config.data;
   }
 };
