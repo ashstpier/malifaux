@@ -111,7 +111,7 @@ window.utils = {
     if (window.environment.is_development) {
       return this.fakeSubject();
     } else {
-      return utils.querystring('subject');
+      return window.subject || utils.querystring('subject');
     }
   },
   fakeSubject: function() {

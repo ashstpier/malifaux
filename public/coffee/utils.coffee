@@ -85,7 +85,7 @@ window.utils = {
     if window.environment.is_development
       @fakeSubject()
     else
-      utils.querystring('subject')
+      window.subject or utils.querystring('subject')
 
   fakeSubject: -> 'PH'
 

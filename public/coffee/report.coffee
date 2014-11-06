@@ -3,8 +3,8 @@ window.Report = {
  init: ->
    Widget.loadAll =>
     API.loadConfig =>
-      @studentId = utils.querystring("studentid")
-      @templateName = utils.querystring('template')
+      @studentId = window.student_id or utils.querystring('studentid')
+      @templateName = window.template or utils.querystring('template')
       @debug = utils.querystring('debug') is '1'
       Template.load @templateName, (template) =>
         @template = template

@@ -3,8 +3,8 @@ window.Report = {
     return Widget.loadAll((function(_this) {
       return function() {
         return API.loadConfig(function() {
-          _this.studentId = utils.querystring("studentid");
-          _this.templateName = utils.querystring('template');
+          _this.studentId = window.student_id || utils.querystring('studentid');
+          _this.templateName = window.template || utils.querystring('template');
           _this.debug = utils.querystring('debug') === '1';
           return Template.load(_this.templateName, function(template) {
             _this.template = template;
