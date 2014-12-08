@@ -26,6 +26,8 @@ class window.Widget
     utils.loadCSS("widgets/#{name}/#{name}-content.css")
     utils.loadCoffeeScript("js/#{name}-content.js", cb)
 
+  isWidget: true
+
   constructor: (config={}, @data=null, @subject=null) ->
     @currentMode = 'layout'
     @guid = config.guid || utils.guid()
@@ -39,6 +41,7 @@ class window.Widget
       height: height
     }
     @position = @origin
+
 
   displayName: -> @content.constructor.displayName
 

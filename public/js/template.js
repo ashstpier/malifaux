@@ -70,7 +70,7 @@ window.Template = (function() {
     }
     data = data || utils.fakeStudentData();
     subject = subject || utils.subject(this.pagetype);
-    widget = widgetConfig.constructor.name === 'Widget' ? widgetConfig : new Widget(widgetConfig, data, subject);
+    widget = widgetConfig.isWidget ? widgetConfig : new Widget(widgetConfig, data, subject);
     this.widgets.push(widget);
     this.page.append(widget.render(mode));
     return widget;
