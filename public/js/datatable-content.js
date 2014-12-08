@@ -169,7 +169,7 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.columSettings = function() {
-    var col, node, self, table, _i, _len, _ref;
+    var col, columnChanged, node, self, table, _i, _len, _ref;
     node = $("<div class=\"datatable-cols prop-table-config\">\n  <h4>Columns</h4>\n  <div class=\"prop-table-wrap\">\n    <table>\n      <thead>\n        <tr>\n          <th>Title</th>\n          <th>Value</th>\n        </tr>\n      </thead>\n      <tbody class=\"edit-rows\">\n      </tbody>\n    </table>\n  </div>\n</div>");
     table = node.find('.edit-rows');
     _ref = this.columns;
@@ -178,13 +178,16 @@ window.DatatableContent = (function(_super) {
       table.append(this.buildEditRow(col));
     }
     table.append(this.buildEditRow());
-    table.on("input", ".col-title, .col-value, .col-compare-to", (function(_this) {
+    columnChanged = (function(_this) {
       return function() {
+        console.log('option changed');
         _this.maybeAddEditRow(table);
         _this.saveColumns(table);
         return _this.redraw();
       };
-    })(this));
+    })(this);
+    table.on("input", ".col-title", columnChanged);
+    table.on("change", ".col-value, .col-compare-to", columnChanged);
     self = this;
     table.on("click", ".mapping", function() {
       var element, mappingIndex, mappings;

@@ -39,6 +39,8 @@ window.Widget = (function() {
     return utils.loadCoffeeScript("js/" + name + "-content.js", cb);
   };
 
+  Widget.prototype.isWidget = true;
+
   function Widget(config, data, subject) {
     var height, width;
     if (config == null) {

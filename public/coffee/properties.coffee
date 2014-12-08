@@ -47,7 +47,10 @@ class window.Properties
     @el.on 'input', '.prop-coord-input', (e) =>
       input = $(e.target)
       @selected[input.data('fn')].call(@selected, input.val())
-    @el.on 'input', '.prop-input', (e) =>
+    @el.on 'input', 'input.prop-input', (e) =>
+      input = $(e.target)
+      @selected.content[input.data('fn')].call(@selected.content, input.val())
+    @el.on 'change', 'select.prop-input', (e) =>
       input = $(e.target)
       @selected.content[input.data('fn')].call(@selected.content, input.val())
     @el.on 'change', '.prop-input-checkbox', (e) =>

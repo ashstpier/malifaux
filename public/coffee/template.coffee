@@ -42,7 +42,7 @@ class window.Template
   addWidget: (widgetConfig, mode, data=null, subject=null) ->
     data = data or utils.fakeStudentData()
     subject = subject or utils.subject(@pagetype)
-    widget = if widgetConfig.constructor.name is 'Widget' then widgetConfig else new Widget(widgetConfig, data, subject)
+    widget = if widgetConfig.isWidget then widgetConfig else new Widget(widgetConfig, data, subject)
     @widgets.push(widget)
     @page.append(widget.render(mode))
     widget
