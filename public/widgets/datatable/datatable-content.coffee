@@ -136,10 +136,13 @@ class window.DatatableContent extends WidgetContent
     table = node.find('.edit-rows')
     table.append(@buildEditRow(col)) for col in @columns
     table.append(@buildEditRow())
-    table.on "input", ".col-title, .col-value, .col-compare-to", =>
+    columnChanged = =>
+      console.log 'option changed'
       @maybeAddEditRow(table)
       @saveColumns(table)
       @redraw()
+    table.on "input", ".col-title", columnChanged
+    table.on "change", ".col-value, .col-compare-to", columnChanged
     self = this
     table.on "click", ".mapping", ->
       element = this
