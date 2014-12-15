@@ -37,6 +37,7 @@
   overflow: hidden;
   background-color: #ffbb22;
   border-radius: 10px;
+  overflow: hidden;
 }
 .datatable .traffic-light.green { background-color: #22ee66; }
 .datatable .traffic-light.red   { background-color: #ee2222; }
