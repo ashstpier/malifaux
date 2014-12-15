@@ -25,13 +25,13 @@ class window.Properties
         <h3 class="prop-section-header">Layout</h3>
         <div class="prop-content">
           <label for="prop-value-x">x</label>
-          <input type="text" id="prop-value-x" class="prop-coord-input" data-fn="x" />
+          <input type="number" step="1" id="prop-value-x" class="prop-coord-input" data-fn="x" />
           <label for="prop-value-y">y</label>
-          <input type="text" id="prop-value-y" class="prop-coord-input" data-fn="y" />
+          <input type="number" step="1" id="prop-value-y" class="prop-coord-input" data-fn="y" />
           <label for="prop-value-width">width</label>
-          <input type="text" id="prop-value-width" class="prop-coord-input" data-fn="width" />
+          <input type="number" step="1" id="prop-value-width" class="prop-coord-input" data-fn="width" />
           <label for="prop-value-height">height</label>
-          <input type="text" id="prop-value-height" class="prop-coord-input"  data-fn="height"/>
+          <input type="number" step="1" id="prop-value-height" class="prop-coord-input"  data-fn="height"/>
         </div>
       </section>
 

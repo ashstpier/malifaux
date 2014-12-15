@@ -154,10 +154,10 @@ class window.Widget
     @el.height(@el.width()/ratio)
     @el.resizable(grid: Widget.GRID_SIZE, containment: Widget.PAGE_SELECTOR, aspectRatio: ratio)
 
-  width: (n) -> if n? then @el.width(n) else @el.width()
-  height: (n) -> if n? then @el.height(n) else @el.height()
-  x: (n) -> if n? then @el.css('left', "#{n}px") else @el.position().left
-  y: (n) -> if n? then @el.css('top', "#{n}px") else @el.position().top
+  width: (n) -> if n? then @el.width(Math.round(n)) else Math.round(@el.width())
+  height: (n) -> if n? then @el.height(Math.round(n)) else Math.round(@el.height())
+  x: (n) -> if n? then @el.css('left', "#{Math.round(n)}px") else Math.round(@el.position().left)
+  y: (n) -> if n? then @el.css('top', "#{Math.round(n)}px") else Math.round(@el.position().top)
 
   updateSelectedState: (selection) =>
     if this is selection
