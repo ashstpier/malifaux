@@ -265,33 +265,33 @@ window.Widget = (function() {
 
   Widget.prototype.width = function(n) {
     if (n != null) {
-      return this.el.width(n);
+      return this.el.width(Math.round(n));
     } else {
-      return this.el.width();
+      return Math.round(this.el.width());
     }
   };
 
   Widget.prototype.height = function(n) {
     if (n != null) {
-      return this.el.height(n);
+      return this.el.height(Math.round(n));
     } else {
-      return this.el.height();
+      return Math.round(this.el.height());
     }
   };
 
   Widget.prototype.x = function(n) {
     if (n != null) {
-      return this.el.css('left', "" + n + "px");
+      return this.el.css('left', "" + (Math.round(n)) + "px");
     } else {
-      return this.el.position().left;
+      return Math.round(this.el.position().left);
     }
   };
 
   Widget.prototype.y = function(n) {
     if (n != null) {
-      return this.el.css('top', "" + n + "px");
+      return this.el.css('top', "" + (Math.round(n)) + "px");
     } else {
-      return this.el.position().top;
+      return Math.round(this.el.position().top);
     }
   };
 

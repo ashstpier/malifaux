@@ -178,7 +178,7 @@ class window.DatatableContent extends WidgetContent
     tlClass = 'amber'
     tlClass = 'red' if numVal < compareTo
     tlClass = 'green' if numVal > compareTo
-    """<span class="traffic-light #{tlClass}">#{val}</span>"""
+    """<span class="traffic-light #{tlClass}"></span>"""
 
   maybeAddEditRow: (el) ->
     rows = el.find('.column-setting')

@@ -250,7 +250,7 @@ window.DatatableContent = (function(_super) {
     if (numVal > compareTo) {
       tlClass = 'green';
     }
-    return "<span class=\"traffic-light " + tlClass + "\">" + val + "</span>";
+    return "<span class=\"traffic-light " + tlClass + "\"></span>";
   };
 
   DatatableContent.prototype.maybeAddEditRow = function(el) {
