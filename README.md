@@ -14,7 +14,7 @@ You will need [Node.JS](http://nodejs.org) installed to build this project. Then
 
     npm install -g grunt-cli
     npm install
-    grunt server
+    gulp server
     open http://localhost:9000/
 
 
