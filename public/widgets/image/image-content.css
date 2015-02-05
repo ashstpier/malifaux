@@ -4,6 +4,10 @@
   height: 100%;
 }
 
+.image-widget img {
+  display: block;
+}
+
 .image-widget input[type="file"] {
   display: none;
 }
@@ -22,6 +26,11 @@
   background-repeat: no-repeat;
   background-position: center;
   background-color: rgba(128, 128, 128, 0.15);
+}
+
+.widget-display-mode .image-widget {
+  background-image: none;
+  background-color: transparent;
 }
 
 .image-widget .edit .icon {

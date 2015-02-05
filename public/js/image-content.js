@@ -106,6 +106,10 @@ window.ImageContent = (function(_super) {
     return node;
   };
 
+  ImageContent.prototype.render_display = function(data) {
+    return $("<div class=\"image-widget\">\n  <img class=\"content\" src=\"" + this.src + "\">\n</div>");
+  };
+
   ImageContent.prototype.renderConfigOptions = function() {
     return [this.option('checkbox', 'maintainAspectRatio', "Maintain Aspect Ratio")];
   };

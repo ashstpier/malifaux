@@ -58,6 +58,13 @@ class window.ImageContent extends WidgetContent
     @bindEvents(node)
     node
 
+  render_display: (data) ->
+    $("""
+      <div class="image-widget">
+        <img class="content" src="#{@src}">
+      </div>
+    """)
+
   renderConfigOptions: ->
     [
       @option('checkbox', 'maintainAspectRatio', "Maintain Aspect Ratio")
