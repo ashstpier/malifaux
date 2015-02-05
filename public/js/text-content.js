@@ -25,7 +25,7 @@ window.TextContent = (function(_super) {
   };
 
   TextContent.prototype.editable = function() {
-    return true;
+    return this.widget.currentMode === 'layout';
   };
 
   TextContent.EDITOR_CONFIG = {

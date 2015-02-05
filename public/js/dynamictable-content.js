@@ -31,7 +31,7 @@ window.DynamicTableContent = (function(_super) {
   };
 
   DynamicTableContent.prototype.editable = function() {
-    return true;
+    return this.widget.currentMode === 'layout';
   };
 
   DynamicTableContent.STYLE_DEFAULTS = {

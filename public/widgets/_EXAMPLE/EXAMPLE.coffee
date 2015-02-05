@@ -25,6 +25,8 @@ class window._EXAMPLEContent extends WidgetContent
 
   # Returns true/false depending on if the Widget is currently able
   # to go into double click edit mode.
+  # A common requirment is to allow double clicking only in 'layout mode', e.g.
+  # editable: -> @widget.currentMode is 'layout'
   # Defaults to false and most Widgets shouldn't need this, see: render_edit()
   # -----
   # editable: -> false

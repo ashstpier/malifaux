@@ -6,7 +6,7 @@ class window.DynamicTableContent extends WidgetContent
 
   defaultWidth: -> 360
   defaultHeight: -> 110
-  editable: -> true
+  editable: -> @widget.currentMode is 'layout'
 
   @STYLE_DEFAULTS: {
     header_position: 'top'
