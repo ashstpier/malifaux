@@ -101,12 +101,7 @@ window.Designer = {
     @history.bind 'history:change', => @updateHistoryButtonState()
     @bindKeyboardEvents()
 
-    window.addEventListener "beforeunload", (e) =>
-      if @hasUnsavedChanges()
-        (e or window.event).returnValue = Designer.UNSAVED_CHANGES_WARNING
-        return Designer.UNSAVED_CHANGES_WARNING
-      else
-        null
+    window.addEventListener "beforeunload", (e) => @reminderToSave(e)
 
     for name, className of Widget.WIDGETS
       do (className) => $("#add-#{name}").click =>
@@ -166,7 +161,6 @@ window.Designer = {
       @clearSelection()
       @clearEditWidget()
 
-
   clearEditWidget: ->
     if @currentEditWidget
       @currentEditWidget.saveConfig()
@@ -217,16 +211,17 @@ window.Designer = {
     false
 
   hasUnsavedChanges: ->
-    @history.canUndo()
+    @history.canUndo() and @safeToExit isnt true
 
-
-  reminderToSave: =>
-    if @history.canUndo()
-      "You haven't saved your progress!"
+  reminderToSave: (e) ->
+    if @hasUnsavedChanges()
+      (e or window.event).returnValue = Designer.UNSAVED_CHANGES_WARNING
+      return Designer.UNSAVED_CHANGES_WARNING
     else
       null
 
   exitDesigner: ->
+    @safeToExit = true
     redirect = if environment.is_ccr then "/ccr2/parentReports/" else "./index.html"
     window.location.href = redirect
 

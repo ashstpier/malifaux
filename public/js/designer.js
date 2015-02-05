@@ -161,12 +161,7 @@ window.Designer = {
     this.bindKeyboardEvents();
     window.addEventListener("beforeunload", (function(_this) {
       return function(e) {
-        if (_this.hasUnsavedChanges()) {
-          (e || window.event).returnValue = Designer.UNSAVED_CHANGES_WARNING;
-          return Designer.UNSAVED_CHANGES_WARNING;
-        } else {
-          return null;
-        }
+        return _this.reminderToSave(e);
       };
     })(this));
     _ref = Widget.WIDGETS;
@@ -379,19 +374,19 @@ window.Designer = {
     return false;
   },
   hasUnsavedChanges: function() {
-    return this.history.canUndo();
+    return this.history.canUndo() && this.safeToExit !== true;
   },
-  reminderToSave: (function(_this) {
-    return function() {
-      if (_this.history.canUndo()) {
-        return "You haven't saved your progress!";
-      } else {
-        return null;
-      }
-    };
-  })(this),
+  reminderToSave: function(e) {
+    if (this.hasUnsavedChanges()) {
+      (e || window.event).returnValue = Designer.UNSAVED_CHANGES_WARNING;
+      return Designer.UNSAVED_CHANGES_WARNING;
+    } else {
+      return null;
+    }
+  },
   exitDesigner: function() {
     var redirect;
+    this.safeToExit = true;
     redirect = environment.is_ccr ? "/ccr2/parentReports/" : "./index.html";
     return window.location.href = redirect;
   },
