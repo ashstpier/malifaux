@@ -54,8 +54,7 @@ window.SubjectFieldContent = (function(_super) {
     ];
     if (this.widget.subject === null) {
       options.unshift(this.option('select', 'subject', "Subject", {
-        options: API.sortedSubjects(),
-        hint: "The 2 or 3 letter CCR! subject code you would like to pull from."
+        options: API.sortedSubjects()
       }));
     }
     return options;
