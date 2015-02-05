@@ -1,3 +1,22 @@
+window.defer = function(ms, fn) {
+  if (fn == null) {
+    fn = null;
+  }
+  if (fn === null) {
+    fn = ms;
+    ms = 0;
+  }
+  return setTimeout(fn, ms);
+};
+
+window.delay = function(ms, func) {
+  return setTimeout(func, ms);
+};
+
+window.every = function(ms, func) {
+  return setInterval(func, ms);
+};
+
 window.environment = {
   name: window.location.port === "9000" ? "development" : "production"
 };

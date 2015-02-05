@@ -34,6 +34,7 @@ class window.ImageContent extends WidgetContent
 
   setImage: (data, doRedraw=true) ->
     @src = data
+    @maybeWarnAboutGif()
     @redraw() if doRedraw
 
   aspectRatio: ->
@@ -49,7 +50,7 @@ class window.ImageContent extends WidgetContent
     $("""
       <div class="image-widget #{if @src is ImageContent.DEFAULT_IMAGE then 'image-blank'}">
         <img class="content" src="#{@src}">
-        <input class="picker" type="file" accept="image/png, image/gif, image/jpeg">
+        <input class="picker" type="file" accept="image/png, image/jpeg">
       </div>
     """)
 
@@ -71,6 +72,18 @@ class window.ImageContent extends WidgetContent
     ]
 
   maintainAspectRatio: @property('_maintainAspectRatio')
+
+  maybeWarnAboutGif: ->
+    isGif = @src and @src isnt ImageContent.DEFAULT_IMAGE and @src.indexOf("image/gif;") > -1
+    if isGif and @widget.currentMode is 'layout'
+      delay 1000, ->
+        alert """
+          Your template contains one or more GIF images.
+
+          GIF files are not currently supported and may not display correctly when printed.
+
+          Please replace all GIF images with alternatives in either JPG or PNG format.
+        """
 
   serialize: ->
     { src: @src, maintainAspectRatio: @maintainAspectRatio() }

@@ -74,6 +74,7 @@ window.ImageContent = (function(_super) {
       doRedraw = true;
     }
     this.src = data;
+    this.maybeWarnAboutGif();
     if (doRedraw) {
       return this.redraw();
     }
@@ -96,7 +97,7 @@ window.ImageContent = (function(_super) {
         return _this.setAspectRatio(_this.aspectRatio());
       };
     })(this)), 0);
-    return $("<div class=\"image-widget " + (this.src === ImageContent.DEFAULT_IMAGE ? 'image-blank' : void 0) + "\">\n  <img class=\"content\" src=\"" + this.src + "\">\n  <input class=\"picker\" type=\"file\" accept=\"image/png, image/gif, image/jpeg\">\n</div>");
+    return $("<div class=\"image-widget " + (this.src === ImageContent.DEFAULT_IMAGE ? 'image-blank' : void 0) + "\">\n  <img class=\"content\" src=\"" + this.src + "\">\n  <input class=\"picker\" type=\"file\" accept=\"image/png, image/jpeg\">\n</div>");
   };
 
   ImageContent.prototype.render_edit = function(data) {
@@ -115,6 +116,16 @@ window.ImageContent = (function(_super) {
   };
 
   ImageContent.prototype.maintainAspectRatio = ImageContent.property('_maintainAspectRatio');
+
+  ImageContent.prototype.maybeWarnAboutGif = function() {
+    var isGif;
+    isGif = this.src && this.src !== ImageContent.DEFAULT_IMAGE && this.src.indexOf("image/gif;") > -1;
+    if (isGif && this.widget.currentMode === 'layout') {
+      return delay(1000, function() {
+        return alert("Your template contains one or more GIF images.\n\nGIF files are not currently supported and may not display correctly when printed.\n\nPlease replace all GIF images with alternatives in either JPG or PNG format.");
+      });
+    }
+  };
 
   ImageContent.prototype.serialize = function() {
     return {

@@ -1,3 +1,13 @@
+window.defer = (ms, fn=null) ->
+  if fn is null
+    fn = ms
+    ms = 0
+  setTimeout(fn, ms)
+
+window.delay = (ms, func) ->  setTimeout func, ms
+
+window.every = (ms, func) ->  setInterval func, ms
+
 window.environment = {
   name: if window.location.port == "9000" then "development" else "production"
 }
