@@ -4,6 +4,7 @@ window.Designer = {
   propertyPanel: null,
   history: new UndoHistory(),
   NUDGE_SIZE: 10,
+  UNSAVED_CHANGES_WARNING: "You have made changes to the template without saving them.\n\nPlease use the 'Exit' button to save your changes.",
   loadAll: function(template) {
     this.template = template;
     this.templateKey = template.key;
@@ -158,6 +159,16 @@ window.Designer = {
       };
     })(this));
     this.bindKeyboardEvents();
+    window.addEventListener("beforeunload", (function(_this) {
+      return function(e) {
+        if (_this.hasUnsavedChanges()) {
+          (e || window.event).returnValue = Designer.UNSAVED_CHANGES_WARNING;
+          return Designer.UNSAVED_CHANGES_WARNING;
+        } else {
+          return null;
+        }
+      };
+    })(this));
     _ref = Widget.WIDGETS;
     _results = [];
     for (name in _ref) {
@@ -357,9 +368,7 @@ window.Designer = {
     return this.template.removeAllWidgets();
   },
   promptSave: function() {
-    var shouldPrompt;
-    shouldPrompt = this.history.canUndo();
-    if (shouldPrompt) {
+    if (this.hasUnsavedChanges()) {
       if (!utils.is_ccr) {
         this.takeScreenShot();
       }
@@ -369,6 +378,18 @@ window.Designer = {
     }
     return false;
   },
+  hasUnsavedChanges: function() {
+    return this.history.canUndo();
+  },
+  reminderToSave: (function(_this) {
+    return function() {
+      if (_this.history.canUndo()) {
+        return "You haven't saved your progress!";
+      } else {
+        return null;
+      }
+    };
+  })(this),
   exitDesigner: function() {
     var redirect;
     redirect = environment.is_ccr ? "/ccr2/parentReports/" : "./index.html";

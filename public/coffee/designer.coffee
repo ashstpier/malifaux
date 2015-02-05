@@ -6,6 +6,11 @@ window.Designer = {
   history: new UndoHistory()
 
   NUDGE_SIZE: 10
+  UNSAVED_CHANGES_WARNING: """
+    You have made changes to the template without saving them.
+
+    Please use the 'Exit' button to save your changes.
+  """
 
   loadAll: (template) ->
     @template = template
@@ -95,6 +100,13 @@ window.Designer = {
     $('#redo').click => @history.redo()
     @history.bind 'history:change', => @updateHistoryButtonState()
     @bindKeyboardEvents()
+
+    window.addEventListener "beforeunload", (e) =>
+      if @hasUnsavedChanges()
+        (e or window.event).returnValue = Designer.UNSAVED_CHANGES_WARNING
+        return Designer.UNSAVED_CHANGES_WARNING
+      else
+        null
 
     for name, className of Widget.WIDGETS
       do (className) => $("#add-#{name}").click =>
@@ -197,15 +209,22 @@ window.Designer = {
   clear: -> @template.removeAllWidgets()
 
   promptSave: ->
-    shouldPrompt = @history.canUndo()
-
-    if shouldPrompt
+    if @hasUnsavedChanges()
       @takeScreenShot() if !utils.is_ccr
       $('#save-modal').modal()
     else
       @exitDesigner()
-
     false
+
+  hasUnsavedChanges: ->
+    @history.canUndo()
+
+
+  reminderToSave: =>
+    if @history.canUndo()
+      "You haven't saved your progress!"
+    else
+      null
 
   exitDesigner: ->
     redirect = if environment.is_ccr then "/ccr2/parentReports/" else "./index.html"
