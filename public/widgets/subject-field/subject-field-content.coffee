@@ -10,17 +10,24 @@ class window.SubjectFieldContent extends FieldContent
   initWithConfig: (config) ->
     super(config)
     @_subject = @get(config.subject, 'PH')
-    @_field = @get(config.field, @assessmentPoints()[0].code)
+    @_field = @get(config.field, 'subjectName')
     @mappings = @get(config.mappings, {})
 
   render_layout: (data) ->
     $("""<div class="subject-field-widget" style="#{@textStyles()}">#{@fieldFrom(data)}</div>""")
 
   renderConfigOptions: ->
-    options = {}
-    options[point.code] = point.longName for point in @assessmentPoints()
+    fields = {
+      "Subject": [
+        ['subjectName', 'Subject Name'],
+        ['teacherNames', 'Teacher Names'],
+        ['teachingGroupCode', 'Teaching Group Code']
+      ],
+      "Results": []
+    }
+    fields.Results.push([point.code, point.longName]) for point in @assessmentPoints()
     options = [
-      @option('select', 'field', "Field", options: options, hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output.")
+      @option('select', 'field', "Field", options: fields, hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output.")
       @mappingSettings()
     ]
     if @widget.subject is null
@@ -46,7 +53,8 @@ class window.SubjectFieldContent extends FieldContent
   fieldFrom: (data) ->
     subject = if @widget.subject then @widget.subject else @subject()
     defaultValue = if @widget.currentMode is 'display' then '' else "? No Value ?"
-    value = data.subjects[subject]?.results[@field()] or defaultValue
+    subjectScope = data.subjects[subject]
+    value = subjectScope?.results[@field()] or subjectScope?[@field()] or defaultValue
     @mappings[value] or value
 
   subject: @property('_subject')

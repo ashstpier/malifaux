@@ -132,13 +132,23 @@ class window.OptionRenderer
     """
 
   renderSelectInput: (styles) ->
-    if $.isArray(@config.options)
+    grouped = false
+    if $.isArray(@config.options) # array format: [[val1, label1], [val2, label2], ...]
       optionsArray = @config.options
-    else
+    else if $.isArray(@config.options[Object.keys(@config.options)[0]]) # optgroup format: {group1: [[val1, label1]], group2: [[val2, label2]], ...}
+      grouped = true
+    else # object format: {val1: label1, val2: label2, ...}
       optionsArray = ([key, value] for key, value of @config.options)
-    console.log optionsArray
-    options = for item in optionsArray
-      """<option value="#{item[0]}" #{if @value is item[0] then 'selected' else ''}>#{item[1]}</option>"""
+
+    renderOption = (item) -> """<option value="#{item[0]}" #{if @value is item[0] then 'selected' else ''}>#{item[1]}</option>"""
+
+    if grouped
+      options = for group, items of @config.options
+        items = (renderOption(item) for item in items).join("\n")
+        """<optgroup label="#{group}">#{items}</optgroup>"""
+    else
+      options = (renderOption(item) for item in optionsArray)
+
     """
       <select name="#{@key}" class="prop-input" data-fn="#{@key}">
         #{options.join("\n")}

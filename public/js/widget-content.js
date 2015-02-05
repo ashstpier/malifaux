@@ -262,9 +262,12 @@ window.OptionRenderer = (function() {
   };
 
   OptionRenderer.prototype.renderSelectInput = function(styles) {
-    var item, key, options, optionsArray, value;
+    var group, grouped, item, items, key, options, optionsArray, renderOption, value;
+    grouped = false;
     if ($.isArray(this.config.options)) {
       optionsArray = this.config.options;
+    } else if ($.isArray(this.config.options[Object.keys(this.config.options)[0]])) {
+      grouped = true;
     } else {
       optionsArray = (function() {
         var _ref, _results;
@@ -277,16 +280,40 @@ window.OptionRenderer = (function() {
         return _results;
       }).call(this);
     }
-    console.log(optionsArray);
-    options = (function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = optionsArray.length; _i < _len; _i++) {
-        item = optionsArray[_i];
-        _results.push("<option value=\"" + item[0] + "\" " + (this.value === item[0] ? 'selected' : '') + ">" + item[1] + "</option>");
-      }
-      return _results;
-    }).call(this);
+    renderOption = function(item) {
+      return "<option value=\"" + item[0] + "\" " + (this.value === item[0] ? 'selected' : '') + ">" + item[1] + "</option>";
+    };
+    if (grouped) {
+      options = (function() {
+        var _ref, _results;
+        _ref = this.config.options;
+        _results = [];
+        for (group in _ref) {
+          items = _ref[group];
+          items = ((function() {
+            var _i, _len, _results1;
+            _results1 = [];
+            for (_i = 0, _len = items.length; _i < _len; _i++) {
+              item = items[_i];
+              _results1.push(renderOption(item));
+            }
+            return _results1;
+          })()).join("\n");
+          _results.push("<optgroup label=\"" + group + "\">" + items + "</optgroup>");
+        }
+        return _results;
+      }).call(this);
+    } else {
+      options = (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = optionsArray.length; _i < _len; _i++) {
+          item = optionsArray[_i];
+          _results.push(renderOption(item));
+        }
+        return _results;
+      })();
+    }
     return "<select name=\"" + this.key + "\" class=\"prop-input\" data-fn=\"" + this.key + "\">\n  " + (options.join("\n")) + "\n</select>";
   };
 

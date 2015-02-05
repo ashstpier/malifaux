@@ -30,7 +30,7 @@ window.SubjectFieldContent = (function(_super) {
   SubjectFieldContent.prototype.initWithConfig = function(config) {
     SubjectFieldContent.__super__.initWithConfig.call(this, config);
     this._subject = this.get(config.subject, 'PH');
-    this._field = this.get(config.field, this.assessmentPoints()[0].code);
+    this._field = this.get(config.field, 'subjectName');
     return this.mappings = this.get(config.mappings, {});
   };
 
@@ -39,16 +39,19 @@ window.SubjectFieldContent = (function(_super) {
   };
 
   SubjectFieldContent.prototype.renderConfigOptions = function() {
-    var options, point, _i, _len, _ref;
-    options = {};
+    var fields, options, point, _i, _len, _ref;
+    fields = {
+      "Subject": [['subjectName', 'Subject Name'], ['teacherNames', 'Teacher Names'], ['teachingGroupCode', 'Teaching Group Code']],
+      "Results": []
+    };
     _ref = this.assessmentPoints();
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       point = _ref[_i];
-      options[point.code] = point.longName;
+      fields.Results.push([point.code, point.longName]);
     }
     options = [
       this.option('select', 'field', "Field", {
-        options: options,
+        options: fields,
         hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output."
       }), this.mappingSettings()
     ];
@@ -85,10 +88,11 @@ window.SubjectFieldContent = (function(_super) {
   };
 
   SubjectFieldContent.prototype.fieldFrom = function(data) {
-    var defaultValue, subject, value, _ref;
+    var defaultValue, subject, subjectScope, value;
     subject = this.widget.subject ? this.widget.subject : this.subject();
     defaultValue = this.widget.currentMode === 'display' ? '' : "? No Value ?";
-    value = ((_ref = data.subjects[subject]) != null ? _ref.results[this.field()] : void 0) || defaultValue;
+    subjectScope = data.subjects[subject];
+    value = (subjectScope != null ? subjectScope.results[this.field()] : void 0) || (subjectScope != null ? subjectScope[this.field()] : void 0) || defaultValue;
     return this.mappings[value] || value;
   };
 
