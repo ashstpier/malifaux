@@ -10,7 +10,7 @@ class window.ImageContent extends WidgetContent
   @DEFAULT_IMAGE: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
 
   initWithConfig: (config) ->
-    @setImage(@get(config.src, ImageContent.DEFAULT_IMAGE))
+    @setImage(@get(config.src, ImageContent.DEFAULT_IMAGE), false)
     @_maintainAspectRatio = @get(config.maintainAspectRatio, true)
 
   bindEvents: (el) ->
@@ -31,10 +31,10 @@ class window.ImageContent extends WidgetContent
     oldSrc = @src
     @setImage(data)
     Designer.history.push(this, 'setImage', oldSrc, @src)
-    @redraw()
 
-  setImage: (data) ->
+  setImage: (data, doRedraw=true) ->
     @src = data
+    @redraw() if doRedraw
 
   aspectRatio: ->
     if @maintainAspectRatio()

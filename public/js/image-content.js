@@ -27,7 +27,7 @@ window.ImageContent = (function(_super) {
   ImageContent.DEFAULT_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
   ImageContent.prototype.initWithConfig = function(config) {
-    this.setImage(this.get(config.src, ImageContent.DEFAULT_IMAGE));
+    this.setImage(this.get(config.src, ImageContent.DEFAULT_IMAGE), false);
     return this._maintainAspectRatio = this.get(config.maintainAspectRatio, true);
   };
 
@@ -66,12 +66,17 @@ window.ImageContent = (function(_super) {
     var oldSrc;
     oldSrc = this.src;
     this.setImage(data);
-    Designer.history.push(this, 'setImage', oldSrc, this.src);
-    return this.redraw();
+    return Designer.history.push(this, 'setImage', oldSrc, this.src);
   };
 
-  ImageContent.prototype.setImage = function(data) {
-    return this.src = data;
+  ImageContent.prototype.setImage = function(data, doRedraw) {
+    if (doRedraw == null) {
+      doRedraw = true;
+    }
+    this.src = data;
+    if (doRedraw) {
+      return this.redraw();
+    }
   };
 
   ImageContent.prototype.aspectRatio = function() {
