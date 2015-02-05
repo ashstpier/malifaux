@@ -86,6 +86,15 @@ class window.WidgetContent
   renderAppearanceOptions: -> false
   renderConfigOptions: -> false
 
+  placeholderWithLabel: (label, html=true) ->
+    blank = if html then '&nbsp;' else ''
+    return blank if @widget.currentMode is 'display'
+    return blank if label is null or label is undefined or label.length is 0
+    if html
+      """<span class="no-value">#{label}</span>"""
+    else
+      "[?:#{label}]"
+
 
 class window.OptionRenderer
   constructor: (@receiver, @type, @key, @label, @config={}) ->

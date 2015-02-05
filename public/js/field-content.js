@@ -93,9 +93,9 @@ window.FieldContent = (function(_super) {
     _ref = this._field.split('.');
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       key = _ref[_i];
-      data = data[key];
+      data = data != null ? data[key] : void 0;
     }
-    return this.mappings[data] || data;
+    return this.mappings[data] || data || this.placeholderWithLabel(key);
   };
 
   FieldContent.prototype.font = FieldContent.property('style', 'font');

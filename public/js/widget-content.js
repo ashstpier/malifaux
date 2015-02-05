@@ -191,6 +191,25 @@ window.WidgetContent = (function() {
     return false;
   };
 
+  WidgetContent.prototype.placeholderWithLabel = function(label, html) {
+    var blank;
+    if (html == null) {
+      html = true;
+    }
+    blank = html ? '&nbsp;' : '';
+    if (this.widget.currentMode === 'display') {
+      return blank;
+    }
+    if (label === null || label === void 0 || label.length === 0) {
+      return blank;
+    }
+    if (html) {
+      return "<span class=\"no-value\">" + label + "</span>";
+    } else {
+      return "[?:" + label + "]";
+    }
+  };
+
   return WidgetContent;
 
 })();

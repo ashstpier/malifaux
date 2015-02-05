@@ -81,28 +81,26 @@ class window.DynamicTableContent extends WidgetContent
         el.attr('data-key', option)
         $('.dynamic-list').remove()
         value = $(this).attr('data-key')
-        if Object.keys(self.metrics()).indexOf(value) is -1
-          el.val(data.subjects[self.widget.subject].results?[value] or '')
-        else
-          el.val(self.fieldFrom($(this).attr('data-key'), data))
+        cell = self.makeCell(value, true)
+        el.val(self.cellValue(cell, data, false))
     table
 
   cellContent: (cell, data, edit) ->
     if edit
-      """<input type="text" data-dynamic="#{cell.dynamic}" data-key="#{cell.value}" value="#{@cellValue(cell, data)}">"""
+      """<input type="text" data-dynamic="#{cell.dynamic}" data-key="#{cell.value}" value="#{@cellValue(cell, data, false)}">"""
     else
-      @cellValue(cell, data) or "&nbsp;"
+      @cellValue(cell, data)
 
-  cellValue: (cell, data) ->
+  cellValue: (cell, data, html=true) ->
     if cell.dynamic
       if Object.keys(@metrics()).indexOf(cell.value) is -1
         if @widget.subject
           value = data.subjects[@widget.subject].results?[cell.value]
         else
-          value = ''
+          value = null
       else
         value = @fieldFrom(cell.value, data)
-      @mappings[value] or value
+      @mappings[value] or value or @placeholderWithLabel(cell.value, html)
     else
       cell.value
 

@@ -232,7 +232,7 @@ window.DatatableContent = (function(_super) {
   DatatableContent.prototype.cellValue = function(subject, col) {
     var originalValue, _ref, _ref1;
     originalValue = ((_ref = subject.results) != null ? _ref[col.value] : void 0) || '';
-    return ((_ref1 = col.mappings) != null ? _ref1[originalValue] : void 0) || originalValue;
+    return ((_ref1 = col.mappings) != null ? _ref1[originalValue] : void 0) || originalValue || this.placeholderWithLabel(col.value);
   };
 
   DatatableContent.prototype.cellContent = function(subject, col) {

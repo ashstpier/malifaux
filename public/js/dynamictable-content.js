@@ -139,17 +139,14 @@ window.DynamicTableContent = (function(_super) {
       el.parent().append(self.dynamicOptions(el));
       $('.dynamic-list').css('top', el.height() + 1);
       return $('.dynamic-list').on("click", "li", function() {
-        var option, value, _ref1;
+        var cell, option, value;
         option = $(this).attr('data-key');
         el.attr('data-dynamic', true);
         el.attr('data-key', option);
         $('.dynamic-list').remove();
         value = $(this).attr('data-key');
-        if (Object.keys(self.metrics()).indexOf(value) === -1) {
-          return el.val(((_ref1 = data.subjects[self.widget.subject].results) != null ? _ref1[value] : void 0) || '');
-        } else {
-          return el.val(self.fieldFrom($(this).attr('data-key'), data));
-        }
+        cell = self.makeCell(value, true);
+        return el.val(self.cellValue(cell, data, false));
       });
     });
     return table;
@@ -157,25 +154,28 @@ window.DynamicTableContent = (function(_super) {
 
   DynamicTableContent.prototype.cellContent = function(cell, data, edit) {
     if (edit) {
-      return "<input type=\"text\" data-dynamic=\"" + cell.dynamic + "\" data-key=\"" + cell.value + "\" value=\"" + (this.cellValue(cell, data)) + "\">";
+      return "<input type=\"text\" data-dynamic=\"" + cell.dynamic + "\" data-key=\"" + cell.value + "\" value=\"" + (this.cellValue(cell, data, false)) + "\">";
     } else {
-      return this.cellValue(cell, data) || "&nbsp;";
+      return this.cellValue(cell, data);
     }
   };
 
-  DynamicTableContent.prototype.cellValue = function(cell, data) {
+  DynamicTableContent.prototype.cellValue = function(cell, data, html) {
     var value, _ref;
+    if (html == null) {
+      html = true;
+    }
     if (cell.dynamic) {
       if (Object.keys(this.metrics()).indexOf(cell.value) === -1) {
         if (this.widget.subject) {
           value = (_ref = data.subjects[this.widget.subject].results) != null ? _ref[cell.value] : void 0;
         } else {
-          value = '';
+          value = null;
         }
       } else {
         value = this.fieldFrom(cell.value, data);
       }
-      return this.mappings[value] || value;
+      return this.mappings[value] || value || this.placeholderWithLabel(cell.value, html);
     } else {
       return cell.value;
     }

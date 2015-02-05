@@ -52,7 +52,7 @@ class window.SubjectFieldContent extends FieldContent
 
   fieldFrom: (data) ->
     subject = if @widget.subject then @widget.subject else @subject()
-    defaultValue = if @widget.currentMode is 'display' then '' else "? No Value ?"
+    defaultValue = @placeholderWithLabel(@field())
     subjectScope = data.subjects[subject]
     value = subjectScope?.results[@field()] or subjectScope?[@field()] or defaultValue
     @mappings[value] or value

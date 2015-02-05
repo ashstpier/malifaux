@@ -141,6 +141,18 @@ body {
   padding: 0;
 }
 
+.widget-content .no-value {
+  /*opacity: 0.5;*/
+}
+.widget-content .no-value::before {
+  content: '[?:';
+  color: #f66;
+}
+.widget-content .no-value::after {
+  content: ']';
+  color: #f66;
+}
+
 .browseimage {
   color: white;
   width: 100%;

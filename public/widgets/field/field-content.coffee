@@ -52,8 +52,8 @@ class window.FieldContent extends WidgetContent
     @styleString('color': @style.color, 'font-family': @style.font, 'font-size': @style.size)
 
   fieldFrom: (data) ->
-    data = data[key] for key in @_field.split('.')
-    @mappings[data] or data
+    data = data?[key] for key in @_field.split('.')
+    @mappings[data] or data or @placeholderWithLabel(key)
 
   font: @property('style', 'font')
   size: @property('style', 'size')

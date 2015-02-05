@@ -168,7 +168,7 @@ class window.DatatableContent extends WidgetContent
 
   cellValue: (subject, col) ->
     originalValue = subject.results?[col.value] or ''
-    col.mappings?[originalValue] or originalValue
+    col.mappings?[originalValue] or originalValue or @placeholderWithLabel(col.value)
 
   cellContent: (subject, col) ->
     val = @cellValue(subject, col)
