@@ -10,7 +10,7 @@ class window.SubjectFieldContent extends FieldContent
   initWithConfig: (config) ->
     super(config)
     @_subject = @get(config.subject, 'PH')
-    @_field = @get(config.field, 'A_KS4_STA#A_Y11a_V3#Aut2_Comm')
+    @_field = @get(config.field, @assessmentPoints()[0].code)
     @mappings = @get(config.mappings, {})
 
   render_layout: (data) ->
@@ -18,7 +18,7 @@ class window.SubjectFieldContent extends FieldContent
 
   renderConfigOptions: ->
     options = {}
-    options[point.name] = point.longName for point in @assessmentPoints()
+    options[point.code] = point.longName for point in @assessmentPoints()
     options = [
       @option('select', 'field', "Field", options: options, hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output.")
       @mappingSettings()
@@ -52,4 +52,4 @@ class window.SubjectFieldContent extends FieldContent
   subject: @property('_subject')
 
   serialize: ->
-    {field: @_field, subject: @_subject, style: @style, mappings: @mappings}
+    {field: @field(), subject: @subject(), style: @style, mappings: @mappings}

@@ -30,7 +30,7 @@ window.SubjectFieldContent = (function(_super) {
   SubjectFieldContent.prototype.initWithConfig = function(config) {
     SubjectFieldContent.__super__.initWithConfig.call(this, config);
     this._subject = this.get(config.subject, 'PH');
-    this._field = this.get(config.field, 'A_KS4_STA#A_Y11a_V3#Aut2_Comm');
+    this._field = this.get(config.field, this.assessmentPoints()[0].code);
     return this.mappings = this.get(config.mappings, {});
   };
 
@@ -44,7 +44,7 @@ window.SubjectFieldContent = (function(_super) {
     _ref = this.assessmentPoints();
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       point = _ref[_i];
-      options[point.name] = point.longName;
+      options[point.code] = point.longName;
     }
     options = [
       this.option('select', 'field', "Field", {
@@ -96,8 +96,8 @@ window.SubjectFieldContent = (function(_super) {
 
   SubjectFieldContent.prototype.serialize = function() {
     return {
-      field: this._field,
-      subject: this._subject,
+      field: this.field(),
+      subject: this.subject(),
       style: this.style,
       mappings: this.mappings
     };
