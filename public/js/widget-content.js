@@ -262,14 +262,28 @@ window.OptionRenderer = (function() {
   };
 
   OptionRenderer.prototype.renderSelectInput = function(styles) {
-    var name, options, value;
+    var item, key, options, optionsArray, value;
+    if ($.isArray(this.config.options)) {
+      optionsArray = this.config.options;
+    } else {
+      optionsArray = (function() {
+        var _ref, _results;
+        _ref = this.config.options;
+        _results = [];
+        for (key in _ref) {
+          value = _ref[key];
+          _results.push([key, value]);
+        }
+        return _results;
+      }).call(this);
+    }
+    console.log(optionsArray);
     options = (function() {
-      var _ref, _results;
-      _ref = this.config.options;
+      var _i, _len, _results;
       _results = [];
-      for (value in _ref) {
-        name = _ref[value];
-        _results.push("<option value=\"" + value + "\" " + (this.value === value ? 'selected' : '') + ">" + name + "</option>");
+      for (_i = 0, _len = optionsArray.length; _i < _len; _i++) {
+        item = optionsArray[_i];
+        _results.push("<option value=\"" + item[0] + "\" " + (this.value === item[0] ? 'selected' : '') + ">" + item[1] + "</option>");
       }
       return _results;
     }).call(this);

@@ -39,5 +39,29 @@ window.API = {
   },
   metrics: function() {
     return this._config.data;
+  },
+  subjects: function() {
+    return this._config.subjects;
+  },
+  sortedSubjects: function() {
+    var code, name;
+    return ((function() {
+      var _ref, _results;
+      _ref = this.subjects();
+      _results = [];
+      for (code in _ref) {
+        name = _ref[code];
+        _results.push([code, name]);
+      }
+      return _results;
+    }).call(this)).sort((function(_this) {
+      return function(a, b) {
+        if (a[1] >= b[1]) {
+          return 1;
+        } else {
+          return -1;
+        }
+      };
+    })(this));
   }
 };

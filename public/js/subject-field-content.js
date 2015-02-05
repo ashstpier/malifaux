@@ -53,7 +53,8 @@ window.SubjectFieldContent = (function(_super) {
       }), this.mappingSettings()
     ];
     if (this.widget.subject === null) {
-      options.unshift(this.option('text', 'subject', "Subject", {
+      options.unshift(this.option('select', 'subject', "Subject", {
+        options: API.sortedSubjects(),
         hint: "The 2 or 3 letter CCR! subject code you would like to pull from."
       }));
     }

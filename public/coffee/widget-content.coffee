@@ -132,8 +132,13 @@ class window.OptionRenderer
     """
 
   renderSelectInput: (styles) ->
-    options = for value, name of @config.options
-      """<option value="#{value}" #{if @value is value then 'selected' else ''}>#{name}</option>"""
+    if $.isArray(@config.options)
+      optionsArray = @config.options
+    else
+      optionsArray = ([key, value] for key, value of @config.options)
+    console.log optionsArray
+    options = for item in optionsArray
+      """<option value="#{item[0]}" #{if @value is item[0] then 'selected' else ''}>#{item[1]}</option>"""
     """
       <select name="#{@key}" class="prop-input" data-fn="#{@key}">
         #{options.join("\n")}
