@@ -3,6 +3,7 @@ window.Designer = {
   currentEditWidget: null,
   propertyPanel: null,
   history: new UndoHistory(),
+  clipboard: null,
   NUDGE_SIZE: 10,
   UNSAVED_CHANGES_WARNING: "You have made changes to the template without saving them.\n\nPlease use the 'Exit' button to save your changes.",
   loadAll: function(template) {
@@ -262,7 +263,7 @@ window.Designer = {
         return false;
       };
     })(this));
-    return Mousetrap.bind(['command+down', 'ctrl+down'], (function(_this) {
+    Mousetrap.bind(['command+down', 'ctrl+down'], (function(_this) {
       return function() {
         if (_this.selection) {
           _this.selection.nudge(0, _this.NUDGE_SIZE);
@@ -270,6 +271,56 @@ window.Designer = {
         return false;
       };
     })(this));
+    Mousetrap.bind(['command+c', 'ctrl+c'], (function(_this) {
+      return function() {
+        if (_this.currentEditWidget) {
+          return true;
+        }
+        _this.copy();
+        return false;
+      };
+    })(this));
+    Mousetrap.bind(['command+v', 'ctrl+v'], (function(_this) {
+      return function() {
+        if (_this.currentEditWidget) {
+          return true;
+        }
+        _this.paste();
+        return false;
+      };
+    })(this));
+    return Mousetrap.bind(['command+d', 'ctrl+d'], (function(_this) {
+      return function() {
+        if (_this.currentEditWidget) {
+          return true;
+        }
+        _this.duplicate();
+        return false;
+      };
+    })(this));
+  },
+  copy: function() {
+    if (!this.selection) {
+      return;
+    }
+    return this.clipboard = this.selection.serialize();
+  },
+  paste: function() {
+    var widgetConfig;
+    if (!this.clipboard) {
+      return;
+    }
+    widgetConfig = $.extend({}, this.clipboard);
+    widgetConfig.x = Designer.NUDGE_SIZE;
+    widgetConfig.y = Designer.NUDGE_SIZE;
+    return this.addWidget(widgetConfig);
+  },
+  duplicate: function() {
+    var widgetConfig;
+    widgetConfig = this.selection.serialize();
+    widgetConfig.x = widgetConfig.x + Designer.NUDGE_SIZE * 2;
+    widgetConfig.y = widgetConfig.y + Designer.NUDGE_SIZE * 2;
+    return this.addWidget(widgetConfig);
   },
   updateName: function() {
     var name;

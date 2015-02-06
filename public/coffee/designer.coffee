@@ -4,6 +4,7 @@ window.Designer = {
   currentEditWidget: null
   propertyPanel: null
   history: new UndoHistory()
+  clipboard: null
 
   NUDGE_SIZE: 10
   UNSAVED_CHANGES_WARNING: """
@@ -144,6 +145,36 @@ window.Designer = {
     Mousetrap.bind ['command+down','ctrl+down'], =>
       @selection.nudge(0, @NUDGE_SIZE) if @selection
       false
+    Mousetrap.bind ['command+c', 'ctrl+c'], =>
+      return true if @currentEditWidget
+      @copy()
+      false
+    Mousetrap.bind ['command+v', 'ctrl+v'], =>
+      return true if @currentEditWidget
+      @paste()
+      false
+    Mousetrap.bind ['command+d', 'ctrl+d'], =>
+      return true if @currentEditWidget
+      @duplicate()
+      false
+
+  copy: ->
+    return unless @selection
+    @clipboard = @selection.serialize()
+
+
+  paste: ->
+    return unless @clipboard
+    widgetConfig = $.extend({}, @clipboard)
+    widgetConfig.x = Designer.NUDGE_SIZE
+    widgetConfig.y = Designer.NUDGE_SIZE
+    @addWidget(widgetConfig)
+
+  duplicate: ->
+    widgetConfig = @selection.serialize()
+    widgetConfig.x = widgetConfig.x + Designer.NUDGE_SIZE*2
+    widgetConfig.y = widgetConfig.y + Designer.NUDGE_SIZE*2
+    @addWidget(widgetConfig)
 
   updateName: ->
     name = $('#name').text()
