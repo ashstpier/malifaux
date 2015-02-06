@@ -83,16 +83,12 @@ window.AttendanceContent = (function(_super) {
   };
 
   AttendanceContent.prototype.drawChart = function() {
-    var chart, data, fontsize, options;
+    var chart, data, fontSize, options;
     data = new google.visualization.DataTable();
     data.addColumn('string', 'Attendance');
     data.addColumn('number', 'Percent');
     data.addRows([[this._label1, parseFloat(this.attendance.present)], [this._label2, parseFloat(this.attendance.late)], [this._label3, parseFloat(this.attendance.authorised)], [this._label4, parseFloat(this.attendance.nonAuthorised)]]);
-    fontsize = {
-      'Small': 10,
-      'Medium': 12,
-      'Large': 16
-    };
+    fontSize = parseInt(utils.sizeMap[this.style.size]);
     options = {
       width: this.widget.width(),
       height: this.widget.height(),
@@ -106,11 +102,11 @@ window.AttendanceContent = (function(_super) {
       },
       pieSliceBorderColor: "transparent",
       enableInteractivity: false,
-      fontSize: fontsize[this.style.size],
-      fontName: this.style.font,
+      fontSize: fontSize,
+      fontName: utils.fontMap[this.style.font],
       titleTextStyle: {
         color: this.style.color,
-        fontSize: fontsize[this.style.size] + 4
+        fontSize: fontSize + 4
       },
       legend: {
         textStyle: {

@@ -32,17 +32,16 @@ window.utils = {
     'Arial': 'Arial, "Helvetica Neue", Helvetica, sans-serif',
     'Helvetica': '"Helvetica Neue", Helvetica, Arial, sans-serif',
     'Verdana': 'Verdana, Geneva, sans-serif',
-    'Garamond': 'Garamond, Baskerville, "Baskerville Old Face", "Hoefler Text", "Times New Roman", serif',
     'Georgia': 'Georgia, Times, "Times New Roman", serif',
     'Times New Roman': 'TimesNewRoman, "Times New Roman", Times, Baskerville, Georgia, serif',
-    'Courier New': '"Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace',
-    'Brush Script': '"Brush Script MT", cursive'
+    'Courier New': '"Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace'
   },
   sizeMap: {
     'Tiny': '11px',
     'Small': '12px',
     'Medium': '14px',
-    'Large': '16px'
+    'Large': '16px',
+    'Extra Large': '18px'
   },
   screenshot: function(element_id, cb) {
     return html2canvas(document.getElementById(element_id), {

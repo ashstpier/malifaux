@@ -49,7 +49,7 @@ class window.FieldContent extends WidgetContent
     @redraw()
 
   textStyles: ->
-    @styleString('color': @style.color, 'font-family': @style.font, 'font-size': @style.size)
+    @styleString('color': @style.color, 'font-family': utils.fontMap[@style.font], 'font-size': utils.sizeMap[@style.size])
 
   fieldFrom: (data) ->
     data = data?[key] for key in @_field.split('.')

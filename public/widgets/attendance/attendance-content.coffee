@@ -66,11 +66,7 @@ class window.AttendanceContent extends WidgetContent
       [@_label4, parseFloat(@attendance.nonAuthorised)]
     ])
 
-    fontsize = {
-      'Small': 10,
-      'Medium': 12,
-      'Large': 16
-    }
+    fontSize = parseInt(utils.sizeMap[@style.size])
 
     options = {
       width: @widget.width(),
@@ -80,9 +76,9 @@ class window.AttendanceContent extends WidgetContent
       chartArea: {left: 0, top: 0, width: '100%', height: '100%'},
       pieSliceBorderColor: "transparent",
       enableInteractivity: false,
-      fontSize: fontsize[@style.size],
-      fontName: @style.font,
-      titleTextStyle: {color: @style.color, fontSize: fontsize[@style.size] + 4},
+      fontSize: fontSize,
+      fontName: utils.fontMap[@style.font],
+      titleTextStyle: {color: @style.color, fontSize: fontSize + 4},
       legend: {textStyle: {color: @style.color}, position: @style.labels}
     }
 

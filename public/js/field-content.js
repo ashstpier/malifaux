@@ -83,8 +83,8 @@ window.FieldContent = (function(_super) {
   FieldContent.prototype.textStyles = function() {
     return this.styleString({
       'color': this.style.color,
-      'font-family': this.style.font,
-      'font-size': this.style.size
+      'font-family': utils.fontMap[this.style.font],
+      'font-size': utils.sizeMap[this.style.size]
     });
   };
 
