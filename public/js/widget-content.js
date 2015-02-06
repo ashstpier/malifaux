@@ -170,7 +170,9 @@ window.WidgetContent = (function() {
       _results = [];
       for (name in styles) {
         value = styles[name];
-        _results.push("" + name + ": " + value + ";");
+        if (value != null) {
+          _results.push("" + name + ": " + value + ";");
+        }
       }
       return _results;
     })()).join(" ").replace(/"/gm, '&quot;');

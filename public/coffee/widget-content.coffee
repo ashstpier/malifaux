@@ -79,7 +79,7 @@ class window.WidgetContent
     new OptionRenderer(this, type, key, label, config).render(@style)
 
   styleString: (styles) ->
-    ("#{name}: #{value};" for name, value of styles).join(" ").replace(/"/gm, '&quot;')
+    ("#{name}: #{value};" for name, value of styles when value?).join(" ").replace(/"/gm, '&quot;')
 
   setAspectRatio: (ratio=true) -> @widget.setAspectRatio(ratio)
 
