@@ -39,12 +39,21 @@ window.TextContent = (function(_super) {
 
   TextContent.DEFAULT_CONTENT = "<p>Type text here&hellip;</p>";
 
+  TextContent.STYLE_DEFAULTS = {
+    font: 'Helvetica'
+  };
+
   TextContent.prototype.initWithConfig = function(config) {
-    return this.html = this.get(config.html, TextContent.DEFAULT_CONTENT);
+    this.html = this.get(config.html, TextContent.DEFAULT_CONTENT);
+    return this.style = $.extend({}, TextContent.STYLE_DEFAULTS, this.get(config.style, {}));
   };
 
   TextContent.prototype.render_layout = function(data) {
-    return $("<div class=\"text-widget\">" + this.html + "</div>");
+    var styles;
+    styles = this.styleString({
+      'font-family': utils.fontMap[this.style.font]
+    });
+    return $("<div class=\"text-widget\" style=\"" + styles + "\">" + this.html + "</div>");
   };
 
   TextContent.prototype.render_edit = function(data) {
@@ -52,6 +61,10 @@ window.TextContent = (function(_super) {
     node = this.render_layout(data);
     this.editor = node.editable(TextContent.EDITOR_CONFIG);
     return node;
+  };
+
+  TextContent.prototype.renderAppearanceOptions = function() {
+    return this.option('font', 'font', "Font");
   };
 
   TextContent.prototype.bindEvents = function(el) {
@@ -62,9 +75,12 @@ window.TextContent = (function(_super) {
     })(this));
   };
 
+  TextContent.prototype.font = TextContent.property('style', 'font');
+
   TextContent.prototype.serialize = function() {
     return {
-      html: this.html
+      html: this.html,
+      style: this.style
     };
   };
 

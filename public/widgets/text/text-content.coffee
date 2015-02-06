@@ -26,19 +26,30 @@ class window.TextContent extends WidgetContent
 
   @DEFAULT_CONTENT: "<p>Type text here&hellip;</p>"
 
+  @STYLE_DEFAULTS: {
+    font: 'Helvetica'
+  }
+
   initWithConfig: (config) ->
     @html = @get(config.html, TextContent.DEFAULT_CONTENT)
+    @style = $.extend({}, TextContent.STYLE_DEFAULTS, @get(config.style, {}))
 
   render_layout: (data) ->
-    $("""<div class="text-widget">#{@html}</div>""")
+    styles = @styleString('font-family': utils.fontMap[@style.font])
+    $("""<div class="text-widget" style="#{styles}">#{@html}</div>""")
 
   render_edit: (data) ->
     node = @render_layout(data)
     @editor = node.editable(TextContent.EDITOR_CONFIG)
     node
 
+  renderAppearanceOptions: ->
+    @option('font',  'font', "Font")
+
   bindEvents: (el) ->
     el.on 'editable.contentChanged', =>
       @html = @el.editable("getHTML")
 
-  serialize: -> { html: @html }
+  font: @property('style', 'font')
+
+  serialize: -> { html: @html, style: @style }
