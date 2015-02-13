@@ -11,13 +11,27 @@ class window.Properties
       <section class="prop-section prop-page-options">
         <h3 class="prop-section-header">Options</h3>
         <div class="prop-content">
-          <form id="orientation">
-            <input type="radio" name="orientation" value="portrait"> Portrait
-            <input type="radio" name="orientation" value="landscape"> Landscape
+          <form id="orientation" class="prop-form">
+            <h4 class="prop-option-header">Orientation</h4>
+            <label class="prop-block-label">
+              <input type="radio" name="orientation" value="portrait">
+              Portrait
+            </label>
+            <label class="prop-block-label">
+              <input type="radio" name="orientation" value="landscape">
+              Landscape
+            </label>
           </form>
-          <form id="pagetype">
-            <input type="radio" name="pagetype" value="student">Student per page
-            <input type="radio" name="pagetype" value="subject">Subject per page
+          <form id="pagetype" class="prop-form">
+            <h4 class="prop-option-header">Report Style</h4>
+            <label class="prop-block-label">
+              <input type="radio" name="pagetype" value="student">
+              Student per page
+            </label>
+            <label class="prop-block-label">
+              <input type="radio" name="pagetype" value="subject">
+              Subject per page
+            </label>
           </form>
         </div>
       </section>

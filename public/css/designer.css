@@ -112,10 +112,6 @@ body {
   left: 25px;
 }
 
-#orientation {
-  width: 300px;
-}
-
 #viewport {
   position: fixed;
   top: 50px;
