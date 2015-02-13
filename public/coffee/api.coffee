@@ -23,9 +23,4 @@ window.API = {
   assessmentPoints: -> @_config.assessmentPoints
   metrics:          -> @_config.data
   subjects:         -> @_config.subjects
-
-  sortedSubjects:   ->
-    return ([code, name] for code, name of @subjects()).sort (a,b) =>
-      if a[1] >= b[1] then 1 else -1
-
 }

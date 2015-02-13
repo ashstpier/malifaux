@@ -180,7 +180,6 @@ window.DatatableContent = (function(_super) {
     table.append(this.buildEditRow());
     columnChanged = (function(_this) {
       return function() {
-        console.log('option changed');
         _this.maybeAddEditRow(table);
         _this.saveColumns(table);
         return _this.redraw();

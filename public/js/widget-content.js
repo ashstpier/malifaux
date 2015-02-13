@@ -128,7 +128,7 @@ window.WidgetContent = (function() {
 
   WidgetContent.prototype.assessmentPoints = function() {
     var key, obj, points;
-    points = (function() {
+    return points = (function() {
       var _ref, _results;
       _ref = API.assessmentPoints();
       _results = [];
@@ -140,13 +140,6 @@ window.WidgetContent = (function() {
       }
       return _results;
     })();
-    return points.sort(function(a, b) {
-      if (a.name <= b.name) {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
   };
 
   WidgetContent.prototype.metrics = function() {

@@ -31,7 +31,7 @@ class window.SubjectFieldContent extends FieldContent
       @mappingSettings()
     ]
     if @widget.subject is null
-      options.unshift(@option('select', 'subject', "Subject", options: API.sortedSubjects()))
+      options.unshift(@option('select', 'subject', "Subject", options: API.subjects()))
     options
 
   mappingSettings: ->

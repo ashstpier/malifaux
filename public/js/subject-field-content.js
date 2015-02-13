@@ -57,7 +57,7 @@ window.SubjectFieldContent = (function(_super) {
     ];
     if (this.widget.subject === null) {
       options.unshift(this.option('select', 'subject', "Subject", {
-        options: API.sortedSubjects()
+        options: API.subjects()
       }));
     }
     return options;

@@ -137,7 +137,6 @@ class window.DatatableContent extends WidgetContent
     table.append(@buildEditRow(col)) for col in @columns
     table.append(@buildEditRow())
     columnChanged = =>
-      console.log 'option changed'
       @maybeAddEditRow(table)
       @saveColumns(table)
       @redraw()
