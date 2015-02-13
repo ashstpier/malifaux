@@ -140,14 +140,23 @@ class window.OptionRenderer
 
   renderSelectInput: (styles) ->
     grouped = false
-    if $.isArray(@config.options) # array format: [[val1, label1], [val2, label2], ...]
-      optionsArray = @config.options
+    if $.isArray(@config.options) # array format: [[val1, label1], [val2, label2], ...] or [v1,v2,v3]
+      if $.isArray(@config.options[0])
+        optionsArray = @config.options
+      else
+        optionsArray = _.map @config.options, (v) -> [v,v]
     else if $.isArray(@config.options[Object.keys(@config.options)[0]]) # optgroup format: {group1: [[val1, label1]], group2: [[val2, label2]], ...}
       grouped = true
     else # object format: {val1: label1, val2: label2, ...}
       optionsArray = ([key, value] for key, value of @config.options)
 
-    renderOption = (item) -> """<option value="#{item[0]}" #{if @value is item[0] then 'selected' else ''}>#{item[1]}</option>"""
+    isSelected = (v) =>
+      if @config.multiple
+        _.contains(@value, v)
+      else
+        @value is v
+
+    renderOption = (item) -> """<option value="#{item[0]}" #{if isSelected(item[0]) then 'selected' else ''}>#{item[1]}</option>"""
 
     if grouped
       options = for group, items of @config.options
@@ -156,8 +165,10 @@ class window.OptionRenderer
     else
       options = (renderOption(item) for item in optionsArray)
 
+    multiple = if @config.multiple then 'multiple' else ''
+
     """
-      <select name="#{@key}" class="prop-input" data-fn="#{@key}">
+      <select name="#{@key}" class="prop-input #{multiple}" data-fn="#{@key}" #{multiple}>
         #{options.join("\n")}
       </select>
     """

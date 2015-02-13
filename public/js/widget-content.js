@@ -276,10 +276,16 @@ window.OptionRenderer = (function() {
   };
 
   OptionRenderer.prototype.renderSelectInput = function(styles) {
-    var group, grouped, item, items, key, options, optionsArray, renderOption, value;
+    var group, grouped, isSelected, item, items, key, multiple, options, optionsArray, renderOption, value;
     grouped = false;
     if ($.isArray(this.config.options)) {
-      optionsArray = this.config.options;
+      if ($.isArray(this.config.options[0])) {
+        optionsArray = this.config.options;
+      } else {
+        optionsArray = _.map(this.config.options, function(v) {
+          return [v, v];
+        });
+      }
     } else if ($.isArray(this.config.options[Object.keys(this.config.options)[0]])) {
       grouped = true;
     } else {
@@ -294,8 +300,17 @@ window.OptionRenderer = (function() {
         return _results;
       }).call(this);
     }
+    isSelected = (function(_this) {
+      return function(v) {
+        if (_this.config.multiple) {
+          return _.contains(_this.value, v);
+        } else {
+          return _this.value === v;
+        }
+      };
+    })(this);
     renderOption = function(item) {
-      return "<option value=\"" + item[0] + "\" " + (this.value === item[0] ? 'selected' : '') + ">" + item[1] + "</option>";
+      return "<option value=\"" + item[0] + "\" " + (isSelected(item[0]) ? 'selected' : '') + ">" + item[1] + "</option>";
     };
     if (grouped) {
       options = (function() {
@@ -328,7 +343,8 @@ window.OptionRenderer = (function() {
         return _results;
       })();
     }
-    return "<select name=\"" + this.key + "\" class=\"prop-input\" data-fn=\"" + this.key + "\">\n  " + (options.join("\n")) + "\n</select>";
+    multiple = this.config.multiple ? 'multiple' : '';
+    return "<select name=\"" + this.key + "\" class=\"prop-input " + multiple + "\" data-fn=\"" + this.key + "\" " + multiple + ">\n  " + (options.join("\n")) + "\n</select>";
   };
 
   OptionRenderer.prototype.renderCheckboxInput = function(styles) {

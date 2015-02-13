@@ -21,7 +21,9 @@ class window.DatatableContent extends WidgetContent
   initWithConfig: (config) ->
     @columns = @get(config.columns, [])
     @style = $.extend({}, DatatableContent.STYLE_DEFAULTS, @get(config.style, {}))
-    @_exclusions = @get(config.exclusions, '')
+    @_exclusions = @get(config.exclusions, [])
+    if typeof @_exclusions is 'string'
+      @_exclusions = @upgradeStringBasedExclusions(@_exclusions)
 
   render_layout: (data) ->
     name = utils.escape(data.name)
@@ -57,10 +59,10 @@ class window.DatatableContent extends WidgetContent
   filter_subjects: (subjects) =>
     if @widget.subject
       return [subjects[@widget.subject]]
-    _.filter subjects, (subject) =>
-      return true unless @_exclusions
-      exclusions = ($.trim(e).toLowerCase() for e in @_exclusions.split(","))
-      !_.contains(exclusions, subject.subjectName.toLowerCase())
+    _.filter subjects, (subject, code) =>
+      return true unless @exclusions()
+      console.log subject
+      !_.contains(@exclusions(), code)
 
   buildEditRow: (col={title:'', value:'', compare_to:'', mappings:{}}) ->
     col.mappings = {} unless col.mappings
@@ -112,7 +114,7 @@ class window.DatatableContent extends WidgetContent
     [
       @option('select', 'subject_order', "Subject Order", options: {alphabetical: "Alphabetical", core_first: 'Core First'})
       @columSettings()
-      @option('text', 'exclusions', 'Subject Blacklist', hint: "A comma seperated, case insensitive, list of subject names to be excluded from reports.")
+      @option('select', 'exclusions', 'Subject Blacklist', options: API.subjects(), multiple: true, hint: "A list of subjects names to be excluded from reports. Hold the shift or command keys for multiple selection.")
     ]
 
   columSettings: ->
@@ -223,3 +225,11 @@ class window.DatatableContent extends WidgetContent
 
   serialize: ->
     {columns: @columns, style: @style, exclusions: @_exclusions}
+
+  upgradeStringBasedExclusions: (exclusionsString) ->
+    newExclusions = exclusionsString.split(',')
+    subjects = $.extend({}, API.subjects())
+    subjects[k] = v.toLowerCase() for k,v of subjects
+    subjects = _.invert(subjects)
+    exclusions = _.map(newExclusions, (e) -> subjects[$.trim(e.toLowerCase())])
+    _.compact(exclusions)

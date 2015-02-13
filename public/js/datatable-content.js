@@ -41,7 +41,10 @@ window.DatatableContent = (function(_super) {
   DatatableContent.prototype.initWithConfig = function(config) {
     this.columns = this.get(config.columns, []);
     this.style = $.extend({}, DatatableContent.STYLE_DEFAULTS, this.get(config.style, {}));
-    return this._exclusions = this.get(config.exclusions, '');
+    this._exclusions = this.get(config.exclusions, []);
+    if (typeof this._exclusions === 'string') {
+      return this._exclusions = this.upgradeStringBasedExclusions(this._exclusions);
+    }
   };
 
   DatatableContent.prototype.render_layout = function(data) {
@@ -85,22 +88,12 @@ window.DatatableContent = (function(_super) {
       return [subjects[this.widget.subject]];
     }
     return _.filter(subjects, (function(_this) {
-      return function(subject) {
-        var e, exclusions;
-        if (!_this._exclusions) {
+      return function(subject, code) {
+        if (!_this.exclusions()) {
           return true;
         }
-        exclusions = (function() {
-          var _i, _len, _ref, _results;
-          _ref = this._exclusions.split(",");
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            e = _ref[_i];
-            _results.push($.trim(e).toLowerCase());
-          }
-          return _results;
-        }).call(_this);
-        return !_.contains(exclusions, subject.subjectName.toLowerCase());
+        console.log(subject);
+        return !_.contains(_this.exclusions(), code);
       };
     })(this));
   };
@@ -162,8 +155,10 @@ window.DatatableContent = (function(_super) {
           alphabetical: "Alphabetical",
           core_first: 'Core First'
         }
-      }), this.columSettings(), this.option('text', 'exclusions', 'Subject Blacklist', {
-        hint: "A comma seperated, case insensitive, list of subject names to be excluded from reports."
+      }), this.columSettings(), this.option('select', 'exclusions', 'Subject Blacklist', {
+        options: API.subjects(),
+        multiple: true,
+        hint: "A list of subjects names to be excluded from reports. Hold the shift or command keys for multiple selection."
       })
     ];
   };
@@ -346,6 +341,21 @@ window.DatatableContent = (function(_super) {
       style: this.style,
       exclusions: this._exclusions
     };
+  };
+
+  DatatableContent.prototype.upgradeStringBasedExclusions = function(exclusionsString) {
+    var exclusions, k, newExclusions, subjects, v;
+    newExclusions = exclusionsString.split(',');
+    subjects = $.extend({}, API.subjects());
+    for (k in subjects) {
+      v = subjects[k];
+      subjects[k] = v.toLowerCase();
+    }
+    subjects = _.invert(subjects);
+    exclusions = _.map(newExclusions, function(e) {
+      return subjects[$.trim(e.toLowerCase())];
+    });
+    return _.compact(exclusions);
   };
 
   return DatatableContent;
