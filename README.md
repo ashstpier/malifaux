@@ -12,9 +12,8 @@ Build Dependancies & Setup
 --------------------------
 You will need [Node.JS](http://nodejs.org) installed to build this project. Then from within the project root run...
 
-    npm install -g grunt-cli
     npm install
-    gulp server
+    ./node_modules/.bin/gulp server
     open http://localhost:9000/
 
 
