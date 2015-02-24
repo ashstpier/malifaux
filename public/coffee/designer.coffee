@@ -92,7 +92,7 @@ window.Designer = {
     $('#discard').click => @discard()
     $('#save a').click =>
         @template.save()
-        @history.reset()
+        @history.resetSaveUndo()
     $('#exit a').click => @promptSave()
     $('#page').on 'mousedown', (e) => @maybeClearSelection(e.target)
     $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())
@@ -245,7 +245,7 @@ window.Designer = {
     false
 
   hasUnsavedChanges: ->
-    @history.canUndo() and @safeToExit isnt true
+    @history.sinceSaveUndo() and @safeToExit isnt true
 
   reminderToSave: (e) ->
     if @hasUnsavedChanges()

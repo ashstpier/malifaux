@@ -5,19 +5,22 @@ class window.UndoHistory
   constructor: ->
     @past = []
     @future = []
+    @sinceSave = []
 
   push: (target, fn, fromState=null, toState=null) ->
     @future = []
     fromState = @clone(fromState)
     toState = @clone(toState)
     @past.push({target: target, fn: fn, fromState: fromState, toState:toState})
+    @sinceSave.push({target: target, fn: fn, fromState: fromState, toState:toState})
     # console.log @past.length, UndoHistory.LIMIT
     @past.shift() if @past.length > UndoHistory.LIMIT
     @trigger('history:change')
 
   canUndo: -> @past.length > 0
   canRedo: -> @future.length > 0
-  reset:   -> @past = []
+  sinceSaveUndo: -> @sinceSave.length > 0
+  resetSaveUndo: -> @sinceSave = []
 
   undo: ->
     return false unless @canUndo()
