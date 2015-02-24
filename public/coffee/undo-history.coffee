@@ -11,8 +11,9 @@ class window.UndoHistory
     @future = []
     fromState = @clone(fromState)
     toState = @clone(toState)
-    @past.push({target: target, fn: fn, fromState: fromState, toState:toState})
-    @sinceSave.push({target: target, fn: fn, fromState: fromState, toState:toState})
+    pastState = {target: target, fn: fn, fromState: fromState, toState:toState}
+    @past.push(pastState)
+    @sinceSave.push(pastState)
     # console.log @past.length, UndoHistory.LIMIT
     @past.shift() if @past.length > UndoHistory.LIMIT
     @trigger('history:change')
