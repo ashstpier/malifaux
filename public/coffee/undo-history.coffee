@@ -17,6 +17,7 @@ class window.UndoHistory
 
   canUndo: -> @past.length > 0
   canRedo: -> @future.length > 0
+  reset:   -> @past = []
 
   undo: ->
     return false unless @canUndo()
