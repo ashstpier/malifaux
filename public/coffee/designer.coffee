@@ -88,8 +88,9 @@ window.Designer = {
 
 
   bindEvents: ->
-    $('#save').click => @saveAndExit()
+    $('#saveExit').click => @saveAndExit()
     $('#discard').click => @discard()
+    $('#save a').click => @template.save()
     $('#exit a').click => @promptSave()
     $('#page').on 'mousedown', (e) => @maybeClearSelection(e.target)
     $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())
