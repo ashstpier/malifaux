@@ -86,13 +86,12 @@ window.Designer = {
 
   isStudentPage: -> (@template.pagetype is 'student')
 
-
   bindEvents: ->
     $('#saveExit').click => @saveAndExit()
     $('#discard').click => @discard()
     $('#save a').click =>
         @template.save()
-        @history.resetSaveUndo()
+        @history.resetSaveChanges()
     $('#exit a').click => @promptSave()
     $('#page').on 'mousedown', (e) => @maybeClearSelection(e.target)
     $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())
@@ -245,7 +244,7 @@ window.Designer = {
     false
 
   hasUnsavedChanges: ->
-    @history.sinceSaveUndo() and @safeToExit isnt true
+    @history.sinceSaveChanges() and @safeToExit isnt true
 
   reminderToSave: (e) ->
     if @hasUnsavedChanges()
