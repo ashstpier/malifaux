@@ -4,6 +4,7 @@ window.UndoHistory = (function() {
   function UndoHistory() {
     this.past = [];
     this.future = [];
+    this.sinceSave = 0;
   }
 
   UndoHistory.prototype.push = function(target, fn, fromState, toState) {
@@ -22,6 +23,7 @@ window.UndoHistory = (function() {
       fromState: fromState,
       toState: toState
     });
+    this.sinceSave += 1;
     if (this.past.length > UndoHistory.LIMIT) {
       this.past.shift();
     }
@@ -36,6 +38,14 @@ window.UndoHistory = (function() {
     return this.future.length > 0;
   };
 
+  UndoHistory.prototype.sinceSaveChanges = function() {
+    return this.sinceSave !== 0;
+  };
+
+  UndoHistory.prototype.resetSaveChanges = function() {
+    return this.sinceSave = 0;
+  };
+
   UndoHistory.prototype.undo = function() {
     var step;
     if (!this.canUndo()) {
@@ -43,6 +53,7 @@ window.UndoHistory = (function() {
     }
     step = this.past.pop();
     step.target[step.fn].call(step.target, this.clone(step.fromState));
+    this.sinceSave -= 1;
     this.future.push(step);
     this.trigger('history:change');
     this.trigger('history:undo');
@@ -57,6 +68,7 @@ window.UndoHistory = (function() {
     step = this.future.pop();
     step.target[step.fn].call(step.target, this.clone(step.toState));
     this.past.push(step);
+    this.sinceSave += 1;
     this.trigger('history:change');
     this.trigger('history:redo');
     return this.canRedo();
