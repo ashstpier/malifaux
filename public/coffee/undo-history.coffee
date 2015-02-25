@@ -16,6 +16,7 @@ class window.UndoHistory
     @sinceSave.push(pastState)
     # console.log @past.length, UndoHistory.LIMIT
     @past.shift() if @past.length > UndoHistory.LIMIT
+    @sinceSave.shift() if @sinceSave.length > UndoHistory.LIMIT
     @trigger('history:change')
 
   canUndo: -> @past.length > 0
@@ -27,6 +28,7 @@ class window.UndoHistory
     return false unless @canUndo()
     step = @past.pop()
     step.target[step.fn].call(step.target,  @clone(step.fromState))
+    @sinceSave.push(step)
     @future.push(step)
     @trigger('history:change')
     @trigger('history:undo')
@@ -37,6 +39,7 @@ class window.UndoHistory
     step = @future.pop()
     step.target[step.fn].call(step.target, @clone(step.toState))
     @past.push(step)
+    @sinceSave.push(step)
     @trigger('history:change')
     @trigger('history:redo')
     @canRedo()
