@@ -97,7 +97,7 @@ window.Designer = {
   },
   bindEvents: function() {
     var className, name, _ref, _results;
-    $('#save').click((function(_this) {
+    $('#saveExit').click((function(_this) {
       return function() {
         return _this.saveAndExit();
       };
@@ -105,6 +105,12 @@ window.Designer = {
     $('#discard').click((function(_this) {
       return function() {
         return _this.discard();
+      };
+    })(this));
+    $('#save a').click((function(_this) {
+      return function() {
+        _this.template.save();
+        return _this.history.resetSaveChanges();
       };
     })(this));
     $('#exit a').click((function(_this) {
@@ -425,7 +431,7 @@ window.Designer = {
     return false;
   },
   hasUnsavedChanges: function() {
-    return this.history.canUndo() && this.safeToExit !== true;
+    return this.history.sinceSaveChanges() && this.safeToExit !== true;
   },
   reminderToSave: function(e) {
     if (this.hasUnsavedChanges()) {
