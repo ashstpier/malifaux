@@ -87,11 +87,12 @@ window.Designer = {
   isStudentPage: -> (@template.pagetype is 'student')
 
   bindEvents: ->
-    $('#saveExit').click => @saveAndExit()
+    $('#save-exit').click => @saveAndExit()
     $('#discard').click => @discard()
     $('#save a').click =>
         @template.save()
         @history.resetSaveChanges()
+        false
     $('#exit a').click => @promptSave()
     $('#page').on 'mousedown', (e) => @maybeClearSelection(e.target)
     $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())

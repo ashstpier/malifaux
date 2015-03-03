@@ -97,7 +97,7 @@ window.Designer = {
   },
   bindEvents: function() {
     var className, name, _ref, _results;
-    $('#saveExit').click((function(_this) {
+    $('#save-exit').click((function(_this) {
       return function() {
         return _this.saveAndExit();
       };
@@ -110,12 +110,13 @@ window.Designer = {
     $('#save a').click((function(_this) {
       return function() {
         _this.template.save();
-        return _this.history.resetSaveChanges();
+        _this.history.resetSaveChanges();
+        return false;
       };
     })(this));
     $('#exit a').click((function(_this) {
       return function() {
-        return _this.promptSave();
+        return _this.promptSave() && false;
       };
     })(this));
     $('#page').on('mousedown', (function(_this) {
