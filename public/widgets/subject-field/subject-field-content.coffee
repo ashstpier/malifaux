@@ -54,7 +54,7 @@ class window.SubjectFieldContent extends FieldContent
     subject = if @widget.subject then @widget.subject else @subject()
     defaultValue = @placeholderWithLabel(@field())
     subjectScope = data.subjects[subject]
-    value = subjectScope?.results[@field()] or subjectScope?[@field()] or defaultValue
+    value = subjectScope?.results?[@field()] or subjectScope?[@field()] or defaultValue
     @mappings[value] or value
 
   subject: @property('_subject')

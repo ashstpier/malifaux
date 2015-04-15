@@ -88,11 +88,11 @@ window.SubjectFieldContent = (function(_super) {
   };
 
   SubjectFieldContent.prototype.fieldFrom = function(data) {
-    var defaultValue, subject, subjectScope, value;
+    var defaultValue, subject, subjectScope, value, _ref;
     subject = this.widget.subject ? this.widget.subject : this.subject();
     defaultValue = this.placeholderWithLabel(this.field());
     subjectScope = data.subjects[subject];
-    value = (subjectScope != null ? subjectScope.results[this.field()] : void 0) || (subjectScope != null ? subjectScope[this.field()] : void 0) || defaultValue;
+    value = (subjectScope != null ? (_ref = subjectScope.results) != null ? _ref[this.field()] : void 0 : void 0) || (subjectScope != null ? subjectScope[this.field()] : void 0) || defaultValue;
     return this.mappings[value] || value;
   };
 

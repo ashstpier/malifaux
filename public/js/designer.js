@@ -116,7 +116,7 @@ window.Designer = {
     })(this));
     $('#exit a').click((function(_this) {
       return function() {
-        return _this.promptSave() && false;
+        return _this.promptSave();
       };
     })(this));
     $('#page').on('mousedown', (function(_this) {
