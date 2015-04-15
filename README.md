@@ -13,7 +13,7 @@ Build Dependancies & Setup
 You will need [Node.JS](http://nodejs.org) installed to build this project. Then from within the project root run...
 
     npm install
-    ./node_modules/.bin/gulp server
+    npm start
     open http://localhost:9000/
 
 
