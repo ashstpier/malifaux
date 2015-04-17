@@ -126,11 +126,7 @@ window.utils = {
     if (pagetype !== 'subject') {
       return null;
     }
-    if (window.environment.is_development) {
-      return this.fakeSubject();
-    } else {
-      return window.subject || utils.querystring('subject');
-    }
+    return window.subject || utils.querystring('subject') || this.fakeSubject();
   },
   fakeSubject: function() {
     return 'PH';

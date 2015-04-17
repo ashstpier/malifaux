@@ -89,10 +89,7 @@ window.utils = {
 
   subject: (pagetype) ->
     return null if pagetype isnt 'subject'
-    if window.environment.is_development
-      @fakeSubject()
-    else
-      window.subject or utils.querystring('subject')
+    window.subject or utils.querystring('subject') or @fakeSubject()
 
   fakeSubject: -> 'PH'
 
