@@ -38,12 +38,13 @@ window.UndoHistory = (function() {
     return this.future.length > 0;
   };
 
-  UndoHistory.prototype.sinceSaveChanges = function() {
+  UndoHistory.prototype.hasChangesSinceLastSave = function() {
     return this.sinceSave !== 0;
   };
 
   UndoHistory.prototype.resetSaveChanges = function() {
-    return this.sinceSave = 0;
+    this.sinceSave = 0;
+    return this.trigger('history:change');
   };
 
   UndoHistory.prototype.undo = function() {

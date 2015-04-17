@@ -90,8 +90,8 @@ window.Designer = {
     $('#save-exit').click => @saveAndExit()
     $('#discard').click => @discard()
     $('#save a').click =>
-        @template.save()
-        @history.resetSaveChanges()
+        @template.save =>
+          @history.resetSaveChanges()
         false
     $('#exit a').click => @promptSave()
     $('#page').on 'mousedown', (e) => @maybeClearSelection(e.target)
@@ -103,6 +103,7 @@ window.Designer = {
     $('#undo').click => @history.undo()
     $('#redo').click => @history.redo()
     @history.bind 'history:change', => @updateHistoryButtonState()
+    @history.bind 'history:change', => @updateSavedButtonState()
     @bindKeyboardEvents()
 
     window.addEventListener "beforeunload", (e) => @reminderToSave(e)
@@ -245,7 +246,7 @@ window.Designer = {
     false
 
   hasUnsavedChanges: ->
-    @history.sinceSaveChanges() and @safeToExit isnt true
+    @history.hasChangesSinceLastSave() and @safeToExit isnt true
 
   reminderToSave: (e) ->
     if @hasUnsavedChanges()
@@ -282,6 +283,11 @@ window.Designer = {
       $('#redo').removeClass('enabled')
       $('#redo').addClass('disabled')
 
+  updateSavedButtonState: ->
+    if @history.hasChangesSinceLastSave()
+      $('#saved-icon').addClass('hidden')
+    else
+      $('#saved-icon').removeClass('hidden')
 }
 
 MicroEvent.mixin(Designer)

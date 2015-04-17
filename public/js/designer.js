@@ -109,8 +109,9 @@ window.Designer = {
     })(this));
     $('#save a').click((function(_this) {
       return function() {
-        _this.template.save();
-        _this.history.resetSaveChanges();
+        _this.template.save(function() {
+          return _this.history.resetSaveChanges();
+        });
         return false;
       };
     })(this));
@@ -164,6 +165,11 @@ window.Designer = {
     this.history.bind('history:change', (function(_this) {
       return function() {
         return _this.updateHistoryButtonState();
+      };
+    })(this));
+    this.history.bind('history:change', (function(_this) {
+      return function() {
+        return _this.updateSavedButtonState();
       };
     })(this));
     this.bindKeyboardEvents();
@@ -432,7 +438,7 @@ window.Designer = {
     return false;
   },
   hasUnsavedChanges: function() {
-    return this.history.sinceSaveChanges() && this.safeToExit !== true;
+    return this.history.hasChangesSinceLastSave() && this.safeToExit !== true;
   },
   reminderToSave: function(e) {
     if (this.hasUnsavedChanges()) {
@@ -478,6 +484,13 @@ window.Designer = {
     } else {
       $('#redo').removeClass('enabled');
       return $('#redo').addClass('disabled');
+    }
+  },
+  updateSavedButtonState: function() {
+    if (this.history.hasChangesSinceLastSave()) {
+      return $('#saved-icon').addClass('hidden');
+    } else {
+      return $('#saved-icon').removeClass('hidden');
     }
   }
 };

@@ -19,8 +19,10 @@ class window.UndoHistory
 
   canUndo: -> @past.length > 0
   canRedo: -> @future.length > 0
-  sinceSaveChanges: -> @sinceSave != 0
-  resetSaveChanges: -> @sinceSave = 0
+  hasChangesSinceLastSave: -> @sinceSave != 0
+  resetSaveChanges: ->
+    @sinceSave = 0
+    @trigger('history:change')
 
   undo: ->
     return false unless @canUndo()
