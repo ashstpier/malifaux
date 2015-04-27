@@ -91,7 +91,7 @@ window.DynamicTableContent = (function(_super) {
   };
 
   DynamicTableContent.prototype.render_layout = function(data, edit) {
-    var c, column, i, row, self, table, tbody, tr, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref;
+    var c, column, i, row, self, table, tbody, tr, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _ref;
     if (edit == null) {
       edit = false;
     }
@@ -118,13 +118,29 @@ window.DynamicTableContent = (function(_super) {
             tr.append("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(column, data, edit)) + "</td>");
           }
         }
-      } else {
+      } else if (this.style.header_position === 'left') {
         for (c = _l = 0, _len3 = row.length; _l < _len3; c = ++_l) {
           column = row[c];
           if (c === 0) {
             tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, data, edit)) + "</th>");
           } else {
             tr.append("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(column, data, edit)) + "</td>");
+          }
+        }
+      } else {
+        if (i === 0) {
+          for (_m = 0, _len4 = row.length; _m < _len4; _m++) {
+            column = row[_m];
+            tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, data, edit)) + "</th>");
+          }
+        } else {
+          for (c = _n = 0, _len5 = row.length; _n < _len5; c = ++_n) {
+            column = row[c];
+            if (c === 0) {
+              tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, data, edit)) + "</th>");
+            } else {
+              tr.append("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(column, data, edit)) + "</td>");
+            }
           }
         }
       }
@@ -216,7 +232,8 @@ window.DynamicTableContent = (function(_super) {
       this.option('select', 'header_position', "Header position", {
         options: {
           top: "Top",
-          left: 'Left'
+          left: 'Left',
+          both: "Both"
         }
       }), this.option('select', 'alignment', "Cell alignment", {
         options: {
