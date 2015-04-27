@@ -5,7 +5,7 @@ window.Designer = {
   history: new UndoHistory(),
   clipboard: null,
   NUDGE_SIZE: 10,
-  UNSAVED_CHANGES_WARNING: "You have made changes to the template without saving them.\n\nPlease use the 'Exit' button to save your changes.",
+  UNSAVED_CHANGES_WARNING: "You have made changes to the template without saving them.\n\nPlease use the 'Save' button to save your changes.",
   loadAll: function(template) {
     this.template = template;
     this.templateKey = template.key;
@@ -488,9 +488,11 @@ window.Designer = {
   },
   updateSavedButtonState: function() {
     if (this.history.hasChangesSinceLastSave()) {
-      return $('#saved-icon').addClass('hidden');
+      $('#saved-icon').addClass('hidden');
+      return $('#save-msg').fadeIn(200);
     } else {
-      return $('#saved-icon').removeClass('hidden');
+      $('#saved-icon').removeClass('hidden');
+      return $('#save-msg').fadeOut(200);
     }
   }
 };

@@ -10,7 +10,7 @@ window.Designer = {
   UNSAVED_CHANGES_WARNING: """
     You have made changes to the template without saving them.
 
-    Please use the 'Exit' button to save your changes.
+    Please use the 'Save' button to save your changes.
   """
 
   loadAll: (template) ->
@@ -286,8 +286,10 @@ window.Designer = {
   updateSavedButtonState: ->
     if @history.hasChangesSinceLastSave()
       $('#saved-icon').addClass('hidden')
+      $('#save-msg').fadeIn(200)
     else
       $('#saved-icon').removeClass('hidden')
+      $('#save-msg').fadeOut(200)
 }
 
 MicroEvent.mixin(Designer)
