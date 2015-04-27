@@ -5,13 +5,14 @@ class window.Widget
 
   @WIDGETS: {
     'image':          'ImageContent'
+    'image-gallery':  'ImageGalleryContent'
     'text':           'TextContent'
     'datatable':      'DatatableContent'
     'field':          'FieldContent'
     'name':           'NameContent'
     'subject-field':  'SubjectFieldContent'
     'attendance':     'AttendanceContent'
-    'dynamictable':     'DynamicTableContent'
+    'dynamictable':   'DynamicTableContent'
   }
 
   @loadAll: (cb) ->

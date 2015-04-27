@@ -1,6 +1,6 @@
 class window.ImageContent extends WidgetContent
   @className:   "ImageContent"
-  @displayName: "Image"
+  @displayName: "Upload Image"
   @description: "A static photograph, logo or graphic"
   @icon:        "picture"
 
