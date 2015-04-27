@@ -83,6 +83,7 @@ class window.AttendanceContent extends WidgetContent
       fontName: utils.fontMap[@style.font],
       titleTextStyle: {color: @style.color, fontSize: fontSize},
       legend: {textStyle: {color: @style.color}, position: label_position},
+      backgroundColor: { fill:'transparent' }
     }
 
     if @style.chartstyle == 'pie'

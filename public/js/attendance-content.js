@@ -123,6 +123,9 @@ window.AttendanceContent = (function(_super) {
           color: this.style.color
         },
         position: label_position
+      },
+      backgroundColor: {
+        fill: 'transparent'
       }
     };
     if (this.style.chartstyle === 'pie') {

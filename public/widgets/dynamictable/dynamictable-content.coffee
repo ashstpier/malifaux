@@ -122,12 +122,11 @@ class window.DynamicTableContent extends WidgetContent
         list += """<li data-key="#{option}">#{name}<i class="glyphicons ok_2"></i></li>"""
       else
         list += """<li data-key="#{option}">#{name}</li>"""
-    if @widget.subject
-      for point in @assessmentPoints()
-        if el.attr('data-key') is point.name
-          list += """<li data-key="#{point.name}">#{point.longName}<i class="glyphicons ok_2"></i></li>"""
-        else
-          list += """<li data-key="#{point.name}">#{point.longName}</li>"""
+    for point in @assessmentPoints()
+      if el.attr('data-key') is point.name
+        list += """<li data-key="#{point.name}">#{point.longName}<i class="glyphicons ok_2"></i></li>"""
+      else
+        list += """<li data-key="#{point.name}">#{point.longName}</li>"""
     list += """</ul>"""
 
   renderAppearanceOptions: ->

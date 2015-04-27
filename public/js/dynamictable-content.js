@@ -209,15 +209,13 @@ window.DynamicTableContent = (function(_super) {
         list += "<li data-key=\"" + option + "\">" + name + "</li>";
       }
     }
-    if (this.widget.subject) {
-      _ref1 = this.assessmentPoints();
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        point = _ref1[_i];
-        if (el.attr('data-key') === point.name) {
-          list += "<li data-key=\"" + point.name + "\">" + point.longName + "<i class=\"glyphicons ok_2\"></i></li>";
-        } else {
-          list += "<li data-key=\"" + point.name + "\">" + point.longName + "</li>";
-        }
+    _ref1 = this.assessmentPoints();
+    for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+      point = _ref1[_i];
+      if (el.attr('data-key') === point.name) {
+        list += "<li data-key=\"" + point.name + "\">" + point.longName + "<i class=\"glyphicons ok_2\"></i></li>";
+      } else {
+        list += "<li data-key=\"" + point.name + "\">" + point.longName + "</li>";
       }
     }
     return list += "</ul>";
