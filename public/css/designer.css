@@ -39,6 +39,7 @@ body {
 
 #undo {
   position: relative;
+  float: left;
   display: inline-block;
   margin: 3px 0 10px 30px;
   text-decoration: none;
@@ -51,6 +52,7 @@ body {
 }
 #redo {
   display: inline-block;
+  float: left;
   margin: 3px 10px 10px 0;
   text-decoration: none;
   cursor: not-allowed;
@@ -198,12 +200,9 @@ body {
 }
 
 #save-msg {
-  position: absolute;
-  top: 60px;
-  left: 10px;
-  padding: 10px;
-  background: #888;
+  margin: 18px 10px;
   color: #fff;
+  float: left;
   display: none;
   font-size: 0.7em;
 }

@@ -25,7 +25,7 @@ window.DatatableContent = (function(_super) {
     heading_background_color: '#FFFFFF',
     cell_text_color: '#000000',
     cell_background_color_odd: '#FFFFFF',
-    cell_background_color_even: '#FFFFFF',
+    cell_background_color_even: '#EEEEEE',
     font: 'Helvetica',
     size: 'Medium'
   };
@@ -92,7 +92,6 @@ window.DatatableContent = (function(_super) {
         if (!_this.exclusions()) {
           return true;
         }
-        console.log(subject);
         return !_.contains(_this.exclusions(), code);
       };
     })(this));
@@ -214,6 +213,7 @@ window.DatatableContent = (function(_super) {
 
   DatatableContent.prototype.cellStyles = function(row, content) {
     var bg_color, text_align;
+    console.log(content);
     bg_color = row % 2 === 0 ? this.style.cell_background_color_even : this.style.cell_background_color_odd;
     text_align = content.split(' ').length > 1 ? 'left' : 'center';
     return this.styleString({
