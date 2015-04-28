@@ -10,7 +10,7 @@ class window.DatatableContent extends WidgetContent
     heading_background_color: '#FFFFFF'
     cell_text_color: '#000000'
     cell_background_color_odd: '#FFFFFF'
-    cell_background_color_even: '#EEEEEE'
+    cell_background_color_even: '#FFFFFF'
     font: 'Helvetica'
     size: 'Medium'
   }
@@ -162,14 +162,15 @@ class window.DatatableContent extends WidgetContent
     @styleString('background-color': @style.heading_background_color, color: @style.heading_text_color)
 
   cellStyles: (row, content) ->
-    console.log content
     bg_color = if row % 2 is 0 then @style.cell_background_color_even else @style.cell_background_color_odd
     text_align = if content.split(' ').length > 1 then 'left' else 'center'
     @styleString('background-color': bg_color, color: @style.cell_text_color, 'text-align': text_align)
 
   cellValue: (subject, col) ->
     originalValue = subject.results?[col.value] or ''
+    console.log @placeholderWithLabel(col.value)
     col.mappings?[originalValue] or originalValue or @placeholderWithLabel(col.value)
+
 
   cellContent: (subject, col) ->
     val = @cellValue(subject, col)

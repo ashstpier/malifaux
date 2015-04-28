@@ -11,7 +11,8 @@ class window.Widget
     'name':           'NameContent'
     'subject-field':  'SubjectFieldContent'
     'attendance':     'AttendanceContent'
-    'dynamictable':     'DynamicTableContent'
+    'dynamictable':   'DynamicTableContent'
+    'shape':          'ShapeContent'
   }
 
   @loadAll: (cb) ->

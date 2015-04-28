@@ -13,7 +13,8 @@ window.Widget = (function() {
     'name': 'NameContent',
     'subject-field': 'SubjectFieldContent',
     'attendance': 'AttendanceContent',
-    'dynamictable': 'DynamicTableContent'
+    'dynamictable': 'DynamicTableContent',
+    'shape': 'ShapeContent'
   };
 
   Widget.loadAll = function(cb) {
