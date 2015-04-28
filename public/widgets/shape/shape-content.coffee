@@ -3,7 +3,7 @@ class window.ShapeContent extends WidgetContent
   @className:   "ShapeContent"
   @displayName: "Shape"
   @description: "A simple shape to be used for drawing."
-  @icon:        "table"
+  @icon:        "vector_path_square"
 
   defaultWidth: -> 200
   defaultHeight: -> 200

@@ -14,7 +14,7 @@ window.ShapeContent = (function(_super) {
 
   ShapeContent.description = "A simple shape to be used for drawing.";
 
-  ShapeContent.icon = "table";
+  ShapeContent.icon = "vector_path_square";
 
   ShapeContent.prototype.defaultWidth = function() {
     return 200;
