@@ -1,16 +1,16 @@
-var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-  __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
 
-window.DynamicTableContent = (function(_super) {
-  __extends(DynamicTableContent, _super);
+window.DynamicTableContent = (function(superClass) {
+  extend(DynamicTableContent, superClass);
 
   function DynamicTableContent() {
-    this.updateTable = __bind(this.updateTable, this);
-    this.makeCell = __bind(this.makeCell, this);
-    this.numberOfColumns = __bind(this.numberOfColumns, this);
-    this.updateMapping = __bind(this.updateMapping, this);
-    this.changeMapping = __bind(this.changeMapping, this);
+    this.updateTable = bind(this.updateTable, this);
+    this.makeCell = bind(this.makeCell, this);
+    this.numberOfColumns = bind(this.numberOfColumns, this);
+    this.updateMapping = bind(this.updateMapping, this);
+    this.changeMapping = bind(this.changeMapping, this);
     return DynamicTableContent.__super__.constructor.apply(this, arguments);
   }
 
@@ -75,23 +75,23 @@ window.DynamicTableContent = (function(_super) {
   };
 
   DynamicTableContent.prototype.makeDefaultTable = function() {
-    var c, r, _i, _ref, _results;
-    _results = [];
-    for (r = _i = 1, _ref = DynamicTableContent.DEFAULT_ROWS; 1 <= _ref ? _i <= _ref : _i >= _ref; r = 1 <= _ref ? ++_i : --_i) {
-      _results.push((function() {
-        var _j, _ref1, _results1;
-        _results1 = [];
-        for (c = _j = 1, _ref1 = DynamicTableContent.DEFAULT_COLUMNS; 1 <= _ref1 ? _j <= _ref1 : _j >= _ref1; c = 1 <= _ref1 ? ++_j : --_j) {
-          _results1.push(this.makeCell());
+    var c, j, r, ref, results;
+    results = [];
+    for (r = j = 1, ref = DynamicTableContent.DEFAULT_ROWS; 1 <= ref ? j <= ref : j >= ref; r = 1 <= ref ? ++j : --j) {
+      results.push((function() {
+        var k, ref1, results1;
+        results1 = [];
+        for (c = k = 1, ref1 = DynamicTableContent.DEFAULT_COLUMNS; 1 <= ref1 ? k <= ref1 : k >= ref1; c = 1 <= ref1 ? ++k : --k) {
+          results1.push(this.makeCell());
         }
-        return _results1;
+        return results1;
       }).call(this));
     }
-    return _results;
+    return results;
   };
 
   DynamicTableContent.prototype.render_layout = function(data, edit) {
-    var c, column, i, row, self, table, tbody, tr, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _ref;
+    var c, column, i, j, k, l, len, len1, len2, len3, len4, len5, m, n, o, ref, row, self, table, tbody, tr;
     if (edit == null) {
       edit = false;
     }
@@ -102,24 +102,24 @@ window.DynamicTableContent = (function(_super) {
       'text-align': this.style.alignment
     })) + "\">\n    <tbody></tbody>\n  </table>\n</div>");
     tbody = table.find('tbody');
-    _ref = this.tabledata;
-    for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-      row = _ref[i];
+    ref = this.tabledata;
+    for (i = j = 0, len = ref.length; j < len; i = ++j) {
+      row = ref[i];
       tr = $('<tr></tr>');
       if (this.style.header_position === 'top') {
         if (i === 0) {
-          for (_j = 0, _len1 = row.length; _j < _len1; _j++) {
-            column = row[_j];
+          for (k = 0, len1 = row.length; k < len1; k++) {
+            column = row[k];
             tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, data, edit)) + "</th>");
           }
         } else {
-          for (_k = 0, _len2 = row.length; _k < _len2; _k++) {
-            column = row[_k];
+          for (l = 0, len2 = row.length; l < len2; l++) {
+            column = row[l];
             tr.append("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(column, data, edit)) + "</td>");
           }
         }
       } else if (this.style.header_position === 'left') {
-        for (c = _l = 0, _len3 = row.length; _l < _len3; c = ++_l) {
+        for (c = m = 0, len3 = row.length; m < len3; c = ++m) {
           column = row[c];
           if (c === 0) {
             tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, data, edit)) + "</th>");
@@ -129,12 +129,12 @@ window.DynamicTableContent = (function(_super) {
         }
       } else {
         if (i === 0) {
-          for (_m = 0, _len4 = row.length; _m < _len4; _m++) {
-            column = row[_m];
+          for (n = 0, len4 = row.length; n < len4; n++) {
+            column = row[n];
             tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, data, edit)) + "</th>");
           }
         } else {
-          for (c = _n = 0, _len5 = row.length; _n < _len5; c = ++_n) {
+          for (c = o = 0, len5 = row.length; o < len5; c = ++o) {
             column = row[c];
             if (c === 0) {
               tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, data, edit)) + "</th>");
@@ -177,14 +177,14 @@ window.DynamicTableContent = (function(_super) {
   };
 
   DynamicTableContent.prototype.cellValue = function(cell, data, html) {
-    var value, _ref;
+    var ref, value;
     if (html == null) {
       html = true;
     }
     if (cell.dynamic) {
       if (Object.keys(this.metrics()).indexOf(cell.value) === -1) {
         if (this.widget.subject) {
-          value = (_ref = data.subjects[this.widget.subject].results) != null ? _ref[cell.value] : void 0;
+          value = (ref = data.subjects[this.widget.subject].results) != null ? ref[cell.value] : void 0;
         } else {
           value = null;
         }
@@ -198,20 +198,20 @@ window.DynamicTableContent = (function(_super) {
   };
 
   DynamicTableContent.prototype.dynamicOptions = function(el) {
-    var list, name, option, point, _i, _len, _ref, _ref1;
+    var j, len, list, name, option, point, ref, ref1;
     list = "<ul class=\"dynamic-list\">";
-    _ref = this.metrics();
-    for (option in _ref) {
-      name = _ref[option];
+    ref = this.metrics();
+    for (option in ref) {
+      name = ref[option];
       if (el.attr('data-key') === option) {
         list += "<li data-key=\"" + option + "\">" + name + "<i class=\"glyphicons ok_2\"></i></li>";
       } else {
         list += "<li data-key=\"" + option + "\">" + name + "</li>";
       }
     }
-    _ref1 = this.assessmentPoints();
-    for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-      point = _ref1[_i];
+    ref1 = this.assessmentPoints();
+    for (j = 0, len = ref1.length; j < len; j++) {
+      point = ref1[j];
       if (el.attr('data-key') === point.name) {
         list += "<li data-key=\"" + point.name + "\">" + point.longName + "<i class=\"glyphicons ok_2\"></i></li>";
       } else {
@@ -329,16 +329,16 @@ window.DynamicTableContent = (function(_super) {
   };
 
   DynamicTableContent.prototype.makeRow = function() {
-    var c, _i, _ref, _results;
-    _results = [];
-    for (c = _i = 1, _ref = this.numberOfColumns(); 1 <= _ref ? _i <= _ref : _i >= _ref; c = 1 <= _ref ? ++_i : --_i) {
-      _results.push(this.makeCell());
+    var c, j, ref, results;
+    results = [];
+    for (c = j = 1, ref = this.numberOfColumns(); 1 <= ref ? j <= ref : j >= ref; c = 1 <= ref ? ++j : --j) {
+      results.push(this.makeCell());
     }
-    return _results;
+    return results;
   };
 
   DynamicTableContent.prototype.setColumns = function(columnCount) {
-    var oldTabledata, row, _i, _j, _len, _len1, _ref, _ref1;
+    var j, k, len, len1, oldTabledata, ref, ref1, row;
     if (columnCount === this.numberOfColumns()) {
       return;
     }
@@ -346,16 +346,16 @@ window.DynamicTableContent = (function(_super) {
     while (columnCount !== this.numberOfColumns()) {
       if (this.numberOfColumns() > columnCount) {
         if (this.numberOfColumns() !== 0) {
-          _ref = this.tabledata;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            row = _ref[_i];
+          ref = this.tabledata;
+          for (j = 0, len = ref.length; j < len; j++) {
+            row = ref[j];
             row.pop();
           }
         }
       } else {
-        _ref1 = this.tabledata;
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          row = _ref1[_j];
+        ref1 = this.tabledata;
+        for (k = 0, len1 = ref1.length; k < len1; k++) {
+          row = ref1[k];
           row.push(this.makeCell());
         }
       }
@@ -398,16 +398,16 @@ window.DynamicTableContent = (function(_super) {
   };
 
   DynamicTableContent.prototype.buildTabledata = function(el) {
-    var $cell, cell, cellArray, cells, newTabledata, row, rows, _i, _j, _len, _len1;
+    var $cell, cell, cellArray, cells, j, k, len, len1, newTabledata, row, rows;
     el.parents('.widget-dynamictable').css('overflow', 'hidden');
     newTabledata = [];
     rows = $(el).find('tr');
-    for (_i = 0, _len = rows.length; _i < _len; _i++) {
-      row = rows[_i];
+    for (j = 0, len = rows.length; j < len; j++) {
+      row = rows[j];
       cells = $(row).find('input');
       cellArray = [];
-      for (_j = 0, _len1 = cells.length; _j < _len1; _j++) {
-        cell = cells[_j];
+      for (k = 0, len1 = cells.length; k < len1; k++) {
+        cell = cells[k];
         $cell = $(cell);
         if ($cell.data('dynamic')) {
           cellArray.push(this.makeCell($cell.data('key'), true));
@@ -428,10 +428,10 @@ window.DynamicTableContent = (function(_super) {
   };
 
   DynamicTableContent.prototype.fieldFrom = function(field, data) {
-    var key, _i, _len, _ref;
-    _ref = field.split('.');
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      key = _ref[_i];
+    var j, key, len, ref;
+    ref = field.split('.');
+    for (j = 0, len = ref.length; j < len; j++) {
+      key = ref[j];
       data = data[key];
     }
     return data;

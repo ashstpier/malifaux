@@ -1,13 +1,13 @@
-var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-  __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
 
-window.FieldContent = (function(_super) {
-  __extends(FieldContent, _super);
+window.FieldContent = (function(superClass) {
+  extend(FieldContent, superClass);
 
   function FieldContent() {
-    this.updateMapping = __bind(this.updateMapping, this);
-    this.changeMapping = __bind(this.changeMapping, this);
+    this.updateMapping = bind(this.updateMapping, this);
+    this.changeMapping = bind(this.changeMapping, this);
     return FieldContent.__super__.constructor.apply(this, arguments);
   }
 
@@ -89,10 +89,10 @@ window.FieldContent = (function(_super) {
   };
 
   FieldContent.prototype.fieldFrom = function(data) {
-    var key, _i, _len, _ref;
-    _ref = this._field.split('.');
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      key = _ref[_i];
+    var i, key, len, ref;
+    ref = this._field.split('.');
+    for (i = 0, len = ref.length; i < len; i++) {
+      key = ref[i];
       data = data != null ? data[key] : void 0;
     }
     return this.mappings[data] || data || this.placeholderWithLabel(key);

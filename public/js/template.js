@@ -45,16 +45,16 @@ window.Template = (function() {
   }
 
   Template.prototype.render = function(mode, data, subject) {
-    var widgetConfig, _i, _len, _ref;
+    var i, len, ref, widgetConfig;
     if (data == null) {
       data = null;
     }
     if (subject == null) {
       subject = null;
     }
-    _ref = this.layout;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      widgetConfig = _ref[_i];
+    ref = this.layout;
+    for (i = 0, len = ref.length; i < len; i++) {
+      widgetConfig = ref[i];
       this.addWidget(widgetConfig, mode, data, subject);
     }
     return this.layout = [];
@@ -77,42 +77,42 @@ window.Template = (function() {
   };
 
   Template.prototype.redraw = function() {
-    var widget, _i, _len, _ref, _results;
-    _ref = this.widgets;
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      widget = _ref[_i];
-      _results.push(widget.redraw());
+    var i, len, ref, results, widget;
+    ref = this.widgets;
+    results = [];
+    for (i = 0, len = ref.length; i < len; i++) {
+      widget = ref[i];
+      results.push(widget.redraw());
     }
-    return _results;
+    return results;
   };
 
   Template.prototype.removeWidget = function(widget) {
     var w;
     widget.remove();
     return this.widgets = (function() {
-      var _i, _len, _ref, _results;
-      _ref = this.widgets;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        w = _ref[_i];
+      var i, len, ref, results;
+      ref = this.widgets;
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        w = ref[i];
         if (w.guid !== widget.guid) {
-          _results.push(w);
+          results.push(w);
         }
       }
-      return _results;
+      return results;
     }).call(this);
   };
 
   Template.prototype.removeAllWidgets = function() {
-    var widget, _i, _len, _ref, _results;
-    _ref = this.widgets;
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      widget = _ref[_i];
-      _results.push(this.removeWidget(widget));
+    var i, len, ref, results, widget;
+    ref = this.widgets;
+    results = [];
+    for (i = 0, len = ref.length; i < len; i++) {
+      widget = ref[i];
+      results.push(this.removeWidget(widget));
     }
-    return _results;
+    return results;
   };
 
   Template.prototype.save = function(cb) {
@@ -125,14 +125,14 @@ window.Template = (function() {
   Template.prototype.serialize = function() {
     var data, layout, widget;
     layout = this.layout.length ? this.layout : (function() {
-      var _i, _len, _ref, _results;
-      _ref = this.widgets;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        widget = _ref[_i];
-        _results.push(widget.serialize());
+      var i, len, ref, results;
+      ref = this.widgets;
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        widget = ref[i];
+        results.push(widget.serialize());
       }
-      return _results;
+      return results;
     }).call(this);
     data = {
       layout: layout,

@@ -4,14 +4,14 @@ window.MappingModal = (function() {
     this.mappings = mappings;
     this.callback = callback;
     inputrows = (function() {
-      var _ref, _results;
-      _ref = this.mappings;
-      _results = [];
-      for (k in _ref) {
-        v = _ref[k];
-        _results.push("<div class=\"mapping-row\">\n  <input type=\"text\" name=\"mapping-input\" class=\"mapping-input\" value=\"" + k + "\">\n  <input type=\"text\" name=\"mapping-output\" class=\"mapping-output\" value=\"" + v + "\">\n</div>");
+      var ref, results;
+      ref = this.mappings;
+      results = [];
+      for (k in ref) {
+        v = ref[k];
+        results.push("<div class=\"mapping-row\">\n  <input type=\"text\" name=\"mapping-input\" class=\"mapping-input\" value=\"" + k + "\">\n  <input type=\"text\" name=\"mapping-output\" class=\"mapping-output\" value=\"" + v + "\">\n</div>");
       }
-      return _results;
+      return results;
     }).call(this);
     inputrow = inputrows.join("\n");
     extrarow = "<div class=\"mapping-row\">\n  <input type=\"text\" name=\"mapping-input\" class=\"mapping-input\">\n  <input type=\"text\" name=\"mapping-output\" class=\"mapping-output\">\n</div>";
@@ -41,11 +41,11 @@ window.MappingModal = (function() {
   }
 
   MappingModal.prototype.close = function() {
-    var input, newMappings, output, row, rows, _i, _len;
+    var i, input, len, newMappings, output, row, rows;
     newMappings = {};
     rows = $('.mapping-row');
-    for (_i = 0, _len = rows.length; _i < _len; _i++) {
-      row = rows[_i];
+    for (i = 0, len = rows.length; i < len; i++) {
+      row = rows[i];
       input = $(row).find('.mapping-input').val();
       output = $(row).find('.mapping-output').val();
       if (!($(row).find('.mapping-input').val() === "" && $(row).find('.mapping-output').val() === "")) {

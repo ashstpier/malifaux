@@ -1,13 +1,13 @@
-var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-  __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
 
-window.DatatableContent = (function(_super) {
-  __extends(DatatableContent, _super);
+window.DatatableContent = (function(superClass) {
+  extend(DatatableContent, superClass);
 
   function DatatableContent() {
-    this.updateMapping = __bind(this.updateMapping, this);
-    this.filter_subjects = __bind(this.filter_subjects, this);
+    this.updateMapping = bind(this.updateMapping, this);
+    this.filter_subjects = bind(this.filter_subjects, this);
     return DatatableContent.__super__.constructor.apply(this, arguments);
   }
 
@@ -48,35 +48,35 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.render_layout = function(data) {
-    var col, columnTitles, columnValues, filteredSubjects, i, name, node, subject, _i, _len, _ref;
+    var col, columnTitles, columnValues, filteredSubjects, i, j, len, name, node, ref, subject;
     name = utils.escape(data.name);
     columnTitles = (function() {
-      var _i, _len, _ref, _results;
-      _ref = this.columns;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        col = _ref[_i];
-        _results.push("<th style=\"" + (this.headingStyles()) + "\">" + col.title + "</th>");
+      var j, len, ref, results;
+      ref = this.columns;
+      results = [];
+      for (j = 0, len = ref.length; j < len; j++) {
+        col = ref[j];
+        results.push("<th style=\"" + (this.headingStyles()) + "\">" + col.title + "</th>");
       }
-      return _results;
+      return results;
     }).call(this);
     node = $("<table class=\"datatable\" style=\"" + (this.styleString({
       'font-family': utils.fontMap[this.style.font],
       'font-size': utils.sizeMap[this.style.size]
     })) + "\">\n  <thead>\n    <tr>\n      <th style=\"" + (this.headingStyles()) + "\"></th>\n      " + (columnTitles.join("\n")) + "\n    </tr>\n  </thead>\n  <tbody>\n  </tbody>\n</table>");
     filteredSubjects = this.filter_subjects(data.subjects);
-    _ref = this.orderdSubjects(filteredSubjects);
-    for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-      subject = _ref[i];
+    ref = this.orderdSubjects(filteredSubjects);
+    for (i = j = 0, len = ref.length; j < len; i = ++j) {
+      subject = ref[i];
       columnValues = (function() {
-        var _j, _len1, _ref1, _results;
-        _ref1 = this.columns;
-        _results = [];
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          col = _ref1[_j];
-          _results.push("<td style=\"" + (this.cellStyles(i + 1, this.cellValue(subject, col))) + "\">" + (this.cellContent(subject, col)) + "</td>");
+        var l, len1, ref1, results;
+        ref1 = this.columns;
+        results = [];
+        for (l = 0, len1 = ref1.length; l < len1; l++) {
+          col = ref1[l];
+          results.push("<td style=\"" + (this.cellStyles(i + 1, this.cellValue(subject, col))) + "\">" + (this.cellContent(subject, col)) + "</td>");
         }
-        return _results;
+        return results;
       }).call(this);
       node.find("tbody").append("<tr>\n  <th style=\"" + (this.headingStyles()) + "\">\n    <strong class=\"subject\">" + subject.subjectName + "</strong>\n    <em class=\"teacher\">" + subject.teacherNames + "</em>\n  </th>\n  " + (columnValues.join("\n")) + "\n</tr>");
     }
@@ -112,14 +112,14 @@ window.DatatableContent = (function(_super) {
     }
     options = (function(_this) {
       return function(val) {
-        var point, _i, _len, _ref, _results;
-        _ref = _this.assessmentPoints();
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          point = _ref[_i];
-          _results.push("<option value=\"" + point.code + "\" " + (point.code === val ? 'selected="selected"' : '') + ">" + point.name + " | " + point.longName + "</option>");
+        var j, len, point, ref, results;
+        ref = _this.assessmentPoints();
+        results = [];
+        for (j = 0, len = ref.length; j < len; j++) {
+          point = ref[j];
+          results.push("<option value=\"" + point.code + "\" " + (point.code === val ? 'selected="selected"' : '') + ">" + point.name + " | " + point.longName + "</option>");
         }
-        return _results;
+        return results;
       };
     })(this);
     return "<tr class=\"column-setting\" data-mappings=\"" + (JSON.stringify(col.mappings).replace(/\"/g, '&quot;')) + "\">\n  <td>\n    <input class=\"col-title\" name=\"col-title\" type=\"text\" value=\"" + col.title + "\" placeholder=\"Untitled...\" />\n    <span class=\"col-comp-label\">compared to:</ span>\n  </td>\n  <td>\n    <select class=\"col-value\" name=\"col-value\">\n      <option value=\"\" " + (col.value === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.value).join("\n")) + "\n    </select>\n    <select class=\"col-compare-to\" name=\"col-compare-to\">\n      <option value=\"\" " + (col.compare_to === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.compare_to).join("\n")) + "\n    </select>\n    <a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(col.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a>\n  </td>\n</tr>";
@@ -163,12 +163,12 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.columSettings = function() {
-    var col, columnChanged, node, self, table, _i, _len, _ref;
+    var col, columnChanged, j, len, node, ref, self, table;
     node = $("<div class=\"datatable-cols prop-table-config\">\n  <h4>Columns</h4>\n  <div class=\"prop-table-wrap\">\n    <table>\n      <thead>\n        <tr>\n          <th>Title</th>\n          <th>Value</th>\n        </tr>\n      </thead>\n      <tbody class=\"edit-rows\">\n      </tbody>\n    </table>\n  </div>\n</div>");
     table = node.find('.edit-rows');
-    _ref = this.columns;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      col = _ref[_i];
+    ref = this.columns;
+    for (j = 0, len = ref.length; j < len; j++) {
+      col = ref[j];
       table.append(this.buildEditRow(col));
     }
     table.append(this.buildEditRow());
@@ -223,20 +223,20 @@ window.DatatableContent = (function(_super) {
   };
 
   DatatableContent.prototype.cellValue = function(subject, col) {
-    var originalValue, _ref, _ref1;
-    originalValue = ((_ref = subject.results) != null ? _ref[col.value] : void 0) || '';
+    var originalValue, ref, ref1;
+    originalValue = ((ref = subject.results) != null ? ref[col.value] : void 0) || '';
     console.log(this.placeholderWithLabel(col.value));
-    return ((_ref1 = col.mappings) != null ? _ref1[originalValue] : void 0) || originalValue || this.placeholderWithLabel(col.value);
+    return ((ref1 = col.mappings) != null ? ref1[originalValue] : void 0) || originalValue || this.placeholderWithLabel(col.value);
   };
 
   DatatableContent.prototype.cellContent = function(subject, col) {
-    var compareTo, numVal, tlClass, val, _ref, _ref1;
+    var compareTo, numVal, ref, ref1, tlClass, val;
     val = this.cellValue(subject, col);
     if (!(col.compare_to && col.compare_to.length > 0)) {
       return val;
     }
-    numVal = ((_ref = subject.internalPoints) != null ? _ref[col.value] : void 0) || 0;
-    compareTo = ((_ref1 = subject.internalPoints) != null ? _ref1[col.compare_to] : void 0) || 0;
+    numVal = ((ref = subject.internalPoints) != null ? ref[col.value] : void 0) || 0;
+    compareTo = ((ref1 = subject.internalPoints) != null ? ref1[col.compare_to] : void 0) || 0;
     tlClass = 'amber';
     if (numVal < compareTo) {
       tlClass = 'red';
@@ -260,31 +260,31 @@ window.DatatableContent = (function(_super) {
     var $col, col, columns, oldColumns;
     oldColumns = this.columns;
     columns = (function() {
-      var _i, _len, _ref, _results;
-      _ref = el.find('.column-setting');
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        col = _ref[_i];
+      var j, len, ref, results;
+      ref = el.find('.column-setting');
+      results = [];
+      for (j = 0, len = ref.length; j < len; j++) {
+        col = ref[j];
         $col = $(col);
-        _results.push({
+        results.push({
           title: $col.find('.col-title').val(),
           value: $col.find('.col-value').val(),
           compare_to: $col.find('.col-compare-to').val(),
           mappings: $col.data('mappings')
         });
       }
-      return _results;
+      return results;
     })();
     this.columns = (function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = columns.length; _i < _len; _i++) {
-        col = columns[_i];
+      var j, len, results;
+      results = [];
+      for (j = 0, len = columns.length; j < len; j++) {
+        col = columns[j];
         if ((col.value != null) && col.value !== '') {
-          _results.push(col);
+          results.push(col);
         }
       }
-      return _results;
+      return results;
     })();
     return Designer.history.push(this, 'setColumnsFromUndo', oldColumns, this.columns);
   };
@@ -298,13 +298,13 @@ window.DatatableContent = (function(_super) {
   DatatableContent.prototype.orderdSubjects = function(subjects) {
     var alphabetical, k, rank, v;
     subjects = (function() {
-      var _results;
-      _results = [];
+      var results;
+      results = [];
       for (k in subjects) {
         v = subjects[k];
-        _results.push(v);
+        results.push(v);
       }
-      return _results;
+      return results;
     })();
     alphabetical = subjects.sort((function(_this) {
       return function(a, b) {

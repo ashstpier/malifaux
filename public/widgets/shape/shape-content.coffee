@@ -13,9 +13,9 @@ class window.ShapeContent extends WidgetContent
   @STYLE_DEFAULTS: {
     fill_color: '#CCCCCC'
     stroke_color: '#888888'
-    stroke_width: '0'
+    stroke_width: '3'
     shape: 'rectangle'
-    border_radius: '0'
+    border_radius: '5'
   }
 
   fill_color: @property('style', 'fill_color')

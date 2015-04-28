@@ -43,19 +43,19 @@ window.Designer = {
     return this.propertyPanel.render();
   },
   renderWidgetButtons: function() {
-    var className, name, type, _ref, _results;
-    _ref = Widget.WIDGETS;
-    _results = [];
-    for (name in _ref) {
-      className = _ref[name];
+    var className, name, ref, results, type;
+    ref = Widget.WIDGETS;
+    results = [];
+    for (name in ref) {
+      className = ref[name];
       type = window[className];
       if (type.active) {
-        _results.push($("#gallery").append("<div id=\"add-" + name + "\" class=\"add-widget\">\n  <i class=\"glyphicons white " + type.icon + "\"></i>\n  <h4>" + type.displayName + "</h4>\n  <p>" + type.description + "</p>\n</div>"));
+        results.push($("#gallery").append("<div id=\"add-" + name + "\" class=\"add-widget\">\n  <i class=\"glyphicons white " + type.icon + "\"></i>\n  <h4>" + type.displayName + "</h4>\n  <p>" + type.description + "</p>\n</div>"));
       } else {
-        _results.push(void 0);
+        results.push(void 0);
       }
     }
-    return _results;
+    return results;
   },
   setOrientation: function(orientation) {
     Designer.history.push(this, 'updateOrientation', this.template.orientation, orientation);
@@ -87,7 +87,7 @@ window.Designer = {
   },
   addPageClass: function() {
     $('#page').attr('class', '');
-    return $('#page').addClass("" + this.template.orientation + " " + this.template.pagetype);
+    return $('#page').addClass(this.template.orientation + " " + this.template.pagetype);
   },
   isSubjectPage: function() {
     return this.template.pagetype === 'subject';
@@ -96,7 +96,7 @@ window.Designer = {
     return this.template.pagetype === 'student';
   },
   bindEvents: function() {
-    var className, name, _ref, _results;
+    var className, name, ref, results;
     $('#save-exit').click((function(_this) {
       return function() {
         return _this.saveAndExit();
@@ -178,11 +178,11 @@ window.Designer = {
         return _this.reminderToSave(e);
       };
     })(this));
-    _ref = Widget.WIDGETS;
-    _results = [];
-    for (name in _ref) {
-      className = _ref[name];
-      _results.push((function(_this) {
+    ref = Widget.WIDGETS;
+    results = [];
+    for (name in ref) {
+      className = ref[name];
+      results.push((function(_this) {
         return function(className) {
           return $("#add-" + name).click(function() {
             $('#gallery').addClass('hidden');
@@ -197,7 +197,7 @@ window.Designer = {
         };
       })(this)(className));
     }
-    return _results;
+    return results;
   },
   bindKeyboardEvents: function() {
     Mousetrap.bind(['command+z', 'ctrl+z'], (function(_this) {
@@ -416,7 +416,7 @@ window.Designer = {
     $('#name').text(this.template.name);
     $("#orientation input:radio[value='" + this.template.orientation + "']").attr('checked', true);
     $("#pagetype input:radio[value='" + this.template.pagetype + "']").attr('checked', true);
-    $('#page').addClass("" + this.template.orientation + " " + this.template.pagetype);
+    $('#page').addClass(this.template.orientation + " " + this.template.pagetype);
     subject = this.isSubjectPage() ? utils.fakeSubject() : null;
     return this.template.render("layout");
   },

@@ -129,16 +129,16 @@ window.WidgetContent = (function() {
   WidgetContent.prototype.assessmentPoints = function() {
     var key, obj, points;
     return points = (function() {
-      var _ref, _results;
-      _ref = API.assessmentPoints();
-      _results = [];
-      for (key in _ref) {
-        obj = _ref[key];
-        _results.push($.extend({}, obj, {
+      var ref, results;
+      ref = API.assessmentPoints();
+      results = [];
+      for (key in ref) {
+        obj = ref[key];
+        results.push($.extend({}, obj, {
           code: key
         }));
       }
-      return _results;
+      return results;
     })();
   };
 
@@ -159,15 +159,15 @@ window.WidgetContent = (function() {
   WidgetContent.prototype.styleString = function(styles) {
     var name, value;
     return ((function() {
-      var _results;
-      _results = [];
+      var results;
+      results = [];
       for (name in styles) {
         value = styles[name];
         if (value != null) {
-          _results.push("" + name + ": " + value + ";");
+          results.push(name + ": " + value + ";");
         }
       }
-      return _results;
+      return results;
     })()).join(" ").replace(/"/gm, '&quot;');
   };
 
@@ -210,12 +210,12 @@ window.WidgetContent = (function() {
 })();
 
 window.OptionRenderer = (function() {
-  function OptionRenderer(receiver, type, key, label, config) {
+  function OptionRenderer(receiver, type1, key1, label1, config1) {
     this.receiver = receiver;
-    this.type = type;
-    this.key = key;
-    this.label = label;
-    this.config = config != null ? config : {};
+    this.type = type1;
+    this.key = key1;
+    this.label = label1;
+    this.config = config1 != null ? config1 : {};
   }
 
   OptionRenderer.prototype.render = function(styles) {
@@ -248,14 +248,14 @@ window.OptionRenderer = (function() {
   OptionRenderer.prototype.renderFontInput = function(styles) {
     var desc, fontName, options;
     options = (function() {
-      var _ref, _results;
-      _ref = utils.fontMap;
-      _results = [];
-      for (fontName in _ref) {
-        desc = _ref[fontName];
-        _results.push("<option " + (this.value === fontName ? 'selected' : '') + ">" + fontName + "</option>");
+      var ref, results;
+      ref = utils.fontMap;
+      results = [];
+      for (fontName in ref) {
+        desc = ref[fontName];
+        results.push("<option " + (this.value === fontName ? 'selected' : '') + ">" + fontName + "</option>");
       }
-      return _results;
+      return results;
     }).call(this);
     return "<select name=\"" + this.key + "\" class=\"prop-input\" data-fn=\"" + this.key + "\">\n  " + (options.join("\n")) + "\n</select>";
   };
@@ -263,14 +263,14 @@ window.OptionRenderer = (function() {
   OptionRenderer.prototype.renderSizeInput = function(styles) {
     var options, size, sizeName;
     options = (function() {
-      var _ref, _results;
-      _ref = utils.sizeMap;
-      _results = [];
-      for (sizeName in _ref) {
-        size = _ref[sizeName];
-        _results.push("<option " + (this.value === sizeName ? 'selected' : '') + ">" + sizeName + "</option>");
+      var ref, results;
+      ref = utils.sizeMap;
+      results = [];
+      for (sizeName in ref) {
+        size = ref[sizeName];
+        results.push("<option " + (this.value === sizeName ? 'selected' : '') + ">" + sizeName + "</option>");
       }
-      return _results;
+      return results;
     }).call(this);
     return "<select name=\"" + this.key + "\" class=\"prop-input\" data-fn=\"" + this.key + "\">\n  " + (options.join("\n")) + "\n</select>";
   };
@@ -290,14 +290,14 @@ window.OptionRenderer = (function() {
       grouped = true;
     } else {
       optionsArray = (function() {
-        var _ref, _results;
-        _ref = this.config.options;
-        _results = [];
-        for (key in _ref) {
-          value = _ref[key];
-          _results.push([key, value]);
+        var ref, results;
+        ref = this.config.options;
+        results = [];
+        for (key in ref) {
+          value = ref[key];
+          results.push([key, value]);
         }
-        return _results;
+        return results;
       }).call(this);
     }
     isSelected = (function(_this) {
@@ -314,33 +314,33 @@ window.OptionRenderer = (function() {
     };
     if (grouped) {
       options = (function() {
-        var _ref, _results;
-        _ref = this.config.options;
-        _results = [];
-        for (group in _ref) {
-          items = _ref[group];
+        var ref, results;
+        ref = this.config.options;
+        results = [];
+        for (group in ref) {
+          items = ref[group];
           items = ((function() {
-            var _i, _len, _results1;
-            _results1 = [];
-            for (_i = 0, _len = items.length; _i < _len; _i++) {
-              item = items[_i];
-              _results1.push(renderOption(item));
+            var i, len, results1;
+            results1 = [];
+            for (i = 0, len = items.length; i < len; i++) {
+              item = items[i];
+              results1.push(renderOption(item));
             }
-            return _results1;
+            return results1;
           })()).join("\n");
-          _results.push("<optgroup label=\"" + group + "\">" + items + "</optgroup>");
+          results.push("<optgroup label=\"" + group + "\">" + items + "</optgroup>");
         }
-        return _results;
+        return results;
       }).call(this);
     } else {
       options = (function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = optionsArray.length; _i < _len; _i++) {
-          item = optionsArray[_i];
-          _results.push(renderOption(item));
+        var i, len, results;
+        results = [];
+        for (i = 0, len = optionsArray.length; i < len; i++) {
+          item = optionsArray[i];
+          results.push(renderOption(item));
         }
-        return _results;
+        return results;
       })();
     }
     multiple = this.config.multiple ? 'multiple' : '';

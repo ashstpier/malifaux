@@ -1,4 +1,4 @@
-var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 window.Widget = (function() {
   Widget.PAGE_SELECTOR = '#page';
@@ -18,21 +18,21 @@ window.Widget = (function() {
   };
 
   Widget.loadAll = function(cb) {
-    var className, completed, name, widgetCount, _ref, _results;
+    var className, completed, name, ref, results, widgetCount;
     completed = 0;
     widgetCount = Object.keys(Widget.WIDGETS).length;
-    _ref = Widget.WIDGETS;
-    _results = [];
-    for (name in _ref) {
-      className = _ref[name];
-      _results.push(this.load(name, function() {
+    ref = Widget.WIDGETS;
+    results = [];
+    for (name in ref) {
+      className = ref[name];
+      results.push(this.load(name, function() {
         completed++;
         if (completed === widgetCount) {
           return cb();
         }
       }));
     }
-    return _results;
+    return results;
   };
 
   Widget.load = function(name, cb) {
@@ -49,7 +49,7 @@ window.Widget = (function() {
     }
     this.data = data != null ? data : null;
     this.subject = subject != null ? subject : null;
-    this.updateSelectedState = __bind(this.updateSelectedState, this);
+    this.updateSelectedState = bind(this.updateSelectedState, this);
     this.currentMode = 'layout';
     this.guid = config.guid || utils.guid();
     this.content = config.type != null ? new window[config.type](this, config.content) : new TextContent();
@@ -286,7 +286,7 @@ window.Widget = (function() {
 
   Widget.prototype.x = function(n) {
     if (n != null) {
-      return this.el.css('left', "" + (Math.round(n)) + "px");
+      return this.el.css('left', (Math.round(n)) + "px");
     } else {
       return Math.round(this.el.position().left);
     }
@@ -294,7 +294,7 @@ window.Widget = (function() {
 
   Widget.prototype.y = function(n) {
     if (n != null) {
-      return this.el.css('top', "" + (Math.round(n)) + "px");
+      return this.el.css('top', (Math.round(n)) + "px");
     } else {
       return Math.round(this.el.position().top);
     }
