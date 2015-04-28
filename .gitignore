@@ -4,3 +4,5 @@ aws.json
 npm-debug.log
 
 private/*.json
+
+.idea
