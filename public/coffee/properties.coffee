@@ -84,7 +84,9 @@ class window.Properties
       @disable()
 
 
-  selectionMoved: => @updateLayoutValues()
+  selectionMoved: =>
+    @updateLayoutValues()
+    true
 
   updateLayoutValues: () ->
     @el.find('#prop-value-x').val(@x())

@@ -71,7 +71,8 @@ window.Properties = (function() {
   };
 
   Properties.prototype.selectionMoved = function() {
-    return this.updateLayoutValues();
+    this.updateLayoutValues();
+    return true;
   };
 
   Properties.prototype.updateLayoutValues = function() {

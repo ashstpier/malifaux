@@ -91,26 +91,7 @@ window.Widget = (function() {
         return Designer.removeWidget(_this);
       };
     })(this));
-    this.el.resizable({
-      grid: Widget.GRID_SIZE,
-      containment: Widget.PAGE_SELECTOR,
-      handles: 'n, e, s, w, ne, se, sw, nw',
-      resize: (function(_this) {
-        return function() {
-          return _this.trigger('widget:move', _this);
-        };
-      })(this),
-      start: (function(_this) {
-        return function() {
-          return Designer.select(_this);
-        };
-      })(this),
-      stop: (function(_this) {
-        return function() {
-          return _this.moved();
-        };
-      })(this)
-    });
+    this.applyResizable();
     return this.el.draggable({
       grid: Widget.GRID_SIZE,
       containment: Widget.PAGE_SELECTOR,
@@ -129,6 +110,33 @@ window.Widget = (function() {
           return _this.moved();
         };
       })(this)
+    });
+  };
+
+  Widget.prototype.applyResizable = function(ratio) {
+    if (ratio == null) {
+      ratio = null;
+    }
+    return this.el.resizable({
+      grid: Widget.GRID_SIZE,
+      containment: Widget.PAGE_SELECTOR,
+      handles: 'n, e, s, w, ne, se, sw, nw',
+      resize: (function(_this) {
+        return function() {
+          return _this.trigger('widget:move', _this);
+        };
+      })(this),
+      start: (function(_this) {
+        return function() {
+          return Designer.select(_this);
+        };
+      })(this),
+      stop: (function(_this) {
+        return function() {
+          return _this.moved();
+        };
+      })(this),
+      aspectRatio: ratio
     });
   };
 
@@ -257,11 +265,7 @@ window.Widget = (function() {
   Widget.prototype.setAspectRatio = function(ratio) {
     this.el.resizable('destroy');
     this.el.height(this.el.width() / ratio);
-    return this.el.resizable({
-      grid: Widget.GRID_SIZE,
-      containment: Widget.PAGE_SELECTOR,
-      aspectRatio: ratio
-    });
+    return this.applyResizable(ratio);
   };
 
   Widget.prototype.width = function(n) {
