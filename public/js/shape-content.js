@@ -37,9 +37,9 @@ window.ShapeContent = (function(superClass) {
   ShapeContent.STYLE_DEFAULTS = {
     fill_color: '#CCCCCC',
     stroke_color: '#888888',
-    stroke_width: '3',
+    stroke_width: '0',
     shape: 'rectangle',
-    border_radius: '5'
+    border_radius: '0'
   };
 
   ShapeContent.prototype.fill_color = ShapeContent.property('style', 'fill_color');
