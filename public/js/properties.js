@@ -1,9 +1,9 @@
-var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 window.Properties = (function() {
   function Properties(designer) {
     this.designer = designer;
-    this.selectionMoved = __bind(this.selectionMoved, this);
+    this.selectionMoved = bind(this.selectionMoved, this);
     this.el = $("#properties");
     this.selected = null;
     this.designer.bind("selection:change", (function(_this) {
@@ -71,7 +71,8 @@ window.Properties = (function() {
   };
 
   Properties.prototype.selectionMoved = function() {
-    return this.updateLayoutValues();
+    this.updateLayoutValues();
+    return true;
   };
 
   Properties.prototype.updateLayoutValues = function() {
@@ -114,17 +115,17 @@ window.Properties = (function() {
         options = [options];
       }
       options = (function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = options.length; _i < _len; _i++) {
-          o = options[_i];
+        var i, len, results;
+        results = [];
+        for (i = 0, len = options.length; i < len; i++) {
+          o = options[i];
           if (typeof o === 'string') {
-            _results.push($(o));
+            results.push($(o));
           } else {
-            _results.push(o);
+            results.push(o);
           }
         }
-        return _results;
+        return results;
       })();
       appearance = this.el.find('.prop-appearance');
       appearance.html("  <h3 class=\"prop-section-header\">Appearance</h3>\n  <div class=\"prop-content\">\n  </div>\n</section>");
@@ -137,7 +138,7 @@ window.Properties = (function() {
   };
 
   Properties.prototype.setConfigOptions = function() {
-    var config, o, option, options, _i, _len, _results;
+    var config, i, len, o, option, options, results;
     options = this.selected.renderConfigOptions();
     if (options === false) {
       return this.clearConfigOptions();
@@ -146,26 +147,26 @@ window.Properties = (function() {
         options = [options];
       }
       options = (function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = options.length; _i < _len; _i++) {
-          o = options[_i];
+        var i, len, results;
+        results = [];
+        for (i = 0, len = options.length; i < len; i++) {
+          o = options[i];
           if (typeof o === 'string') {
-            _results.push($(o));
+            results.push($(o));
           } else {
-            _results.push(o);
+            results.push(o);
           }
         }
-        return _results;
+        return results;
       })();
       config = this.el.find('.prop-config');
       config.html("  <h3 class=\"prop-section-header\">Configuration</h3>\n  <div class=\"prop-content\">\n  </div>\n</section>");
-      _results = [];
-      for (_i = 0, _len = options.length; _i < _len; _i++) {
-        option = options[_i];
-        _results.push(config.find('.prop-content').append(option));
+      results = [];
+      for (i = 0, len = options.length; i < len; i++) {
+        option = options[i];
+        results.push(config.find('.prop-content').append(option));
       }
-      return _results;
+      return results;
     }
   };
 
@@ -174,23 +175,23 @@ window.Properties = (function() {
   };
 
   Properties.prototype.x = function() {
-    var _ref;
-    return ((_ref = this.selected) != null ? _ref.x() : void 0) || '';
+    var ref;
+    return ((ref = this.selected) != null ? ref.x() : void 0) || '';
   };
 
   Properties.prototype.y = function() {
-    var _ref;
-    return ((_ref = this.selected) != null ? _ref.y() : void 0) || '';
+    var ref;
+    return ((ref = this.selected) != null ? ref.y() : void 0) || '';
   };
 
   Properties.prototype.width = function() {
-    var _ref;
-    return ((_ref = this.selected) != null ? _ref.width() : void 0) || '';
+    var ref;
+    return ((ref = this.selected) != null ? ref.width() : void 0) || '';
   };
 
   Properties.prototype.height = function() {
-    var _ref;
-    return ((_ref = this.selected) != null ? _ref.height() : void 0) || '';
+    var ref;
+    return ((ref = this.selected) != null ? ref.height() : void 0) || '';
   };
 
   return Properties;

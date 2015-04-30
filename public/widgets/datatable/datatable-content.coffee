@@ -61,7 +61,6 @@ class window.DatatableContent extends WidgetContent
       return [subjects[@widget.subject]]
     _.filter subjects, (subject, code) =>
       return true unless @exclusions()
-      console.log subject
       !_.contains(@exclusions(), code)
 
   buildEditRow: (col={title:'', value:'', compare_to:'', mappings:{}}) ->
@@ -169,7 +168,9 @@ class window.DatatableContent extends WidgetContent
 
   cellValue: (subject, col) ->
     originalValue = subject.results?[col.value] or ''
+    console.log @placeholderWithLabel(col.value)
     col.mappings?[originalValue] or originalValue or @placeholderWithLabel(col.value)
+
 
   cellContent: (subject, col) ->
     val = @cellValue(subject, col)

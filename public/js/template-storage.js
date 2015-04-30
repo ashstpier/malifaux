@@ -14,7 +14,7 @@ TemplateStore = (function() {
   };
 
   TemplateStore.get = function(key, cb) {
-    return $.get("" + ENDPOINT_URL + "/" + key, function(data) {
+    return $.get(ENDPOINT_URL + "/" + key, function(data) {
       return cb(data);
     });
   };
@@ -22,7 +22,7 @@ TemplateStore = (function() {
   TemplateStore["delete"] = function(key) {
     return $.ajax({
       type: 'DELETE',
-      url: "" + ENDPOINT_URL + "/" + key,
+      url: ENDPOINT_URL + "/" + key,
       dataType: 'json'
     });
   };
@@ -30,7 +30,7 @@ TemplateStore = (function() {
   TemplateStore.save = function(key, data, cb) {
     return $.ajax({
       type: 'PUT',
-      url: "" + ENDPOINT_URL + "/" + key,
+      url: ENDPOINT_URL + "/" + key,
       contentType: "application/json",
       data: JSON.stringify(data),
       complete: function() {

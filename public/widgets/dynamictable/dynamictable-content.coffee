@@ -58,12 +58,23 @@ class window.DynamicTableContent extends WidgetContent
         else
           for column in row
             tr.append("""<td style="#{@cellStyles(i+1)}">#{@cellContent(column, data, edit)}</td>""")
-      else
+      else if @style.header_position == 'left'
         for column, c in row
           if c == 0
             tr.append("""<th style="#{@headingStyles()}">#{@cellContent(column, data, edit)}</th>""")
           else
             tr.append("""<td style="#{@cellStyles(i+1)}">#{@cellContent(column, data, edit)}</td>""")
+      else
+        if i == 0
+          for column in row
+            tr.append("""<th style="#{@headingStyles()}">#{@cellContent(column, data, edit)}</th>""")
+        else
+          for column, c in row
+            if c == 0
+              tr.append("""<th style="#{@headingStyles()}">#{@cellContent(column, data, edit)}</th>""")
+            else
+              tr.append("""<td style="#{@cellStyles(i+1)}">#{@cellContent(column, data, edit)}</td>""")
+
       tbody.append(tr)
 
     self = this
@@ -111,12 +122,11 @@ class window.DynamicTableContent extends WidgetContent
         list += """<li data-key="#{option}">#{name}<i class="glyphicons ok_2"></i></li>"""
       else
         list += """<li data-key="#{option}">#{name}</li>"""
-    if @widget.subject
-      for point in @assessmentPoints()
-        if el.attr('data-key') is point.name
-          list += """<li data-key="#{point.name}">#{point.longName}<i class="glyphicons ok_2"></i></li>"""
-        else
-          list += """<li data-key="#{point.name}">#{point.longName}</li>"""
+    for point in @assessmentPoints()
+      if el.attr('data-key') is point.name
+        list += """<li data-key="#{point.name}">#{point.longName}<i class="glyphicons ok_2"></i></li>"""
+      else
+        list += """<li data-key="#{point.name}">#{point.longName}</li>"""
     list += """</ul>"""
 
   renderAppearanceOptions: ->
@@ -132,7 +142,7 @@ class window.DynamicTableContent extends WidgetContent
 
   renderConfigOptions: ->
     [
-      @option('select', 'header_position', "Header position", options: {top: "Top", left: 'Left'})
+      @option('select', 'header_position', "Header position", options: {top: "Top", left: 'Left', both: "Both"})
       @option('select', 'alignment', "Cell alignment", options: {left: "Left", center: 'Center', right: 'Right'})
       @option('text', 'numberOfColumns', "No. of columns")
       @option('text', 'numberOfRows', "No. of rows")

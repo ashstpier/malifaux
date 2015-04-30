@@ -1,13 +1,13 @@
-var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-  __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
 
-window.SubjectFieldContent = (function(_super) {
-  __extends(SubjectFieldContent, _super);
+window.SubjectFieldContent = (function(superClass) {
+  extend(SubjectFieldContent, superClass);
 
   function SubjectFieldContent() {
-    this.updateMapping = __bind(this.updateMapping, this);
-    this.changeMapping = __bind(this.changeMapping, this);
+    this.updateMapping = bind(this.updateMapping, this);
+    this.changeMapping = bind(this.changeMapping, this);
     return SubjectFieldContent.__super__.constructor.apply(this, arguments);
   }
 
@@ -39,14 +39,14 @@ window.SubjectFieldContent = (function(_super) {
   };
 
   SubjectFieldContent.prototype.renderConfigOptions = function() {
-    var fields, options, point, _i, _len, _ref;
+    var fields, i, len, options, point, ref;
     fields = {
       "Subject": [['subjectName', 'Subject Name'], ['teacherNames', 'Teacher Names'], ['teachingGroupCode', 'Teaching Group Code']],
       "Results": []
     };
-    _ref = this.assessmentPoints();
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      point = _ref[_i];
+    ref = this.assessmentPoints();
+    for (i = 0, len = ref.length; i < len; i++) {
+      point = ref[i];
       fields.Results.push([point.code, point.longName]);
     }
     options = [
@@ -88,11 +88,11 @@ window.SubjectFieldContent = (function(_super) {
   };
 
   SubjectFieldContent.prototype.fieldFrom = function(data) {
-    var defaultValue, subject, subjectScope, value, _ref;
+    var defaultValue, ref, subject, subjectScope, value;
     subject = this.widget.subject ? this.widget.subject : this.subject();
     defaultValue = this.placeholderWithLabel(this.field());
     subjectScope = data.subjects[subject];
-    value = (subjectScope != null ? (_ref = subjectScope.results) != null ? _ref[this.field()] : void 0 : void 0) || (subjectScope != null ? subjectScope[this.field()] : void 0) || defaultValue;
+    value = (subjectScope != null ? (ref = subjectScope.results) != null ? ref[this.field()] : void 0 : void 0) || (subjectScope != null ? subjectScope[this.field()] : void 0) || defaultValue;
     return this.mappings[value] || value;
   };
 

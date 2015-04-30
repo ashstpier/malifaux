@@ -39,6 +39,7 @@ body {
 
 #undo {
   position: relative;
+  float: left;
   display: inline-block;
   margin: 3px 0 10px 30px;
   text-decoration: none;
@@ -51,6 +52,7 @@ body {
 }
 #redo {
   display: inline-block;
+  float: left;
   margin: 3px 10px 10px 0;
   text-decoration: none;
   cursor: not-allowed;
@@ -118,7 +120,7 @@ body {
   bottom: 0;
   left: 0;
   right: 300px;
-  padding: 0;
+  padding: 0 10px;
   overflow: auto;
 }
 
@@ -187,9 +189,20 @@ body {
 .hidden {
   display: none !important;
 }
+.show {
+  display: block !important;
+}
 
 #viewport.screenshot {
   position: relative;
   overflow: auto;
   margin-right: 300px;
+}
+
+#save-msg {
+  margin: 18px 10px;
+  color: #fff;
+  float: left;
+  display: none;
+  font-size: 0.7em;
 }

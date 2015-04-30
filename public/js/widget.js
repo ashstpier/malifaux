@@ -1,4 +1,4 @@
-var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 window.Widget = (function() {
   Widget.PAGE_SELECTOR = '#page';
@@ -7,31 +7,33 @@ window.Widget = (function() {
 
   Widget.WIDGETS = {
     'image': 'ImageContent',
+    'image-gallery': 'ImageGalleryContent',
     'text': 'TextContent',
     'datatable': 'DatatableContent',
     'field': 'FieldContent',
     'name': 'NameContent',
     'subject-field': 'SubjectFieldContent',
     'attendance': 'AttendanceContent',
-    'dynamictable': 'DynamicTableContent'
+    'dynamictable': 'DynamicTableContent',
+    'shape': 'ShapeContent'
   };
 
   Widget.loadAll = function(cb) {
-    var className, completed, name, widgetCount, _ref, _results;
+    var className, completed, name, ref, results, widgetCount;
     completed = 0;
     widgetCount = Object.keys(Widget.WIDGETS).length;
-    _ref = Widget.WIDGETS;
-    _results = [];
-    for (name in _ref) {
-      className = _ref[name];
-      _results.push(this.load(name, function() {
+    ref = Widget.WIDGETS;
+    results = [];
+    for (name in ref) {
+      className = ref[name];
+      results.push(this.load(name, function() {
         completed++;
         if (completed === widgetCount) {
           return cb();
         }
       }));
     }
-    return _results;
+    return results;
   };
 
   Widget.load = function(name, cb) {
@@ -48,7 +50,7 @@ window.Widget = (function() {
     }
     this.data = data != null ? data : null;
     this.subject = subject != null ? subject : null;
-    this.updateSelectedState = __bind(this.updateSelectedState, this);
+    this.updateSelectedState = bind(this.updateSelectedState, this);
     this.currentMode = 'layout';
     this.guid = config.guid || utils.guid();
     this.content = config.type != null ? new window[config.type](this, config.content) : new TextContent();
@@ -90,26 +92,7 @@ window.Widget = (function() {
         return Designer.removeWidget(_this);
       };
     })(this));
-    this.el.resizable({
-      grid: Widget.GRID_SIZE,
-      containment: Widget.PAGE_SELECTOR,
-      handles: 'n, e, s, w, ne, se, sw, nw',
-      resize: (function(_this) {
-        return function() {
-          return _this.trigger('widget:move', _this);
-        };
-      })(this),
-      start: (function(_this) {
-        return function() {
-          return Designer.select(_this);
-        };
-      })(this),
-      stop: (function(_this) {
-        return function() {
-          return _this.moved();
-        };
-      })(this)
-    });
+    this.applyResizable();
     return this.el.draggable({
       grid: Widget.GRID_SIZE,
       containment: Widget.PAGE_SELECTOR,
@@ -128,6 +111,33 @@ window.Widget = (function() {
           return _this.moved();
         };
       })(this)
+    });
+  };
+
+  Widget.prototype.applyResizable = function(ratio) {
+    if (ratio == null) {
+      ratio = null;
+    }
+    return this.el.resizable({
+      grid: Widget.GRID_SIZE,
+      containment: Widget.PAGE_SELECTOR,
+      handles: 'n, e, s, w, ne, se, sw, nw',
+      resize: (function(_this) {
+        return function() {
+          return _this.trigger('widget:move', _this);
+        };
+      })(this),
+      start: (function(_this) {
+        return function() {
+          return Designer.select(_this);
+        };
+      })(this),
+      stop: (function(_this) {
+        return function() {
+          return _this.moved();
+        };
+      })(this),
+      aspectRatio: ratio
     });
   };
 
@@ -256,11 +266,7 @@ window.Widget = (function() {
   Widget.prototype.setAspectRatio = function(ratio) {
     this.el.resizable('destroy');
     this.el.height(this.el.width() / ratio);
-    return this.el.resizable({
-      grid: Widget.GRID_SIZE,
-      containment: Widget.PAGE_SELECTOR,
-      aspectRatio: ratio
-    });
+    return this.applyResizable(ratio);
   };
 
   Widget.prototype.width = function(n) {
@@ -281,7 +287,7 @@ window.Widget = (function() {
 
   Widget.prototype.x = function(n) {
     if (n != null) {
-      return this.el.css('left', "" + (Math.round(n)) + "px");
+      return this.el.css('left', (Math.round(n)) + "px");
     } else {
       return Math.round(this.el.position().left);
     }
@@ -289,7 +295,7 @@ window.Widget = (function() {
 
   Widget.prototype.y = function(n) {
     if (n != null) {
-      return this.el.css('top', "" + (Math.round(n)) + "px");
+      return this.el.css('top', (Math.round(n)) + "px");
     } else {
       return Math.round(this.el.position().top);
     }
