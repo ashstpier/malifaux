@@ -37,11 +37,23 @@ window.utils = {
     'Courier New': '"Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace'
   },
   sizeMap: {
-    'Tiny': '11px',
-    'Small': '12px',
-    'Medium': '14px',
-    'Large': '16px',
-    'Extra Large': '18px'
+    '11px': '11px',
+    '12px': '12px',
+    '14px': '14px',
+    '16px': '16px',
+    '18px': '18px',
+    '20px': '20px',
+    '22px': '22px',
+    '24px': '24px',
+    '26px': '26px',
+    '28px': '28px',
+    '30px': '30px',
+    '32px': '32px',
+    '36px': '36px',
+    '40px': '40px',
+    '48px': '48px',
+    '54px': '54px',
+    '60px': '60px'
   },
   screenshot: function(element_id, cb) {
     return html2canvas(document.getElementById(element_id), {
@@ -986,6 +998,9 @@ window.utils = {
           "teachingGroupCode": "12/ENRIC2",
           "teacherNames": "Dr M. Perfect"
         }
+      },
+      "images": {
+        "profile": "iVBORw0KGgoAAAANSUhEUgAAAJQAAACUCAMAAABC4vDmAAAAHlBMVEXt7e3a2trd3d3h4eHm5ubr6+vk5OTi4uLY2Njv7+8AbWW3AAAC+0lEQVR4nO2aWY7jMAwFYy12eP8Lj2TLnaQn1kL6SUKDBczfIF0gaWrj46EoiqIos0OJ0R5veLeu1tptXZ33o2VCgIKPNcsbxgazkSEjv9rlC3YdFi/ynzH69PK9g7X/PW+fl0qH1vk/e1mFxGWNdtauTjFzZacUrC4+8Z+7LqYPjHt0S6GrUzpS2ImKcupu1eS0LA6fP2rJ3WkFp9kpWKFD5dudlgXdGar602/sY28Mdwcs/R4xkhc5ih2URV/ZNH9jkOtgYzd4scb1EqJE3EClUGFgBwrYrIjvtCygiuJ+eilUoJJi9agTi5Hil3nEAIyIteq9gyn1TSaF2ViJSupYAG+n7qyQkUL0T1mdg5q6sM6Pk81sUpDPb0Yp2SKzSwF6+h+Vut9pzq9vyj41pdSMax+RdJeA2OVV35RdgNlPCXeeoEOWSMrefxjdf1HSqZ6Y00z4UUmkEEq7lqApbLCLM0H+gK8i7FBBTg0J0f0UDOa9C/YynRcqxJH9HZd/T/sO+naYGAkE36PHX2/+Aju8zlQ+9b3o8OhHrdex6WIf7tWy3AA2B1dUb0KPeur1NlqVQsip6gqKXbTYsJ6m9yQHFbfsBv7M9w2/ZrSMGzNZEqdvLr5D6zzgfa+aL+Eycfxm7CRVqGXvNpPYQtbO6ibEa2iL2D5kNtusmaIwIDG3C8WxSWsNH3tMNf6YiRWzC0o9z9RYpdDl2CSbYwkSSeXGJrmEcLG14jIhvOe81uIPdAhvObNa3NoSDGxUwNoqS59nizReD5Fo2KaapnuPWIKsMbdmK9/UQzvEKdJwpKdeTm11ha7xF9W3xtKnoRaelZ2BuhT5D/44YcyTvEhNWRG4kf9PTQK7fXkntrjj6x+omova7oEKjb0kJZ8eYVDq69Q/UOUO2rdHJQrbhSHZK3UF2YApm8LMwoiSKnX1AQ0hkj9GjCmpvBTn4ewWcpWuUh9Smc+v556zXmpMm1IplVIplVIplVIplVIplVIplVIplVIplVIplZpJ6h+P7ziboSKQQgAAAABJRU5ErkJggg=="
       }
     };
   }

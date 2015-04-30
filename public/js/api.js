@@ -26,7 +26,7 @@ window.API = {
       "production": "",
       "development": ".json"
     };
-    studentUrl = "" + STUDENT_ENDPOINTS[environment.name] + "/" + id + extensions[environment.name];
+    studentUrl = STUDENT_ENDPOINTS[environment.name] + "/" + id + extensions[environment.name];
     return $.get(studentUrl, (function(_this) {
       return function(data) {
         _this._students[id] = data;
@@ -42,5 +42,8 @@ window.API = {
   },
   subjects: function() {
     return this._config.subjects;
+  },
+  images: function() {
+    return this._config.images;
   }
 };

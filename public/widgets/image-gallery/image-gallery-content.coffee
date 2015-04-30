@@ -5,7 +5,6 @@ class window.ImageGalleryContent extends WidgetContent
   @icon:        "picture"
 
   initWithConfig: (config) ->
-    console.log(config)
     @_field = @get(config.field, Object.keys(@images())[0])
     @_maintainAspectRatio = @get(config.maintainAspectRatio, true)
 
@@ -25,7 +24,7 @@ class window.ImageGalleryContent extends WidgetContent
     ]
 
   fieldFrom: (data) ->
-    data = data?[key] for key in @_field.split('.')
+    data = data?['images'][key] for key in @_field.split('.')
 
   aspectRatio: ->
     if @maintainAspectRatio()
