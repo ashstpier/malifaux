@@ -13,6 +13,7 @@ class window.Widget
     'subject-field':  'SubjectFieldContent'
     'attendance':     'AttendanceContent'
     'dynamictable':   'DynamicTableContent'
+    'shape':          'ShapeContent'
   }
 
   @loadAll: (cb) ->
@@ -53,6 +54,15 @@ class window.Widget
     @el.click => Designer.select(this)
     @el.dblclick => Designer.editWidget(this) if this.content.editable()
     @el.find('.widget-delete').click  => Designer.removeWidget(this)
+    @applyResizable()
+    @el.draggable
+      grid:         Widget.GRID_SIZE
+      containment:  Widget.PAGE_SELECTOR
+      drag:         => @trigger 'widget:move', this
+      start:        => Designer.select(this)
+      stop:         => @moved()
+
+  applyResizable: (ratio=null) ->
     @el.resizable
       grid:         Widget.GRID_SIZE
       containment:  Widget.PAGE_SELECTOR
@@ -60,12 +70,7 @@ class window.Widget
       resize:       => @trigger 'widget:move', this
       start:        => Designer.select(this)
       stop:         => @moved()
-    @el.draggable
-      grid:         Widget.GRID_SIZE
-      containment:  Widget.PAGE_SELECTOR
-      drag:         => @trigger 'widget:move', this
-      start:        => Designer.select(this)
-      stop:         => @moved()
+      aspectRatio:  ratio
 
   render: (mode) ->
     @el = $("""
@@ -153,7 +158,7 @@ class window.Widget
   setAspectRatio: (ratio) ->
     @el.resizable('destroy')
     @el.height(@el.width()/ratio)
-    @el.resizable(grid: Widget.GRID_SIZE, containment: Widget.PAGE_SELECTOR, aspectRatio: ratio)
+    @applyResizable(ratio)
 
   width: (n) -> if n? then @el.width(Math.round(n)) else Math.round(@el.width())
   height: (n) -> if n? then @el.height(Math.round(n)) else Math.round(@el.height())
