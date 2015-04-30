@@ -17,14 +17,13 @@ window.ImageGalleryContent = (function(superClass) {
   ImageGalleryContent.icon = "picture";
 
   ImageGalleryContent.prototype.initWithConfig = function(config) {
-    this._field = this.get(config.field, Object.keys(this.images())[0]);
-    return this._maintainAspectRatio = this.get(config.maintainAspectRatio, true);
+    return this._field = this.get(config.field, Object.keys(this.images())[0]);
   };
 
   ImageGalleryContent.prototype.render_layout = function(data) {
     setTimeout(((function(_this) {
       return function() {
-        return _this.setAspectRatio(_this.aspectRatio());
+        return _this.setAspectRatio(1);
       };
     })(this)), 0);
     return $("<div class=\"image-widget\">\n  <img class=\"content\" src=\"data:image/gif;base64," + (this.fieldFrom(data)) + "\">\n  <input class=\"picker\" type=\"file\" accept=\"image/png, image/jpeg\">\n</div>");
@@ -32,7 +31,7 @@ window.ImageGalleryContent = (function(superClass) {
 
   ImageGalleryContent.prototype.renderConfigOptions = function() {
     return [
-      this.option('checkbox', 'maintainAspectRatio', "Maintain Aspect Ratio"), this.option('select', 'field', "Field", {
+      this.option('select', 'field', "Field", {
         options: this.images(),
         hint: "This is the gallery image you would like to be merged, the image shown is only a placeholder of the final output."
       })
@@ -40,12 +39,12 @@ window.ImageGalleryContent = (function(superClass) {
   };
 
   ImageGalleryContent.prototype.fieldFrom = function(data) {
-    var i, key, len, ref, results;
+    var i, key, len, ref, ref1, results;
     ref = this._field.split('.');
     results = [];
     for (i = 0, len = ref.length; i < len; i++) {
       key = ref[i];
-      results.push(data = data != null ? data['images'][key] : void 0);
+      results.push(data = (ref1 = data['images']) != null ? ref1[key] : void 0);
     }
     return results;
   };
@@ -63,12 +62,9 @@ window.ImageGalleryContent = (function(superClass) {
 
   ImageGalleryContent.prototype.field = ImageGalleryContent.property('_field');
 
-  ImageGalleryContent.prototype.maintainAspectRatio = ImageGalleryContent.property('_maintainAspectRatio');
-
   ImageGalleryContent.prototype.serialize = function() {
     return {
-      field: this._field,
-      maintainAspectRatio: this.maintainAspectRatio()
+      field: this._field
     };
   };
 

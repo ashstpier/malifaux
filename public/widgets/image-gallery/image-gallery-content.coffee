@@ -6,10 +6,9 @@ class window.ImageGalleryContent extends WidgetContent
 
   initWithConfig: (config) ->
     @_field = @get(config.field, Object.keys(@images())[0])
-    @_maintainAspectRatio = @get(config.maintainAspectRatio, true)
 
   render_layout: (data) ->
-    setTimeout (=> @setAspectRatio(@aspectRatio())), 0
+    setTimeout (=> @setAspectRatio(1)), 0
     $("""
       <div class="image-widget">
         <img class="content" src="data:image/gif;base64,#{@fieldFrom(data)}">
@@ -19,12 +18,11 @@ class window.ImageGalleryContent extends WidgetContent
 
   renderConfigOptions: ->
     [
-      @option('checkbox', 'maintainAspectRatio', "Maintain Aspect Ratio")
       @option('select', 'field', "Field", options: @images(), hint: "This is the gallery image you would like to be merged, the image shown is only a placeholder of the final output.")
     ]
 
   fieldFrom: (data) ->
-    data = data?['images'][key] for key in @_field.split('.')
+    data = data['images']?[key] for key in @_field.split('.')
 
   aspectRatio: ->
     if @maintainAspectRatio()
@@ -35,8 +33,6 @@ class window.ImageGalleryContent extends WidgetContent
       false
 
   field: @property('_field')
-
-  maintainAspectRatio: @property('_maintainAspectRatio')
-
+  
   serialize: ->
-    {field: @_field, maintainAspectRatio: @maintainAspectRatio()}
+    {field: @_field}
