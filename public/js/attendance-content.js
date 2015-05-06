@@ -80,13 +80,6 @@ window.AttendanceContent = (function(superClass) {
 
   AttendanceContent.prototype.drawChart = function() {
     var chart, chart_area, data, fontSize, label_position;
-    data = google.visualization.arrayToDataTable([
-      [
-        'Attendance', 'Percent', {
-          role: 'style'
-        }
-      ], [this._label1, parseFloat(this.attendance.present), this.style.color1], [this._label2, parseFloat(this.attendance.late), this.style.color2], [this._label3, parseFloat(this.attendance.authorised), this.style.color3], [this._label4, parseFloat(this.attendance.nonAuthorised), this.style.color4]
-    ]);
     fontSize = parseInt(utils.sizeMap[this.style.size]);
     if (this.style.chartstyle === 'pie') {
       label_position = 'left';
@@ -96,14 +89,22 @@ window.AttendanceContent = (function(superClass) {
         width: '100%',
         height: '100%'
       };
+      data = google.visualization.arrayToDataTable([
+        [
+          'Attendance', 'Percent', {
+            role: 'style'
+          }
+        ], [this._label1, parseFloat(this.attendance.present), this.style.color1], [this._label2, parseFloat(this.attendance.late), this.style.color2], [this._label3, parseFloat(this.attendance.authorised), this.style.color3], [this._label4, parseFloat(this.attendance.nonAuthorised), this.style.color4]
+      ]);
     } else {
-      label_position = 'none';
+      label_position = 'top';
       chart_area = {
-        left: '30%',
-        top: 0,
-        width: '100%',
-        height: '100%'
+        left: '20%',
+        top: '20%',
+        width: '75%',
+        height: '60%'
       };
+      data = google.visualization.arrayToDataTable([['Attendance', this._label1, this._label2, this._label3, this._label4], ['Attendance', parseFloat(this.attendance.present), parseFloat(this.attendance.late), parseFloat(this.attendance.authorised), parseFloat(this.attendance.nonAuthorised)]]);
     }
     this.options = {
       width: this.widget.width(),
@@ -126,7 +127,8 @@ window.AttendanceContent = (function(superClass) {
       },
       backgroundColor: {
         fill: 'transparent'
-      }
+      },
+      isStacked: true
     };
     if (this.style.chartstyle === 'pie') {
       chart = new google.visualization.PieChart(this.el[0]);

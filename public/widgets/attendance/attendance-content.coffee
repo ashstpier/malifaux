@@ -56,21 +56,26 @@ class window.AttendanceContent extends WidgetContent
     ]
 
   drawChart: () ->
-    data = google.visualization.arrayToDataTable([
-      ['Attendance', 'Percent', { role: 'style' } ],
-      [@_label1, parseFloat(@attendance.present), @style.color1],
-      [@_label2, parseFloat(@attendance.late), @style.color2],
-      [@_label3, parseFloat(@attendance.authorised), @style.color3],
-      [@_label4, parseFloat(@attendance.nonAuthorised), @style.color4]
-    ])
 
     fontSize = parseInt(utils.sizeMap[@style.size])
+
     if @style.chartstyle == 'pie'
       label_position = 'left'
       chart_area = {left: 0, top: 0, width: '100%', height: '100%'}
+      data = google.visualization.arrayToDataTable([
+        ['Attendance', 'Percent', { role: 'style' } ],
+        [@_label1, parseFloat(@attendance.present), @style.color1],
+        [@_label2, parseFloat(@attendance.late), @style.color2],
+        [@_label3, parseFloat(@attendance.authorised), @style.color3],
+        [@_label4, parseFloat(@attendance.nonAuthorised), @style.color4]
+      ])
     else
-      label_position = 'none'
-      chart_area = {left: '30%', top: 0, width: '100%', height: '100%'}
+      label_position = 'top'
+      chart_area = {left: '20%', top: '20%', width: '75%', height: '60%'}
+      data = google.visualization.arrayToDataTable([
+        ['Attendance', @_label1, @_label2, @_label3, @_label4 ],
+        ['Attendance', parseFloat(@attendance.present), parseFloat(@attendance.late), parseFloat(@attendance.authorised), parseFloat(@attendance.nonAuthorised)]
+      ])
 
     @options = {
       width: @widget.width(),
@@ -83,7 +88,8 @@ class window.AttendanceContent extends WidgetContent
       fontName: utils.fontMap[@style.font],
       titleTextStyle: {color: @style.color, fontSize: fontSize},
       legend: {textStyle: {color: @style.color}, position: label_position},
-      backgroundColor: { fill:'transparent' }
+      backgroundColor: { fill:'transparent' },
+      isStacked: true
     }
 
     if @style.chartstyle == 'pie'
