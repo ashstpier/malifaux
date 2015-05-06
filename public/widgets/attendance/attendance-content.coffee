@@ -4,8 +4,8 @@ class window.AttendanceContent extends WidgetContent
   @description: "Show a visual representation of student attendance."
   @icon:        "bell"
 
-  defaultWidth: -> 400
-  defaultHeight: -> 250
+  defaultWidth: -> 450
+  defaultHeight: -> 300
 
   @STYLE_DEFAULTS: {
     color1: '#77cc33'
@@ -71,10 +71,10 @@ class window.AttendanceContent extends WidgetContent
       ])
     else
       label_position = 'top'
-      chart_area = {left: '20%', top: '20%', width: '75%', height: '60%'}
+      chart_area = {left: '25%', top: '20%', width: '70%', height: '60%'}
       data = google.visualization.arrayToDataTable([
         ['Attendance', @_label1, @_label2, @_label3, @_label4 ],
-        ['Attendance', parseFloat(@attendance.present), parseFloat(@attendance.late), parseFloat(@attendance.authorised), parseFloat(@attendance.nonAuthorised)]
+        ['Attendance %', parseFloat(@attendance.present), parseFloat(@attendance.late), parseFloat(@attendance.authorised), parseFloat(@attendance.nonAuthorised)]
       ])
 
     @options = {
@@ -87,7 +87,7 @@ class window.AttendanceContent extends WidgetContent
       fontSize: fontSize,
       fontName: utils.fontMap[@style.font],
       titleTextStyle: {color: @style.color, fontSize: fontSize},
-      legend: {textStyle: {color: @style.color}, position: label_position},
+      legend: {textStyle: {color: @style.color}, position: label_position, maxLines: 3},
       backgroundColor: { fill:'transparent' },
       isStacked: true
     }

@@ -17,11 +17,11 @@ window.AttendanceContent = (function(superClass) {
   AttendanceContent.icon = "bell";
 
   AttendanceContent.prototype.defaultWidth = function() {
-    return 400;
+    return 450;
   };
 
   AttendanceContent.prototype.defaultHeight = function() {
-    return 250;
+    return 300;
   };
 
   AttendanceContent.STYLE_DEFAULTS = {
@@ -99,12 +99,12 @@ window.AttendanceContent = (function(superClass) {
     } else {
       label_position = 'top';
       chart_area = {
-        left: '20%',
+        left: '25%',
         top: '20%',
-        width: '75%',
+        width: '70%',
         height: '60%'
       };
-      data = google.visualization.arrayToDataTable([['Attendance', this._label1, this._label2, this._label3, this._label4], ['Attendance', parseFloat(this.attendance.present), parseFloat(this.attendance.late), parseFloat(this.attendance.authorised), parseFloat(this.attendance.nonAuthorised)]]);
+      data = google.visualization.arrayToDataTable([['Attendance', this._label1, this._label2, this._label3, this._label4], ['Attendance %', parseFloat(this.attendance.present), parseFloat(this.attendance.late), parseFloat(this.attendance.authorised), parseFloat(this.attendance.nonAuthorised)]]);
     }
     this.options = {
       width: this.widget.width(),
@@ -123,7 +123,8 @@ window.AttendanceContent = (function(superClass) {
         textStyle: {
           color: this.style.color
         },
-        position: label_position
+        position: label_position,
+        maxLines: 3
       },
       backgroundColor: {
         fill: 'transparent'
