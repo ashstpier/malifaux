@@ -37,6 +37,7 @@ class window.DynamicTableContent extends WidgetContent
     @style = $.extend({}, DynamicTableContent.STYLE_DEFAULTS, @get(config.style, {}))
     @mappings = @get(config.mappings, {})
     @tabledata = @get(config.tabledata, @makeDefaultTable())
+    @_subject = @get(config.subject, 'PH')
 
   makeDefaultTable: ->
     for r in [1..DynamicTableContent.DEFAULT_ROWS]
@@ -78,27 +79,45 @@ class window.DynamicTableContent extends WidgetContent
       tbody.append(tr)
 
     self = this
-    table.on "click", "input", ->
+    table.on "click", "input:text", ->
       el = $(this)
       self.el.parents('.widget-dynamictable').css('overflow', 'visible')
       $('.dynamic-list').remove()
       el.parent().append(self.dynamicOptions(el))
-
       $('.dynamic-list').css('top', el.height() + 1)
 
-      $('.dynamic-list').on "click", "li", ->
-        option = $(this).attr('data-key')
+      $('.dynamic-list').on "change", "#category-select", ->
+        $(".dynamic-select").remove()
+        if $(this).val() == "basic"
+          $('.dynamic-list').append(self.basicInfoSelect(el))
+        else
+          $('.dynamic-list').append(self.assessmentInfoSelect(el))
+
+      $('.dynamic-list').on "change", "#field-select", ->
+        option = $(this).val()
         el.attr('data-dynamic', true)
         el.attr('data-key', option)
+        el.attr('data-subject', '')
         $('.dynamic-list').remove()
-        value = $(this).attr('data-key')
-        cell = self.makeCell(value, true)
+        cell = self.makeCell(option, true)
+        el.val(self.cellValue(cell, data, false))
+
+      $('.dynamic-list').on "change", "#assessment-select", ->
+        option = $(this).val()
+        subject = $("#category-select").val()
+        el.attr('data-dynamic', true)
+        el.attr('data-key', option)
+        el.attr('data-subject', subject)
+        $('.dynamic-list').remove()
+        cell = self.makeCell(option, true, subject)
         el.val(self.cellValue(cell, data, false))
     table
 
+
+
   cellContent: (cell, data, edit) ->
     if edit
-      """<input type="text" data-dynamic="#{cell.dynamic}" data-key="#{cell.value}" value="#{@cellValue(cell, data, false)}">"""
+      """<input type="text" data-dynamic="#{cell.dynamic}" data-key="#{cell.value}" data-subject="#{cell.subject or ''}" value="#{@cellValue(cell, data, false)}">"""
     else
       @cellValue(cell, data)
 
@@ -108,7 +127,11 @@ class window.DynamicTableContent extends WidgetContent
         if @widget.subject
           value = data.subjects[@widget.subject].results?[cell.value]
         else
-          value = null
+          if data.subjects[cell.subject]
+            value = data.subjects[cell.subject].results?[cell.value]
+          else
+            @placeholderWithLabel(cell.value, html)
+
       else
         value = @fieldFrom(cell.value, data)
       @mappings[value] or value or @placeholderWithLabel(cell.value, html)
@@ -116,18 +139,59 @@ class window.DynamicTableContent extends WidgetContent
       cell.value
 
   dynamicOptions: (el) ->
-    list = """<ul class="dynamic-list">"""
+
+    options = """<div class="dynamic-list"><p>Type in the text box or select a dynamic option from below</p>"""
+    options += @categorySelect(el)
+    if el.attr('data-subject')
+      options += @assessmentInfoSelect(el)
+    else
+      options += @basicInfoSelect(el)
+    options += """</div>"""
+
+
+  categorySelect: (el)->
+    if @widget.subject
+
+      category_select = """<select id="category-select">
+      <option value="basic">Basic Information</option>
+      <option value="assessment" #{if el.attr('data-subject') then 'selected'}>Assessment Information</option>
+      </select>"""
+
+    else
+
+      category_select = """<select id="category-select"><option value="basic">Basic Information</option>"""
+      for option, name of API.subjects()
+        if el.attr('data-subject') is option
+          category_select += """<option value="#{option}" selected>#{name}</option>"""
+        else
+          category_select += """<option value="#{option}">#{name}</option>"""
+
+      category_select += """</select>"""
+
+
+  basicInfoSelect: (el) ->
+    field_select = """<select id="field-select" class="dynamic-select"><option value="" disabled selected>Select an option</option>"""
+
     for option, name of @metrics()
       if el.attr('data-key') is option
-        list += """<li data-key="#{option}">#{name}<i class="glyphicons ok_2"></i></li>"""
+        field_select += """<option value="#{option}" selected>#{name}</option>"""
       else
-        list += """<li data-key="#{option}">#{name}</li>"""
+        field_select += """<option value="#{option}">#{name}</option>"""
+
+    field_select += """</select>"""
+
+
+  assessmentInfoSelect: (el) ->
+    field_select = """<select id="assessment-select" class="dynamic-select"><option value="" disabled selected>Select an assessment</option>"""
+
     for point in @assessmentPoints()
-      if el.attr('data-key') is point.name
-        list += """<li data-key="#{point.name}">#{point.longName}<i class="glyphicons ok_2"></i></li>"""
+      if el.attr('data-key') is point.code
+        field_select += """<option value="#{point.code}" selected>#{point.longName}</option>"""
       else
-        list += """<li data-key="#{point.name}">#{point.longName}</li>"""
-    list += """</ul>"""
+        field_select += """<option value="#{point.code}">#{point.longName}</option>"""
+
+    field_select += """</select>"""
+
 
   renderAppearanceOptions: ->
     [
@@ -214,7 +278,7 @@ class window.DynamicTableContent extends WidgetContent
     Designer.history.push(this, 'updateTable', oldTabledata, @tabledata)
     @redraw()
 
-  makeCell: (value='', dynamic=false) => {dynamic: dynamic, value: value}
+  makeCell: (value='', dynamic=false, subject='') => {dynamic: dynamic, subject: subject, value: value}
 
   render_edit: (data) ->
     @render_layout(data, true)
@@ -229,7 +293,7 @@ class window.DynamicTableContent extends WidgetContent
     @widget.bind 'widget:layout-switching', updateFn
 
   buildTabledata: (el) ->
-    el.parents('.widget-dynamictable').css('overflow', 'hidden')
+    # el.parents('.widget-dynamictable').css('overflow', 'hidden')
     newTabledata = []
 
     rows = $(el).find('tr')
@@ -255,5 +319,6 @@ class window.DynamicTableContent extends WidgetContent
   fieldFrom: (field, data) ->
     data = data[key] for key in field.split('.')
     data
+
 
   serialize: -> { tabledata: @tabledata, style: @style, mappings: @mappings }

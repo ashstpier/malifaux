@@ -71,7 +71,8 @@ window.DynamicTableContent = (function(superClass) {
   DynamicTableContent.prototype.initWithConfig = function(config) {
     this.style = $.extend({}, DynamicTableContent.STYLE_DEFAULTS, this.get(config.style, {}));
     this.mappings = this.get(config.mappings, {});
-    return this.tabledata = this.get(config.tabledata, this.makeDefaultTable());
+    this.tabledata = this.get(config.tabledata, this.makeDefaultTable());
+    return this._subject = this.get(config.subject, 'PH');
   };
 
   DynamicTableContent.prototype.makeDefaultTable = function() {
@@ -147,21 +148,40 @@ window.DynamicTableContent = (function(superClass) {
       tbody.append(tr);
     }
     self = this;
-    table.on("click", "input", function() {
+    table.on("click", "input:text", function() {
       var el;
       el = $(this);
       self.el.parents('.widget-dynamictable').css('overflow', 'visible');
       $('.dynamic-list').remove();
       el.parent().append(self.dynamicOptions(el));
       $('.dynamic-list').css('top', el.height() + 1);
-      return $('.dynamic-list').on("click", "li", function() {
-        var cell, option, value;
-        option = $(this).attr('data-key');
+      $('.dynamic-list').on("change", "#category-select", function() {
+        $(".dynamic-select").remove();
+        if ($(this).val() === "basic") {
+          return $('.dynamic-list').append(self.basicInfoSelect(el));
+        } else {
+          return $('.dynamic-list').append(self.assessmentInfoSelect(el));
+        }
+      });
+      $('.dynamic-list').on("change", "#field-select", function() {
+        var cell, option;
+        option = $(this).val();
         el.attr('data-dynamic', true);
         el.attr('data-key', option);
+        el.attr('data-subject', '');
         $('.dynamic-list').remove();
-        value = $(this).attr('data-key');
-        cell = self.makeCell(value, true);
+        cell = self.makeCell(option, true);
+        return el.val(self.cellValue(cell, data, false));
+      });
+      return $('.dynamic-list').on("change", "#assessment-select", function() {
+        var cell, option, subject;
+        option = $(this).val();
+        subject = $("#category-select").val();
+        el.attr('data-dynamic', true);
+        el.attr('data-key', option);
+        el.attr('data-subject', subject);
+        $('.dynamic-list').remove();
+        cell = self.makeCell(option, true, subject);
         return el.val(self.cellValue(cell, data, false));
       });
     });
@@ -170,14 +190,14 @@ window.DynamicTableContent = (function(superClass) {
 
   DynamicTableContent.prototype.cellContent = function(cell, data, edit) {
     if (edit) {
-      return "<input type=\"text\" data-dynamic=\"" + cell.dynamic + "\" data-key=\"" + cell.value + "\" value=\"" + (this.cellValue(cell, data, false)) + "\">";
+      return "<input type=\"text\" data-dynamic=\"" + cell.dynamic + "\" data-key=\"" + cell.value + "\" data-subject=\"" + (cell.subject || '') + "\" value=\"" + (this.cellValue(cell, data, false)) + "\">";
     } else {
       return this.cellValue(cell, data);
     }
   };
 
   DynamicTableContent.prototype.cellValue = function(cell, data, html) {
-    var ref, value;
+    var ref, ref1, value;
     if (html == null) {
       html = true;
     }
@@ -186,7 +206,11 @@ window.DynamicTableContent = (function(superClass) {
         if (this.widget.subject) {
           value = (ref = data.subjects[this.widget.subject].results) != null ? ref[cell.value] : void 0;
         } else {
-          value = null;
+          if (data.subjects[cell.subject]) {
+            value = (ref1 = data.subjects[cell.subject].results) != null ? ref1[cell.value] : void 0;
+          } else {
+            this.placeholderWithLabel(cell.value, html);
+          }
         }
       } else {
         value = this.fieldFrom(cell.value, data);
@@ -198,27 +222,64 @@ window.DynamicTableContent = (function(superClass) {
   };
 
   DynamicTableContent.prototype.dynamicOptions = function(el) {
-    var j, len, list, name, option, point, ref, ref1;
-    list = "<ul class=\"dynamic-list\">";
+    var options;
+    options = "<div class=\"dynamic-list\"><p>Type in the text box or select a dynamic option from below</p>";
+    options += this.categorySelect(el);
+    if (el.attr('data-subject')) {
+      options += this.assessmentInfoSelect(el);
+    } else {
+      options += this.basicInfoSelect(el);
+    }
+    return options += "</div>";
+  };
+
+  DynamicTableContent.prototype.categorySelect = function(el) {
+    var category_select, name, option, ref;
+    if (this.widget.subject) {
+      return category_select = "<select id=\"category-select\">\n<option value=\"basic\">Basic Information</option>\n<option value=\"assessment\" " + (el.attr('data-subject') ? 'selected' : void 0) + ">Assessment Information</option>\n</select>";
+    } else {
+      category_select = "<select id=\"category-select\"><option value=\"basic\">Basic Information</option>";
+      ref = API.subjects();
+      for (option in ref) {
+        name = ref[option];
+        if (el.attr('data-subject') === option) {
+          category_select += "<option value=\"" + option + "\" selected>" + name + "</option>";
+        } else {
+          category_select += "<option value=\"" + option + "\">" + name + "</option>";
+        }
+      }
+      return category_select += "</select>";
+    }
+  };
+
+  DynamicTableContent.prototype.basicInfoSelect = function(el) {
+    var field_select, name, option, ref;
+    field_select = "<select id=\"field-select\" class=\"dynamic-select\"><option value=\"\" disabled selected>Select an option</option>";
     ref = this.metrics();
     for (option in ref) {
       name = ref[option];
       if (el.attr('data-key') === option) {
-        list += "<li data-key=\"" + option + "\">" + name + "<i class=\"glyphicons ok_2\"></i></li>";
+        field_select += "<option value=\"" + option + "\" selected>" + name + "</option>";
       } else {
-        list += "<li data-key=\"" + option + "\">" + name + "</li>";
+        field_select += "<option value=\"" + option + "\">" + name + "</option>";
       }
     }
-    ref1 = this.assessmentPoints();
-    for (j = 0, len = ref1.length; j < len; j++) {
-      point = ref1[j];
-      if (el.attr('data-key') === point.name) {
-        list += "<li data-key=\"" + point.name + "\">" + point.longName + "<i class=\"glyphicons ok_2\"></i></li>";
+    return field_select += "</select>";
+  };
+
+  DynamicTableContent.prototype.assessmentInfoSelect = function(el) {
+    var field_select, j, len, point, ref;
+    field_select = "<select id=\"assessment-select\" class=\"dynamic-select\"><option value=\"\" disabled selected>Select an assessment</option>";
+    ref = this.assessmentPoints();
+    for (j = 0, len = ref.length; j < len; j++) {
+      point = ref[j];
+      if (el.attr('data-key') === point.code) {
+        field_select += "<option value=\"" + point.code + "\" selected>" + point.longName + "</option>";
       } else {
-        list += "<li data-key=\"" + point.name + "\">" + point.longName + "</li>";
+        field_select += "<option value=\"" + point.code + "\">" + point.longName + "</option>";
       }
     }
-    return list += "</ul>";
+    return field_select += "</select>";
   };
 
   DynamicTableContent.prototype.renderAppearanceOptions = function() {
@@ -364,15 +425,19 @@ window.DynamicTableContent = (function(superClass) {
     return this.redraw();
   };
 
-  DynamicTableContent.prototype.makeCell = function(value, dynamic) {
+  DynamicTableContent.prototype.makeCell = function(value, dynamic, subject) {
     if (value == null) {
       value = '';
     }
     if (dynamic == null) {
       dynamic = false;
     }
+    if (subject == null) {
+      subject = '';
+    }
     return {
       dynamic: dynamic,
+      subject: subject,
       value: value
     };
   };
@@ -399,7 +464,6 @@ window.DynamicTableContent = (function(superClass) {
 
   DynamicTableContent.prototype.buildTabledata = function(el) {
     var $cell, cell, cellArray, cells, j, k, len, len1, newTabledata, row, rows;
-    el.parents('.widget-dynamictable').css('overflow', 'hidden');
     newTabledata = [];
     rows = $(el).find('tr');
     for (j = 0, len = rows.length; j < len; j++) {
