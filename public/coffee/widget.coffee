@@ -67,7 +67,9 @@ class window.Widget
       grid:         Widget.GRID_SIZE
       containment:  Widget.PAGE_SELECTOR
       handles:      'n, e, s, w, ne, se, sw, nw'
-      resize:       => @trigger 'widget:move', this
+      resize:       =>
+        @trigger 'widget:move', this
+        @trigger 'widget:resize', this
       start:        => Designer.select(this)
       stop:         => @moved()
       aspectRatio:  ratio

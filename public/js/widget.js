@@ -124,7 +124,8 @@ window.Widget = (function() {
       handles: 'n, e, s, w, ne, se, sw, nw',
       resize: (function(_this) {
         return function() {
-          return _this.trigger('widget:move', _this);
+          _this.trigger('widget:move', _this);
+          return _this.trigger('widget:resize', _this);
         };
       })(this),
       start: (function(_this) {

@@ -16,27 +16,67 @@ window.ImageGalleryContent = (function(superClass) {
 
   ImageGalleryContent.icon = "picture";
 
+  ImageGalleryContent.prototype.editable = function() {
+    return this.widget.currentMode === 'layout';
+  };
+
   ImageGalleryContent.prototype.initWithConfig = function(config) {
-    return this._field = this.get(config.field, Object.keys(this.images())[0]);
+    this._field = this.get(config.field, Object.keys(this.images())[0]);
+    return this._stretchImage = this.get(config.stretchImage, true);
+  };
+
+  ImageGalleryContent.prototype.bindEvents = function(el) {
+    return this.widget.bind('widget:resize', (function(_this) {
+      return function() {
+        return _this.imageCSS();
+      };
+    })(this));
+  };
+
+  ImageGalleryContent.prototype.imageCSS = function() {
+    $('.image-gallery-widget img').removeClass(this.cssImageClass);
+    this.calcImageCSS();
+    return $('.image-gallery-widget img').addClass(this.cssImageClass);
+  };
+
+  ImageGalleryContent.prototype.calcImageCSS = function() {
+    if (this.width >= this.height && (this.stretchImage() || this.width > this.widget.width())) {
+      return this.cssImageClass = 'wider';
+    } else if (this.height > this.width && (this.stretchImage() || this.height > this.widget.height())) {
+      return this.cssImageClass = 'taller';
+    } else {
+      return this.cssImageClass = '';
+    }
   };
 
   ImageGalleryContent.prototype.render_layout = function(data) {
-    setTimeout(((function(_this) {
-      return function() {
-        return _this.setAspectRatio(1);
-      };
-    })(this)), 0);
-    return $("<div class=\"image-widget\">\n  <img class=\"content\" src=\"data:image/gif;base64," + (this.fieldFrom(data)) + "\">\n  <input class=\"picker\" type=\"file\" accept=\"image/png, image/jpeg\">\n</div>");
+    var img;
+    img = new Image();
+    img.src = "data:image/gif;base64," + (this.fieldFrom(data));
+    img.width / img.height;
+    this.width = img.width;
+    this.height = img.height;
+    this.calcImageCSS();
+    if (this.editable()) {
+      setTimeout(((function(_this) {
+        return function() {
+          return _this.setAspectRatio(1);
+        };
+      })(this)), 0);
+    }
+    return $("<div class=\"image-gallery-widget\">\n  <img class=\"content " + this.cssImageClass + "\" src=\"" + img.src + "\">\n</div>");
   };
 
   ImageGalleryContent.prototype.renderConfigOptions = function() {
     return [
-      this.option('select', 'field', "Field", {
+      this.option('checkbox', 'stretchImage', "Stretch Image"), this.option('select', 'field', "Field", {
         options: this.images(),
         hint: "This is the gallery image you would like to be merged, the image shown is only a placeholder of the final output."
       })
     ];
   };
+
+  ImageGalleryContent.prototype.stretchImage = ImageGalleryContent.property('_stretchImage');
 
   ImageGalleryContent.prototype.fieldFrom = function(data) {
     var i, key, len, ref, ref1, results;
@@ -49,22 +89,12 @@ window.ImageGalleryContent = (function(superClass) {
     return results;
   };
 
-  ImageGalleryContent.prototype.aspectRatio = function() {
-    var img;
-    if (this.maintainAspectRatio()) {
-      img = new Image();
-      img.src = "data:image/gif;base64," + (this.fieldFrom(data));
-      return img.width / img.height;
-    } else {
-      return false;
-    }
-  };
-
   ImageGalleryContent.prototype.field = ImageGalleryContent.property('_field');
 
   ImageGalleryContent.prototype.serialize = function() {
     return {
-      field: this._field
+      field: this._field,
+      stretchImage: this.stretchImage()
     };
   };
 

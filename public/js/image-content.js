@@ -10,7 +10,7 @@ window.ImageContent = (function(superClass) {
 
   ImageContent.className = "ImageContent";
 
-  ImageContent.displayName = "Upload Image";
+  ImageContent.displayName = "Image";
 
   ImageContent.description = "A static photograph, logo or graphic";
 
