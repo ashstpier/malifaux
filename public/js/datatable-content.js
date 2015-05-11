@@ -225,7 +225,6 @@ window.DatatableContent = (function(superClass) {
   DatatableContent.prototype.cellValue = function(subject, col) {
     var originalValue, ref, ref1;
     originalValue = ((ref = subject.results) != null ? ref[col.value] : void 0) || '';
-    console.log(this.placeholderWithLabel(col.value));
     return ((ref1 = col.mappings) != null ? ref1[originalValue] : void 0) || originalValue || this.placeholderWithLabel(col.value);
   };
 

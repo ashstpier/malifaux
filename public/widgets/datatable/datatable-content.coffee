@@ -168,7 +168,6 @@ class window.DatatableContent extends WidgetContent
 
   cellValue: (subject, col) ->
     originalValue = subject.results?[col.value] or ''
-    console.log @placeholderWithLabel(col.value)
     col.mappings?[originalValue] or originalValue or @placeholderWithLabel(col.value)
 
 

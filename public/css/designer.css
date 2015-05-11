@@ -75,7 +75,6 @@ body {
 
 #nav .nav-option {
   display: inline-block;
-  width: 160px;
   margin: 0;
   padding: 0;
 }
@@ -98,7 +97,7 @@ body {
   display: block;
   position: relative;
   margin: 0;
-  padding: 0 0 0 60px;
+  padding: 0 20px 0 60px;
   font-size: 18px;
   font-weight: 300;
   line-height: 50px;
