@@ -12,7 +12,11 @@ window.Designer = {
     return $((function(_this) {
       return function() {
         return API.loadConfig(function() {
-          return Widget.loadAll(function() {
+          return Widget.loadAll(function(err) {
+            if (err) {
+              console.error("error loading widgets", err);
+              alert('Failed to load some widgets. Please reload the page.');
+            }
             _this.renderControls();
             _this.bindEvents();
             return _this.load();

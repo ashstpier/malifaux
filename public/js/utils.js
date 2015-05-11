@@ -123,14 +123,21 @@ window.utils = {
   loadCSS: function(path) {
     return $('head').append("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + path + "\">");
   },
-  loadCoffeeScript: function(path, cb) {
+  loadJS: function(path, cb) {
     if (cb == null) {
       cb = null;
     }
     return $.get(path, function(data) {
-      eval(data);
+      var e, err;
+      err = null;
+      try {
+        eval(data);
+      } catch (_error) {
+        e = _error;
+        err = e;
+      }
       if (cb != null) {
-        return cb();
+        return cb(err);
       }
     });
   },

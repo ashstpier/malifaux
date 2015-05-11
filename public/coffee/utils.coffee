@@ -94,10 +94,14 @@ window.utils = {
   loadCSS: (path) ->
     $('head').append("""<link rel="stylesheet" type="text/css" href="#{path}">""")
 
-  loadCoffeeScript: (path, cb=null) ->
+  loadJS: (path, cb=null) ->
     $.get path, (data) ->
-      eval(data)
-      cb() if cb?
+      err = null
+      try
+        eval(data)
+      catch e
+        err = e
+      cb(err) if cb?
 
   subject: (pagetype) ->
     return null if pagetype isnt 'subject'

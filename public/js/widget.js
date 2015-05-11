@@ -18,27 +18,26 @@ window.Widget = (function() {
     'shape': 'ShapeContent'
   };
 
-  Widget.loadAll = function(cb) {
-    var className, completed, name, ref, results, widgetCount;
+  Widget.loadAll = function(done) {
+    var className, completed, name, names, widgetCount;
     completed = 0;
     widgetCount = Object.keys(Widget.WIDGETS).length;
-    ref = Widget.WIDGETS;
-    results = [];
-    for (name in ref) {
-      className = ref[name];
-      results.push(this.load(name, function() {
-        completed++;
-        if (completed === widgetCount) {
-          return cb();
-        }
-      }));
-    }
-    return results;
+    names = (function() {
+      var ref, results;
+      ref = Widget.WIDGETS;
+      results = [];
+      for (name in ref) {
+        className = ref[name];
+        results.push(name);
+      }
+      return results;
+    })();
+    return async.eachLimit(names, 5, this.load, done);
   };
 
   Widget.load = function(name, cb) {
     utils.loadCSS("widgets/" + name + "/" + name + "-content.css");
-    return utils.loadCoffeeScript("js/" + name + "-content.js", cb);
+    return utils.loadJS("js/" + name + "-content.js", cb);
   };
 
   Widget.prototype.isWidget = true;
