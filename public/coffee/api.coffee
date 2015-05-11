@@ -23,4 +23,5 @@ window.API = {
   assessmentPoints: -> @_config.assessmentPoints
   metrics:          -> @_config.data
   subjects:         -> @_config.subjects
+  images:           -> @_config.images
 }

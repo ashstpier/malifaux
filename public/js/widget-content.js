@@ -146,6 +146,10 @@ window.WidgetContent = (function() {
     return API.metrics();
   };
 
+  WidgetContent.prototype.images = function() {
+    return API.images();
+  };
+
   WidgetContent.prototype.option = function(type, key, label, config) {
     if (label == null) {
       label = key;

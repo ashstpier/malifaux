@@ -73,6 +73,9 @@ class window.WidgetContent
   metrics: ->
     API.metrics()
 
+  images: ->
+    API.images()
+
   option: (type, key, label=key, config={}) ->
     new OptionRenderer(this, type, key, label, config).render(@style)
 

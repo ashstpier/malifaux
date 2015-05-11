@@ -42,5 +42,8 @@ window.API = {
   },
   subjects: function() {
     return this._config.subjects;
+  },
+  images: function() {
+    return this._config.images;
   }
 };
