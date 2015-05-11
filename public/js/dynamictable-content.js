@@ -223,7 +223,7 @@ window.DynamicTableContent = (function(superClass) {
 
   DynamicTableContent.prototype.dynamicOptions = function(el) {
     var options;
-    options = "<div class=\"dynamic-list\"><p>Type in the text box or select a dynamic option from below</p>";
+    options = "<div class=\"dynamic-list\"><p>Type free text or select a dynamic option from below</p>";
     options += this.categorySelect(el);
     if (el.attr('data-subject')) {
       options += this.assessmentInfoSelect(el);
