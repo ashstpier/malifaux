@@ -8,8 +8,15 @@ The code project is mainly authored in [CoffeeScript](http://coffeescript.org) w
 The editor has a concept of 'Widgets' which are logically seperate content units arranged on the page. A Widget consists of a CoffeeScript file and a CSS file, these can be found in `public/widgets`.
 
 
+
 Build Dependancies & Setup
 --------------------------
+
+There are 3 ways to run the project locally, take your pick.
+
+
+=== Locally
+
 You will need [Node.JS](http://nodejs.org) installed to build this project. Then from within the project root run...
 
     npm install
@@ -17,9 +24,35 @@ You will need [Node.JS](http://nodejs.org) installed to build this project. Then
     open http://localhost:9000/
 
 
+=== Vagrant (https://www.vagrantup.com)
+
+    vagrant up
+    vagrant ssh
+
+    # rebuild coffeescript files
+    ./node_modules/.bin/gulp
+
+    # Run a dev server
+    cd /vagrant && npm start
+    open http://localhost:9000/
+
+
+=== Docker (https://docs.docker.com)
+
+    # without docker-compose
+    docker build -t parent-reports .
+    docker docker run -it --rm --name parent-reports-dev -p 9000:9000 parent-reports
+    open http://$(boot2docker ip):9000/
+
+    # with docker-compose
+    docker-compose up
+    open http://$(boot2docker ip):9000/
+
+
 Development Storage
 -------------------
 In development all template data is stored in memory on the server so there is no percsistance once you kill the process. Local template JSON files can be dragged and dropped onto the index page to upload them into the current session. There is a sample JSON template in `docs/sample_real_WA_report.json` that can be dragged onto the web interface to load into the current session.
+
 
 
 Production Deployment
@@ -27,9 +60,11 @@ Production Deployment
 The project is deployed to `/ccr2/ccr-parentreports/public/designer.html`. See Jose for deployment instructions.
 
 
+
 CCR! API
 --------
 In development the reports all operate on sample data. Student data isn't checked into version control for data protection reasons so you will need to place some sample data in the `./private` folder. There should be a `configuration.json` file and several `[STUDENTID].json` files. See the CCR! API output for full format examples. The endpoints are listed in `public/coffee/endpoints.coffee`.
+
 
 
 Developing Widgets
