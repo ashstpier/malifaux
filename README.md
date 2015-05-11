@@ -15,7 +15,7 @@ Build Dependencies & Setup
 There are 3 ways to run the project locally, take your pick.
 
 
-=== Locally
+### Locally
 
 You will need [Node.JS](http://nodejs.org) installed to build this project. Then from within the project root run...
 
@@ -24,7 +24,7 @@ You will need [Node.JS](http://nodejs.org) installed to build this project. Then
     open http://localhost:9000/
 
 
-=== Vagrant (https://www.vagrantup.com)
+### Vagrant (https://www.vagrantup.com)
 
     vagrant up
     vagrant ssh
@@ -37,7 +37,7 @@ You will need [Node.JS](http://nodejs.org) installed to build this project. Then
     open http://localhost:9000/
 
 
-=== Docker (https://docs.docker.com)
+### Docker (https://docs.docker.com)
 
     # without docker-compose
     docker build -t parent-reports .
