@@ -1,7 +1,8 @@
 {
   "name": "ark-reports",
   "version": "0.0.0",
-  "description": "",
+  "description": "Ark Parent Report Builder",
+  "readme": "README.md",
   "main": "gulpfile.js",
   "devDependencies": {
     "alfred": "^0.5.4",
