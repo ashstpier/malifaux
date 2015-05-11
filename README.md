@@ -9,7 +9,7 @@ The editor has a concept of 'Widgets' which are logically seperate content units
 
 
 
-Build Dependancies & Setup
+Build Dependencies & Setup
 --------------------------
 
 There are 3 ways to run the project locally, take your pick.
@@ -30,7 +30,7 @@ You will need [Node.JS](http://nodejs.org) installed to build this project. Then
     vagrant ssh
 
     # rebuild coffeescript files
-    ./node_modules/.bin/gulp
+    cd /vagrant && npm run build
 
     # Run a dev server
     cd /vagrant && npm start
