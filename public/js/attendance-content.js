@@ -17,7 +17,7 @@ window.AttendanceContent = (function(superClass) {
   AttendanceContent.icon = "bell";
 
   AttendanceContent.prototype.defaultWidth = function() {
-    return 450;
+    return 400;
   };
 
   AttendanceContent.prototype.defaultHeight = function() {
@@ -81,8 +81,8 @@ window.AttendanceContent = (function(superClass) {
   AttendanceContent.prototype.drawChart = function() {
     var chart, chart_area, data, fontSize, label_position;
     fontSize = parseInt(utils.sizeMap[this.style.size]);
+    label_position = 'right';
     if (this.style.chartstyle === 'pie') {
-      label_position = 'left';
       chart_area = {
         left: 0,
         top: 0,
@@ -94,17 +94,16 @@ window.AttendanceContent = (function(superClass) {
           'Attendance', 'Percent', {
             role: 'style'
           }
-        ], [this._label1, parseFloat(this.attendance.present), this.style.color1], [this._label2, parseFloat(this.attendance.late), this.style.color2], [this._label3, parseFloat(this.attendance.authorised), this.style.color3], [this._label4, parseFloat(this.attendance.nonAuthorised), this.style.color4]
+        ], [this._label1 + " " + (parseFloat(this.attendance.present)) + "%", parseFloat(this.attendance.present), this.style.color1], [this._label2 + " " + (parseFloat(this.attendance.late)) + "%", parseFloat(this.attendance.late), this.style.color2], [this._label3 + " " + (parseFloat(this.attendance.authorised)) + "%", parseFloat(this.attendance.authorised), this.style.color3], [this._label4 + " " + (parseFloat(this.attendance.nonAuthorised)) + "%", parseFloat(this.attendance.nonAuthorised), this.style.color4]
       ]);
     } else {
-      label_position = 'top';
       chart_area = {
-        left: '25%',
-        top: '20%',
-        width: '70%',
-        height: '60%'
+        left: '10%',
+        top: '10%',
+        width: '50%',
+        height: '80%'
       };
-      data = google.visualization.arrayToDataTable([['Attendance', this._label1, this._label2, this._label3, this._label4], ['Attendance %', parseFloat(this.attendance.present), parseFloat(this.attendance.late), parseFloat(this.attendance.authorised), parseFloat(this.attendance.nonAuthorised)]]);
+      data = google.visualization.arrayToDataTable([['Attendance', this._label1 + " " + (parseFloat(this.attendance.present)) + "%", this._label2 + " " + (parseFloat(this.attendance.late)) + "%", this._label3 + " " + (parseFloat(this.attendance.authorised)) + "%", this._label4 + " " + (parseFloat(this.attendance.nonAuthorised)) + "%"], ['', parseFloat(this.attendance.present), parseFloat(this.attendance.late), parseFloat(this.attendance.authorised), parseFloat(this.attendance.nonAuthorised)]]);
     }
     this.options = {
       width: this.widget.width(),
@@ -129,13 +128,18 @@ window.AttendanceContent = (function(superClass) {
       backgroundColor: {
         fill: 'transparent'
       },
-      isStacked: true
+      isStacked: true,
+      vAxis: {
+        gridlines: {
+          count: 11
+        }
+      }
     };
     if (this.style.chartstyle === 'pie') {
       chart = new google.visualization.PieChart(this.el[0]);
       return chart.draw(data, this.options);
     } else {
-      chart = new google.visualization.BarChart(this.el[0]);
+      chart = new google.visualization.ColumnChart(this.el[0]);
       return chart.draw(data, this.options);
     }
   };

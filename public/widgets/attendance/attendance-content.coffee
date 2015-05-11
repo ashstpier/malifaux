@@ -4,7 +4,7 @@ class window.AttendanceContent extends WidgetContent
   @description: "Show a visual representation of student attendance."
   @icon:        "bell"
 
-  defaultWidth: -> 450
+  defaultWidth: -> 400
   defaultHeight: -> 300
 
   @STYLE_DEFAULTS: {
@@ -58,23 +58,34 @@ class window.AttendanceContent extends WidgetContent
   drawChart: () ->
 
     fontSize = parseInt(utils.sizeMap[@style.size])
+    label_position = 'right'
 
     if @style.chartstyle == 'pie'
-      label_position = 'left'
       chart_area = {left: 0, top: 0, width: '100%', height: '100%'}
       data = google.visualization.arrayToDataTable([
         ['Attendance', 'Percent', { role: 'style' } ],
-        [@_label1, parseFloat(@attendance.present), @style.color1],
-        [@_label2, parseFloat(@attendance.late), @style.color2],
-        [@_label3, parseFloat(@attendance.authorised), @style.color3],
-        [@_label4, parseFloat(@attendance.nonAuthorised), @style.color4]
+        ["#{@_label1} #{parseFloat(@attendance.present)}%", parseFloat(@attendance.present), @style.color1],
+        ["#{@_label2} #{parseFloat(@attendance.late)}%", parseFloat(@attendance.late), @style.color2],
+        ["#{@_label3} #{parseFloat(@attendance.authorised)}%", parseFloat(@attendance.authorised), @style.color3],
+        ["#{@_label4} #{parseFloat(@attendance.nonAuthorised)}%", parseFloat(@attendance.nonAuthorised), @style.color4]
       ])
     else
-      label_position = 'top'
-      chart_area = {left: '25%', top: '20%', width: '70%', height: '60%'}
+      chart_area = {left: '10%', top: '10%', width: '50%', height: '80%'}
       data = google.visualization.arrayToDataTable([
-        ['Attendance', @_label1, @_label2, @_label3, @_label4 ],
-        ['Attendance %', parseFloat(@attendance.present), parseFloat(@attendance.late), parseFloat(@attendance.authorised), parseFloat(@attendance.nonAuthorised)]
+        [
+          'Attendance',
+          "#{@_label1} #{parseFloat(@attendance.present)}%",
+          "#{@_label2} #{parseFloat(@attendance.late)}%",
+          "#{@_label3} #{parseFloat(@attendance.authorised)}%",
+          "#{@_label4} #{parseFloat(@attendance.nonAuthorised)}%"
+        ],
+        [
+          '',
+          parseFloat(@attendance.present),
+          parseFloat(@attendance.late),
+          parseFloat(@attendance.authorised),
+          parseFloat(@attendance.nonAuthorised)
+        ]
       ])
 
     @options = {
@@ -89,14 +100,15 @@ class window.AttendanceContent extends WidgetContent
       titleTextStyle: {color: @style.color, fontSize: fontSize},
       legend: {textStyle: {color: @style.color}, position: label_position, maxLines: 3},
       backgroundColor: { fill:'transparent' },
-      isStacked: true
+      isStacked: true,
+      vAxis: { gridlines: { count: 11 } }
     }
 
     if @style.chartstyle == 'pie'
       chart = new google.visualization.PieChart(@el[0])
       chart.draw(data, @options)
     else
-      chart = new google.visualization.BarChart(@el[0])
+      chart = new google.visualization.ColumnChart(@el[0])
       chart.draw(data, @options)
 
   color1: @property('style', 'color1')
