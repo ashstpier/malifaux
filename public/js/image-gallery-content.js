@@ -10,7 +10,7 @@ window.ImageGalleryContent = (function(superClass) {
 
   ImageGalleryContent.className = "ImageGalleryContent";
 
-  ImageGalleryContent.displayName = "Image Gallery";
+  ImageGalleryContent.displayName = "Dynamic Images";
 
   ImageGalleryContent.description = "A dynamic photograph, logo or graphic";
 

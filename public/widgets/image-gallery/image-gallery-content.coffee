@@ -1,6 +1,6 @@
 class window.ImageGalleryContent extends WidgetContent
   @className: "ImageGalleryContent"
-  @displayName: "Image Gallery"
+  @displayName: "Dynamic Images"
   @description: "A dynamic photograph, logo or graphic"
   @icon: "picture"
 
