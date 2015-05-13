@@ -34,9 +34,11 @@ class window.Widget
     @content = if config.type? then new window[config.type](this, config.content) else new TextContent()
     width = if config.width? then config.width else @content.defaultWidth()
     height = if config.height? then config.height else @content.defaultHeight()
+    zIndex = if config.zIndex? then config.zIndex else @content.defaultZIndex()
     @origin = {
       x: if config.x? then config.x else ((960/2) - (width/2))
       y: if config.y? then config.y else 100
+      zIndex: zIndex
       width: width
       height: height
     }
@@ -45,7 +47,7 @@ class window.Widget
 
   displayName: -> @content.constructor.displayName
 
-  originStyles: -> """position:absolute; top:#{@origin.y}px; left:#{@origin.x}px; width:#{@origin.width}px; height:#{@origin.height}px;"""
+  originStyles: -> """position:absolute; top:#{@origin.y}px; left:#{@origin.x}px; width:#{@origin.width}px; height:#{@origin.height}px; z-index:#{@origin.zIndex};"""
 
   bindEvents: ->
     Designer.bind 'selection:change', @updateSelectedState
@@ -106,7 +108,7 @@ class window.Widget
     Designer.history.push(this, 'moveTo', oldPosition, @position)
 
   cachePosition: ->
-    @position = {x: @x(), y: @y(), width: @width(), height: @height()}
+    @position = {x: @x(), y: @y(), width: @width(), height: @height(), zIndex: @zIndex()}
 
   layoutMode: ->
     return if @currentMode is 'layout'
@@ -130,6 +132,7 @@ class window.Widget
       guid: @guid
       x: @x()
       y: @y()
+      zIndex: @zIndex()
       width: @width()
       height: @height()
       type: @content.className()
@@ -160,6 +163,7 @@ class window.Widget
     @el.height(@el.width()/ratio)
     @applyResizable(ratio)
 
+  zIndex: (n) -> if n? then @el.css('z-index', "#{Math.round(n)}") else Math.round(@el.zIndex())
   width: (n) -> if n? then @el.width(Math.round(n)) else Math.round(@el.width())
   height: (n) -> if n? then @el.height(Math.round(n)) else Math.round(@el.height())
   x: (n) -> if n? then @el.css('left', "#{Math.round(n)}px") else Math.round(@el.position().left)

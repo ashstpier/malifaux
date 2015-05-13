@@ -19,7 +19,7 @@ window.Properties = (function() {
   }
 
   Properties.prototype.render = function() {
-    this.el.append("<h2 class=\"prop-selection\"></h2>\n<section class=\"prop-section prop-page-options\">\n  <h3 class=\"prop-section-header\">Options</h3>\n  <div class=\"prop-content\">\n    <form id=\"orientation\" class=\"prop-form\">\n      <h4 class=\"prop-option-header\">Orientation</h4>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"orientation\" value=\"portrait\">\n        Portrait\n      </label>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"orientation\" value=\"landscape\">\n        Landscape\n      </label>\n    </form>\n    <form id=\"pagetype\" class=\"prop-form\">\n      <h4 class=\"prop-option-header\">Report Style</h4>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"pagetype\" value=\"student\">\n        Student per page\n      </label>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"pagetype\" value=\"subject\">\n        Subject per page\n      </label>\n    </form>\n  </div>\n</section>\n<section class=\"prop-section prop-layout\">\n  <h3 class=\"prop-section-header\">Layout</h3>\n  <div class=\"prop-content\">\n    <label for=\"prop-value-x\">x</label>\n    <input type=\"number\" step=\"1\" id=\"prop-value-x\" class=\"prop-coord-input\" data-fn=\"x\" />\n    <label for=\"prop-value-y\">y</label>\n    <input type=\"number\" step=\"1\" id=\"prop-value-y\" class=\"prop-coord-input\" data-fn=\"y\" />\n    <label for=\"prop-value-width\">width</label>\n    <input type=\"number\" step=\"1\" id=\"prop-value-width\" class=\"prop-coord-input\" data-fn=\"width\" />\n    <label for=\"prop-value-height\">height</label>\n    <input type=\"number\" step=\"1\" id=\"prop-value-height\" class=\"prop-coord-input\"  data-fn=\"height\"/>\n  </div>\n</section>\n\n<section class=\"prop-section prop-config\"></section>\n<section class=\"prop-section prop-appearance\"></section>");
+    this.el.append("<h2 class=\"prop-selection\"></h2>\n<section class=\"prop-section prop-page-options\">\n  <h3 class=\"prop-section-header\">Options</h3>\n  <div class=\"prop-content\">\n    <form id=\"orientation\" class=\"prop-form\">\n      <h4 class=\"prop-option-header\">Orientation</h4>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"orientation\" value=\"portrait\">\n        Portrait\n      </label>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"orientation\" value=\"landscape\">\n        Landscape\n      </label>\n    </form>\n    <form id=\"pagetype\" class=\"prop-form\">\n      <h4 class=\"prop-option-header\">Report Style</h4>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"pagetype\" value=\"student\">\n        Student per page\n      </label>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"pagetype\" value=\"subject\">\n        Subject per page\n      </label>\n    </form>\n  </div>\n</section>\n<section class=\"prop-section prop-layout\">\n  <h3 class=\"prop-section-header\">Layout</h3>\n  <div class=\"prop-content\">\n    <label for=\"prop-value-x\">x</label>\n    <input type=\"number\" step=\"1\" id=\"prop-value-x\" class=\"prop-coord-input\" data-fn=\"x\" />\n    <label for=\"prop-value-y\">y</label>\n    <input type=\"number\" step=\"1\" id=\"prop-value-y\" class=\"prop-coord-input\" data-fn=\"y\" />\n    <label for=\"prop-value-width\">width</label>\n    <input type=\"number\" step=\"1\" id=\"prop-value-width\" class=\"prop-coord-input\" data-fn=\"width\" />\n    <label for=\"prop-value-height\">height</label>\n    <input type=\"number\" step=\"1\" id=\"prop-value-height\" class=\"prop-coord-input\"  data-fn=\"height\"/>\n    <label for=\"prop-value-z-index\">z-index</label>\n    <input type=\"number\" step=\"1\" id=\"prop-value-z-index\" class=\"prop-coord-input\"  data-fn=\"zIndex\"/>\n  </div>\n</section>\n\n<section class=\"prop-section prop-config\"></section>\n<section class=\"prop-section prop-appearance\"></section>");
     this.bindEvents();
     this.updateLayoutValues();
     return this.disable();
@@ -79,7 +79,8 @@ window.Properties = (function() {
     this.el.find('#prop-value-x').val(this.x());
     this.el.find('#prop-value-y').val(this.y());
     this.el.find('#prop-value-width').val(this.width());
-    return this.el.find('#prop-value-height').val(this.height());
+    this.el.find('#prop-value-height').val(this.height());
+    return this.el.find('#prop-value-z-index').val(this.zIndex());
   };
 
   Properties.prototype.redraw = function() {
@@ -182,6 +183,11 @@ window.Properties = (function() {
   Properties.prototype.y = function() {
     var ref;
     return ((ref = this.selected) != null ? ref.y() : void 0) || '';
+  };
+
+  Properties.prototype.zIndex = function() {
+    var ref;
+    return ((ref = this.selected) != null ? ref.zIndex() : void 0) || '';
   };
 
   Properties.prototype.width = function() {

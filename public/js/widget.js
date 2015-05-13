@@ -43,7 +43,7 @@ window.Widget = (function() {
   Widget.prototype.isWidget = true;
 
   function Widget(config, data, subject) {
-    var height, width;
+    var height, width, zIndex;
     if (config == null) {
       config = {};
     }
@@ -55,9 +55,11 @@ window.Widget = (function() {
     this.content = config.type != null ? new window[config.type](this, config.content) : new TextContent();
     width = config.width != null ? config.width : this.content.defaultWidth();
     height = config.height != null ? config.height : this.content.defaultHeight();
+    zIndex = config.zIndex != null ? config.zIndex : this.content.defaultZIndex();
     this.origin = {
       x: config.x != null ? config.x : (960 / 2) - (width / 2),
       y: config.y != null ? config.y : 100,
+      zIndex: zIndex,
       width: width,
       height: height
     };
@@ -69,7 +71,7 @@ window.Widget = (function() {
   };
 
   Widget.prototype.originStyles = function() {
-    return "position:absolute; top:" + this.origin.y + "px; left:" + this.origin.x + "px; width:" + this.origin.width + "px; height:" + this.origin.height + "px;";
+    return "position:absolute; top:" + this.origin.y + "px; left:" + this.origin.x + "px; width:" + this.origin.width + "px; height:" + this.origin.height + "px; z-index:" + this.origin.zIndex + ";";
   };
 
   Widget.prototype.bindEvents = function() {
@@ -188,7 +190,8 @@ window.Widget = (function() {
       x: this.x(),
       y: this.y(),
       width: this.width(),
-      height: this.height()
+      height: this.height(),
+      zIndex: this.zIndex()
     };
   };
 
@@ -221,6 +224,7 @@ window.Widget = (function() {
       guid: this.guid,
       x: this.x(),
       y: this.y(),
+      zIndex: this.zIndex(),
       width: this.width(),
       height: this.height(),
       type: this.content.className(),
@@ -267,6 +271,14 @@ window.Widget = (function() {
     this.el.resizable('destroy');
     this.el.height(this.el.width() / ratio);
     return this.applyResizable(ratio);
+  };
+
+  Widget.prototype.zIndex = function(n) {
+    if (n != null) {
+      return this.el.css('z-index', "" + (Math.round(n)));
+    } else {
+      return Math.round(this.el.zIndex());
+    }
   };
 
   Widget.prototype.width = function(n) {

@@ -46,6 +46,8 @@ class window.Properties
           <input type="number" step="1" id="prop-value-width" class="prop-coord-input" data-fn="width" />
           <label for="prop-value-height">height</label>
           <input type="number" step="1" id="prop-value-height" class="prop-coord-input"  data-fn="height"/>
+          <label for="prop-value-z-index">z-index</label>
+          <input type="number" step="1" id="prop-value-z-index" class="prop-coord-input"  data-fn="zIndex"/>
         </div>
       </section>
 
@@ -93,6 +95,7 @@ class window.Properties
     @el.find('#prop-value-y').val(@y())
     @el.find('#prop-value-width').val(@width())
     @el.find('#prop-value-height').val(@height())
+    @el.find('#prop-value-z-index').val(@zIndex())
 
   redraw: ->
     @setAppearanceOptions()
@@ -158,5 +161,6 @@ class window.Properties
 
   x: -> @selected?.x() or ''
   y: -> @selected?.y() or ''
+  zIndex: -> @selected?.zIndex() or ''
   width: -> @selected?.width() or ''
   height: -> @selected?.height() or ''
