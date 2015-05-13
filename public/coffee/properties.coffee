@@ -121,7 +121,6 @@ class window.Properties
     @_elCache[sel] = @el.find(sel)
     @_elCache[sel]
 
-
   redraw: ->
     @setAppearanceOptions()
     @setConfigOptions()
