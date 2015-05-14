@@ -157,6 +157,8 @@ class window.Widget
 
   ordering: (fn) -> Designer[fn].call(Designer, @guid)
 
+  ordering: (fn) -> Designer[fn].call(Designer, @guid)
+
   zIndex: (n) -> if n? then @el.css('z-index', "#{Math.round(n)}") else Math.round(@el.zIndex())
   width: (n) -> if n? then @el.width(Math.round(n)) else Math.round(@el.width())
   height: (n) -> if n? then @el.height(Math.round(n)) else Math.round(@el.height())

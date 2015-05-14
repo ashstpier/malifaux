@@ -1,3 +1,5 @@
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
 window.Template = (function() {
   Template.clone = function(templateData, cb) {
     return this.deserialize(templateData, function(template) {
@@ -33,6 +35,7 @@ window.Template = (function() {
   };
 
   function Template(description) {
+    this.getWidget = bind(this.getWidget, this);
     this.key = description.key;
     this.name = description.name;
     this.pages = description.pages;
@@ -113,6 +116,33 @@ window.Template = (function() {
     data = this.serialize();
     data.key = this.key;
     return TemplateStore.save(this.key, data, cb);
+  };
+
+  Template.prototype.getWidget = function(guid) {
+    return _.find(this.widgets, function(w) {
+      return w.guid === guid;
+    });
+  };
+
+  Template.prototype.getWidgetOrder = function() {
+    var sortedWidgets;
+    sortedWidgets = _.sortBy(this.widgets, function(w) {
+      return w.zIndex();
+    });
+    return _.map(sortedWidgets, function(w) {
+      return w.guid;
+    });
+  };
+
+  Template.prototype.setWidgetOrder = function(newOrder) {
+    var i, index, len, newlyOrderedWidgets, results, widget;
+    newlyOrderedWidgets = _.map(newOrder, this.getWidget);
+    results = [];
+    for (index = i = 0, len = newlyOrderedWidgets.length; i < len; index = ++i) {
+      widget = newlyOrderedWidgets[index];
+      results.push(widget.zIndex(index + 1));
+    }
+    return results;
   };
 
   Template.prototype.serialize = function() {
