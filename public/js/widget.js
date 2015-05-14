@@ -273,6 +273,10 @@ window.Widget = (function() {
     return this.applyResizable(ratio);
   };
 
+  Widget.prototype.ordering = function(fn) {
+    return Designer[fn].call(Designer, this.guid);
+  };
+
   Widget.prototype.zIndex = function(n) {
     if (n != null) {
       return this.el.css('z-index', "" + (Math.round(n)));

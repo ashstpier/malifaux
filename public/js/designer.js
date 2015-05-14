@@ -194,7 +194,8 @@ window.Designer = {
               return $('#gallery').removeClass('hidden');
             }), 500);
             _this.addWidget({
-              type: className
+              type: className,
+              zIndex: _this.template.widgets.length + 1
             });
             return false;
           });
@@ -498,6 +499,40 @@ window.Designer = {
       $('#saved-icon').removeClass('hidden');
       return $('#save-msg').fadeOut(200);
     }
+  },
+  setWidgetToBack: function(guid) {
+    var currentOrder, reorder;
+    currentOrder = this.template.getWidgetOrder();
+    reorder = _.without(currentOrder, guid);
+    reorder.unshift(guid);
+    return this.template.setWidgetOrder(reorder);
+  },
+  setWidgetBackOne: function(guid) {
+    var currentIndex, currentOrder, reorder;
+    currentOrder = this.template.getWidgetOrder();
+    currentIndex = _.indexOf(currentOrder, guid);
+    if (currentIndex !== 0) {
+      reorder = _.without(currentOrder, guid);
+      reorder.splice(currentIndex - 1, 0, guid);
+      return this.template.setWidgetOrder(reorder);
+    }
+  },
+  setWidgetForwardOne: function(guid) {
+    var currentIndex, currentOrder, reorder;
+    currentOrder = this.template.getWidgetOrder();
+    currentIndex = _.indexOf(currentOrder, guid);
+    if (currentIndex !== this.template.widgets.length - 1) {
+      reorder = _.without(currentOrder, guid);
+      reorder.splice(currentIndex + 1, 0, guid);
+      return this.template.setWidgetOrder(reorder);
+    }
+  },
+  setWidgetToFront: function(guid) {
+    var currentOrder, reorder;
+    currentOrder = this.template.getWidgetOrder();
+    reorder = _.without(currentOrder, guid);
+    reorder.push(guid);
+    return this.template.setWidgetOrder(reorder);
   }
 };
 

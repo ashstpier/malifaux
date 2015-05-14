@@ -115,7 +115,7 @@ window.Designer = {
       do (className) => $("#add-#{name}").click =>
         $('#gallery').addClass('hidden')
         setTimeout (-> $('#gallery').removeClass('hidden')), 500
-        @addWidget(type: className)
+        @addWidget(type: className, zIndex: @template.widgets.length+1)
         false
 
   bindKeyboardEvents: ->
@@ -293,6 +293,34 @@ window.Designer = {
     else
       $('#saved-icon').removeClass('hidden')
       $('#save-msg').fadeOut(200)
+
+  setWidgetToBack: (guid) ->
+    currentOrder = @template.getWidgetOrder()
+    reorder = _.without(currentOrder, guid)
+    reorder.unshift(guid)
+    @template.setWidgetOrder(reorder)
+
+  setWidgetBackOne: (guid) ->
+    currentOrder = @template.getWidgetOrder()
+    currentIndex = _.indexOf(currentOrder, guid)
+    unless currentIndex is 0
+      reorder = _.without(currentOrder, guid)
+      reorder.splice(currentIndex - 1, 0, guid)
+      @template.setWidgetOrder(reorder)
+
+  setWidgetForwardOne: (guid) ->
+    currentOrder = @template.getWidgetOrder()
+    currentIndex = _.indexOf(currentOrder, guid)
+    unless currentIndex is @template.widgets.length - 1
+      reorder = _.without(currentOrder, guid)
+      reorder.splice(currentIndex + 1, 0, guid)
+      @template.setWidgetOrder(reorder)
+
+  setWidgetToFront: (guid) ->
+    currentOrder = @template.getWidgetOrder()
+    reorder = _.without(currentOrder, guid)
+    reorder.push(guid)
+    @template.setWidgetOrder(reorder)
 }
 
 MicroEvent.mixin(Designer)
