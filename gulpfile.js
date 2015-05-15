@@ -74,7 +74,6 @@ gulp.task('server', ["express", "css", "coffee", "jit"], function() { } );
 
 gulp.task('css', function() {
   gulp.src('./public/widgets/**/*.css')
-    .pipe(flatten())
     .pipe(concat('widgets.css'))
     .pipe(gulp.dest('./public/css'))
 });
@@ -109,7 +108,11 @@ gulp.task('jit-widgets', function() {
     .pipe(gulp.dest('./public/js'))
 });
 
-gulp.task('jit', ['jit-app', 'jit-widgets'], function() { });
+gulp.task('jit-css', function() {
+  gulp.watch('./public/widgets/**/*.css', ['css']);
+})
+
+gulp.task('jit', ['jit-app', 'jit-widgets', 'jit-css'], function() { });
 
 gulp.task('deploy', function() {
   var aws = JSON.parse(fs.readFileSync('./aws.json'));
