@@ -166,9 +166,9 @@ window.DynamicTableContent = (function(superClass) {
       $('.dynamic-list').on("change", "#field-select", function() {
         var cell, option;
         option = $(this).val();
-        el.attr('data-dynamic', true);
-        el.attr('data-key', option);
-        el.attr('data-subject', '');
+        el.data('dynamic', true);
+        el.data('key', option);
+        el.data('subject', '');
         $('.dynamic-list').remove();
         cell = self.makeCell(option, true);
         return el.val(self.cellValue(cell, data, false));
@@ -177,9 +177,9 @@ window.DynamicTableContent = (function(superClass) {
         var cell, option, subject;
         option = $(this).val();
         subject = $("#category-select").val();
-        el.attr('data-dynamic', true);
-        el.attr('data-key', option);
-        el.attr('data-subject', subject);
+        el.data('dynamic', true);
+        el.data('key', option);
+        el.data('subject', subject);
         $('.dynamic-list').remove();
         cell = self.makeCell(option, true, subject);
         return el.val(self.cellValue(cell, data, false));
@@ -209,7 +209,7 @@ window.DynamicTableContent = (function(superClass) {
           if (data.subjects[cell.subject]) {
             value = (ref1 = data.subjects[cell.subject].results) != null ? ref1[cell.value] : void 0;
           } else {
-            this.placeholderWithLabel(cell.value, html);
+            value = null;
           }
         }
       } else {
@@ -225,7 +225,7 @@ window.DynamicTableContent = (function(superClass) {
     var options;
     options = "<div class=\"dynamic-list\"><p>Type free text or select a dynamic option from below</p>";
     options += this.categorySelect(el);
-    if (el.attr('data-subject')) {
+    if (el.data('subject')) {
       options += this.assessmentInfoSelect(el);
     } else {
       options += this.basicInfoSelect(el);
@@ -236,16 +236,18 @@ window.DynamicTableContent = (function(superClass) {
   DynamicTableContent.prototype.categorySelect = function(el) {
     var category_select, name, option, ref;
     if (this.widget.subject) {
-      return category_select = "<select id=\"category-select\">\n<option value=\"basic\">Basic Information</option>\n<option value=\"assessment\" " + (el.attr('data-subject') ? 'selected' : void 0) + ">Assessment Information</option>\n</select>";
+      return category_select = "<select id=\"category-select\">\n<option value=\"basic\">Basic Information</option>\n<option value=\"assessment\" " + (el.data('subject') ? 'selected' : void 0) + ">Assessment Information</option>\n</select>";
     } else {
       category_select = "<select id=\"category-select\"><option value=\"basic\">Basic Information</option>";
       ref = API.subjects();
       for (option in ref) {
         name = ref[option];
-        if (el.attr('data-subject') === option) {
-          category_select += "<option value=\"" + option + "\" selected>" + name + "</option>";
-        } else {
-          category_select += "<option value=\"" + option + "\">" + name + "</option>";
+        if (option !== '') {
+          if (el.data('subject') === option) {
+            category_select += "<option value=\"" + option + "\" selected>" + name + "</option>";
+          } else {
+            category_select += "<option value=\"" + option + "\">" + name + "</option>";
+          }
         }
       }
       return category_select += "</select>";
@@ -258,7 +260,7 @@ window.DynamicTableContent = (function(superClass) {
     ref = this.metrics();
     for (option in ref) {
       name = ref[option];
-      if (el.attr('data-key') === option) {
+      if (el.data('key') === option) {
         field_select += "<option value=\"" + option + "\" selected>" + name + "</option>";
       } else {
         field_select += "<option value=\"" + option + "\">" + name + "</option>";
@@ -273,7 +275,7 @@ window.DynamicTableContent = (function(superClass) {
     ref = this.assessmentPoints();
     for (j = 0, len = ref.length; j < len; j++) {
       point = ref[j];
-      if (el.attr('data-key') === point.code) {
+      if (el.data('key') === point.code) {
         field_select += "<option value=\"" + point.code + "\" selected>" + point.longName + "</option>";
       } else {
         field_select += "<option value=\"" + point.code + "\">" + point.longName + "</option>";
@@ -454,8 +456,8 @@ window.DynamicTableContent = (function(superClass) {
       };
     })(this);
     el.on('input', 'input', function() {
-      $(this).attr('data-dynamic', false);
-      return $(this).attr('data-key', '');
+      $(this).data('dynamic', false);
+      return $(this).data('key', '');
     });
     el.on('change', updateFn);
     this.widget.unbind('widget:layout-switching', updateFn);
@@ -474,7 +476,7 @@ window.DynamicTableContent = (function(superClass) {
         cell = cells[k];
         $cell = $(cell);
         if ($cell.data('dynamic')) {
-          cellArray.push(this.makeCell($cell.data('key'), true));
+          cellArray.push(this.makeCell($cell.data('key'), true, $cell.data('subject')));
         } else {
           cellArray.push(this.makeCell($cell.val(), false));
         }

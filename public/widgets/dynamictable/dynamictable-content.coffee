@@ -95,9 +95,9 @@ class window.DynamicTableContent extends WidgetContent
 
       $('.dynamic-list').on "change", "#field-select", ->
         option = $(this).val()
-        el.attr('data-dynamic', true)
-        el.attr('data-key', option)
-        el.attr('data-subject', '')
+        el.data('dynamic', true)
+        el.data('key', option)
+        el.data('subject', '')
         $('.dynamic-list').remove()
         cell = self.makeCell(option, true)
         el.val(self.cellValue(cell, data, false))
@@ -105,9 +105,9 @@ class window.DynamicTableContent extends WidgetContent
       $('.dynamic-list').on "change", "#assessment-select", ->
         option = $(this).val()
         subject = $("#category-select").val()
-        el.attr('data-dynamic', true)
-        el.attr('data-key', option)
-        el.attr('data-subject', subject)
+        el.data('dynamic', true)
+        el.data('key', option)
+        el.data('subject', subject)
         $('.dynamic-list').remove()
         cell = self.makeCell(option, true, subject)
         el.val(self.cellValue(cell, data, false))
@@ -130,7 +130,7 @@ class window.DynamicTableContent extends WidgetContent
           if data.subjects[cell.subject]
             value = data.subjects[cell.subject].results?[cell.value]
           else
-            @placeholderWithLabel(cell.value, html)
+            value = null
 
       else
         value = @fieldFrom(cell.value, data)
@@ -142,7 +142,7 @@ class window.DynamicTableContent extends WidgetContent
 
     options = """<div class="dynamic-list"><p>Type free text or select a dynamic option from below</p>"""
     options += @categorySelect(el)
-    if el.attr('data-subject')
+    if el.data('subject')
       options += @assessmentInfoSelect(el)
     else
       options += @basicInfoSelect(el)
@@ -154,17 +154,18 @@ class window.DynamicTableContent extends WidgetContent
 
       category_select = """<select id="category-select">
       <option value="basic">Basic Information</option>
-      <option value="assessment" #{if el.attr('data-subject') then 'selected'}>Assessment Information</option>
+      <option value="assessment" #{if el.data('subject') then 'selected'}>Assessment Information</option>
       </select>"""
 
     else
 
       category_select = """<select id="category-select"><option value="basic">Basic Information</option>"""
       for option, name of API.subjects()
-        if el.attr('data-subject') is option
-          category_select += """<option value="#{option}" selected>#{name}</option>"""
-        else
-          category_select += """<option value="#{option}">#{name}</option>"""
+        unless option is ''
+          if el.data('subject') is option
+            category_select += """<option value="#{option}" selected>#{name}</option>"""
+          else
+            category_select += """<option value="#{option}">#{name}</option>"""
 
       category_select += """</select>"""
 
@@ -173,7 +174,7 @@ class window.DynamicTableContent extends WidgetContent
     field_select = """<select id="field-select" class="dynamic-select"><option value="" disabled selected>Select an option</option>"""
 
     for option, name of @metrics()
-      if el.attr('data-key') is option
+      if el.data('key') is option
         field_select += """<option value="#{option}" selected>#{name}</option>"""
       else
         field_select += """<option value="#{option}">#{name}</option>"""
@@ -185,7 +186,7 @@ class window.DynamicTableContent extends WidgetContent
     field_select = """<select id="assessment-select" class="dynamic-select"><option value="" disabled selected>Select an assessment</option>"""
 
     for point in @assessmentPoints()
-      if el.attr('data-key') is point.code
+      if el.data('key') is point.code
         field_select += """<option value="#{point.code}" selected>#{point.longName}</option>"""
       else
         field_select += """<option value="#{point.code}">#{point.longName}</option>"""
@@ -286,8 +287,8 @@ class window.DynamicTableContent extends WidgetContent
   bindEvents: (el) ->
     updateFn = => @buildTabledata(el)
     el.on 'input', 'input', ->
-      $(this).attr('data-dynamic', false)
-      $(this).attr('data-key', '')
+      $(this).data('dynamic', false)
+      $(this).data('key', '')
     el.on 'change', updateFn
     @widget.unbind 'widget:layout-switching', updateFn
     @widget.bind 'widget:layout-switching', updateFn
@@ -303,7 +304,7 @@ class window.DynamicTableContent extends WidgetContent
       for cell in cells
         $cell = $(cell)
         if $cell.data('dynamic')
-          cellArray.push(@makeCell($cell.data('key'), true))
+          cellArray.push(@makeCell($cell.data('key'), true, $cell.data('subject')))
         else
           cellArray.push(@makeCell($cell.val(), false))
       newTabledata.push(cellArray)
