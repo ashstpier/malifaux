@@ -236,12 +236,17 @@ window.DatatableContent = (function(superClass) {
     }
     numVal = ((ref = subject.internalPoints) != null ? ref[col.value] : void 0) || 0;
     compareTo = ((ref1 = subject.internalPoints) != null ? ref1[col.compare_to] : void 0) || 0;
-    tlClass = 'amber';
-    if (numVal < compareTo) {
-      tlClass = 'red';
-    }
     if (numVal > compareTo) {
-      tlClass = 'green';
+      tlClass = 'dark-green';
+    }
+    if (numVal === compareTo) {
+      tlClass = 'light-green';
+    }
+    if (numVal === compareTo - 1) {
+      tlClass = 'amber';
+    }
+    if (numVal < compareTo - 1) {
+      tlClass = 'red';
     }
     return "<span class=\"traffic-light " + tlClass + "\"></span>";
   };

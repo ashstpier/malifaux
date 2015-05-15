@@ -176,9 +176,10 @@ class window.DatatableContent extends WidgetContent
     return val unless col.compare_to and col.compare_to.length > 0
     numVal = subject.internalPoints?[col.value] or 0
     compareTo = subject.internalPoints?[col.compare_to] or 0
-    tlClass = 'amber'
-    tlClass = 'red' if numVal < compareTo
-    tlClass = 'green' if numVal > compareTo
+    tlClass = 'dark-green' if numVal > compareTo
+    tlClass = 'light-green' if numVal == compareTo
+    tlClass = 'amber' if numVal == compareTo - 1
+    tlClass = 'red' if numVal < compareTo - 1
     """<span class="traffic-light #{tlClass}"></span>"""
 
   maybeAddEditRow: (el) ->
