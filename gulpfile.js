@@ -114,6 +114,6 @@ gulp.task('jit', ['jit-app', 'jit-widgets'], function() { });
 gulp.task('deploy', function() {
   var aws = JSON.parse(fs.readFileSync('./aws.json'));
   var options = {};
-  gulp.src('./public/**/*.{js,coffee,map,ico,html,css,png,jpg,gif,svg,eot,svg,ttf,woff}', {read: true})
+  gulp.src('./public/**/*.{js,map,ico,html,css,png,jpg,gif,svg,eot,svg,ttf,woff}', {read: true})
     .pipe(s3(aws, options));
 });
