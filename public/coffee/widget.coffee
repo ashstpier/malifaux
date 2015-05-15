@@ -30,7 +30,7 @@ class window.Widget
 
   constructor: (config={}, @data=null, @subject=null) ->
     @currentMode = 'layout'
-    @guid = config.guid || utils.guid()
+    @guid = utils.guid()
     @content = if config.type? then new window[config.type](this, config.content) else new TextContent()
     width = if config.width? then config.width else @content.defaultWidth()
     height = if config.height? then config.height else @content.defaultHeight()
