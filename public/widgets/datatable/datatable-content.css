@@ -39,7 +39,8 @@
   border-radius: 10px;
   overflow: hidden;
 }
-.datatable .traffic-light.green { background-color: #22ee66; }
+.datatable .traffic-light.dark-green { background-color: #019442; }
+.datatable .traffic-light.light-green { background-color: #7AE073; }
 .datatable .traffic-light.red   { background-color: #ee2222; }
 
 .datatable-cols .prop-table-wrap {

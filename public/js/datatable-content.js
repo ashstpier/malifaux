@@ -236,8 +236,11 @@ window.DatatableContent = (function(superClass) {
     }
     numVal = ((ref = subject.internalPoints) != null ? ref[col.value] : void 0) || 0;
     compareTo = ((ref1 = subject.internalPoints) != null ? ref1[col.compare_to] : void 0) || 0;
-    if (numVal >= compareTo) {
-      tlClass = 'green';
+    if (numVal > compareTo) {
+      tlClass = 'dark-green';
+    }
+    if (numVal === compareTo) {
+      tlClass = 'light-green';
     }
     if (numVal === compareTo - 1) {
       tlClass = 'amber';
