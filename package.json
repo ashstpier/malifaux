@@ -14,6 +14,7 @@
     "gulp-flatten": "0.0.2",
     "gulp-s3": "^0.3.0",
     "gulp-watch": "^0.6.7",
+    "gulp-concat": "^2.5.2",
     "gutil": "^1.2.0",
     "secret": "git://github.com/nkostelnik/node.secret.git#master",
     "underscore": "^1.6.0",

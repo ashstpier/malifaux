@@ -10,8 +10,8 @@ var gulp          = require('gulp'),
   bodyParser      = require('body-parser'),
   secret          = require( 'secret' ),
   _               = require('underscore'),
-  argv            = require('yargs').argv
-  ;
+  argv            = require('yargs').argv,
+  concat          = require('gulp-concat');
 
 var guid = (function() {
   function s4() {
@@ -70,7 +70,13 @@ gulp.task('express', function() {
   app.listen(9000);
 });
 
-gulp.task('server', ["express", "coffee", "jit"], function() { } );
+gulp.task('server', ["express", "css", "coffee", "jit"], function() { } );
+
+gulp.task('css', function() {
+  gulp.src('./public/widgets/**/*.css')
+    .pipe(concat('widgets.css'))
+    .pipe(gulp.dest('./public/css'))
+});
 
 gulp.task('coffee', function() {
   gulp.src('./public/coffee/*.coffee')
@@ -79,8 +85,9 @@ gulp.task('coffee', function() {
     .pipe(gulp.dest('./public/js'))
 
   gulp.src('./public/widgets/**/*.coffee')
-    .pipe(coffee({bare: true}).on('error', gutil.log))
+    .pipe(coffee().on('error', gutil.log))
     .pipe(flatten())
+    .pipe(concat('widgets.js'))
     .pipe(gulp.dest('./public/js'))
 });
 
@@ -95,16 +102,21 @@ gulp.task('jit-app', function() {
 gulp.task('jit-widgets', function() {
   gulp.src('./public/widgets/**/*.coffee', { read: false })
     .pipe(watch())
-    .pipe(coffee({bare: true}).on('error', gutil.log))
+    .pipe(coffee().on('error', gutil.log))
     .pipe(flatten())
+    .pipe(concat('widgets.js'))
     .pipe(gulp.dest('./public/js'))
 });
 
-gulp.task('jit', ['jit-app', 'jit-widgets'], function() { });
+gulp.task('jit-css', function() {
+  gulp.watch('./public/widgets/**/*.css', ['css']);
+})
+
+gulp.task('jit', ['jit-app', 'jit-widgets', 'jit-css'], function() { });
 
 gulp.task('deploy', function() {
   var aws = JSON.parse(fs.readFileSync('./aws.json'));
   var options = {};
-  gulp.src('./public/**/*.{js,coffee,map,ico,html,css,png,jpg,gif,svg,eot,svg,ttf,woff}', {read: true})
+  gulp.src('./public/**/*.{js,map,ico,html,css,png,jpg,gif,svg,eot,svg,ttf,woff}', {read: true})
     .pipe(s3(aws, options));
 });

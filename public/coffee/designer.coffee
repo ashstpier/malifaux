@@ -18,13 +18,9 @@ window.Designer = {
     @templateKey = template.key
     $ =>
       API.loadConfig =>
-        Widget.loadAll (err) =>
-          if err
-            console.error("error loading widgets", err)
-            alert('Failed to load some widgets. Please reload the page.')
-          @renderControls()
-          @bindEvents()
-          @load()
+        @renderControls()
+        @bindEvents()
+        @load()
 
   init: ->
     templateKey = utils.querystring("template")
