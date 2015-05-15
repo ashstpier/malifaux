@@ -70,7 +70,14 @@ gulp.task('express', function() {
   app.listen(9000);
 });
 
-gulp.task('server', ["express", "coffee", "jit"], function() { } );
+gulp.task('server', ["express", "css", "coffee", "jit"], function() { } );
+
+gulp.task('css', function() {
+  gulp.src('./public/widgets/**/*.css')
+    .pipe(flatten())
+    .pipe(concat('widgets.css'))
+    .pipe(gulp.dest('./public/css'))
+});
 
 gulp.task('coffee', function() {
   gulp.src('./public/coffee/*.coffee')

@@ -18,26 +18,6 @@ window.Widget = (function() {
     'shape': 'ShapeContent'
   };
 
-  Widget.loadAll = function(done) {
-    var className, name, names;
-    names = (function() {
-      var ref, results;
-      ref = Widget.WIDGETS;
-      results = [];
-      for (name in ref) {
-        className = ref[name];
-        results.push(name);
-      }
-      return results;
-    })();
-    return async.eachLimit(names, 5, this.load, done);
-  };
-
-  Widget.load = function(name, cb) {
-    utils.loadCSS("widgets/" + name + "/" + name + "-content.css");
-    return cb();
-  };
-
   Widget.prototype.isWidget = true;
 
   function Widget(config, data, subject) {

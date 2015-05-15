@@ -16,14 +16,6 @@ class window.Widget
     'shape':          'ShapeContent'
   }
 
-  @loadAll: (done) ->
-    names = (name for name, className of Widget.WIDGETS)
-    async.eachLimit(names, 5, @load, done)
-
-  @load: (name, cb) ->
-    utils.loadCSS("widgets/#{name}/#{name}-content.css")
-    cb()
-
   isWidget: true
 
   constructor: (config={}, @data=null, @subject=null) ->
