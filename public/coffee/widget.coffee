@@ -17,14 +17,12 @@ class window.Widget
   }
 
   @loadAll: (done) ->
-    completed = 0
-    widgetCount = Object.keys(Widget.WIDGETS).length
     names = (name for name, className of Widget.WIDGETS)
     async.eachLimit(names, 5, @load, done)
 
   @load: (name, cb) ->
     utils.loadCSS("widgets/#{name}/#{name}-content.css")
-    utils.loadJS("js/#{name}-content.js", cb)
+    cb()
 
   isWidget: true
 

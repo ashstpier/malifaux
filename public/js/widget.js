@@ -19,9 +19,7 @@ window.Widget = (function() {
   };
 
   Widget.loadAll = function(done) {
-    var className, completed, name, names, widgetCount;
-    completed = 0;
-    widgetCount = Object.keys(Widget.WIDGETS).length;
+    var className, name, names;
     names = (function() {
       var ref, results;
       ref = Widget.WIDGETS;
@@ -37,7 +35,7 @@ window.Widget = (function() {
 
   Widget.load = function(name, cb) {
     utils.loadCSS("widgets/" + name + "/" + name + "-content.css");
-    return utils.loadJS("js/" + name + "-content.js", cb);
+    return cb();
   };
 
   Widget.prototype.isWidget = true;

@@ -10,8 +10,8 @@ var gulp          = require('gulp'),
   bodyParser      = require('body-parser'),
   secret          = require( 'secret' ),
   _               = require('underscore'),
-  argv            = require('yargs').argv
-  ;
+  argv            = require('yargs').argv,
+  concat          = require('gulp-concat');
 
 var guid = (function() {
   function s4() {
@@ -79,8 +79,9 @@ gulp.task('coffee', function() {
     .pipe(gulp.dest('./public/js'))
 
   gulp.src('./public/widgets/**/*.coffee')
-    .pipe(coffee({bare: true}).on('error', gutil.log))
+    .pipe(coffee().on('error', gutil.log))
     .pipe(flatten())
+    .pipe(concat('widgets.js'))
     .pipe(gulp.dest('./public/js'))
 });
 
@@ -95,8 +96,9 @@ gulp.task('jit-app', function() {
 gulp.task('jit-widgets', function() {
   gulp.src('./public/widgets/**/*.coffee', { read: false })
     .pipe(watch())
-    .pipe(coffee({bare: true}).on('error', gutil.log))
+    .pipe(coffee().on('error', gutil.log))
     .pipe(flatten())
+    .pipe(concat('widgets.js'))
     .pipe(gulp.dest('./public/js'))
 });
 
