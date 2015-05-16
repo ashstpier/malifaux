@@ -51,7 +51,7 @@ window.Widget = (function() {
     this.subject = subject != null ? subject : null;
     this.updateSelectedState = bind(this.updateSelectedState, this);
     this.currentMode = 'layout';
-    this.guid = config.guid || utils.guid();
+    this.guid = utils.guid();
     this.content = config.type != null ? new window[config.type](this, config.content) : new TextContent();
     width = config.width != null ? config.width : this.content.defaultWidth();
     height = config.height != null ? config.height : this.content.defaultHeight();
