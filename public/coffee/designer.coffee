@@ -299,6 +299,7 @@ window.Designer = {
     reorder = _.without(currentOrder, guid)
     reorder.unshift(guid)
     @template.setWidgetOrder(reorder)
+    Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder})
 
   setWidgetBackOne: (guid) ->
     currentOrder = @template.getWidgetOrder()
@@ -307,6 +308,7 @@ window.Designer = {
       reorder = _.without(currentOrder, guid)
       reorder.splice(currentIndex - 1, 0, guid)
       @template.setWidgetOrder(reorder)
+      Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder})
 
   setWidgetForwardOne: (guid) ->
     currentOrder = @template.getWidgetOrder()
@@ -315,12 +317,18 @@ window.Designer = {
       reorder = _.without(currentOrder, guid)
       reorder.splice(currentIndex + 1, 0, guid)
       @template.setWidgetOrder(reorder)
+      Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder})
 
   setWidgetToFront: (guid) ->
     currentOrder = @template.getWidgetOrder()
     reorder = _.without(currentOrder, guid)
     reorder.push(guid)
     @template.setWidgetOrder(reorder)
+    Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder})
+
+  undoRedoOrderingWidget: (action) ->
+    @template.setWidgetOrder(action.undo)
+    @template.setWidgetOrder(action.redo)
 }
 
 MicroEvent.mixin(Designer)

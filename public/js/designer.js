@@ -505,7 +505,12 @@ window.Designer = {
     currentOrder = this.template.getWidgetOrder();
     reorder = _.without(currentOrder, guid);
     reorder.unshift(guid);
-    return this.template.setWidgetOrder(reorder);
+    this.template.setWidgetOrder(reorder);
+    return Designer.history.push(this, 'undoRedoOrderingWidget', {
+      undo: currentOrder
+    }, {
+      redo: reorder
+    });
   },
   setWidgetBackOne: function(guid) {
     var currentIndex, currentOrder, reorder;
@@ -514,7 +519,12 @@ window.Designer = {
     if (currentIndex !== 0) {
       reorder = _.without(currentOrder, guid);
       reorder.splice(currentIndex - 1, 0, guid);
-      return this.template.setWidgetOrder(reorder);
+      this.template.setWidgetOrder(reorder);
+      return Designer.history.push(this, 'undoRedoOrderingWidget', {
+        undo: currentOrder
+      }, {
+        redo: reorder
+      });
     }
   },
   setWidgetForwardOne: function(guid) {
@@ -524,7 +534,12 @@ window.Designer = {
     if (currentIndex !== this.template.widgets.length - 1) {
       reorder = _.without(currentOrder, guid);
       reorder.splice(currentIndex + 1, 0, guid);
-      return this.template.setWidgetOrder(reorder);
+      this.template.setWidgetOrder(reorder);
+      return Designer.history.push(this, 'undoRedoOrderingWidget', {
+        undo: currentOrder
+      }, {
+        redo: reorder
+      });
     }
   },
   setWidgetToFront: function(guid) {
@@ -532,7 +547,16 @@ window.Designer = {
     currentOrder = this.template.getWidgetOrder();
     reorder = _.without(currentOrder, guid);
     reorder.push(guid);
-    return this.template.setWidgetOrder(reorder);
+    this.template.setWidgetOrder(reorder);
+    return Designer.history.push(this, 'undoRedoOrderingWidget', {
+      undo: currentOrder
+    }, {
+      redo: reorder
+    });
+  },
+  undoRedoOrderingWidget: function(action) {
+    this.template.setWidgetOrder(action.undo);
+    return this.template.setWidgetOrder(action.redo);
   }
 };
 

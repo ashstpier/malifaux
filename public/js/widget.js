@@ -224,7 +224,7 @@ window.Widget = (function() {
       guid: this.guid,
       x: this.x(),
       y: this.y(),
-      zIndex: this.zIndex(),
+      z_index: this.zIndex(),
       width: this.width(),
       height: this.height(),
       type: this.content.className(),

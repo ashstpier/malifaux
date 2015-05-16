@@ -132,7 +132,7 @@ class window.Widget
       guid: @guid
       x: @x()
       y: @y()
-      zIndex: @zIndex()
+      z_index: @zIndex()
       width: @width()
       height: @height()
       type: @content.className()
