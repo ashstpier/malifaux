@@ -166,7 +166,6 @@
   margin-top: 10px;
   font-size: 11px;
 }
-
 .image-widget,
 .image-widget .content {
   width: 100%;
@@ -212,6 +211,12 @@
   position: relative;
   top: -8px;
 }
+
+.widget-shape {
+  overflow: hidden;
+}
+
+
 .image-gallery-widget {
     text-align: center;
 }
@@ -226,11 +231,9 @@
     height: auto;
 }
 
+.widget-EXAMPLE {
 
-.widget-shape {
-  overflow: hidden;
 }
-
 .text-widget {
   text-align: left;
   font-size: 16px;
@@ -252,7 +255,4 @@
 
 .text-widget .html-switch {
   display: none;
-}
-.widget-EXAMPLE {
-
 }
