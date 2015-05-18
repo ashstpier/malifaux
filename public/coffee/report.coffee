@@ -1,14 +1,13 @@
 window.Report = {
 
  init: ->
-   Widget.loadAll =>
-    API.loadConfig =>
-      @studentId = window.student_id or utils.querystring('studentid')
-      @templateName = window.template or utils.querystring('template')
-      @debug = utils.querystring('debug') is '1'
-      Template.load @templateName, (template) =>
-        @template = template
-        API.student @studentId, (data) => @render(data)
+  API.loadConfig =>
+    @studentId = window.student_id or utils.querystring('studentid')
+    @templateName = window.template or utils.querystring('template')
+    @debug = utils.querystring('debug') is '1'
+    Template.load @templateName, (template) =>
+      @template = template
+      API.student @studentId, (data) => @render(data)
 
  renderDebug: (data) ->
    if @debug
