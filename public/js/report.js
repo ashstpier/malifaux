@@ -1,16 +1,14 @@
 window.Report = {
   init: function() {
-    return Widget.loadAll((function(_this) {
+    return API.loadConfig((function(_this) {
       return function() {
-        return API.loadConfig(function() {
-          _this.studentId = window.student_id || utils.querystring('studentid');
-          _this.templateName = window.template || utils.querystring('template');
-          _this.debug = utils.querystring('debug') === '1';
-          return Template.load(_this.templateName, function(template) {
-            _this.template = template;
-            return API.student(_this.studentId, function(data) {
-              return _this.render(data);
-            });
+        _this.studentId = window.student_id || utils.querystring('studentid');
+        _this.templateName = window.template || utils.querystring('template');
+        _this.debug = utils.querystring('debug') === '1';
+        return Template.load(_this.templateName, function(template) {
+          _this.template = template;
+          return API.student(_this.studentId, function(data) {
+            return _this.render(data);
           });
         });
       };

@@ -1241,7 +1241,7 @@
 
     return NameContent;
 
-  })(FieldContent);
+  })(WidgetContent);
 
 }).call(this);
 
