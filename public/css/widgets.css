@@ -1,3 +1,6 @@
+.widget-EXAMPLE {
+
+}
 .attendance-widget {
   width: 100%;
   height: 100%;
@@ -86,6 +89,7 @@
 .style-option input {
   display: inline-block;
 }*/
+
 .widget-dynamictable {
   overflow: hidden;
 }
@@ -211,12 +215,6 @@
   position: relative;
   top: -8px;
 }
-
-.widget-shape {
-  overflow: hidden;
-}
-
-
 .image-gallery-widget {
     text-align: center;
 }
@@ -231,9 +229,11 @@
     height: auto;
 }
 
-.widget-EXAMPLE {
 
+.widget-shape {
+  overflow: hidden;
 }
+
 .text-widget {
   text-align: left;
   font-size: 16px;

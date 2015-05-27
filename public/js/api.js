@@ -45,5 +45,12 @@ window.API = {
   },
   images: function() {
     return this._config.images;
+  },
+  subjectFields: function() {
+    return {
+      subjectName: 'Subject Name',
+      teachingGroupCode: 'Teaching Group Code',
+      teacherNames: 'Teacher Names'
+    };
   }
 };
