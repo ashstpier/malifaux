@@ -78,12 +78,16 @@ gulp.task('css', function() {
     .pipe(gulp.dest('./public/css'))
 });
 
-gulp.task('coffee', function() {
+gulp.task('coffee', ['app', 'widgets'], function() {});
+
+gulp.task('app', function() {
   gulp.src('./public/coffee/*.coffee')
     .pipe(coffee({bare: true}).on('error', gutil.log))
     .pipe(flatten())
     .pipe(gulp.dest('./public/js'))
+});
 
+gulp.task('widgets', function() {
   gulp.src('./public/widgets/**/*.coffee')
     .pipe(coffee().on('error', gutil.log))
     .pipe(flatten())
@@ -92,20 +96,11 @@ gulp.task('coffee', function() {
 });
 
 gulp.task('jit-app', function() {
-  gulp.src('./public/coffee/*.coffee', { read: false })
-    .pipe(watch())
-    .pipe(coffee({bare: true}).on('error', gutil.log))
-    .pipe(flatten())
-    .pipe(gulp.dest('./public/js'))
+  gulp.watch('./public/coffee/*.coffee', ['app']);
 });
 
 gulp.task('jit-widgets', function() {
-  gulp.src('./public/widgets/**/*.coffee', { read: false })
-    .pipe(watch())
-    .pipe(coffee().on('error', gutil.log))
-    .pipe(flatten())
-    .pipe(concat('widgets.js'))
-    .pipe(gulp.dest('./public/js'))
+  gulp.watch('./public/widgets/**/*.coffee', ['widgets']);
 });
 
 gulp.task('jit-css', function() {
