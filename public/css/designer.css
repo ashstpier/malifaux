@@ -314,3 +314,38 @@ body {
 #add-page:hover .page-icon {
   background-color: rgba(255,255,255,0.8);
 }
+
+#pages {
+  text-align: center;
+}
+
+.page-button {
+  display: inline-block;
+  width: 100px;
+  padding: 10px;
+  margin: 0;
+  text-align: center;
+  color: #eee;
+  cursor: pointer;
+}
+.page-button:hover {
+  background-color: rgba(0,0,0,0.2);
+}
+.page-button-active {
+  background-color: rgba(0,0,0,0.1);
+  color: #fff;
+  font-weight: bold;
+}
+.page-icon {
+  background-color: #fff;
+  width: 100px;
+  height: 140px;
+  margin: 0 0 10px 0;
+}
+
+#add-page .page-icon {
+  background-color: rgba(255,255,255,0.5);
+}
+#add-page:hover .page-icon {
+  background-color: rgba(255,255,255,0.8);
+}
