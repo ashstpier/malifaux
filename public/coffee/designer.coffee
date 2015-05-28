@@ -215,9 +215,15 @@ window.Designer = {
     widgetConfig.y = widgetConfig.y + Designer.NUDGE_SIZE*2
     @addWidget(widgetConfig)
 
-  updateName: ->
-    name = $('#name').text()
+  updateNameFromHistory: (name) ->
     @template.name = name
+    $('#name').text(name)
+
+  updateName: ->
+    newName = $('#name').text()
+    oldName = @template.name
+    @template.name = newName
+    Designer.history.push(this, 'updateNameFromHistory', oldName, newName);
 
   select: (widget) ->
     @selection = widget
