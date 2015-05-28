@@ -50,23 +50,23 @@ window.Designer = {
         """
 
   setOrientation: (orientation) ->
-    Designer.history.push(this, 'updateOrientation', @template.orientation, orientation)
+    Designer.history.push(this, 'updateOrientation', @template.currentPage.orientation, orientation)
     @updateOrientation(orientation)
 
   updateOrientation: (orientation) ->
-    @template.orientation = orientation
+    @template.currentPage.orientation = orientation
     $("#orientation input:radio").removeAttr('checked')
-    $("#orientation input:radio[value='#{@template.orientation}']").prop('checked', true)
+    $("#orientation input:radio[value='#{@template.currentPage.orientation}']").prop('checked', true)
     @addPageClass()
 
   setPageType: (pagetype) ->
-    Designer.history.push(this, 'updatePageType', @template.pagetype, pagetype)
+    Designer.history.push(this, 'updatePageType', @template.currentPage.pagetype, pagetype)
     @updatePageType(pagetype)
 
   updatePageType: (pagetype) ->
-    @template.pagetype = pagetype
+    @template.currentPage.pagetype = pagetype
     $("#pagetype input:radio").removeAttr('checked')
-    $("#pagetype input:radio[value='#{@template.pagetype}']").prop('checked', true)
+    $("#pagetype input:radio[value='#{@template.currentPage.pagetype}']").prop('checked', true)
     @addPageClass()
     @reloadTemplate()
 
@@ -79,11 +79,11 @@ window.Designer = {
 
   addPageClass: ->
     $('#page').attr('class', '')
-    $('#page').addClass("#{@template.orientation} #{@template.pagetype}")
+    $('#page').addClass("#{@template.currentPage.orientation} #{@template.currentPage.pagetype}")
 
-  isSubjectPage: -> (@template.pagetype is 'subject')
+  isSubjectPage: -> (@template.currentPage.pagetype is 'subject')
 
-  isStudentPage: -> (@template.pagetype is 'student')
+  isStudentPage: -> (@template.currentPage.pagetype is 'student')
 
   bindEvents: ->
     $('#save-exit').click => @saveAndExit()
@@ -111,7 +111,7 @@ window.Designer = {
       do (className) => $("#add-#{name}").click =>
         $('#gallery').addClass('hidden')
         setTimeout (-> $('#gallery').removeClass('hidden')), 500
-        @addWidget(type: className, zIndex: @template.widgets.length+1)
+        @addWidget(type: className, zIndex: @template.currentPage.widgets.length+1)
         false
 
   bindKeyboardEvents: ->
@@ -227,9 +227,9 @@ window.Designer = {
 
   load: ->
     $('#name').text(@template.name)
-    $("#orientation input:radio[value='#{@template.orientation}']").attr('checked', true)
-    $("#pagetype input:radio[value='#{@template.pagetype}']").attr('checked', true)
-    $('#page').addClass("#{@template.orientation} #{@template.pagetype}")
+    $("#orientation input:radio[value='#{@template.currentPage.orientation}']").attr('checked', true)
+    $("#pagetype input:radio[value='#{@template.currentPage.pagetype}']").attr('checked', true)
+    $('#page').addClass("#{@template.currentPage.orientation} #{@template.currentPage.pagetype}")
     subject = if @isSubjectPage() then utils.fakeSubject() else null
     @template.render("layout")
 
@@ -309,7 +309,7 @@ window.Designer = {
   setWidgetForwardOne: (guid) ->
     currentOrder = @template.getWidgetOrder()
     currentIndex = _.indexOf(currentOrder, guid)
-    unless currentIndex is @template.widgets.length - 1
+    unless currentIndex is @template.currentPage.widgets.length - 1
       reorder = _.without(currentOrder, guid)
       reorder.splice(currentIndex + 1, 0, guid)
       @template.setWidgetOrder(reorder)

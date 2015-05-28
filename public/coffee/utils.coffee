@@ -1,3 +1,8 @@
+window.delegate = (source, destination, methods) ->
+  methods.forEach (method) =>
+    source.constructor::[method] = (args...) ->
+      source[destination][method].apply(source[destination], args)
+
 window.defer = (ms, fn=null) ->
   if fn is null
     fn = ms
