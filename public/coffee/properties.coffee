@@ -46,6 +46,14 @@ class window.Properties
           <input type="number" step="1" id="prop-value-width" class="prop-coord-input" data-fn="width" />
           <label for="prop-value-height">height</label>
           <input type="number" step="1" id="prop-value-height" class="prop-coord-input"  data-fn="height"/>
+          <label for="prop-value-ordering">ordering</label>
+          <select id='prop-value-ordering' class='prop-coord-select' data-fn="ordering">
+            <option></option>
+            <option value="setWidgetToBack">Send to back</option>
+            <option value="setWidgetBackOne">Send backward</option>
+            <option value="setWidgetForwardOne">Bring forward</option>
+            <option value="setWidgetToFront">Bring to front</option>
+          </select>
         </div>
       </section>
 
@@ -61,6 +69,10 @@ class window.Properties
     @el.on 'input', '.prop-coord-input', (e) =>
       input = $(e.target)
       @selected[input.data('fn')].call(@selected, input.val())
+    @el.on 'change', '.prop-coord-select', (e) =>
+      input = $(e.target)
+      @selected[input.data('fn')].call(@selected, input.val())
+      input.val('')
     @el.on 'input', 'input.prop-input', (e) =>
       input = $(e.target)
       @selected.content[input.data('fn')].call(@selected.content, input.val())
@@ -93,6 +105,7 @@ class window.Properties
     @el.find('#prop-value-y').val(@y())
     @el.find('#prop-value-width').val(@width())
     @el.find('#prop-value-height').val(@height())
+    @el.find('#prop-value-z-index').val(@zIndex())
 
   redraw: ->
     @setAppearanceOptions()
@@ -155,8 +168,8 @@ class window.Properties
 
   clearConfigOptions: -> @el.find('.prop-config').html('')
 
-
   x: -> @selected?.x() or ''
   y: -> @selected?.y() or ''
+  zIndex: -> @selected?.zIndex() or ''
   width: -> @selected?.width() or ''
   height: -> @selected?.height() or ''

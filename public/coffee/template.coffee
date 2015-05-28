@@ -61,6 +61,18 @@ class window.Template
     data.key = @key
     TemplateStore.save(@key, data, cb)
 
+  getWidget: (guid) =>
+    _.find(@widgets, (w) -> w.guid is guid)
+
+  getWidgetOrder: ->
+    sortedWidgets = _.sortBy(@widgets, (w) -> w.zIndex())
+    _.map(sortedWidgets, (w) -> w.guid)
+
+  setWidgetOrder: (newOrder) ->
+    newlyOrderedWidgets = _.map(newOrder, @getWidget)
+    for widget, index in newlyOrderedWidgets
+      widget.zIndex(index+1)
+
   serialize: ->
     layout = if @layout.length then @layout else (widget.serialize() for widget in @widgets)
     data = {

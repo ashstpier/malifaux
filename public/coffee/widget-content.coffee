@@ -65,6 +65,7 @@ class window.WidgetContent
 
   defaultWidth: -> 160
   defaultHeight: -> 160
+  defaultZIndex: -> 1
   editable: -> false
 
   assessmentPoints: ->

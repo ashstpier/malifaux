@@ -188,7 +188,8 @@ window.Designer = {
               return $('#gallery').removeClass('hidden');
             }), 500);
             _this.addWidget({
-              type: className
+              type: className,
+              zIndex: _this.template.widgets.length + 1
             });
             return false;
           });
@@ -492,6 +493,64 @@ window.Designer = {
       $('#saved-icon').removeClass('hidden');
       return $('#save-msg').fadeOut(200);
     }
+  },
+  setWidgetToBack: function(guid) {
+    var currentOrder, reorder;
+    currentOrder = this.template.getWidgetOrder();
+    reorder = _.without(currentOrder, guid);
+    reorder.unshift(guid);
+    this.template.setWidgetOrder(reorder);
+    return Designer.history.push(this, 'undoRedoOrderingWidget', {
+      undo: currentOrder
+    }, {
+      redo: reorder
+    });
+  },
+  setWidgetBackOne: function(guid) {
+    var currentIndex, currentOrder, reorder;
+    currentOrder = this.template.getWidgetOrder();
+    currentIndex = _.indexOf(currentOrder, guid);
+    if (currentIndex !== 0) {
+      reorder = _.without(currentOrder, guid);
+      reorder.splice(currentIndex - 1, 0, guid);
+      this.template.setWidgetOrder(reorder);
+      return Designer.history.push(this, 'undoRedoOrderingWidget', {
+        undo: currentOrder
+      }, {
+        redo: reorder
+      });
+    }
+  },
+  setWidgetForwardOne: function(guid) {
+    var currentIndex, currentOrder, reorder;
+    currentOrder = this.template.getWidgetOrder();
+    currentIndex = _.indexOf(currentOrder, guid);
+    if (currentIndex !== this.template.widgets.length - 1) {
+      reorder = _.without(currentOrder, guid);
+      reorder.splice(currentIndex + 1, 0, guid);
+      this.template.setWidgetOrder(reorder);
+      return Designer.history.push(this, 'undoRedoOrderingWidget', {
+        undo: currentOrder
+      }, {
+        redo: reorder
+      });
+    }
+  },
+  setWidgetToFront: function(guid) {
+    var currentOrder, reorder;
+    currentOrder = this.template.getWidgetOrder();
+    reorder = _.without(currentOrder, guid);
+    reorder.push(guid);
+    this.template.setWidgetOrder(reorder);
+    return Designer.history.push(this, 'undoRedoOrderingWidget', {
+      undo: currentOrder
+    }, {
+      redo: reorder
+    });
+  },
+  undoRedoOrderingWidget: function(action) {
+    this.template.setWidgetOrder(action.undo);
+    return this.template.setWidgetOrder(action.redo);
   }
 };
 

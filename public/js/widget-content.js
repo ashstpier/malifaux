@@ -122,6 +122,10 @@ window.WidgetContent = (function() {
     return 160;
   };
 
+  WidgetContent.prototype.defaultZIndex = function() {
+    return 1;
+  };
+
   WidgetContent.prototype.editable = function() {
     return false;
   };
