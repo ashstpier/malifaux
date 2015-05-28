@@ -1222,113 +1222,6 @@
   var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  window.ImageGalleryContent = (function(superClass) {
-    extend(ImageGalleryContent, superClass);
-
-    function ImageGalleryContent() {
-      return ImageGalleryContent.__super__.constructor.apply(this, arguments);
-    }
-
-    ImageGalleryContent.className = "ImageGalleryContent";
-
-    ImageGalleryContent.displayName = "Dynamic Images";
-
-    ImageGalleryContent.description = "A dynamic photograph, logo or graphic";
-
-    ImageGalleryContent.icon = "picture";
-
-    ImageGalleryContent.prototype.editable = function() {
-      return this.widget.currentMode === 'layout';
-    };
-
-    ImageGalleryContent.prototype.initWithConfig = function(config) {
-      this._field = this.get(config.field, Object.keys(this.images())[0]);
-      return this._stretchImage = this.get(config.stretchImage, true);
-    };
-
-    ImageGalleryContent.prototype.bindEvents = function(el) {
-      return this.widget.bind('widget:resize', (function(_this) {
-        return function() {
-          return _this.imageCSS();
-        };
-      })(this));
-    };
-
-    ImageGalleryContent.prototype.imageCSS = function() {
-      $('.image-gallery-widget img').removeClass(this.cssImageClass);
-      this.calcImageCSS();
-      return $('.image-gallery-widget img').addClass(this.cssImageClass);
-    };
-
-    ImageGalleryContent.prototype.calcImageCSS = function() {
-      if (this.width >= this.height && (this.stretchImage() || this.width > this.widget.width())) {
-        return this.cssImageClass = 'wider';
-      } else if (this.height > this.width && (this.stretchImage() || this.height > this.widget.height())) {
-        return this.cssImageClass = 'taller';
-      } else {
-        return this.cssImageClass = '';
-      }
-    };
-
-    ImageGalleryContent.prototype.render_layout = function(data) {
-      var img;
-      img = new Image();
-      img.src = "data:image/gif;base64," + (this.fieldFrom(data));
-      img.width / img.height;
-      this.width = img.width;
-      this.height = img.height;
-      this.calcImageCSS();
-      if (this.editable()) {
-        setTimeout(((function(_this) {
-          return function() {
-            return _this.setAspectRatio(1);
-          };
-        })(this)), 0);
-      }
-      return $("<div class=\"image-gallery-widget\">\n  <img class=\"content " + this.cssImageClass + "\" src=\"" + img.src + "\">\n</div>");
-    };
-
-    ImageGalleryContent.prototype.renderConfigOptions = function() {
-      return [
-        this.option('checkbox', 'stretchImage', "Stretch Image"), this.option('select', 'field', "Field", {
-          options: this.images(),
-          hint: "This is the gallery image you would like to be merged, the image shown is only a placeholder of the final output."
-        })
-      ];
-    };
-
-    ImageGalleryContent.prototype.stretchImage = ImageGalleryContent.property('_stretchImage');
-
-    ImageGalleryContent.prototype.fieldFrom = function(data) {
-      var i, key, len, ref, ref1, results;
-      ref = this._field.split('.');
-      results = [];
-      for (i = 0, len = ref.length; i < len; i++) {
-        key = ref[i];
-        results.push(data = (ref1 = data['images']) != null ? ref1[key] : void 0);
-      }
-      return results;
-    };
-
-    ImageGalleryContent.prototype.field = ImageGalleryContent.property('_field');
-
-    ImageGalleryContent.prototype.serialize = function() {
-      return {
-        field: this._field,
-        stretchImage: this.stretchImage()
-      };
-    };
-
-    return ImageGalleryContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
   window.ImageContent = (function(superClass) {
     extend(ImageContent, superClass);
 
@@ -1472,6 +1365,113 @@
   var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
+  window.ImageGalleryContent = (function(superClass) {
+    extend(ImageGalleryContent, superClass);
+
+    function ImageGalleryContent() {
+      return ImageGalleryContent.__super__.constructor.apply(this, arguments);
+    }
+
+    ImageGalleryContent.className = "ImageGalleryContent";
+
+    ImageGalleryContent.displayName = "Dynamic Images";
+
+    ImageGalleryContent.description = "A dynamic photograph, logo or graphic";
+
+    ImageGalleryContent.icon = "picture";
+
+    ImageGalleryContent.prototype.editable = function() {
+      return this.widget.currentMode === 'layout';
+    };
+
+    ImageGalleryContent.prototype.initWithConfig = function(config) {
+      this._field = this.get(config.field, Object.keys(this.images())[0]);
+      return this._stretchImage = this.get(config.stretchImage, true);
+    };
+
+    ImageGalleryContent.prototype.bindEvents = function(el) {
+      return this.widget.bind('widget:resize', (function(_this) {
+        return function() {
+          return _this.imageCSS();
+        };
+      })(this));
+    };
+
+    ImageGalleryContent.prototype.imageCSS = function() {
+      $('.image-gallery-widget img').removeClass(this.cssImageClass);
+      this.calcImageCSS();
+      return $('.image-gallery-widget img').addClass(this.cssImageClass);
+    };
+
+    ImageGalleryContent.prototype.calcImageCSS = function() {
+      if (this.width >= this.height && (this.stretchImage() || this.width > this.widget.width())) {
+        return this.cssImageClass = 'wider';
+      } else if (this.height > this.width && (this.stretchImage() || this.height > this.widget.height())) {
+        return this.cssImageClass = 'taller';
+      } else {
+        return this.cssImageClass = '';
+      }
+    };
+
+    ImageGalleryContent.prototype.render_layout = function(data) {
+      var img;
+      img = new Image();
+      img.src = "data:image/gif;base64," + (this.fieldFrom(data));
+      img.width / img.height;
+      this.width = img.width;
+      this.height = img.height;
+      this.calcImageCSS();
+      if (this.editable()) {
+        setTimeout(((function(_this) {
+          return function() {
+            return _this.setAspectRatio(1);
+          };
+        })(this)), 0);
+      }
+      return $("<div class=\"image-gallery-widget\">\n  <img class=\"content " + this.cssImageClass + "\" src=\"" + img.src + "\">\n</div>");
+    };
+
+    ImageGalleryContent.prototype.renderConfigOptions = function() {
+      return [
+        this.option('checkbox', 'stretchImage', "Stretch Image"), this.option('select', 'field', "Field", {
+          options: this.images(),
+          hint: "This is the gallery image you would like to be merged, the image shown is only a placeholder of the final output."
+        })
+      ];
+    };
+
+    ImageGalleryContent.prototype.stretchImage = ImageGalleryContent.property('_stretchImage');
+
+    ImageGalleryContent.prototype.fieldFrom = function(data) {
+      var i, key, len, ref, ref1, results;
+      ref = this._field.split('.');
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        key = ref[i];
+        results.push(data = (ref1 = data['images']) != null ? ref1[key] : void 0);
+      }
+      return results;
+    };
+
+    ImageGalleryContent.prototype.field = ImageGalleryContent.property('_field');
+
+    ImageGalleryContent.prototype.serialize = function() {
+      return {
+        field: this._field,
+        stretchImage: this.stretchImage()
+      };
+    };
+
+    return ImageGalleryContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
   window.NameContent = (function(superClass) {
     extend(NameContent, superClass);
 
@@ -1492,6 +1492,116 @@
     return NameContent;
 
   })(FieldContent);
+
+}).call(this);
+
+(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.ShapeContent = (function(superClass) {
+    extend(ShapeContent, superClass);
+
+    function ShapeContent() {
+      return ShapeContent.__super__.constructor.apply(this, arguments);
+    }
+
+    ShapeContent.className = "ShapeContent";
+
+    ShapeContent.displayName = "Shape";
+
+    ShapeContent.description = "A simple shape to be used for drawing.";
+
+    ShapeContent.icon = "vector_path_square";
+
+    ShapeContent.prototype.defaultWidth = function() {
+      return 200;
+    };
+
+    ShapeContent.prototype.defaultHeight = function() {
+      return 200;
+    };
+
+    ShapeContent.border_widths = {
+      "0": "none",
+      "1": "1",
+      "3": "3",
+      "5": "5",
+      "8": "8",
+      "10": "10",
+      "15": "15"
+    };
+
+    ShapeContent.STYLE_DEFAULTS = {
+      fill_color: '#CCCCCC',
+      stroke_color: '#888888',
+      stroke_width: '0',
+      shape: 'rectangle',
+      border_radius: '0'
+    };
+
+    ShapeContent.prototype.fill_color = ShapeContent.property('style', 'fill_color');
+
+    ShapeContent.prototype.stroke_color = ShapeContent.property('style', 'stroke_color');
+
+    ShapeContent.prototype.stroke_width = ShapeContent.property('style', 'stroke_width');
+
+    ShapeContent.prototype.shape = ShapeContent.property('style', 'shape');
+
+    ShapeContent.prototype.border_radius = ShapeContent.property('style', 'border_radius');
+
+    ShapeContent.prototype.maintainAspectRatio = ShapeContent.property('_maintainAspectRatio');
+
+    ShapeContent.prototype.initWithConfig = function(config) {
+      return this.style = $.extend({}, ShapeContent.STYLE_DEFAULTS, this.get(config.style, {}));
+    };
+
+    ShapeContent.prototype.renderAppearanceOptions = function() {
+      return [
+        this.option('select', 'shape', "Shape", {
+          options: {
+            rectangle: "Rectangle",
+            ellipse: "Ellipse"
+          }
+        }), this.option('color', 'fill_color', "Fill colour"), this.option('color', 'stroke_color', "Border colour"), this.option('select', 'stroke_width', "Border width", {
+          options: ShapeContent.border_widths
+        }), this.option('select', 'border_radius', "Corner radius", {
+          options: ShapeContent.border_widths
+        })
+      ];
+    };
+
+    ShapeContent.prototype.renderConfigOptions = function() {
+      return [this.option('checkbox', 'maintainAspectRatio', "Maintain Aspect Ratio")];
+    };
+
+    ShapeContent.prototype.render_layout = function() {
+      if (this.maintainAspectRatio()) {
+        this.setAspectRatio(1);
+      } else {
+        setTimeout(((function(_this) {
+          return function() {
+            return _this.setAspectRatio(0);
+          };
+        })(this)), 0);
+      }
+      if (this.style.shape === 'rectangle') {
+        return $("<svg width='100%' height='100%'> <rect x='" + (this.style.stroke_width / 1.6) + "%' y='" + (this.style.stroke_width / 1.6) + "%' width='" + (100 - this.style.stroke_width / 0.8) + "%' height='" + (100 - this.style.stroke_width / 0.8) + "%' rx='" + this.style.border_radius + "' ry='" + this.style.border_radius + "' style='fill:" + this.style.fill_color + ";stroke-width:" + this.style.stroke_width + ";stroke:" + this.style.stroke_color + "' /> </svg>");
+      } else {
+        return $("<svg height='100%' width='100%'> <ellipse cx='50%' cy='50%' rx='" + (45 - this.style.stroke_width / 1.8) + "%' ry='" + (45 - this.style.stroke_width / 1.8) + "%' stroke='" + this.style.stroke_color + "' stroke-width='" + this.style.stroke_width + "' fill='" + this.style.fill_color + "' /> </svg>");
+      }
+    };
+
+    ShapeContent.prototype.serialize = function() {
+      return {
+        style: this.style,
+        maintainAspectRatio: this.maintainAspectRatio()
+      };
+    };
+
+    return ShapeContent;
+
+  })(WidgetContent);
 
 }).call(this);
 
@@ -1608,116 +1718,6 @@
     return SubjectFieldContent;
 
   })(FieldContent);
-
-}).call(this);
-
-(function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.ShapeContent = (function(superClass) {
-    extend(ShapeContent, superClass);
-
-    function ShapeContent() {
-      return ShapeContent.__super__.constructor.apply(this, arguments);
-    }
-
-    ShapeContent.className = "ShapeContent";
-
-    ShapeContent.displayName = "Shape";
-
-    ShapeContent.description = "A simple shape to be used for drawing.";
-
-    ShapeContent.icon = "vector_path_square";
-
-    ShapeContent.prototype.defaultWidth = function() {
-      return 200;
-    };
-
-    ShapeContent.prototype.defaultHeight = function() {
-      return 200;
-    };
-
-    ShapeContent.border_widths = {
-      "0": "none",
-      "1": "1",
-      "3": "3",
-      "5": "5",
-      "8": "8",
-      "10": "10",
-      "15": "15"
-    };
-
-    ShapeContent.STYLE_DEFAULTS = {
-      fill_color: '#CCCCCC',
-      stroke_color: '#888888',
-      stroke_width: '0',
-      shape: 'rectangle',
-      border_radius: '0'
-    };
-
-    ShapeContent.prototype.fill_color = ShapeContent.property('style', 'fill_color');
-
-    ShapeContent.prototype.stroke_color = ShapeContent.property('style', 'stroke_color');
-
-    ShapeContent.prototype.stroke_width = ShapeContent.property('style', 'stroke_width');
-
-    ShapeContent.prototype.shape = ShapeContent.property('style', 'shape');
-
-    ShapeContent.prototype.border_radius = ShapeContent.property('style', 'border_radius');
-
-    ShapeContent.prototype.maintainAspectRatio = ShapeContent.property('_maintainAspectRatio');
-
-    ShapeContent.prototype.initWithConfig = function(config) {
-      return this.style = $.extend({}, ShapeContent.STYLE_DEFAULTS, this.get(config.style, {}));
-    };
-
-    ShapeContent.prototype.renderAppearanceOptions = function() {
-      return [
-        this.option('select', 'shape', "Shape", {
-          options: {
-            rectangle: "Rectangle",
-            ellipse: "Ellipse"
-          }
-        }), this.option('color', 'fill_color', "Fill colour"), this.option('color', 'stroke_color', "Border colour"), this.option('select', 'stroke_width', "Border width", {
-          options: ShapeContent.border_widths
-        }), this.option('select', 'border_radius', "Corner radius", {
-          options: ShapeContent.border_widths
-        })
-      ];
-    };
-
-    ShapeContent.prototype.renderConfigOptions = function() {
-      return [this.option('checkbox', 'maintainAspectRatio', "Maintain Aspect Ratio")];
-    };
-
-    ShapeContent.prototype.render_layout = function() {
-      if (this.maintainAspectRatio()) {
-        this.setAspectRatio(1);
-      } else {
-        setTimeout(((function(_this) {
-          return function() {
-            return _this.setAspectRatio(0);
-          };
-        })(this)), 0);
-      }
-      if (this.style.shape === 'rectangle') {
-        return $("<svg width='100%' height='100%'> <rect x='" + (this.style.stroke_width / 1.6) + "%' y='" + (this.style.stroke_width / 1.6) + "%' width='" + (100 - this.style.stroke_width / 0.8) + "%' height='" + (100 - this.style.stroke_width / 0.8) + "%' rx='" + this.style.border_radius + "' ry='" + this.style.border_radius + "' style='fill:" + this.style.fill_color + ";stroke-width:" + this.style.stroke_width + ";stroke:" + this.style.stroke_color + "' /> </svg>");
-      } else {
-        return $("<svg height='100%' width='100%'> <ellipse cx='50%' cy='50%' rx='" + (45 - this.style.stroke_width / 1.8) + "%' ry='" + (45 - this.style.stroke_width / 1.8) + "%' stroke='" + this.style.stroke_color + "' stroke-width='" + this.style.stroke_width + "' fill='" + this.style.fill_color + "' /> </svg>");
-      }
-    };
-
-    ShapeContent.prototype.serialize = function() {
-      return {
-        style: this.style,
-        maintainAspectRatio: this.maintainAspectRatio()
-      };
-    };
-
-    return ShapeContent;
-
-  })(WidgetContent);
 
 }).call(this);
 
