@@ -51,13 +51,36 @@
 	<body>
 		<header id="toolbar">
 			<div id="template-name">
-				<i class="glyphicons white file"></i>
 				<h1 contenteditable="true" id="name"></h1>
 			</div>
 			<a href="#" id="undo"><i class="glyphicons white undo"></i></a>
 			<a href="#" id="redo"><i class="glyphicons white redo"></i></a>
 			<div id="save-msg">Unsaved changes.</div>
 			<ul id="nav">
+				<li class="nav-option" id="pages-button">
+					<a href="#">
+						<i class="glyphicons white file"></i>
+						Pages
+					</a>
+					<div class="subnav" id="pages">
+						<div class="page-button">
+							<div class="page-icon"></div>
+							Page 1
+						</div>
+						<div class="page-button page-button-active">
+							<div class="page-icon"></div>
+							Page 2
+						</div>
+						<div class="page-button">
+							<div class="page-icon"></div>
+							Page 3
+						</div>
+						<div class="page-button" id="add-page">
+							<div class="page-icon"></div>
+							Add Page
+						</div>
+					</div>
+				</li>
 				<li class="nav-option" id="widget-options">
 					<a href="#">
 						<i class="glyphicons white circle_plus"></i>
