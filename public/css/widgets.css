@@ -1,6 +1,3 @@
-.widget-EXAMPLE {
-
-}
 .attendance-widget {
   width: 100%;
   height: 100%;
@@ -89,7 +86,6 @@
 .style-option input {
   display: inline-block;
 }*/
-
 .widget-dynamictable {
   overflow: hidden;
 }
@@ -170,6 +166,7 @@
   margin-top: 10px;
   font-size: 11px;
 }
+
 .image-widget,
 .image-widget .content {
   width: 100%;
@@ -255,4 +252,7 @@
 
 .text-widget .html-switch {
   display: none;
+}
+.widget-EXAMPLE {
+
 }
