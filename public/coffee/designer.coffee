@@ -32,6 +32,7 @@ window.Designer = {
   renderControls: ->
     @renderWidgetButtons()
     @renderPropertyPanel()
+    @renderPagesList()
 
   renderPropertyPanel: ->
     @propertyPanel = new Properties(this)
@@ -48,6 +49,16 @@ window.Designer = {
             <p>#{type.description}</p>
           </div>
         """
+
+  renderPagesList: ->
+    $('#page-list').empty()
+    for page, n in @template.pages
+      $('#page-list').append """
+        <div class="page-button #{if n is @template.currentPageNumber then 'page-button-active' else ''}" data-number="#{n}">
+          <div class="page-icon"></div>
+          Page #{n+1}
+        </div>
+      """
 
   setOrientation: (orientation) ->
     Designer.history.push(this, 'updateOrientation', @template.currentPage.orientation, orientation)
@@ -101,6 +112,8 @@ window.Designer = {
     $('#name').click (e) => $(e.currentTarget).selectText()
     $('#undo').click => @history.undo()
     $('#redo').click => @history.redo()
+    $('#page-list').on 'click', '.page-button', (e) => @switchPage(Number($(e.currentTarget).attr('data-number')))
+    $('#add-page').click => @addPage()
     @history.bind 'history:change', => @updateHistoryButtonState()
     @history.bind 'history:change', => @updateSavedButtonState()
     @bindKeyboardEvents()
@@ -160,6 +173,15 @@ window.Designer = {
       return true if @currentEditWidget
       @duplicate()
       false
+
+  addPage: ->
+    @template.addPage()
+    @renderPagesList()
+
+  switchPage: (number) ->
+    @template.setCurrentPage(number)
+    @template.render()
+    @renderPagesList()
 
   copy: ->
     return unless @selection

@@ -18,6 +18,7 @@ class window.PageTemplate
     @pagetype = description.pagetype
 
   render: (mode, data=null, subject=null) ->
+    @page.empty()
     for widgetConfig in @layout
       @addWidget(widgetConfig, mode, data, subject)
     @layout = []
@@ -48,7 +49,6 @@ class window.PageTemplate
     _.map(sortedWidgets, (w) -> w.guid)
 
   setWidgetOrder: (newOrder) ->
-    console.log 'setting order', newOrder
     newlyOrderedWidgets = _.map(newOrder, @getWidget)
     for widget, index in newlyOrderedWidgets
       widget.zIndex(index+1)

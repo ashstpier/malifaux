@@ -27,7 +27,7 @@ class window.Template
     @key = description.key
     @name = description.name
     @pages = description.pages
-    @currentPage = @pages[0]
+    @setCurrentPage(0)
     delegate(this, 'currentPage', [
       'render'
       'redraw'
@@ -38,6 +38,13 @@ class window.Template
       'getWidgetOrder'
       'setWidgetOrder'
     ])
+
+  addPage: ->
+    @pages.push(PageTemplate.create())
+
+  setCurrentPage: (n) ->
+    @currentPageNumber = n
+    @currentPage = @pages[@currentPageNumber]
 
   save: (cb) ->
     data = @serialize()
