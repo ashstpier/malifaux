@@ -2,9 +2,7 @@
 node_modules
 aws.json
 npm-debug.log
-
+public/js/*
 private/*.json
-
 .idea
-
 .vagrant
