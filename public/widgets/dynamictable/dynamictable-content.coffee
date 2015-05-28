@@ -122,19 +122,17 @@ class window.DynamicTableContent extends WidgetContent
       @cellValue(cell, data)
 
   cellValue: (cell, data, html=true) ->
+    subject = null
     if cell.dynamic
       if Object.keys(@metrics()).indexOf(cell.value) is -1
-        if @widget.subject
-          value = data.subjects[@widget.subject].results?[cell.value]
-        else
-          if data.subjects[cell.subject]
-            value = data.subjects[cell.subject].results?[cell.value]
-          else
-            value = null
-
+        subject = @widget.subject or cell.subject
+        subjectData = data.subjects[subject]
+        value = null
+        if subjectData
+          value = subjectData[cell.value] or subjectData.results?[cell.value]
       else
         value = @fieldFrom(cell.value, data)
-      @mappings[value] or value or @placeholderWithLabel(cell.value, html)
+      @mappings[value] or value or @placeholderWithLabel([subject,cell.value].join(':'), html)
     else
       cell.value
 
@@ -171,7 +169,7 @@ class window.DynamicTableContent extends WidgetContent
 
 
   basicInfoSelect: (el) ->
-    field_select = """<select id="field-select" class="dynamic-select"><option value="" disabled selected>Select an option</option>"""
+    field_select = """<select id="field-select" class="dynamic-select"><option value="" disabled selected>Select an option...</option>"""
 
     for option, name of @metrics()
       if el.data('key') is option
@@ -183,7 +181,16 @@ class window.DynamicTableContent extends WidgetContent
 
 
   assessmentInfoSelect: (el) ->
-    field_select = """<select id="assessment-select" class="dynamic-select"><option value="" disabled selected>Select an assessment</option>"""
+    field_select = """<select id="assessment-select" class="dynamic-select"><option value="" disabled selected>Select an option...</option>"""
+
+    field_select += """<optgroup label="Basic Info">"""
+    for field, name of API.subjectFields()
+      if el.data('key') is field
+        field_select += """<option value="#{field}" selected>#{name}</option>"""
+      else
+        field_select += """<option value="#{field}">#{name}</option>"""
+
+    field_select += """</optgroup><optgroup label="Assessment Points">"""
 
     for point in @assessmentPoints()
       if el.data('key') is point.code
@@ -191,7 +198,7 @@ class window.DynamicTableContent extends WidgetContent
       else
         field_select += """<option value="#{point.code}">#{point.longName}</option>"""
 
-    field_select += """</select>"""
+    field_select += """</optgroup></select>"""
 
 
   renderAppearanceOptions: ->

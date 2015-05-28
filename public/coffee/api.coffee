@@ -24,4 +24,8 @@ window.API = {
   metrics:          -> @_config.data
   subjects:         -> @_config.subjects
   images:           -> @_config.images
+  subjectFields:    ->
+    subjectName: 'Subject Name'
+    teachingGroupCode: 'Teaching Group Code'
+    teacherNames: 'Teacher Names'
 }
