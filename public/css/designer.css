@@ -223,7 +223,7 @@ body {
 
 .page-button {
   display: inline-block;
-  padding: 10px;
+  padding: 15px;
   margin: 0;
   text-align: center;
   color: #eee;
@@ -245,10 +245,35 @@ body {
   margin: 0 0 10px 0;
 }
 
-.page-button-landscape .page-icon {
+.page-button-landscape .page-icon,
+.page-button-landscape.page-button-subject .page-icon:before,
+.page-button-landscape.page-button-subject .page-icon:after {
   width: 140px;
   height: 100px;
 }
+
+.page-button-subject .page-icon {
+  left: -3px;
+}
+.page-button-subject .page-icon:before,
+.page-button-subject .page-icon:after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100px;
+  height: 140px;
+  background-color: #bbb;
+  top: 3px;
+  left: 3px;
+  z-index: -1;
+}
+.page-button-subject .page-icon:after {
+  background-color: #888;
+  top: 6px;
+  left: 6px;
+  z-index: -2;
+}
+
 
 .page-delete-button {
   color: #c33;
