@@ -17,14 +17,16 @@ class window.PageTemplate
     @orientation = description.orientation
     @pagetype = description.pagetype
 
+  clear: ->
+    @serializeWidgets()
+    @removeAllWidgets()
+
   render: (mode, data=null, subject=null) ->
-    @page.empty()
     for widgetConfig in @layout
       @addWidget(widgetConfig, mode, data, subject)
     @layout = []
 
   addWidget: (widgetConfig, mode, data=null, subject=null) ->
-    console.log 'adding', widgetConfig
     data = data or utils.fakeStudentData()
     subject = subject or utils.subject(@pagetype)
     widget = if widgetConfig.isWidget then widgetConfig else new Widget(widgetConfig, data, subject)
@@ -53,10 +55,13 @@ class window.PageTemplate
     for widget, index in newlyOrderedWidgets
       widget.zIndex(index+1)
 
+  serializeWidgets: ->
+    @layout = (widget.serialize() for widget in @widgets)
+
   serialize: ->
-    layout = if @layout.length then @layout else (widget.serialize() for widget in @widgets)
+    @serializeWidgets() unless @layout.length > 0
     data = {
-      layout: layout,
+      layout: @layout,
       orientation: @orientation,
       pagetype: @pagetype,
       screenshot: @screenshot

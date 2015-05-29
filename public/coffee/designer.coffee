@@ -179,8 +179,9 @@ window.Designer = {
     @renderPagesList()
 
   switchPage: (number) ->
+    @template.clear()
     @template.setCurrentPage(number)
-    @template.render()
+    @template.render('layout')
     @renderPagesList()
 
   copy: ->

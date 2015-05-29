@@ -37,6 +37,7 @@ class window.Template
       'getWidget'
       'getWidgetOrder'
       'setWidgetOrder'
+      'clear'
     ])
 
   addPage: ->
