@@ -43,6 +43,10 @@ class window.Template
       for widget in page.widgets
         widget.subject = subject
 
+  renderPage: (number, mode, data=null, subject=null) ->
+    console.log number, mode, @pages
+    @pages[number].render(mode, data, subject)
+
   render: (mode, data=null, subject=null) ->
     for page in @pages
       page.render(mode, data, subject)

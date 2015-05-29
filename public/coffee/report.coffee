@@ -4,6 +4,7 @@ window.Report = {
   API.loadConfig =>
     @studentId = window.student_id or utils.querystring('studentid')
     @templateName = window.template or utils.querystring('template')
+    @page = window.page or utils.querystring('page') or 0
     @debug = utils.querystring('debug') is '1'
     Template.load @templateName, (template) =>
       @template = template
@@ -22,7 +23,7 @@ window.Report = {
      """)
 
  render: (data) ->
-   @template.render('display', data)
+   @template.renderPage(@page, 'display', data)
    @renderDebug(data) if @debug
 }
 
