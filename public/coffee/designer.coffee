@@ -70,7 +70,7 @@ window.Designer = {
     @template.currentPage.orientation = orientation
     $("#orientation input:radio").removeAttr('checked')
     $("#orientation input:radio[value='#{@template.currentPage.orientation}']").prop('checked', true)
-    @addPageClass()
+    @updatePageAttributes()
 
   setPageType: (pagetype) ->
     Designer.history.push(this, 'updatePageType', @template.currentPage.pagetype, pagetype)
@@ -80,7 +80,7 @@ window.Designer = {
     @template.currentPage.pagetype = pagetype
     $("#pagetype input:radio").removeAttr('checked')
     $("#pagetype input:radio[value='#{@template.currentPage.pagetype}']").prop('checked', true)
-    @addPageClass()
+    @updatePageAttributes()
     @reloadTemplate()
 
   reloadTemplate: ->
@@ -90,9 +90,8 @@ window.Designer = {
     @template.render('layout')
 
 
-  addPageClass: ->
-    $('#page').attr('class', '')
-    $('#page').addClass("#{@template.currentPage.orientation} #{@template.currentPage.pagetype}")
+  updatePageAttributes: ->
+    @template.currentPage.updateAttributes()
 
   isSubjectPage: -> (@template.currentPage.pagetype is 'subject')
 
@@ -183,9 +182,7 @@ window.Designer = {
     false
 
   switchPage: (number) ->
-    @template.clear()
     @template.setCurrentPage(number)
-    @template.render('layout')
     @renderPagesList()
     false
 

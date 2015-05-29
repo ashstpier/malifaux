@@ -123,12 +123,19 @@ body {
   overflow: auto;
 }
 
-#page {
-  z-index: 1;
-  position: relative;
+.page {
+  z-index: 100;
+  position: absolute;
+  top: 0;
+  visibility: hidden;
   margin: 10px auto;
   background-color: #fff;
   box-shadow: #c9c9c9 0 0 5px;
+}
+.page-active {
+  z-index: 101;
+  position: relative;
+  visibility: visible;
 }
 
 #properties {
@@ -145,12 +152,12 @@ body {
 
  /* A4 Ratio is ~ 1:1.4 */
 
-.portrait {
+.page[data-orientation='portrait'] {
   width: 960px;
   height: 1344px;
 }
 
-.landscape {
+.page[data-orientation='landscape'] {
   width: 1344px;
   height: 960px;
 }

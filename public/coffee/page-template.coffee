@@ -10,29 +10,29 @@ class window.PageTemplate
     return template
 
   constructor: (description) ->
-    @page = $('#page')
     @widgets = []
-    @key = description.key
     @layout = description.layout
     @orientation = description.orientation
     @pagetype = description.pagetype
-
-  clear: ->
-    @serializeWidgets()
-    @removeAllWidgets()
+    @el = $("""<div class="page" data-orientation="#{@orientation}"" data-pagetype="#{@pagetype}"/>""")
+    $('#viewport').append(@el)
 
   render: (mode, data=null, subject=null) ->
     for widgetConfig in @layout
       @addWidget(widgetConfig, mode, data, subject)
     @layout = []
+    @isRendered = true
 
   addWidget: (widgetConfig, mode, data=null, subject=null) ->
     data = data or utils.fakeStudentData()
     subject = subject or utils.subject(@pagetype)
     widget = if widgetConfig.isWidget then widgetConfig else new Widget(widgetConfig, data, subject)
     @widgets.push(widget)
-    @page.append(widget.render(mode))
+    @el.append(widget.render(mode))
     widget
+
+  activate: -> @el.addClass('page-active')
+  deactivate: -> @el.removeClass('page-active')
 
   redraw: -> widget.redraw() for widget in @widgets
 
@@ -54,6 +54,10 @@ class window.PageTemplate
     newlyOrderedWidgets = _.map(newOrder, @getWidget)
     for widget, index in newlyOrderedWidgets
       widget.zIndex(index+1)
+
+  updateAttributes: ->
+    @el.attr('data-orientation', @orientation)
+    @el.attr('data-pagetype', @pagetype)
 
   serializeWidgets: ->
     @layout = (widget.serialize() for widget in @widgets)

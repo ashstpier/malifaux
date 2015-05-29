@@ -29,7 +29,6 @@ class window.Template
     @pages = description.pages
     @setCurrentPage(0)
     delegate(this, 'currentPage', [
-      'render'
       'redraw'
       'addWidget'
       'removeWidget'
@@ -37,8 +36,11 @@ class window.Template
       'getWidget'
       'getWidgetOrder'
       'setWidgetOrder'
-      'clear'
     ])
+
+  render: (mode, data=null, subject=null) ->
+    for page in @pages
+      page.render(mode, data, subject)
 
   addPage: ->
     @pages.push(PageTemplate.create())
@@ -47,8 +49,11 @@ class window.Template
     @pages.splice(number, 1)
 
   setCurrentPage: (n) ->
+    @currentPage.deactivate() if @currentPage
     @currentPageNumber = n
     @currentPage = @pages[@currentPageNumber]
+    @currentPage.activate()
+    @currentPage
 
   save: (cb) ->
     data = @serialize()
