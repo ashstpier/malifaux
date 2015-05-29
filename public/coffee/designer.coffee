@@ -105,7 +105,7 @@ window.Designer = {
           @history.resetSaveChanges()
         false
     $('#exit a').click => @promptSave()
-    $('#page').on 'mousedown', (e) => @maybeClearSelection(e.target)
+    $('#viewport').on 'mousedown', '.page', (e) => @maybeClearSelection(e.currentTarget)
     $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())
     $('#pagetype input:radio').change (e) => @setPageType($(e.currentTarget).val())
     $('#name').blur => @updateName()
@@ -185,6 +185,8 @@ window.Designer = {
 
   switchPage: (number) ->
     return if @template.currentPageNumber is number
+    @clearSelection()
+    @clearEditWidget()
     @template.setCurrentPage(number)
     @renderPagesList()
     false
@@ -224,7 +226,7 @@ window.Designer = {
   clearSelection: -> @select(null)
 
   maybeClearSelection: (target) ->
-    if target is $('#page')[0]
+    if $('.page').is(target)
       @clearSelection()
       @clearEditWidget()
 
