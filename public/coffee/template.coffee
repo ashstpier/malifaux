@@ -38,6 +38,12 @@ class window.Template
       'setWidgetOrder'
     ])
 
+  setSubject: (subject) ->
+    for page in @pages
+      for widget in page.widgets
+        console.log subject, widget
+        widget.subject = subject
+
   render: (mode, data=null, subject=null) ->
     for page in @pages
       page.render(mode, data, subject)
@@ -49,6 +55,7 @@ class window.Template
     @pages.splice(number, 1)
 
   setCurrentPage: (n) ->
+    return if @currentPageNumber is n
     @currentPage.deactivate() if @currentPage
     @currentPageNumber = n
     @currentPage = @pages[@currentPageNumber]

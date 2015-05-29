@@ -87,14 +87,7 @@ window.Designer = {
     $("#pagetype input:radio[value='#{@template.currentPage.pagetype}']").prop('checked', true)
     @updatePageAttributes()
     @renderPagesList()
-    @reloadTemplate()
-
-  reloadTemplate: ->
-    config = @template.serialize()
-    @template.removeAllWidgets()
-    @template = new Template(config)
-    @template.render('layout')
-
+    @template.setSubject(utils.subject(@template.currentPage.pagetype))
 
   updatePageAttributes: ->
     @template.currentPage.updateAttributes()
