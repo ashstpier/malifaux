@@ -95,7 +95,7 @@ class window.Widget
   moved: ->
     oldPosition = @position
     @cachePosition()
-    Designer.history.push(this, 'moveTo', oldPosition, @position)
+    Designer.history.push(this, 'moveTo', oldPosition, @position, Designer.template.currentPageNumber)
 
   cachePosition: ->
     @position = {x: @x(), y: @y(), width: @width(), height: @height(), zIndex: @zIndex()}
@@ -142,7 +142,7 @@ class window.Widget
     @x(@x()+x) unless x is 0
     @y(@y()+y) unless y is 0
     @cachePosition()
-    Designer.history.push(this, 'moveTo', oldPosition, @position)
+    Designer.history.push(this, 'moveTo', oldPosition, @position, Designer.template.currentPageNumber)
     @trigger 'widget:move', this
 
   saveConfig: ->

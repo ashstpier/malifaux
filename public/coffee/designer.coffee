@@ -63,7 +63,7 @@ window.Designer = {
       """
 
   setOrientation: (orientation) ->
-    Designer.history.push(this, 'updateOrientation', @template.currentPage.orientation, orientation)
+    Designer.history.push(this, 'updateOrientation', @template.currentPage.orientation, orientation, @template.currentPageNumber)
     @updateOrientation(orientation)
 
   updateOrientation: (orientation) ->
@@ -73,7 +73,7 @@ window.Designer = {
     @updatePageAttributes()
 
   setPageType: (pagetype) ->
-    Designer.history.push(this, 'updatePageType', @template.currentPage.pagetype, pagetype)
+    Designer.history.push(this, 'updatePageType', @template.currentPage.pagetype, pagetype, @template.currentPageNumber)
     @updatePageType(pagetype)
 
   updatePageType: (pagetype) ->
@@ -116,6 +116,7 @@ window.Designer = {
     $('#page-list').on 'click', '.page-delete-button', (e) => @deletePage(Number($(e.currentTarget).attr('data-number')))
     $('#page-list').on 'click', '.page-button', (e) => @switchPage(Number($(e.currentTarget).attr('data-number')))
     $('#add-page').click => @addPage()
+    @history.bind 'history:ensure-page', (page) => @switchPage(page)
     @history.bind 'history:change', => @updateHistoryButtonState()
     @history.bind 'history:change', => @updateSavedButtonState()
     @bindKeyboardEvents()
@@ -183,6 +184,7 @@ window.Designer = {
     false
 
   switchPage: (number) ->
+    return if @template.currentPageNumber is number
     @template.setCurrentPage(number)
     @renderPagesList()
     false
@@ -243,14 +245,14 @@ window.Designer = {
     widget = @template.addWidget(widgetConfig, 'layout')
     @select(widget)
     if withHistory
-      Designer.history.push(this, 'addRemoveWidget', {remove:widget}, {add:widget})
+      Designer.history.push(this, 'addRemoveWidget', {remove:widget}, {add:widget}, @template.currentPageNumber)
 
   removeWidget: (widget, withHistory=true) ->
     @currentEditWidget = null if @currentEditWidget is widget
     @clearSelection()
     @template.removeWidget(widget)
     if withHistory
-      Designer.history.push(this, 'addRemoveWidget', {add:widget}, {remove:widget})
+      Designer.history.push(this, 'addRemoveWidget', {add:widget}, {remove:widget}, @template.currentPageNumber)
 
   addRemoveWidget: (action) ->
     @addWidget(action.add, false) if action.add?
@@ -326,7 +328,7 @@ window.Designer = {
     reorder = _.without(currentOrder, guid)
     reorder.unshift(guid)
     @template.setWidgetOrder(reorder)
-    Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder})
+    Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder}, @template.currentPageNumber)
 
   setWidgetBackOne: (guid) ->
     currentOrder = @template.getWidgetOrder()
@@ -335,7 +337,7 @@ window.Designer = {
       reorder = _.without(currentOrder, guid)
       reorder.splice(currentIndex - 1, 0, guid)
       @template.setWidgetOrder(reorder)
-      Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder})
+      Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder}, @template.currentPageNumber)
 
   setWidgetForwardOne: (guid) ->
     currentOrder = @template.getWidgetOrder()
@@ -344,14 +346,14 @@ window.Designer = {
       reorder = _.without(currentOrder, guid)
       reorder.splice(currentIndex + 1, 0, guid)
       @template.setWidgetOrder(reorder)
-      Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder})
+      Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder}, @template.currentPageNumber)
 
   setWidgetToFront: (guid) ->
     currentOrder = @template.getWidgetOrder()
     reorder = _.without(currentOrder, guid)
     reorder.push(guid)
     @template.setWidgetOrder(reorder)
-    Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder})
+    Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder}, @template.currentPageNumber)
 
   undoRedoOrderingWidget: (action) ->
     @template.setWidgetOrder(action.undo)

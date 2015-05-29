@@ -199,7 +199,7 @@ class window.DatatableContent extends WidgetContent
         mappings:         $col.data('mappings')
       }
     @columns = (col for col in columns when col.value? and col.value isnt '')
-    Designer.history.push(this, 'setColumnsFromUndo', oldColumns, @columns)
+    Designer.history.push(this, 'setColumnsFromUndo', oldColumns, @columns, Designer.template.currentPageNumber)
 
   setColumnsFromUndo: (cols) ->
     @columns = cols
