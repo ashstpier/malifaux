@@ -178,6 +178,7 @@ window.Designer = {
 
   addPage: ->
     @template.addPage()
+    @template.setCurrentPage(@template.pages.length-1)
     @renderPagesList()
     false
 
