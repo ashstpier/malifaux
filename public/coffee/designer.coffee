@@ -90,6 +90,7 @@ window.Designer = {
     @renderPagesList()
     @template.setSubject(utils.subject(@template.currentPage.pagetype))
 
+
   updatePageAttributes: ->
     @template.currentPage.updateAttributes()
 
