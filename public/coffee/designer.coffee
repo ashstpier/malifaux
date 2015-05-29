@@ -53,8 +53,12 @@ window.Designer = {
   renderPagesList: ->
     $('#page-list').empty()
     for page, n in @template.pages
+      classes = ['page-button']
+      classes.push('page-button-active') if n is @template.currentPageNumber
+      classes.push('page-button-landscape') if page.orientation is 'landscape'
+      classes.push('page-button-subject') if page.pagetype is 'subject'
       $('#page-list').append """
-        <div class="page-button #{if n is @template.currentPageNumber then 'page-button-active' else ''}" data-number="#{n}">
+        <div class="#{classes.join(' ')}" data-number="#{n}">
           <div class="page-icon">
             #{if n is @template.currentPageNumber then '' else '<span class="page-delete-button" title="Remove page" data-number="#{n}">&times;</span>'}
           </div>
@@ -71,6 +75,7 @@ window.Designer = {
     $("#orientation input:radio").removeAttr('checked')
     $("#orientation input:radio[value='#{@template.currentPage.orientation}']").prop('checked', true)
     @updatePageAttributes()
+    @renderPagesList()
 
   setPageType: (pagetype) ->
     Designer.history.push(this, 'updatePageType', @template.currentPage.pagetype, pagetype, @template.currentPageNumber)
@@ -81,6 +86,7 @@ window.Designer = {
     $("#pagetype input:radio").removeAttr('checked')
     $("#pagetype input:radio[value='#{@template.currentPage.pagetype}']").prop('checked', true)
     @updatePageAttributes()
+    @renderPagesList()
     @reloadTemplate()
 
   reloadTemplate: ->
@@ -188,6 +194,7 @@ window.Designer = {
     @clearSelection()
     @clearEditWidget()
     @template.setCurrentPage(number)
+    @setPageFormFields()
     @renderPagesList()
     false
 
@@ -262,11 +269,13 @@ window.Designer = {
 
   load: ->
     $('#name').text(@template.name)
-    $("#orientation input:radio[value='#{@template.currentPage.orientation}']").attr('checked', true)
-    $("#pagetype input:radio[value='#{@template.currentPage.pagetype}']").attr('checked', true)
-    $('#page').addClass("#{@template.currentPage.orientation} #{@template.currentPage.pagetype}")
+    @setPageFormFields()
     subject = if @isSubjectPage() then utils.fakeSubject() else null
     @template.render("layout")
+
+  setPageFormFields: ->
+    $("#orientation input:radio[value='#{@template.currentPage.orientation}']").prop('checked', true)
+    $("#pagetype input:radio[value='#{@template.currentPage.pagetype}']").prop('checked', true)
 
   discard: -> @exitDesigner()
   clear: -> @template.removeAllWidgets()
