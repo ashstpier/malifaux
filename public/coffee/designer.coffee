@@ -104,7 +104,7 @@ window.Designer = {
           @history.resetSaveChanges()
         false
     $('#exit a').click => @promptSave()
-    $('#viewport').on 'mousedown', '.page', (e) => @maybeClearSelection(e.currentTarget)
+    $('#viewport').on 'mousedown', '.page', (e) => @maybeClearSelection(e.target)
     $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())
     $('#pagetype input:radio').change (e) => @setPageType($(e.currentTarget).val())
     $('#name').blur => @updateName()

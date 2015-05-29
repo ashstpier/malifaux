@@ -41,7 +41,6 @@ class window.Template
   setSubject: (subject) ->
     for page in @pages
       for widget in page.widgets
-        console.log subject, widget
         widget.subject = subject
 
   render: (mode, data=null, subject=null) ->
