@@ -55,7 +55,9 @@ window.Designer = {
     for page, n in @template.pages
       $('#page-list').append """
         <div class="page-button #{if n is @template.currentPageNumber then 'page-button-active' else ''}" data-number="#{n}">
-          <div class="page-icon"></div>
+          <div class="page-icon">
+            #{if n is @template.currentPageNumber then '' else '<span class="page-delete-button" title="Remove page" data-number="#{n}">&times;</span>'}
+          </div>
           Page #{n+1}
         </div>
       """
@@ -112,6 +114,7 @@ window.Designer = {
     $('#name').click (e) => $(e.currentTarget).selectText()
     $('#undo').click => @history.undo()
     $('#redo').click => @history.redo()
+    $('#page-list').on 'click', '.page-delete-button', (e) => @deletePage(Number($(e.currentTarget).attr('data-number')))
     $('#page-list').on 'click', '.page-button', (e) => @switchPage(Number($(e.currentTarget).attr('data-number')))
     $('#add-page').click => @addPage()
     @history.bind 'history:change', => @updateHistoryButtonState()
@@ -177,12 +180,19 @@ window.Designer = {
   addPage: ->
     @template.addPage()
     @renderPagesList()
+    false
 
   switchPage: (number) ->
     @template.clear()
     @template.setCurrentPage(number)
     @template.render('layout')
     @renderPagesList()
+    false
+
+  deletePage: (number) ->
+    @template.removePage(number)
+    @renderPagesList()
+    false
 
   copy: ->
     return unless @selection

@@ -43,6 +43,9 @@ class window.Template
   addPage: ->
     @pages.push(PageTemplate.create())
 
+  removePage: (number) ->
+    @pages.splice(number, 1)
+
   setCurrentPage: (n) ->
     @currentPageNumber = n
     @currentPage = @pages[@currentPageNumber]

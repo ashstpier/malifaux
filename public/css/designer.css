@@ -232,10 +232,24 @@ body {
   font-weight: bold;
 }
 .page-icon {
+  position: relative;
   background-color: #fff;
   width: 100px;
   height: 140px;
   margin: 0 0 10px 0;
+}
+
+.page-delete-button {
+  color: #c33;
+  position: absolute;
+  top: 0;
+  right: 0;
+  line-height: 10px;
+  font-size: 20px;
+  padding: 5px;
+}
+.page-delete-button:hover {
+  color: #e22;
 }
 
 #add-page .page-icon {
