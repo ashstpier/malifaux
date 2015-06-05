@@ -24,7 +24,7 @@ class window.Widget
     @content = if config.type? then new window[config.type](this, config.content) else new TextContent()
     width = if config.width? then config.width else @content.defaultWidth()
     height = if config.height? then config.height else @content.defaultHeight()
-    zIndex = if config.zIndex? then config.zIndex else @content.defaultZIndex()
+    zIndex = if config.z_index? then config.z_index else @content.defaultZIndex()
     @origin = {
       x: if config.x? then config.x else ((960/2) - (width/2))
       y: if config.y? then config.y else 100
