@@ -189,1113 +189,6 @@
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  window.DatatableContent = (function(superClass) {
-    extend(DatatableContent, superClass);
-
-    function DatatableContent() {
-      this.updateMapping = bind(this.updateMapping, this);
-      this.filter_subjects = bind(this.filter_subjects, this);
-      return DatatableContent.__super__.constructor.apply(this, arguments);
-    }
-
-    DatatableContent.className = "DatatableContent";
-
-    DatatableContent.displayName = "Subjects Data Table";
-
-    DatatableContent.description = "Showing assessment points, one row per subject.";
-
-    DatatableContent.icon = "book_open";
-
-    DatatableContent.STYLE_DEFAULTS = {
-      subject_order: 'alphabetical',
-      heading_text_color: '#000000',
-      heading_background_color: '#FFFFFF',
-      cell_text_color: '#000000',
-      cell_background_color_odd: '#FFFFFF',
-      cell_background_color_even: '#FFFFFF',
-      font: 'Helvetica',
-      size: 'Medium'
-    };
-
-    DatatableContent.prototype.defaultWidth = function() {
-      return 640;
-    };
-
-    DatatableContent.prototype.defaultHeight = function() {
-      return 480;
-    };
-
-    DatatableContent.prototype.initWithConfig = function(config) {
-      this.columns = this.get(config.columns, []);
-      this.style = $.extend({}, DatatableContent.STYLE_DEFAULTS, this.get(config.style, {}));
-      this._exclusions = this.get(config.exclusions, []);
-      if (typeof this._exclusions === 'string') {
-        return this._exclusions = this.upgradeStringBasedExclusions(this._exclusions);
-      }
-    };
-
-    DatatableContent.prototype.render_layout = function(data) {
-      var col, columnTitles, columnValues, filteredSubjects, i, j, len, name, node, ref, subject;
-      name = utils.escape(data.name);
-      columnTitles = (function() {
-        var j, len, ref, results;
-        ref = this.columns;
-        results = [];
-        for (j = 0, len = ref.length; j < len; j++) {
-          col = ref[j];
-          results.push("<th style=\"" + (this.headingStyles()) + "\">" + col.title + "</th>");
-        }
-        return results;
-      }).call(this);
-      node = $("<table class=\"datatable\" style=\"" + (this.styleString({
-        'font-family': utils.fontMap[this.style.font],
-        'font-size': utils.sizeMap[this.style.size]
-      })) + "\">\n  <thead>\n    <tr>\n      <th style=\"" + (this.headingStyles()) + "\"></th>\n      " + (columnTitles.join("\n")) + "\n    </tr>\n  </thead>\n  <tbody>\n  </tbody>\n</table>");
-      filteredSubjects = this.filter_subjects(data.subjects);
-      ref = this.orderdSubjects(filteredSubjects);
-      for (i = j = 0, len = ref.length; j < len; i = ++j) {
-        subject = ref[i];
-        columnValues = (function() {
-          var l, len1, ref1, results;
-          ref1 = this.columns;
-          results = [];
-          for (l = 0, len1 = ref1.length; l < len1; l++) {
-            col = ref1[l];
-            results.push("<td style=\"" + (this.cellStyles(i + 1, this.cellValue(subject, col))) + "\">" + (this.cellContent(subject, col)) + "</td>");
-          }
-          return results;
-        }).call(this);
-        node.find("tbody").append("<tr>\n  <th style=\"" + (this.headingStyles()) + "\">\n    <strong class=\"subject\">" + subject.subjectName + "</strong>\n    <em class=\"teacher\">" + subject.teacherNames + "</em>\n  </th>\n  " + (columnValues.join("\n")) + "\n</tr>");
-      }
-      return node;
-    };
-
-    DatatableContent.prototype.filter_subjects = function(subjects) {
-      if (this.widget.subject) {
-        return [subjects[this.widget.subject]];
-      }
-      return _.filter(subjects, (function(_this) {
-        return function(subject, code) {
-          if (!_this.exclusions()) {
-            return true;
-          }
-          return !_.contains(_this.exclusions(), code);
-        };
-      })(this));
-    };
-
-    DatatableContent.prototype.buildEditRow = function(col) {
-      var options;
-      if (col == null) {
-        col = {
-          title: '',
-          value: '',
-          compare_to: '',
-          mappings: {}
-        };
-      }
-      if (!col.mappings) {
-        col.mappings = {};
-      }
-      options = (function(_this) {
-        return function(val) {
-          var j, len, point, ref, results;
-          ref = _this.assessmentPoints();
-          results = [];
-          for (j = 0, len = ref.length; j < len; j++) {
-            point = ref[j];
-            results.push("<option value=\"" + point.code + "\" " + (point.code === val ? 'selected="selected"' : '') + ">" + point.name + " | " + point.longName + "</option>");
-          }
-          return results;
-        };
-      })(this);
-      return "<tr class=\"column-setting\" data-mappings=\"" + (JSON.stringify(col.mappings).replace(/\"/g, '&quot;')) + "\">\n  <td>\n    <input class=\"col-title\" name=\"col-title\" type=\"text\" value=\"" + col.title + "\" placeholder=\"Untitled...\" />\n    <span class=\"col-comp-label\">compared to:</ span>\n  </td>\n  <td>\n    <select class=\"col-value\" name=\"col-value\">\n      <option value=\"\" " + (col.value === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.value).join("\n")) + "\n    </select>\n    <select class=\"col-compare-to\" name=\"col-compare-to\">\n      <option value=\"\" " + (col.compare_to === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.compare_to).join("\n")) + "\n    </select>\n    <a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(col.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a>\n  </td>\n</tr>";
-    };
-
-    DatatableContent.prototype.renderAppearanceOptions = function() {
-      return [this.option('font', 'font', "Font"), this.option('size', 'size', "Text Size"), this.option('color', 'heading_text_color', "Heading Text"), this.option('color', 'heading_background_color', "Heading Bg"), this.option('color', 'cell_text_color', "Cell Text"), this.option('color', 'cell_background_color_odd', "Cell Bg Odd"), this.option('color', 'cell_background_color_even', "Cell Bg Even")];
-    };
-
-    DatatableContent.prototype.subject_order = DatatableContent.property('style', 'subject_order');
-
-    DatatableContent.prototype.font = DatatableContent.property('style', 'font');
-
-    DatatableContent.prototype.size = DatatableContent.property('style', 'size');
-
-    DatatableContent.prototype.heading_text_color = DatatableContent.property('style', 'heading_text_color');
-
-    DatatableContent.prototype.heading_background_color = DatatableContent.property('style', 'heading_background_color');
-
-    DatatableContent.prototype.cell_text_color = DatatableContent.property('style', 'cell_text_color');
-
-    DatatableContent.prototype.cell_background_color_odd = DatatableContent.property('style', 'cell_background_color_odd');
-
-    DatatableContent.prototype.cell_background_color_even = DatatableContent.property('style', 'cell_background_color_even');
-
-    DatatableContent.prototype.exclusions = DatatableContent.property('_exclusions');
-
-    DatatableContent.prototype.renderConfigOptions = function() {
-      return [
-        this.option('select', 'subject_order', "Subject Order", {
-          options: {
-            alphabetical: "Alphabetical",
-            core_first: 'Core First'
-          }
-        }), this.columSettings(), this.option('select', 'exclusions', 'Subject Blacklist', {
-          options: API.subjects(),
-          multiple: true,
-          hint: "A list of subjects names to be excluded from reports. Hold the shift or command keys for multiple selection."
-        })
-      ];
-    };
-
-    DatatableContent.prototype.columSettings = function() {
-      var col, columnChanged, j, len, node, ref, self, table;
-      node = $("<div class=\"datatable-cols prop-table-config\">\n  <h4>Columns</h4>\n  <div class=\"prop-table-wrap\">\n    <table>\n      <thead>\n        <tr>\n          <th>Title</th>\n          <th>Value</th>\n        </tr>\n      </thead>\n      <tbody class=\"edit-rows\">\n      </tbody>\n    </table>\n  </div>\n</div>");
-      table = node.find('.edit-rows');
-      ref = this.columns;
-      for (j = 0, len = ref.length; j < len; j++) {
-        col = ref[j];
-        table.append(this.buildEditRow(col));
-      }
-      table.append(this.buildEditRow());
-      columnChanged = (function(_this) {
-        return function() {
-          _this.maybeAddEditRow(table);
-          _this.saveColumns(table);
-          return _this.redraw();
-        };
-      })(this);
-      table.on("input", ".col-title", columnChanged);
-      table.on("change", ".col-value, .col-compare-to", columnChanged);
-      self = this;
-      table.on("click", ".mapping", function() {
-        var element, mappingIndex, mappings;
-        element = this;
-        mappingIndex = $(this).parents('.column-setting').index();
-        mappings = $(element).parents(".edit-rows").find(".column-setting:eq(" + mappingIndex + ")").data('mappings');
-        return new MappingModal(mappings, (function(_this) {
-          return function(newMappings) {
-            return self.updateMapping(mappingIndex, newMappings);
-          };
-        })(this));
-      });
-      return node;
-    };
-
-    DatatableContent.prototype.updateMapping = function(index, newMappings) {
-      var editrows;
-      editrows = $(".edit-rows");
-      editrows.find(".column-setting:eq(" + index + ")").data('mappings', newMappings);
-      this.saveColumns(editrows);
-      return this.redraw();
-    };
-
-    DatatableContent.prototype.headingStyles = function() {
-      return this.styleString({
-        'background-color': this.style.heading_background_color,
-        color: this.style.heading_text_color
-      });
-    };
-
-    DatatableContent.prototype.cellStyles = function(row, content) {
-      var bg_color, text_align;
-      bg_color = row % 2 === 0 ? this.style.cell_background_color_even : this.style.cell_background_color_odd;
-      text_align = content.split(' ').length > 1 ? 'left' : 'center';
-      return this.styleString({
-        'background-color': bg_color,
-        color: this.style.cell_text_color,
-        'text-align': text_align
-      });
-    };
-
-    DatatableContent.prototype.cellValue = function(subject, col) {
-      var originalValue, ref, ref1;
-      originalValue = ((ref = subject.results) != null ? ref[col.value] : void 0) || '';
-      return ((ref1 = col.mappings) != null ? ref1[originalValue] : void 0) || originalValue || this.placeholderWithLabel(col.value);
-    };
-
-    DatatableContent.prototype.cellContent = function(subject, col) {
-      var compareTo, numVal, ref, ref1, tlClass, val;
-      val = this.cellValue(subject, col);
-      if (!(col.compare_to && col.compare_to.length > 0)) {
-        return val;
-      }
-      numVal = ((ref = subject.internalPoints) != null ? ref[col.value] : void 0) || 0;
-      compareTo = ((ref1 = subject.internalPoints) != null ? ref1[col.compare_to] : void 0) || 0;
-      if (numVal > compareTo) {
-        tlClass = 'dark-green';
-      }
-      if (numVal === compareTo) {
-        tlClass = 'light-green';
-      }
-      if (numVal === compareTo - 1) {
-        tlClass = 'amber';
-      }
-      if (numVal < compareTo - 1) {
-        tlClass = 'red';
-      }
-      return "<span class=\"traffic-light " + tlClass + "\"></span>";
-    };
-
-    DatatableContent.prototype.maybeAddEditRow = function(el) {
-      var lastRow, rows;
-      rows = el.find('.column-setting');
-      lastRow = $(rows[rows.length - 1]);
-      if (lastRow.find('.col-value').val() !== '') {
-        return lastRow.after(this.buildEditRow());
-      }
-    };
-
-    DatatableContent.prototype.saveColumns = function(el) {
-      var $col, col, columns, oldColumns;
-      oldColumns = this.columns;
-      columns = (function() {
-        var j, len, ref, results;
-        ref = el.find('.column-setting');
-        results = [];
-        for (j = 0, len = ref.length; j < len; j++) {
-          col = ref[j];
-          $col = $(col);
-          results.push({
-            title: $col.find('.col-title').val(),
-            value: $col.find('.col-value').val(),
-            compare_to: $col.find('.col-compare-to').val(),
-            mappings: $col.data('mappings')
-          });
-        }
-        return results;
-      })();
-      this.columns = (function() {
-        var j, len, results;
-        results = [];
-        for (j = 0, len = columns.length; j < len; j++) {
-          col = columns[j];
-          if ((col.value != null) && col.value !== '') {
-            results.push(col);
-          }
-        }
-        return results;
-      })();
-      return Designer.history.push(this, 'setColumnsFromUndo', oldColumns, this.columns);
-    };
-
-    DatatableContent.prototype.setColumnsFromUndo = function(cols) {
-      this.columns = cols;
-      this.redraw();
-      return Designer.select(this.widget);
-    };
-
-    DatatableContent.prototype.orderdSubjects = function(subjects) {
-      var alphabetical, k, rank, v;
-      subjects = (function() {
-        var results;
-        results = [];
-        for (k in subjects) {
-          v = subjects[k];
-          results.push(v);
-        }
-        return results;
-      })();
-      alphabetical = subjects.sort((function(_this) {
-        return function(a, b) {
-          if (a.subjectName >= b.subjectName) {
-            return 1;
-          } else {
-            return -1;
-          }
-        };
-      })(this));
-      if (this.style.subject_order === 'alphabetical') {
-        return alphabetical;
-      }
-      rank = {
-        'english': 1,
-        'maths': 2,
-        'mathematics': 2,
-        'science': 3
-      };
-      return _.sortBy(alphabetical, function(subject) {
-        var name;
-        name = subject.subjectName.toLowerCase();
-        if (rank[name]) {
-          return rank[name];
-        } else {
-          return name.charCodeAt(0);
-        }
-      });
-    };
-
-    DatatableContent.prototype.serialize = function() {
-      return {
-        columns: this.columns,
-        style: this.style,
-        exclusions: this._exclusions
-      };
-    };
-
-    DatatableContent.prototype.upgradeStringBasedExclusions = function(exclusionsString) {
-      var exclusions, k, newExclusions, subjects, v;
-      newExclusions = exclusionsString.split(',');
-      subjects = $.extend({}, API.subjects());
-      for (k in subjects) {
-        v = subjects[k];
-        subjects[k] = v.toLowerCase();
-      }
-      subjects = _.invert(subjects);
-      exclusions = _.map(newExclusions, function(e) {
-        return subjects[$.trim(e.toLowerCase())];
-      });
-      return _.compact(exclusions);
-    };
-
-    return DatatableContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
-  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.FieldContent = (function(superClass) {
-    extend(FieldContent, superClass);
-
-    function FieldContent() {
-      this.updateMapping = bind(this.updateMapping, this);
-      this.changeMapping = bind(this.changeMapping, this);
-      return FieldContent.__super__.constructor.apply(this, arguments);
-    }
-
-    FieldContent.className = "FieldContent";
-
-    FieldContent.displayName = "Dynamic Text";
-
-    FieldContent.description = "Pull a text field from a student record and style it for display.";
-
-    FieldContent.icon = "nameplate";
-
-    FieldContent.prototype.defaultWidth = function() {
-      return 200;
-    };
-
-    FieldContent.prototype.defaultHeight = function() {
-      return 50;
-    };
-
-    FieldContent.STYLE_DEFAULTS = {
-      color: '#000000',
-      font: 'Helvetica',
-      size: 'Medium'
-    };
-
-    FieldContent.prototype.initWithConfig = function(config) {
-      this._field = this.get(config.field, Object.keys(this.metrics())[0]);
-      this.style = $.extend({}, FieldContent.STYLE_DEFAULTS, this.get(config.style, {}));
-      return this.mappings = this.get(config.mappings, {});
-    };
-
-    FieldContent.prototype.render_layout = function(data) {
-      return $("<div class=\"field-widget\" style=\"" + (this.textStyles()) + "\">" + (this.fieldFrom(data)) + "</div>");
-    };
-
-    FieldContent.prototype.renderAppearanceOptions = function() {
-      return this.option('font', 'font', "Font") + this.option('size', 'size', "Text Size") + this.option('color', 'color', "Text Color");
-    };
-
-    FieldContent.prototype.renderConfigOptions = function() {
-      return [
-        this.option('select', 'field', "Field", {
-          options: this.metrics(),
-          hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output."
-        }), this.mappingSettings()
-      ];
-    };
-
-    FieldContent.prototype.mappingSettings = function() {
-      var node, self;
-      node = $("<div class=\"mapping-option\"><a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(this.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a></div>");
-      self = this;
-      node.on("click", ".mapping", (function(_this) {
-        return function() {
-          return new MappingModal(_this.mappings, _this.changeMapping);
-        };
-      })(this));
-      return node;
-    };
-
-    FieldContent.prototype.changeMapping = function(newMappings) {
-      var oldMappings;
-      oldMappings = this.mappings;
-      this.updateMapping(newMappings);
-      return Designer.history.push(this, 'updateMapping', oldMappings, newMappings);
-    };
-
-    FieldContent.prototype.updateMapping = function(mappings) {
-      this.mappings = mappings;
-      return this.redraw();
-    };
-
-    FieldContent.prototype.textStyles = function() {
-      return this.styleString({
-        'color': this.style.color,
-        'font-family': utils.fontMap[this.style.font],
-        'font-size': utils.sizeMap[this.style.size]
-      });
-    };
-
-    FieldContent.prototype.fieldFrom = function(data) {
-      var i, key, len, ref;
-      ref = this._field.split('.');
-      for (i = 0, len = ref.length; i < len; i++) {
-        key = ref[i];
-        data = data != null ? data[key] : void 0;
-      }
-      return this.mappings[data] || data || this.placeholderWithLabel(key);
-    };
-
-    FieldContent.prototype.font = FieldContent.property('style', 'font');
-
-    FieldContent.prototype.size = FieldContent.property('style', 'size');
-
-    FieldContent.prototype.color = FieldContent.property('style', 'color');
-
-    FieldContent.prototype.field = FieldContent.property('_field');
-
-    FieldContent.prototype.serialize = function() {
-      return {
-        field: this._field,
-        style: this.style,
-        mappings: this.mappings
-      };
-    };
-
-    return FieldContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.ImageGalleryContent = (function(superClass) {
-    extend(ImageGalleryContent, superClass);
-
-    function ImageGalleryContent() {
-      return ImageGalleryContent.__super__.constructor.apply(this, arguments);
-    }
-
-    ImageGalleryContent.className = "ImageGalleryContent";
-
-    ImageGalleryContent.displayName = "Dynamic Images";
-
-    ImageGalleryContent.description = "A dynamic photograph, logo or graphic";
-
-    ImageGalleryContent.icon = "picture";
-
-    ImageGalleryContent.prototype.editable = function() {
-      return this.widget.currentMode === 'layout';
-    };
-
-    ImageGalleryContent.prototype.initWithConfig = function(config) {
-      this._field = this.get(config.field, Object.keys(this.images())[0]);
-      return this._stretchImage = this.get(config.stretchImage, true);
-    };
-
-    ImageGalleryContent.prototype.bindEvents = function(el) {
-      return this.widget.bind('widget:resize', (function(_this) {
-        return function() {
-          return _this.imageCSS();
-        };
-      })(this));
-    };
-
-    ImageGalleryContent.prototype.imageCSS = function() {
-      $('.image-gallery-widget img').removeClass(this.cssImageClass);
-      this.calcImageCSS();
-      return $('.image-gallery-widget img').addClass(this.cssImageClass);
-    };
-
-    ImageGalleryContent.prototype.calcImageCSS = function() {
-      if (this.width >= this.height && (this.stretchImage() || this.width > this.widget.width())) {
-        return this.cssImageClass = 'wider';
-      } else if (this.height > this.width && (this.stretchImage() || this.height > this.widget.height())) {
-        return this.cssImageClass = 'taller';
-      } else {
-        return this.cssImageClass = '';
-      }
-    };
-
-    ImageGalleryContent.prototype.render_layout = function(data) {
-      var img;
-      img = new Image();
-      img.src = "data:image/gif;base64," + (this.fieldFrom(data));
-      img.width / img.height;
-      this.width = img.width;
-      this.height = img.height;
-      this.calcImageCSS();
-      if (this.editable()) {
-        setTimeout(((function(_this) {
-          return function() {
-            return _this.setAspectRatio(1);
-          };
-        })(this)), 0);
-      }
-      return $("<div class=\"image-gallery-widget\">\n  <img class=\"content " + this.cssImageClass + "\" src=\"" + img.src + "\">\n</div>");
-    };
-
-    ImageGalleryContent.prototype.renderConfigOptions = function() {
-      return [
-        this.option('checkbox', 'stretchImage', "Stretch Image"), this.option('select', 'field', "Field", {
-          options: this.images(),
-          hint: "This is the gallery image you would like to be merged, the image shown is only a placeholder of the final output."
-        })
-      ];
-    };
-
-    ImageGalleryContent.prototype.stretchImage = ImageGalleryContent.property('_stretchImage');
-
-    ImageGalleryContent.prototype.fieldFrom = function(data) {
-      var i, key, len, ref, ref1, results;
-      ref = this._field.split('.');
-      results = [];
-      for (i = 0, len = ref.length; i < len; i++) {
-        key = ref[i];
-        results.push(data = (ref1 = data['images']) != null ? ref1[key] : void 0);
-      }
-      return results;
-    };
-
-    ImageGalleryContent.prototype.field = ImageGalleryContent.property('_field');
-
-    ImageGalleryContent.prototype.serialize = function() {
-      return {
-        field: this._field,
-        stretchImage: this.stretchImage()
-      };
-    };
-
-    return ImageGalleryContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.NameContent = (function(superClass) {
-    extend(NameContent, superClass);
-
-    function NameContent() {
-      return NameContent.__super__.constructor.apply(this, arguments);
-    }
-
-    NameContent.className = "NameContent";
-
-    NameContent.displayName = "Student Name";
-
-    NameContent.description = "Name of the student in the format \"last, first\"";
-
-    NameContent.icon = "girl";
-
-    NameContent.active = false;
-
-    return NameContent;
-
-  })(FieldContent);
-
-}).call(this);
-
-(function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.ShapeContent = (function(superClass) {
-    extend(ShapeContent, superClass);
-
-    function ShapeContent() {
-      return ShapeContent.__super__.constructor.apply(this, arguments);
-    }
-
-    ShapeContent.className = "ShapeContent";
-
-    ShapeContent.displayName = "Shape";
-
-    ShapeContent.description = "A simple shape to be used for drawing.";
-
-    ShapeContent.icon = "vector_path_square";
-
-    ShapeContent.prototype.defaultWidth = function() {
-      return 200;
-    };
-
-    ShapeContent.prototype.defaultHeight = function() {
-      return 200;
-    };
-
-    ShapeContent.border_widths = {
-      "0": "none",
-      "1": "1",
-      "3": "3",
-      "5": "5",
-      "8": "8",
-      "10": "10",
-      "15": "15"
-    };
-
-    ShapeContent.STYLE_DEFAULTS = {
-      fill_color: '#CCCCCC',
-      stroke_color: '#888888',
-      stroke_width: '0',
-      shape: 'rectangle',
-      border_radius: '0'
-    };
-
-    ShapeContent.prototype.fill_color = ShapeContent.property('style', 'fill_color');
-
-    ShapeContent.prototype.stroke_color = ShapeContent.property('style', 'stroke_color');
-
-    ShapeContent.prototype.stroke_width = ShapeContent.property('style', 'stroke_width');
-
-    ShapeContent.prototype.shape = ShapeContent.property('style', 'shape');
-
-    ShapeContent.prototype.border_radius = ShapeContent.property('style', 'border_radius');
-
-    ShapeContent.prototype.maintainAspectRatio = ShapeContent.property('_maintainAspectRatio');
-
-    ShapeContent.prototype.initWithConfig = function(config) {
-      return this.style = $.extend({}, ShapeContent.STYLE_DEFAULTS, this.get(config.style, {}));
-    };
-
-    ShapeContent.prototype.renderAppearanceOptions = function() {
-      return [
-        this.option('select', 'shape', "Shape", {
-          options: {
-            rectangle: "Rectangle",
-            ellipse: "Ellipse"
-          }
-        }), this.option('color', 'fill_color', "Fill colour"), this.option('color', 'stroke_color', "Border colour"), this.option('select', 'stroke_width', "Border width", {
-          options: ShapeContent.border_widths
-        }), this.option('select', 'border_radius', "Corner radius", {
-          options: ShapeContent.border_widths
-        })
-      ];
-    };
-
-    ShapeContent.prototype.renderConfigOptions = function() {
-      return [this.option('checkbox', 'maintainAspectRatio', "Maintain Aspect Ratio")];
-    };
-
-    ShapeContent.prototype.render_layout = function() {
-      if (this.maintainAspectRatio()) {
-        this.setAspectRatio(1);
-      } else {
-        setTimeout(((function(_this) {
-          return function() {
-            return _this.setAspectRatio(0);
-          };
-        })(this)), 0);
-      }
-      if (this.style.shape === 'rectangle') {
-        return $("<svg width='100%' height='100%'> <rect x='" + (this.style.stroke_width / 1.6) + "%' y='" + (this.style.stroke_width / 1.6) + "%' width='" + (100 - this.style.stroke_width / 0.8) + "%' height='" + (100 - this.style.stroke_width / 0.8) + "%' rx='" + this.style.border_radius + "' ry='" + this.style.border_radius + "' style='fill:" + this.style.fill_color + ";stroke-width:" + this.style.stroke_width + ";stroke:" + this.style.stroke_color + "' /> </svg>");
-      } else {
-        return $("<svg height='100%' width='100%'> <ellipse cx='50%' cy='50%' rx='" + (45 - this.style.stroke_width / 1.8) + "%' ry='" + (45 - this.style.stroke_width / 1.8) + "%' stroke='" + this.style.stroke_color + "' stroke-width='" + this.style.stroke_width + "' fill='" + this.style.fill_color + "' /> </svg>");
-      }
-    };
-
-    ShapeContent.prototype.serialize = function() {
-      return {
-        style: this.style,
-        maintainAspectRatio: this.maintainAspectRatio()
-      };
-    };
-
-    return ShapeContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
-  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.SubjectFieldContent = (function(superClass) {
-    extend(SubjectFieldContent, superClass);
-
-    function SubjectFieldContent() {
-      this.updateMapping = bind(this.updateMapping, this);
-      this.changeMapping = bind(this.changeMapping, this);
-      return SubjectFieldContent.__super__.constructor.apply(this, arguments);
-    }
-
-    SubjectFieldContent.className = "SubjectFieldContent";
-
-    SubjectFieldContent.displayName = "Subject Dynamic Text";
-
-    SubjectFieldContent.description = "Pull a text field from a specific subject and style it for display.";
-
-    SubjectFieldContent.icon = "book";
-
-    SubjectFieldContent.prototype.defaultWidth = function() {
-      return 280;
-    };
-
-    SubjectFieldContent.prototype.defaultHeight = function() {
-      return 80;
-    };
-
-    SubjectFieldContent.prototype.initWithConfig = function(config) {
-      SubjectFieldContent.__super__.initWithConfig.call(this, config);
-      this._subject = this.get(config.subject, 'PH');
-      this._field = this.get(config.field, 'subjectName');
-      return this.mappings = this.get(config.mappings, {});
-    };
-
-    SubjectFieldContent.prototype.render_layout = function(data) {
-      return $("<div class=\"subject-field-widget\" style=\"" + (this.textStyles()) + "\">" + (this.fieldFrom(data)) + "</div>");
-    };
-
-    SubjectFieldContent.prototype.renderConfigOptions = function() {
-      var fields, i, len, options, point, ref;
-      fields = {
-        "Subject": [['subjectName', 'Subject Name'], ['teacherNames', 'Teacher Names'], ['teachingGroupCode', 'Teaching Group Code']],
-        "Results": []
-      };
-      ref = this.assessmentPoints();
-      for (i = 0, len = ref.length; i < len; i++) {
-        point = ref[i];
-        fields.Results.push([point.code, point.longName]);
-      }
-      options = [
-        this.option('select', 'field', "Field", {
-          options: fields,
-          hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output."
-        }), this.mappingSettings()
-      ];
-      if (this.widget.subject === null) {
-        options.unshift(this.option('select', 'subject', "Subject", {
-          options: API.subjects()
-        }));
-      }
-      return options;
-    };
-
-    SubjectFieldContent.prototype.mappingSettings = function() {
-      var node, self;
-      node = $("<div class=\"mapping-option\"><a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(this.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a></div>");
-      self = this;
-      node.on("click", ".mapping", (function(_this) {
-        return function() {
-          return new MappingModal(_this.mappings, _this.changeMapping);
-        };
-      })(this));
-      return node;
-    };
-
-    SubjectFieldContent.prototype.changeMapping = function(newMappings) {
-      var oldMappings;
-      oldMappings = this.mappings;
-      this.updateMapping(newMappings);
-      return Designer.history.push(this, 'updateMapping', oldMappings, newMappings);
-    };
-
-    SubjectFieldContent.prototype.updateMapping = function(mappings) {
-      this.mappings = mappings;
-      return this.redraw();
-    };
-
-    SubjectFieldContent.prototype.fieldFrom = function(data) {
-      var defaultValue, ref, subject, subjectScope, value;
-      subject = this.widget.subject ? this.widget.subject : this.subject();
-      defaultValue = this.placeholderWithLabel(this.field());
-      subjectScope = data.subjects[subject];
-      value = (subjectScope != null ? (ref = subjectScope.results) != null ? ref[this.field()] : void 0 : void 0) || (subjectScope != null ? subjectScope[this.field()] : void 0) || defaultValue;
-      return this.mappings[value] || value;
-    };
-
-    SubjectFieldContent.prototype.subject = SubjectFieldContent.property('_subject');
-
-    SubjectFieldContent.prototype.serialize = function() {
-      return {
-        field: this.field(),
-        subject: this.subject(),
-        style: this.style,
-        mappings: this.mappings
-      };
-    };
-
-    return SubjectFieldContent;
-
-  })(FieldContent);
-
-}).call(this);
-
-(function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.TextContent = (function(superClass) {
-    extend(TextContent, superClass);
-
-    function TextContent() {
-      return TextContent.__super__.constructor.apply(this, arguments);
-    }
-
-    TextContent.className = "TextContent";
-
-    TextContent.displayName = "Free Text";
-
-    TextContent.description = "A block of static text with formatting options.";
-
-    TextContent.icon = "font";
-
-    TextContent.prototype.defaultWidth = function() {
-      return 360;
-    };
-
-    TextContent.prototype.defaultHeight = function() {
-      return 240;
-    };
-
-    TextContent.prototype.editable = function() {
-      return this.widget.currentMode === 'layout';
-    };
-
-    TextContent.EDITOR_CONFIG = {
-      imageUpload: false,
-      inlineMode: true,
-      mediaManager: false,
-      placeholder: "Type here...",
-      plainPaste: true,
-      buttons: ["bold", "italic", "underline", "fontSize", "color", "sep", "align", "insertOrderedList", "insertUnorderedList", "outdent", "indent"]
-    };
-
-    TextContent.DEFAULT_CONTENT = "<p>Type text here&hellip;</p>";
-
-    TextContent.STYLE_DEFAULTS = {
-      font: 'Helvetica'
-    };
-
-    TextContent.prototype.initWithConfig = function(config) {
-      this.html = this.get(config.html, TextContent.DEFAULT_CONTENT);
-      return this.style = $.extend({}, TextContent.STYLE_DEFAULTS, this.get(config.style, {}));
-    };
-
-    TextContent.prototype.render_layout = function(data) {
-      var styles;
-      styles = this.styleString({
-        'font-family': utils.fontMap[this.style.font]
-      });
-      return $("<div class=\"text-widget\" style=\"" + styles + "\">" + this.html + "</div>");
-    };
-
-    TextContent.prototype.render_edit = function(data) {
-      var node;
-      node = this.render_layout(data);
-      this.editor = node.editable(TextContent.EDITOR_CONFIG);
-      return node;
-    };
-
-    TextContent.prototype.renderAppearanceOptions = function() {
-      return this.option('font', 'font', "Font");
-    };
-
-    TextContent.prototype.bindEvents = function(el) {
-      return el.on('editable.contentChanged', (function(_this) {
-        return function() {
-          return _this.html = _this.el.editable("getHTML");
-        };
-      })(this));
-    };
-
-    TextContent.prototype.font = TextContent.property('style', 'font');
-
-    TextContent.prototype.serialize = function() {
-      return {
-        html: this.html,
-        style: this.style
-      };
-    };
-
-    return TextContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window._EXAMPLEContent = (function(superClass) {
-    extend(_EXAMPLEContent, superClass);
-
-    function _EXAMPLEContent() {
-      return _EXAMPLEContent.__super__.constructor.apply(this, arguments);
-    }
-
-    return _EXAMPLEContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.ImageContent = (function(superClass) {
-    extend(ImageContent, superClass);
-
-    function ImageContent() {
-      return ImageContent.__super__.constructor.apply(this, arguments);
-    }
-
-    ImageContent.className = "ImageContent";
-
-    ImageContent.displayName = "Image";
-
-    ImageContent.description = "A static photograph, logo or graphic";
-
-    ImageContent.icon = "picture";
-
-    ImageContent.prototype.defaultWidth = function() {
-      return 240;
-    };
-
-    ImageContent.prototype.defaultHeight = function() {
-      return 240;
-    };
-
-    ImageContent.DEFAULT_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-
-    ImageContent.prototype.initWithConfig = function(config) {
-      this.setImage(this.get(config.src, ImageContent.DEFAULT_IMAGE), false);
-      return this._maintainAspectRatio = this.get(config.maintainAspectRatio, true);
-    };
-
-    ImageContent.prototype.bindEvents = function(el) {
-      el.find(".picker").change((function(_this) {
-        return function(e) {
-          return _this.setImageFromFile(e.currentTarget.files[0]);
-        };
-      })(this));
-      return el.find(".content").dblclick((function(_this) {
-        return function() {
-          return _this.openFilePicker();
-        };
-      })(this));
-    };
-
-    ImageContent.prototype.openFilePicker = function() {
-      var picker;
-      picker = this.el.find(".picker");
-      picker.click();
-      return false;
-    };
-
-    ImageContent.prototype.setImageFromFile = function(file) {
-      var reader;
-      reader = new FileReader();
-      reader.onload = (function(_this) {
-        return function(e) {
-          return _this.updateImage(e.target.result);
-        };
-      })(this);
-      return reader.readAsDataURL(file);
-    };
-
-    ImageContent.prototype.updateImage = function(data) {
-      var oldSrc;
-      oldSrc = this.src;
-      this.setImage(data);
-      return Designer.history.push(this, 'setImage', oldSrc, this.src);
-    };
-
-    ImageContent.prototype.setImage = function(data, doRedraw) {
-      if (doRedraw == null) {
-        doRedraw = true;
-      }
-      this.src = data;
-      this.maybeWarnAboutGif();
-      if (doRedraw) {
-        return this.redraw();
-      }
-    };
-
-    ImageContent.prototype.aspectRatio = function() {
-      var img;
-      if (this.maintainAspectRatio()) {
-        img = new Image();
-        img.src = this.src;
-        return img.width / img.height;
-      } else {
-        return false;
-      }
-    };
-
-    ImageContent.prototype.render_layout = function(data) {
-      setTimeout(((function(_this) {
-        return function() {
-          return _this.setAspectRatio(_this.aspectRatio());
-        };
-      })(this)), 0);
-      return $("<div class=\"image-widget " + (this.src === ImageContent.DEFAULT_IMAGE ? 'image-blank' : void 0) + "\">\n  <img class=\"content\" src=\"" + this.src + "\">\n  <input class=\"picker\" type=\"file\" accept=\"image/png, image/jpeg\">\n</div>");
-    };
-
-    ImageContent.prototype.render_edit = function(data) {
-      var node;
-      node = this.render_layout(data);
-      this.bindEvents(node);
-      return node;
-    };
-
-    ImageContent.prototype.render_display = function(data) {
-      return $("<div class=\"image-widget\">\n  <img class=\"content\" src=\"" + this.src + "\">\n</div>");
-    };
-
-    ImageContent.prototype.renderConfigOptions = function() {
-      return [this.option('checkbox', 'maintainAspectRatio', "Maintain Aspect Ratio")];
-    };
-
-    ImageContent.prototype.maintainAspectRatio = ImageContent.property('_maintainAspectRatio');
-
-    ImageContent.prototype.maybeWarnAboutGif = function() {
-      var isGif;
-      isGif = this.src && this.src !== ImageContent.DEFAULT_IMAGE && this.src.indexOf("image/gif;") > -1;
-      if (isGif && this.widget.currentMode === 'layout') {
-        return delay(1000, function() {
-          return alert("Your template contains one or more GIF images.\n\nGIF files are not currently supported and may not display correctly when printed.\n\nPlease replace all GIF images with alternatives in either JPG or PNG format.");
-        });
-      }
-    };
-
-    ImageContent.prototype.serialize = function() {
-      return {
-        src: this.src,
-        maintainAspectRatio: this.maintainAspectRatio()
-      };
-    };
-
-    return ImageContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
-  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
   window.DynamicTableContent = (function(superClass) {
     extend(DynamicTableContent, superClass);
 
@@ -1815,6 +708,1113 @@
     };
 
     return DynamicTableContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.FieldContent = (function(superClass) {
+    extend(FieldContent, superClass);
+
+    function FieldContent() {
+      this.updateMapping = bind(this.updateMapping, this);
+      this.changeMapping = bind(this.changeMapping, this);
+      return FieldContent.__super__.constructor.apply(this, arguments);
+    }
+
+    FieldContent.className = "FieldContent";
+
+    FieldContent.displayName = "Dynamic Text";
+
+    FieldContent.description = "Pull a text field from a student record and style it for display.";
+
+    FieldContent.icon = "nameplate";
+
+    FieldContent.prototype.defaultWidth = function() {
+      return 200;
+    };
+
+    FieldContent.prototype.defaultHeight = function() {
+      return 50;
+    };
+
+    FieldContent.STYLE_DEFAULTS = {
+      color: '#000000',
+      font: 'Helvetica',
+      size: 'Medium'
+    };
+
+    FieldContent.prototype.initWithConfig = function(config) {
+      this._field = this.get(config.field, Object.keys(this.metrics())[0]);
+      this.style = $.extend({}, FieldContent.STYLE_DEFAULTS, this.get(config.style, {}));
+      return this.mappings = this.get(config.mappings, {});
+    };
+
+    FieldContent.prototype.render_layout = function(data) {
+      return $("<div class=\"field-widget\" style=\"" + (this.textStyles()) + "\">" + (this.fieldFrom(data)) + "</div>");
+    };
+
+    FieldContent.prototype.renderAppearanceOptions = function() {
+      return this.option('font', 'font', "Font") + this.option('size', 'size', "Text Size") + this.option('color', 'color', "Text Color");
+    };
+
+    FieldContent.prototype.renderConfigOptions = function() {
+      return [
+        this.option('select', 'field', "Field", {
+          options: this.metrics(),
+          hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output."
+        }), this.mappingSettings()
+      ];
+    };
+
+    FieldContent.prototype.mappingSettings = function() {
+      var node, self;
+      node = $("<div class=\"mapping-option\"><a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(this.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a></div>");
+      self = this;
+      node.on("click", ".mapping", (function(_this) {
+        return function() {
+          return new MappingModal(_this.mappings, _this.changeMapping);
+        };
+      })(this));
+      return node;
+    };
+
+    FieldContent.prototype.changeMapping = function(newMappings) {
+      var oldMappings;
+      oldMappings = this.mappings;
+      this.updateMapping(newMappings);
+      return Designer.history.push(this, 'updateMapping', oldMappings, newMappings);
+    };
+
+    FieldContent.prototype.updateMapping = function(mappings) {
+      this.mappings = mappings;
+      return this.redraw();
+    };
+
+    FieldContent.prototype.textStyles = function() {
+      return this.styleString({
+        'color': this.style.color,
+        'font-family': utils.fontMap[this.style.font],
+        'font-size': utils.sizeMap[this.style.size]
+      });
+    };
+
+    FieldContent.prototype.fieldFrom = function(data) {
+      var i, key, len, ref;
+      ref = this._field.split('.');
+      for (i = 0, len = ref.length; i < len; i++) {
+        key = ref[i];
+        data = data != null ? data[key] : void 0;
+      }
+      return this.mappings[data] || data || this.placeholderWithLabel(key);
+    };
+
+    FieldContent.prototype.font = FieldContent.property('style', 'font');
+
+    FieldContent.prototype.size = FieldContent.property('style', 'size');
+
+    FieldContent.prototype.color = FieldContent.property('style', 'color');
+
+    FieldContent.prototype.field = FieldContent.property('_field');
+
+    FieldContent.prototype.serialize = function() {
+      return {
+        field: this._field,
+        style: this.style,
+        mappings: this.mappings
+      };
+    };
+
+    return FieldContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.ImageContent = (function(superClass) {
+    extend(ImageContent, superClass);
+
+    function ImageContent() {
+      return ImageContent.__super__.constructor.apply(this, arguments);
+    }
+
+    ImageContent.className = "ImageContent";
+
+    ImageContent.displayName = "Image";
+
+    ImageContent.description = "A static photograph, logo or graphic";
+
+    ImageContent.icon = "picture";
+
+    ImageContent.prototype.defaultWidth = function() {
+      return 240;
+    };
+
+    ImageContent.prototype.defaultHeight = function() {
+      return 240;
+    };
+
+    ImageContent.DEFAULT_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+    ImageContent.prototype.initWithConfig = function(config) {
+      this.setImage(this.get(config.src, ImageContent.DEFAULT_IMAGE), false);
+      return this._maintainAspectRatio = this.get(config.maintainAspectRatio, true);
+    };
+
+    ImageContent.prototype.bindEvents = function(el) {
+      el.find(".picker").change((function(_this) {
+        return function(e) {
+          return _this.setImageFromFile(e.currentTarget.files[0]);
+        };
+      })(this));
+      return el.find(".content").dblclick((function(_this) {
+        return function() {
+          return _this.openFilePicker();
+        };
+      })(this));
+    };
+
+    ImageContent.prototype.openFilePicker = function() {
+      var picker;
+      picker = this.el.find(".picker");
+      picker.click();
+      return false;
+    };
+
+    ImageContent.prototype.setImageFromFile = function(file) {
+      var reader;
+      reader = new FileReader();
+      reader.onload = (function(_this) {
+        return function(e) {
+          return _this.updateImage(e.target.result);
+        };
+      })(this);
+      return reader.readAsDataURL(file);
+    };
+
+    ImageContent.prototype.updateImage = function(data) {
+      var oldSrc;
+      oldSrc = this.src;
+      this.setImage(data);
+      return Designer.history.push(this, 'setImage', oldSrc, this.src);
+    };
+
+    ImageContent.prototype.setImage = function(data, doRedraw) {
+      if (doRedraw == null) {
+        doRedraw = true;
+      }
+      this.src = data;
+      this.maybeWarnAboutGif();
+      if (doRedraw) {
+        return this.redraw();
+      }
+    };
+
+    ImageContent.prototype.aspectRatio = function() {
+      var img;
+      if (this.maintainAspectRatio()) {
+        img = new Image();
+        img.src = this.src;
+        return img.width / img.height;
+      } else {
+        return false;
+      }
+    };
+
+    ImageContent.prototype.render_layout = function(data) {
+      setTimeout(((function(_this) {
+        return function() {
+          return _this.setAspectRatio(_this.aspectRatio());
+        };
+      })(this)), 0);
+      return $("<div class=\"image-widget " + (this.src === ImageContent.DEFAULT_IMAGE ? 'image-blank' : void 0) + "\">\n  <img class=\"content\" src=\"" + this.src + "\">\n  <input class=\"picker\" type=\"file\" accept=\"image/png, image/jpeg\">\n</div>");
+    };
+
+    ImageContent.prototype.render_edit = function(data) {
+      var node;
+      node = this.render_layout(data);
+      this.bindEvents(node);
+      return node;
+    };
+
+    ImageContent.prototype.render_display = function(data) {
+      return $("<div class=\"image-widget\">\n  <img class=\"content\" src=\"" + this.src + "\">\n</div>");
+    };
+
+    ImageContent.prototype.renderConfigOptions = function() {
+      return [this.option('checkbox', 'maintainAspectRatio', "Maintain Aspect Ratio")];
+    };
+
+    ImageContent.prototype.maintainAspectRatio = ImageContent.property('_maintainAspectRatio');
+
+    ImageContent.prototype.maybeWarnAboutGif = function() {
+      var isGif;
+      isGif = this.src && this.src !== ImageContent.DEFAULT_IMAGE && this.src.indexOf("image/gif;") > -1;
+      if (isGif && this.widget.currentMode === 'layout') {
+        return delay(1000, function() {
+          return alert("Your template contains one or more GIF images.\n\nGIF files are not currently supported and may not display correctly when printed.\n\nPlease replace all GIF images with alternatives in either JPG or PNG format.");
+        });
+      }
+    };
+
+    ImageContent.prototype.serialize = function() {
+      return {
+        src: this.src,
+        maintainAspectRatio: this.maintainAspectRatio()
+      };
+    };
+
+    return ImageContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.ImageGalleryContent = (function(superClass) {
+    extend(ImageGalleryContent, superClass);
+
+    function ImageGalleryContent() {
+      return ImageGalleryContent.__super__.constructor.apply(this, arguments);
+    }
+
+    ImageGalleryContent.className = "ImageGalleryContent";
+
+    ImageGalleryContent.displayName = "Dynamic Images";
+
+    ImageGalleryContent.description = "A dynamic photograph, logo or graphic";
+
+    ImageGalleryContent.icon = "picture";
+
+    ImageGalleryContent.prototype.editable = function() {
+      return this.widget.currentMode === 'layout';
+    };
+
+    ImageGalleryContent.prototype.initWithConfig = function(config) {
+      this._field = this.get(config.field, Object.keys(this.images())[0]);
+      return this._stretchImage = this.get(config.stretchImage, true);
+    };
+
+    ImageGalleryContent.prototype.bindEvents = function(el) {
+      return this.widget.bind('widget:resize', (function(_this) {
+        return function() {
+          return _this.imageCSS();
+        };
+      })(this));
+    };
+
+    ImageGalleryContent.prototype.imageCSS = function() {
+      $('.image-gallery-widget img').removeClass(this.cssImageClass);
+      this.calcImageCSS();
+      return $('.image-gallery-widget img').addClass(this.cssImageClass);
+    };
+
+    ImageGalleryContent.prototype.calcImageCSS = function() {
+      if (this.width >= this.height && (this.stretchImage() || this.width > this.widget.width())) {
+        return this.cssImageClass = 'wider';
+      } else if (this.height > this.width && (this.stretchImage() || this.height > this.widget.height())) {
+        return this.cssImageClass = 'taller';
+      } else {
+        return this.cssImageClass = '';
+      }
+    };
+
+    ImageGalleryContent.prototype.render_layout = function(data) {
+      var img;
+      img = new Image();
+      img.src = "data:image/gif;base64," + (this.fieldFrom(data));
+      img.width / img.height;
+      this.width = img.width;
+      this.height = img.height;
+      this.calcImageCSS();
+      if (this.editable()) {
+        setTimeout(((function(_this) {
+          return function() {
+            return _this.setAspectRatio(1);
+          };
+        })(this)), 0);
+      }
+      return $("<div class=\"image-gallery-widget\">\n  <img class=\"content " + this.cssImageClass + "\" src=\"" + img.src + "\">\n</div>");
+    };
+
+    ImageGalleryContent.prototype.renderConfigOptions = function() {
+      return [
+        this.option('checkbox', 'stretchImage', "Stretch Image"), this.option('select', 'field', "Field", {
+          options: this.images(),
+          hint: "This is the gallery image you would like to be merged, the image shown is only a placeholder of the final output."
+        })
+      ];
+    };
+
+    ImageGalleryContent.prototype.stretchImage = ImageGalleryContent.property('_stretchImage');
+
+    ImageGalleryContent.prototype.fieldFrom = function(data) {
+      var i, key, len, ref, ref1, results;
+      ref = this._field.split('.');
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        key = ref[i];
+        results.push(data = (ref1 = data['images']) != null ? ref1[key] : void 0);
+      }
+      return results;
+    };
+
+    ImageGalleryContent.prototype.field = ImageGalleryContent.property('_field');
+
+    ImageGalleryContent.prototype.serialize = function() {
+      return {
+        field: this._field,
+        stretchImage: this.stretchImage()
+      };
+    };
+
+    return ImageGalleryContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.NameContent = (function(superClass) {
+    extend(NameContent, superClass);
+
+    function NameContent() {
+      return NameContent.__super__.constructor.apply(this, arguments);
+    }
+
+    NameContent.className = "NameContent";
+
+    NameContent.displayName = "Student Name";
+
+    NameContent.description = "Name of the student in the format \"last, first\"";
+
+    NameContent.icon = "girl";
+
+    NameContent.active = false;
+
+    return NameContent;
+
+  })(FieldContent);
+
+}).call(this);
+
+(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.ShapeContent = (function(superClass) {
+    extend(ShapeContent, superClass);
+
+    function ShapeContent() {
+      return ShapeContent.__super__.constructor.apply(this, arguments);
+    }
+
+    ShapeContent.className = "ShapeContent";
+
+    ShapeContent.displayName = "Shape";
+
+    ShapeContent.description = "A simple shape to be used for drawing.";
+
+    ShapeContent.icon = "vector_path_square";
+
+    ShapeContent.prototype.defaultWidth = function() {
+      return 200;
+    };
+
+    ShapeContent.prototype.defaultHeight = function() {
+      return 200;
+    };
+
+    ShapeContent.border_widths = {
+      "0": "none",
+      "1": "1",
+      "3": "3",
+      "5": "5",
+      "8": "8",
+      "10": "10",
+      "15": "15"
+    };
+
+    ShapeContent.STYLE_DEFAULTS = {
+      fill_color: '#CCCCCC',
+      stroke_color: '#888888',
+      stroke_width: '0',
+      shape: 'rectangle',
+      border_radius: '0'
+    };
+
+    ShapeContent.prototype.fill_color = ShapeContent.property('style', 'fill_color');
+
+    ShapeContent.prototype.stroke_color = ShapeContent.property('style', 'stroke_color');
+
+    ShapeContent.prototype.stroke_width = ShapeContent.property('style', 'stroke_width');
+
+    ShapeContent.prototype.shape = ShapeContent.property('style', 'shape');
+
+    ShapeContent.prototype.border_radius = ShapeContent.property('style', 'border_radius');
+
+    ShapeContent.prototype.maintainAspectRatio = ShapeContent.property('_maintainAspectRatio');
+
+    ShapeContent.prototype.initWithConfig = function(config) {
+      return this.style = $.extend({}, ShapeContent.STYLE_DEFAULTS, this.get(config.style, {}));
+    };
+
+    ShapeContent.prototype.renderAppearanceOptions = function() {
+      return [
+        this.option('select', 'shape', "Shape", {
+          options: {
+            rectangle: "Rectangle",
+            ellipse: "Ellipse"
+          }
+        }), this.option('color', 'fill_color', "Fill colour"), this.option('color', 'stroke_color', "Border colour"), this.option('select', 'stroke_width', "Border width", {
+          options: ShapeContent.border_widths
+        }), this.option('select', 'border_radius', "Corner radius", {
+          options: ShapeContent.border_widths
+        })
+      ];
+    };
+
+    ShapeContent.prototype.renderConfigOptions = function() {
+      return [this.option('checkbox', 'maintainAspectRatio', "Maintain Aspect Ratio")];
+    };
+
+    ShapeContent.prototype.render_layout = function() {
+      if (this.maintainAspectRatio()) {
+        this.setAspectRatio(1);
+      } else {
+        setTimeout(((function(_this) {
+          return function() {
+            return _this.setAspectRatio(0);
+          };
+        })(this)), 0);
+      }
+      if (this.style.shape === 'rectangle') {
+        return $("<svg width='100%' height='100%'> <rect x='" + (this.style.stroke_width / 1.6) + "%' y='" + (this.style.stroke_width / 1.6) + "%' width='" + (100 - this.style.stroke_width / 0.8) + "%' height='" + (100 - this.style.stroke_width / 0.8) + "%' rx='" + this.style.border_radius + "' ry='" + this.style.border_radius + "' style='fill:" + this.style.fill_color + ";stroke-width:" + this.style.stroke_width + ";stroke:" + this.style.stroke_color + "' /> </svg>");
+      } else {
+        return $("<svg height='100%' width='100%'> <ellipse cx='50%' cy='50%' rx='" + (45 - this.style.stroke_width / 1.8) + "%' ry='" + (45 - this.style.stroke_width / 1.8) + "%' stroke='" + this.style.stroke_color + "' stroke-width='" + this.style.stroke_width + "' fill='" + this.style.fill_color + "' /> </svg>");
+      }
+    };
+
+    ShapeContent.prototype.serialize = function() {
+      return {
+        style: this.style,
+        maintainAspectRatio: this.maintainAspectRatio()
+      };
+    };
+
+    return ShapeContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.SubjectFieldContent = (function(superClass) {
+    extend(SubjectFieldContent, superClass);
+
+    function SubjectFieldContent() {
+      this.updateMapping = bind(this.updateMapping, this);
+      this.changeMapping = bind(this.changeMapping, this);
+      return SubjectFieldContent.__super__.constructor.apply(this, arguments);
+    }
+
+    SubjectFieldContent.className = "SubjectFieldContent";
+
+    SubjectFieldContent.displayName = "Subject Dynamic Text";
+
+    SubjectFieldContent.description = "Pull a text field from a specific subject and style it for display.";
+
+    SubjectFieldContent.icon = "book";
+
+    SubjectFieldContent.prototype.defaultWidth = function() {
+      return 280;
+    };
+
+    SubjectFieldContent.prototype.defaultHeight = function() {
+      return 80;
+    };
+
+    SubjectFieldContent.prototype.initWithConfig = function(config) {
+      SubjectFieldContent.__super__.initWithConfig.call(this, config);
+      this._subject = this.get(config.subject, 'PH');
+      this._field = this.get(config.field, 'subjectName');
+      return this.mappings = this.get(config.mappings, {});
+    };
+
+    SubjectFieldContent.prototype.render_layout = function(data) {
+      return $("<div class=\"subject-field-widget\" style=\"" + (this.textStyles()) + "\">" + (this.fieldFrom(data)) + "</div>");
+    };
+
+    SubjectFieldContent.prototype.renderConfigOptions = function() {
+      var fields, i, len, options, point, ref;
+      fields = {
+        "Subject": [['subjectName', 'Subject Name'], ['teacherNames', 'Teacher Names'], ['teachingGroupCode', 'Teaching Group Code']],
+        "Results": []
+      };
+      ref = this.assessmentPoints();
+      for (i = 0, len = ref.length; i < len; i++) {
+        point = ref[i];
+        fields.Results.push([point.code, point.longName]);
+      }
+      options = [
+        this.option('select', 'field', "Field", {
+          options: fields,
+          hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output."
+        }), this.mappingSettings()
+      ];
+      if (this.widget.subject === null) {
+        options.unshift(this.option('select', 'subject', "Subject", {
+          options: API.subjects()
+        }));
+      }
+      return options;
+    };
+
+    SubjectFieldContent.prototype.mappingSettings = function() {
+      var node, self;
+      node = $("<div class=\"mapping-option\"><a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(this.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a></div>");
+      self = this;
+      node.on("click", ".mapping", (function(_this) {
+        return function() {
+          return new MappingModal(_this.mappings, _this.changeMapping);
+        };
+      })(this));
+      return node;
+    };
+
+    SubjectFieldContent.prototype.changeMapping = function(newMappings) {
+      var oldMappings;
+      oldMappings = this.mappings;
+      this.updateMapping(newMappings);
+      return Designer.history.push(this, 'updateMapping', oldMappings, newMappings);
+    };
+
+    SubjectFieldContent.prototype.updateMapping = function(mappings) {
+      this.mappings = mappings;
+      return this.redraw();
+    };
+
+    SubjectFieldContent.prototype.fieldFrom = function(data) {
+      var defaultValue, ref, subject, subjectScope, value;
+      subject = this.widget.subject ? this.widget.subject : this.subject();
+      defaultValue = this.placeholderWithLabel(this.field());
+      subjectScope = data.subjects[subject];
+      value = (subjectScope != null ? (ref = subjectScope.results) != null ? ref[this.field()] : void 0 : void 0) || (subjectScope != null ? subjectScope[this.field()] : void 0) || defaultValue;
+      return this.mappings[value] || value;
+    };
+
+    SubjectFieldContent.prototype.subject = SubjectFieldContent.property('_subject');
+
+    SubjectFieldContent.prototype.serialize = function() {
+      return {
+        field: this.field(),
+        subject: this.subject(),
+        style: this.style,
+        mappings: this.mappings
+      };
+    };
+
+    return SubjectFieldContent;
+
+  })(FieldContent);
+
+}).call(this);
+
+(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.TextContent = (function(superClass) {
+    extend(TextContent, superClass);
+
+    function TextContent() {
+      return TextContent.__super__.constructor.apply(this, arguments);
+    }
+
+    TextContent.className = "TextContent";
+
+    TextContent.displayName = "Free Text";
+
+    TextContent.description = "A block of static text with formatting options.";
+
+    TextContent.icon = "font";
+
+    TextContent.prototype.defaultWidth = function() {
+      return 360;
+    };
+
+    TextContent.prototype.defaultHeight = function() {
+      return 240;
+    };
+
+    TextContent.prototype.editable = function() {
+      return this.widget.currentMode === 'layout';
+    };
+
+    TextContent.EDITOR_CONFIG = {
+      imageUpload: false,
+      inlineMode: true,
+      mediaManager: false,
+      placeholder: "Type here...",
+      plainPaste: true,
+      buttons: ["bold", "italic", "underline", "fontSize", "color", "sep", "align", "insertOrderedList", "insertUnorderedList", "outdent", "indent"]
+    };
+
+    TextContent.DEFAULT_CONTENT = "<p>Type text here&hellip;</p>";
+
+    TextContent.STYLE_DEFAULTS = {
+      font: 'Helvetica'
+    };
+
+    TextContent.prototype.initWithConfig = function(config) {
+      this.html = this.get(config.html, TextContent.DEFAULT_CONTENT);
+      return this.style = $.extend({}, TextContent.STYLE_DEFAULTS, this.get(config.style, {}));
+    };
+
+    TextContent.prototype.render_layout = function(data) {
+      var styles;
+      styles = this.styleString({
+        'font-family': utils.fontMap[this.style.font]
+      });
+      return $("<div class=\"text-widget\" style=\"" + styles + "\">" + this.html + "</div>");
+    };
+
+    TextContent.prototype.render_edit = function(data) {
+      var node;
+      node = this.render_layout(data);
+      this.editor = node.editable(TextContent.EDITOR_CONFIG);
+      return node;
+    };
+
+    TextContent.prototype.renderAppearanceOptions = function() {
+      return this.option('font', 'font', "Font");
+    };
+
+    TextContent.prototype.bindEvents = function(el) {
+      return el.on('editable.contentChanged', (function(_this) {
+        return function() {
+          return _this.html = _this.el.editable("getHTML");
+        };
+      })(this));
+    };
+
+    TextContent.prototype.font = TextContent.property('style', 'font');
+
+    TextContent.prototype.serialize = function() {
+      return {
+        html: this.html,
+        style: this.style
+      };
+    };
+
+    return TextContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window._EXAMPLEContent = (function(superClass) {
+    extend(_EXAMPLEContent, superClass);
+
+    function _EXAMPLEContent() {
+      return _EXAMPLEContent.__super__.constructor.apply(this, arguments);
+    }
+
+    return _EXAMPLEContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.DatatableContent = (function(superClass) {
+    extend(DatatableContent, superClass);
+
+    function DatatableContent() {
+      this.updateMapping = bind(this.updateMapping, this);
+      this.filter_subjects = bind(this.filter_subjects, this);
+      return DatatableContent.__super__.constructor.apply(this, arguments);
+    }
+
+    DatatableContent.className = "DatatableContent";
+
+    DatatableContent.displayName = "Subjects Data Table";
+
+    DatatableContent.description = "Showing assessment points, one row per subject.";
+
+    DatatableContent.icon = "book_open";
+
+    DatatableContent.STYLE_DEFAULTS = {
+      subject_order: 'alphabetical',
+      heading_text_color: '#000000',
+      heading_background_color: '#FFFFFF',
+      cell_text_color: '#000000',
+      cell_background_color_odd: '#FFFFFF',
+      cell_background_color_even: '#FFFFFF',
+      font: 'Helvetica',
+      size: 'Medium'
+    };
+
+    DatatableContent.prototype.defaultWidth = function() {
+      return 640;
+    };
+
+    DatatableContent.prototype.defaultHeight = function() {
+      return 480;
+    };
+
+    DatatableContent.prototype.initWithConfig = function(config) {
+      this.columns = this.get(config.columns, []);
+      this.style = $.extend({}, DatatableContent.STYLE_DEFAULTS, this.get(config.style, {}));
+      this._exclusions = this.get(config.exclusions, []);
+      if (typeof this._exclusions === 'string') {
+        return this._exclusions = this.upgradeStringBasedExclusions(this._exclusions);
+      }
+    };
+
+    DatatableContent.prototype.render_layout = function(data) {
+      var col, columnTitles, columnValues, filteredSubjects, i, j, len, name, node, ref, subject;
+      name = utils.escape(data.name);
+      columnTitles = (function() {
+        var j, len, ref, results;
+        ref = this.columns;
+        results = [];
+        for (j = 0, len = ref.length; j < len; j++) {
+          col = ref[j];
+          results.push("<th style=\"" + (this.headingStyles()) + "\">" + col.title + "</th>");
+        }
+        return results;
+      }).call(this);
+      node = $("<table class=\"datatable\" style=\"" + (this.styleString({
+        'font-family': utils.fontMap[this.style.font],
+        'font-size': utils.sizeMap[this.style.size]
+      })) + "\">\n  <thead>\n    <tr>\n      <th style=\"" + (this.headingStyles()) + "\"></th>\n      " + (columnTitles.join("\n")) + "\n    </tr>\n  </thead>\n  <tbody>\n  </tbody>\n</table>");
+      filteredSubjects = this.filter_subjects(data.subjects);
+      ref = this.orderdSubjects(filteredSubjects);
+      for (i = j = 0, len = ref.length; j < len; i = ++j) {
+        subject = ref[i];
+        columnValues = (function() {
+          var l, len1, ref1, results;
+          ref1 = this.columns;
+          results = [];
+          for (l = 0, len1 = ref1.length; l < len1; l++) {
+            col = ref1[l];
+            results.push("<td style=\"" + (this.cellStyles(i + 1, this.cellValue(subject, col))) + "\">" + (this.cellContent(subject, col)) + "</td>");
+          }
+          return results;
+        }).call(this);
+        node.find("tbody").append("<tr>\n  <th style=\"" + (this.headingStyles()) + "\">\n    <strong class=\"subject\">" + subject.subjectName + "</strong>\n    <em class=\"teacher\">" + subject.teacherNames + "</em>\n  </th>\n  " + (columnValues.join("\n")) + "\n</tr>");
+      }
+      return node;
+    };
+
+    DatatableContent.prototype.filter_subjects = function(subjects) {
+      if (this.widget.subject) {
+        return [subjects[this.widget.subject]];
+      }
+      return _.filter(subjects, (function(_this) {
+        return function(subject, code) {
+          if (!_this.exclusions()) {
+            return true;
+          }
+          return !_.contains(_this.exclusions(), code);
+        };
+      })(this));
+    };
+
+    DatatableContent.prototype.buildEditRow = function(col) {
+      var options;
+      if (col == null) {
+        col = {
+          title: '',
+          value: '',
+          compare_to: '',
+          mappings: {}
+        };
+      }
+      if (!col.mappings) {
+        col.mappings = {};
+      }
+      options = (function(_this) {
+        return function(val) {
+          var j, len, point, ref, results;
+          ref = _this.assessmentPoints();
+          results = [];
+          for (j = 0, len = ref.length; j < len; j++) {
+            point = ref[j];
+            results.push("<option value=\"" + point.code + "\" " + (point.code === val ? 'selected="selected"' : '') + ">" + point.name + " | " + point.longName + "</option>");
+          }
+          return results;
+        };
+      })(this);
+      return "<tr class=\"column-setting\" data-mappings=\"" + (JSON.stringify(col.mappings).replace(/\"/g, '&quot;')) + "\">\n  <td>\n    <input class=\"col-title\" name=\"col-title\" type=\"text\" value=\"" + col.title + "\" placeholder=\"Untitled...\" />\n    <span class=\"col-comp-label\">compared to:</ span>\n  </td>\n  <td>\n    <select class=\"col-value\" name=\"col-value\">\n      <option value=\"\" " + (col.value === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.value).join("\n")) + "\n    </select>\n    <select class=\"col-compare-to\" name=\"col-compare-to\">\n      <option value=\"\" " + (col.compare_to === "" ? 'selected="selected"' : '') + "></option>\n      " + (options(col.compare_to).join("\n")) + "\n    </select>\n    <a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(col.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a>\n  </td>\n</tr>";
+    };
+
+    DatatableContent.prototype.renderAppearanceOptions = function() {
+      return [this.option('font', 'font', "Font"), this.option('size', 'size', "Text Size"), this.option('color', 'heading_text_color', "Heading Text"), this.option('color', 'heading_background_color', "Heading Bg"), this.option('color', 'cell_text_color', "Cell Text"), this.option('color', 'cell_background_color_odd', "Cell Bg Odd"), this.option('color', 'cell_background_color_even', "Cell Bg Even")];
+    };
+
+    DatatableContent.prototype.subject_order = DatatableContent.property('style', 'subject_order');
+
+    DatatableContent.prototype.font = DatatableContent.property('style', 'font');
+
+    DatatableContent.prototype.size = DatatableContent.property('style', 'size');
+
+    DatatableContent.prototype.heading_text_color = DatatableContent.property('style', 'heading_text_color');
+
+    DatatableContent.prototype.heading_background_color = DatatableContent.property('style', 'heading_background_color');
+
+    DatatableContent.prototype.cell_text_color = DatatableContent.property('style', 'cell_text_color');
+
+    DatatableContent.prototype.cell_background_color_odd = DatatableContent.property('style', 'cell_background_color_odd');
+
+    DatatableContent.prototype.cell_background_color_even = DatatableContent.property('style', 'cell_background_color_even');
+
+    DatatableContent.prototype.exclusions = DatatableContent.property('_exclusions');
+
+    DatatableContent.prototype.renderConfigOptions = function() {
+      return [
+        this.option('select', 'subject_order', "Subject Order", {
+          options: {
+            alphabetical: "Alphabetical",
+            core_first: 'Core First'
+          }
+        }), this.columSettings(), this.option('select', 'exclusions', 'Subject Blacklist', {
+          options: API.subjects(),
+          multiple: true,
+          hint: "A list of subjects names to be excluded from reports. Hold the shift or command keys for multiple selection."
+        })
+      ];
+    };
+
+    DatatableContent.prototype.columSettings = function() {
+      var col, columnChanged, j, len, node, ref, self, table;
+      node = $("<div class=\"datatable-cols prop-table-config\">\n  <h4>Columns</h4>\n  <div class=\"prop-table-wrap\">\n    <table>\n      <thead>\n        <tr>\n          <th>Title</th>\n          <th>Value</th>\n        </tr>\n      </thead>\n      <tbody class=\"edit-rows\">\n      </tbody>\n    </table>\n  </div>\n</div>");
+      table = node.find('.edit-rows');
+      ref = this.columns;
+      for (j = 0, len = ref.length; j < len; j++) {
+        col = ref[j];
+        table.append(this.buildEditRow(col));
+      }
+      table.append(this.buildEditRow());
+      columnChanged = (function(_this) {
+        return function() {
+          _this.maybeAddEditRow(table);
+          _this.saveColumns(table);
+          return _this.redraw();
+        };
+      })(this);
+      table.on("input", ".col-title", columnChanged);
+      table.on("change", ".col-value, .col-compare-to", columnChanged);
+      self = this;
+      table.on("click", ".mapping", function() {
+        var element, mappingIndex, mappings;
+        element = this;
+        mappingIndex = $(this).parents('.column-setting').index();
+        mappings = $(element).parents(".edit-rows").find(".column-setting:eq(" + mappingIndex + ")").data('mappings');
+        return new MappingModal(mappings, (function(_this) {
+          return function(newMappings) {
+            return self.updateMapping(mappingIndex, newMappings);
+          };
+        })(this));
+      });
+      return node;
+    };
+
+    DatatableContent.prototype.updateMapping = function(index, newMappings) {
+      var editrows;
+      editrows = $(".edit-rows");
+      editrows.find(".column-setting:eq(" + index + ")").data('mappings', newMappings);
+      this.saveColumns(editrows);
+      return this.redraw();
+    };
+
+    DatatableContent.prototype.headingStyles = function() {
+      return this.styleString({
+        'background-color': this.style.heading_background_color,
+        color: this.style.heading_text_color
+      });
+    };
+
+    DatatableContent.prototype.cellStyles = function(row, content) {
+      var bg_color, text_align;
+      bg_color = row % 2 === 0 ? this.style.cell_background_color_even : this.style.cell_background_color_odd;
+      text_align = content.split(' ').length > 1 ? 'left' : 'center';
+      return this.styleString({
+        'background-color': bg_color,
+        color: this.style.cell_text_color,
+        'text-align': text_align
+      });
+    };
+
+    DatatableContent.prototype.cellValue = function(subject, col) {
+      var originalValue, ref, ref1;
+      originalValue = ((ref = subject.results) != null ? ref[col.value] : void 0) || '';
+      return ((ref1 = col.mappings) != null ? ref1[originalValue] : void 0) || originalValue || this.placeholderWithLabel(col.value);
+    };
+
+    DatatableContent.prototype.cellContent = function(subject, col) {
+      var compareTo, numVal, ref, ref1, tlClass, val;
+      val = this.cellValue(subject, col);
+      if (!(col.compare_to && col.compare_to.length > 0)) {
+        return val;
+      }
+      numVal = ((ref = subject.internalPoints) != null ? ref[col.value] : void 0) || 0;
+      compareTo = ((ref1 = subject.internalPoints) != null ? ref1[col.compare_to] : void 0) || 0;
+      if (numVal > compareTo) {
+        tlClass = 'dark-green';
+      }
+      if (numVal === compareTo) {
+        tlClass = 'light-green';
+      }
+      if (numVal === compareTo - 1) {
+        tlClass = 'amber';
+      }
+      if (numVal < compareTo - 1) {
+        tlClass = 'red';
+      }
+      return "<span class=\"traffic-light " + tlClass + "\"></span>";
+    };
+
+    DatatableContent.prototype.maybeAddEditRow = function(el) {
+      var lastRow, rows;
+      rows = el.find('.column-setting');
+      lastRow = $(rows[rows.length - 1]);
+      if (lastRow.find('.col-value').val() !== '') {
+        return lastRow.after(this.buildEditRow());
+      }
+    };
+
+    DatatableContent.prototype.saveColumns = function(el) {
+      var $col, col, columns, oldColumns;
+      oldColumns = this.columns;
+      columns = (function() {
+        var j, len, ref, results;
+        ref = el.find('.column-setting');
+        results = [];
+        for (j = 0, len = ref.length; j < len; j++) {
+          col = ref[j];
+          $col = $(col);
+          results.push({
+            title: $col.find('.col-title').val(),
+            value: $col.find('.col-value').val(),
+            compare_to: $col.find('.col-compare-to').val(),
+            mappings: $col.data('mappings')
+          });
+        }
+        return results;
+      })();
+      this.columns = (function() {
+        var j, len, results;
+        results = [];
+        for (j = 0, len = columns.length; j < len; j++) {
+          col = columns[j];
+          if ((col.value != null) && col.value !== '') {
+            results.push(col);
+          }
+        }
+        return results;
+      })();
+      return Designer.history.push(this, 'setColumnsFromUndo', oldColumns, this.columns);
+    };
+
+    DatatableContent.prototype.setColumnsFromUndo = function(cols) {
+      this.columns = cols;
+      this.redraw();
+      return Designer.select(this.widget);
+    };
+
+    DatatableContent.prototype.orderdSubjects = function(subjects) {
+      var alphabetical, k, rank, v;
+      subjects = (function() {
+        var results;
+        results = [];
+        for (k in subjects) {
+          v = subjects[k];
+          results.push(v);
+        }
+        return results;
+      })();
+      alphabetical = subjects.sort((function(_this) {
+        return function(a, b) {
+          if (a.subjectName >= b.subjectName) {
+            return 1;
+          } else {
+            return -1;
+          }
+        };
+      })(this));
+      if (this.style.subject_order === 'alphabetical') {
+        return alphabetical;
+      }
+      rank = {
+        'english': 1,
+        'maths': 2,
+        'mathematics': 2,
+        'science': 3
+      };
+      return _.sortBy(alphabetical, function(subject) {
+        var name;
+        name = subject.subjectName.toLowerCase();
+        if (rank[name]) {
+          return rank[name];
+        } else {
+          return name.charCodeAt(0);
+        }
+      });
+    };
+
+    DatatableContent.prototype.serialize = function() {
+      return {
+        columns: this.columns,
+        style: this.style,
+        exclusions: this._exclusions
+      };
+    };
+
+    DatatableContent.prototype.upgradeStringBasedExclusions = function(exclusionsString) {
+      var exclusions, k, newExclusions, subjects, v;
+      newExclusions = exclusionsString.split(',');
+      subjects = $.extend({}, API.subjects());
+      for (k in subjects) {
+        v = subjects[k];
+        subjects[k] = v.toLowerCase();
+      }
+      subjects = _.invert(subjects);
+      exclusions = _.map(newExclusions, function(e) {
+        return subjects[$.trim(e.toLowerCase())];
+      });
+      return _.compact(exclusions);
+    };
+
+    return DatatableContent;
 
   })(WidgetContent);
 
