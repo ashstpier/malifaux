@@ -74,7 +74,6 @@ class window.Template
     {
       pages:        _.map(@pages, (p) -> p.serialize())
       name:         @name
-      screenshot:   @screenshot
     }
 
   @deserialize: (templateData, cb) ->

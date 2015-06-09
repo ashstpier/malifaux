@@ -276,7 +276,6 @@ window.Designer = {
 
   promptSave: ->
     if @hasUnsavedChanges()
-      @takeScreenShot() if !utils.is_ccr
       $('#save-modal').modal()
     else
       @exitDesigner()
@@ -299,12 +298,6 @@ window.Designer = {
 
   saveAndExit: ->
     @template.save => @exitDesigner()
-
-  takeScreenShot: ->
-    $('#viewport').addClass('screenshot')
-    utils.screenshot 'page', (data_url) =>
-      @template.screenshot = data_url
-      $('#viewport').removeClass('screenshot')
 
   updateHistoryButtonState: ->
     if @history.canUndo()

@@ -37,7 +37,7 @@ html, body {
 
 #templates .template {
   display: inline-block;
-  width: 250px;
+  width: 200px;
   margin: 5px;
 
   text-decoration: none;
@@ -49,9 +49,6 @@ html, body {
   margin-bottom: 5px;
 }
 
-#templates .template .thumbnail img {
-  width: 100%;
-}
 
 #templates .template:hover .content   {
   box-shadow: 0px 0px 5px #888888;
@@ -65,6 +62,16 @@ html, body {
 #templates .template .content .thumbnail {
   position: relative;
   overflow: hidden;
+  display: block;
+  width: 100%;
+  height: 280px;
+  background-color: #fff;
+}
+
+#templates .template .template-link {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 #templates .template .actions {

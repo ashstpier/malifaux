@@ -3,15 +3,14 @@ window.Templates = {
   addTemplateRow: (template) ->
     $("#templates").append("""
       <div class="template">
-        <p>#{template.name}</p>
         <div class="content">
           <div class="thumbnail">
-            <a href="./designer.html?template=#{template.key}">
-              <img class="image" src="#{utils.screenshot_url(template.screenshot)}">
+            <a class="template-link" href="./designer.html?template=#{template.key}">
             </a>
             <a class="actions" href="./report.html?studentid=15318&template=#{template.key}">Run</a></a>
           </div>
         </div>
+        <p>#{template.name}</p>
       </div>
       """)
 

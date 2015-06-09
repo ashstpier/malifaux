@@ -68,7 +68,6 @@ class window.PageTemplate
       layout: @layout,
       orientation: @orientation,
       pagetype: @pagetype,
-      screenshot: @screenshot
     }
     data
 
