@@ -52,6 +52,7 @@ window.Designer = {
 
   renderPagesList: ->
     $('#page-list').empty()
+    $('#pages-nav-label').html("Page #{@template.currentPageNumber+1}")
     for page, n in @template.pages
       classes = ['page-button']
       classes.push('page-button-active') if n is @template.currentPageNumber
