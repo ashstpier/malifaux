@@ -74,8 +74,6 @@ class window.Template
     {
       pages:        _.map(@pages, (p) -> p.serialize())
       name:         @name
-      orientation:  @orientation
-      pagetype:     @pagetype
       screenshot:   @screenshot
     }
 
