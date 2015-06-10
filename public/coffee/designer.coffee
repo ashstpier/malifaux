@@ -182,7 +182,6 @@ window.Designer = {
   updateName: ->
     name = $('#name').text()
     @template.name = name
-    @save()
 
   select: (widget) ->
     @selection = widget
