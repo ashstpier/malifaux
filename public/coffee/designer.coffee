@@ -42,9 +42,9 @@ window.Designer = {
     for name, className of Widget.WIDGETS
       type = window[className]
       if type.active
-        $("#gallery").append """
+        $("#widget-gallery .assembly-modal-content").append """
           <div id="add-#{name}" class="add-widget">
-            <i class="glyphicons white #{type.icon}"></i>
+            <i class="glyphicons #{type.icon}"></i>
             <h4>#{type.displayName}</h4>
             <p>#{type.description}</p>
           </div>
@@ -120,6 +120,8 @@ window.Designer = {
     @history.bind 'history:change', => @updateHistoryButtonState()
     @history.bind 'history:change', => @updateSavedButtonState()
     @bindKeyboardEvents()
+
+    $('#widget-options, .assembly-modal-close').click => @toggleGallery()
 
     window.addEventListener "beforeunload", (e) => @reminderToSave(e)
 

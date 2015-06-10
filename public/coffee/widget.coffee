@@ -3,15 +3,15 @@ class window.Widget
   @GRID_SIZE: [1,1]
 
   @WIDGETS: {
+    'text':           'TextContent'
+    'field':          'FieldContent'
     'image':          'ImageContent'
     'image-gallery':  'ImageGalleryContent'
-    'text':           'TextContent'
+    'dynamictable':   'DynamicTableContent'
     'datatable':      'DatatableContent'
-    'field':          'FieldContent'
     'name':           'NameContent'
     'subject-field':  'SubjectFieldContent'
     'attendance':     'AttendanceContent'
-    'dynamictable':   'DynamicTableContent'
     'shape':          'ShapeContent'
   }
 

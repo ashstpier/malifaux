@@ -104,6 +104,7 @@ class window.OptionRenderer
   render: (styles) ->
     """
       <div class="prop-option">
+        <i class="glyphicons edit"></i>
         <label class="prop-label" for="#{@key}">#{@label}</label>
         #{@renderInput(styles)}
         #{@renderHint()}

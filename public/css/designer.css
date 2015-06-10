@@ -12,7 +12,8 @@ body {
   left: 0;
   right: 0;
   height: 50px;
-  background-color: #4184D3;
+  background-color: #10B2C1;
+  border-bottom: 1px solid #09A6B4;
   color: #fff;
   font-weight: 300;
 }
@@ -23,17 +24,23 @@ body {
 }
 
 #template-name .file {
-  top:  12px;
+  top: 16px;
   display: block;
+}
+#template-name .file:before {
+  font-size: 18px;
 }
 
 #name {
   margin: 10px;
   padding: 0 5px;
   color: #fff;
-  font-size: 24px;
-  font-weight: 300;
+  font-size: 18px;
+  font-weight: 400;
   line-height: 30px;
+  max-width: 500px;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 #undo {
@@ -45,9 +52,10 @@ body {
   cursor: not-allowed;
   opacity: 0.3;
 }
-#undo i {
+#undo i, #redo i {
   position: relative;
-  top: 0px;
+  font-size: 18px;
+  top: -5px;
 }
 #redo {
   display: inline-block;
@@ -57,10 +65,7 @@ body {
   cursor: not-allowed;
   opacity: 0.3;
 }
-#redo i {
-  position: relative;
-  top: 0px;
-}
+
 #undo.enabled, #redo.enabled {
   opacity: 1;
   cursor: pointer;
@@ -78,38 +83,28 @@ body {
   padding: 0;
 }
 
-#nav .subnav {
-  display: none;
-  background-color: #3467A3;
-  position: fixed;
-  top: 50px;
-  left: 0;
-  right: 0;
-  padding: 20px;
-}
-
-#nav .nav-option:hover .subnav {
-  display: block;
-}
-
 #nav .nav-option a {
   display: block;
   position: relative;
   margin: 0;
-  padding: 0 20px 0 60px;
-  font-size: 18px;
-  font-weight: 300;
+  padding: 0 20px 0 55px;
+  font-size: 16px;
+  font-weight: 400;
   line-height: 50px;
   color: #fff;
   text-decoration: none;
 }
 #nav .nav-option:hover a {
-  background-color: #3467A3;
+  background-color: #09A6B4;
 }
 #nav .nav-option a .glyphicons {
   position: absolute;
-  top: 12px;
+  top: 17px;
   left: 25px;
+}
+
+#nav .nav-option a .glyphicons:before {
+  font-size: 16px;
 }
 
 #viewport {
@@ -117,9 +112,10 @@ body {
   top: 50px;
   bottom: 0;
   left: 0;
-  right: 300px;
+  right: 340px;
   padding: 0 10px;
   overflow: auto;
+  background: #eee;
 }
 
 .page {
@@ -142,11 +138,13 @@ body {
   top: 50px;
   bottom: 0;
   right: 0;
-  width: 300px;
-  background-color: #ddd;
-  border-left: 1px solid #ccc;
+  width: 340px;
+  color: #555;
+  background-color: #f6f6f6;
   overflow-x: hidden;
   overflow-y: auto;
+  /*border-left: 1px solid #e6e6e6;*/
+  box-shadow: -1px 0 3px rgba(0,0,0,0.1);
 }
 
  /* A4 Ratio is ~ 1:1.4 */
@@ -162,27 +160,36 @@ body {
 }
 
 .add-widget {
-  display: inline-block;
   position: relative;
   text-align: left;
-  width: 50%;
   box-sizing: border-box;
-  padding: 20px 30px 20px 70px;
+  padding: 30px 10px;
   cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  max-width: 220px;
+  vertical-align: top;
+  color: #555;
+  border-radius: 3px;
 }
 .add-widget:hover {
-  background-color: #2A588D;
+  background-color: #eee;
 }
-.add-widget i {
-  position: absolute;
-  top: 30px;
-  left: 25px;
+.add-widget .glyphicons {
+  width: 60px;
+  height: 60px;
+}
+.add-widget .glyphicons:before {
+  margin: 0;
+  width: 60px;
+  height: 60px;
+  font-size: 48px;
+  color: #666;
 }
 .add-widget h4 {
-  margin: 0;
-  padding: 0 0 0.2em 0;
-  font-weight: 300;
-  font-size: 18px;
+  margin: 10px 0 5px;
+  font-weight: 700;
+  font-size: 14px;
 }
 .add-widget p {
   margin: 0;
@@ -205,11 +212,11 @@ body {
 }
 
 #save-msg {
-  margin: 18px 10px;
+  margin: 15px 0;
   color: #fff;
   float: left;
   display: none;
-  font-size: 0.7em;
+  font-size: 14px;
 }
 
 #pages {

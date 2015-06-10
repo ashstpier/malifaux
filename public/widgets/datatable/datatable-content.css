@@ -53,16 +53,17 @@
   font-weight: bold;
 }
 .datatable-cols .col-value {
-  width: 130px;
+  width: 100%;
 }
 .datatable-cols .col-comp-label {
   display: block;
-  margin-top: 5px;
+  margin: 12px 10px 0 0;
   text-align: right;
   font-style: italic;
+  font-size: 12px;
 }
 .datatable-cols .col-compare-to {
-  width: 130px;
+  width: 100%;
 }
 
 
