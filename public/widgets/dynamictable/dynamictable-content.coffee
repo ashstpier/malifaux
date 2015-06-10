@@ -83,7 +83,8 @@ class window.DynamicTableContent extends WidgetContent
       el = $(this)
       self.el.parents('.widget-dynamictable').css('overflow', 'visible')
       $('.dynamic-list').remove()
-      el.parent().append(self.dynamicOptions(el))
+      td = el.parent()
+      td.append(self.dynamicOptions(el))
       $('.dynamic-list').css('top', el.height() + 1)
 
       $('.dynamic-list').on "change", "#category-select", ->
