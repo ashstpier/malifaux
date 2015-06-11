@@ -24,7 +24,7 @@ window.Report = {
  render: (data) ->
    @template.render('display', data)
    @renderDebug(data) if @debug
-   setTimeout (-> window.status = 'ready'), 100
+   delay 100, -> window.status = 'ready'
 }
 
 $ ->
