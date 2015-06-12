@@ -24,6 +24,7 @@ window.Report = {
  render: (data) ->
    @template.render('display', data)
    @renderDebug(data) if @debug
+   delay 100, -> window.status = 'ready'
 }
 
 $ ->
