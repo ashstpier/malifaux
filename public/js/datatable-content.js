@@ -151,6 +151,9 @@ window.DatatableContent = (function(superClass) {
     return [
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Add tabs and styling
 =======
 >>>>>>> Add tabs and styling
       this.columSettings(), this.option('select', 'exclusions', 'Subject Blacklist', {
@@ -159,10 +162,16 @@ window.DatatableContent = (function(superClass) {
         hint: "A list of subjects names to be excluded from reports. Hold the shift or command keys for multiple selection."
       }), this.option('select', 'subject_order', "Subject Order", {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       this.option('select', 'subject_order', "Subject Order", {
 >>>>>>> Add tabs and styling
 =======
+>>>>>>> Add tabs and styling
+=======
+=======
+      this.option('select', 'subject_order', "Subject Order", {
+>>>>>>> Add tabs and styling
 >>>>>>> Add tabs and styling
         options: {
           alphabetical: "Alphabetical",
@@ -170,11 +179,17 @@ window.DatatableContent = (function(superClass) {
         }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Add tabs and styling
 =======
       }), this.columSettings(), this.option('select', 'exclusions', 'Subject Blacklist', {
         options: API.subjects(),
         multiple: true,
         hint: "A list of subjects names to be excluded from reports. Hold the shift or command keys for multiple selection."
+>>>>>>> Add tabs and styling
+<<<<<<< HEAD
+=======
 >>>>>>> Add tabs and styling
 =======
 >>>>>>> Add tabs and styling
@@ -186,12 +201,18 @@ window.DatatableContent = (function(superClass) {
     var col, columnChanged, j, len, node, ref, self, table;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     node = $("<div class=\"datatable-cols prop-table-config\">\n  <h4>Table data</h4>\n  <div class=\"prop-table-wrap\">\n    <table>\n      <thead>\n        <tr>\n          <th>Title</th>\n          <th>Value</th>\n        </tr>\n      </thead>\n      <tbody class=\"edit-rows\">\n      </tbody>\n    </table>\n  </div>\n</div>");
 =======
     node = $("<div class=\"datatable-cols prop-table-config\">\n  <h4>Columns</h4>\n  <div class=\"prop-table-wrap\">\n    <table>\n      <thead>\n        <tr>\n          <th>Title</th>\n          <th>Value</th>\n        </tr>\n      </thead>\n      <tbody class=\"edit-rows\">\n      </tbody>\n    </table>\n  </div>\n</div>");
 >>>>>>> Add tabs and styling
 =======
     node = $("<div class=\"datatable-cols prop-table-config\">\n  <h4>Table data</h4>\n  <div class=\"prop-table-wrap\">\n    <table>\n      <thead>\n        <tr>\n          <th>Title</th>\n          <th>Value</th>\n        </tr>\n      </thead>\n      <tbody class=\"edit-rows\">\n      </tbody>\n    </table>\n  </div>\n</div>");
+=======
+    node = $("<div class=\"datatable-cols prop-table-config\">\n  <h4>Table data</h4>\n  <div class=\"prop-table-wrap\">\n    <table>\n      <thead>\n        <tr>\n          <th>Title</th>\n          <th>Value</th>\n        </tr>\n      </thead>\n      <tbody class=\"edit-rows\">\n      </tbody>\n    </table>\n  </div>\n</div>");
+=======
+    node = $("<div class=\"datatable-cols prop-table-config\">\n  <h4>Columns</h4>\n  <div class=\"prop-table-wrap\">\n    <table>\n      <thead>\n        <tr>\n          <th>Title</th>\n          <th>Value</th>\n        </tr>\n      </thead>\n      <tbody class=\"edit-rows\">\n      </tbody>\n    </table>\n  </div>\n</div>");
+>>>>>>> Add tabs and styling
 >>>>>>> Add tabs and styling
     table = node.find('.edit-rows');
     ref = this.columns;

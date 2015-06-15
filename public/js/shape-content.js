@@ -70,6 +70,9 @@ window.ShapeContent = (function(superClass) {
 <<<<<<< HEAD
 =======
 >>>>>>> Add tabs and styling
+<<<<<<< HEAD
+=======
+>>>>>>> Add tabs and styling
 =======
 >>>>>>> Add tabs and styling
       }), this.option('select', 'stroke_width', "Border width", {
@@ -85,6 +88,7 @@ window.ShapeContent = (function(superClass) {
         options: ShapeContent.border_widths
       })
 >>>>>>> Add tabs and styling
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -93,6 +97,10 @@ window.ShapeContent = (function(superClass) {
       }), this.option('select', 'border_radius', "Corner radius", {
         options: ShapeContent.border_widths
       }), this.option('color', 'fill_color', "Fill colour"), this.option('color', 'stroke_color', "Border colour")
+>>>>>>> Add tabs and styling
+<<<<<<< HEAD
+=======
+=======
 >>>>>>> Add tabs and styling
 >>>>>>> Add tabs and styling
     ];

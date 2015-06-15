@@ -97,17 +97,24 @@ window.AttendanceContent = (function(superClass) {
     return [
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Add tabs and styling
       this.option('select', 'chartstyle', "Chart style", {
 =======
       this.option('color', 'color1', "Present"), this.option('color', 'color2', "Late"), this.option('color', 'color3', "Authorised"), this.option('color', 'color4', "Unauthorised"), this.option('select', 'chartstyle', "Chart style", {
 >>>>>>> Add tabs and styling
+<<<<<<< HEAD
 =======
       this.option('select', 'chartstyle', "Chart style", {
+>>>>>>> Add tabs and styling
+=======
 >>>>>>> Add tabs and styling
         options: {
           bar: 'Bar',
           pie: 'Pie'
         }
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       }), this.option('font', 'font', "Font"), this.option('size', 'size', "Text Size"), this.option('color', 'color1', "Present"), this.option('color', 'color2', "Late"), this.option('color', 'color3', "Authorised"), this.option('color', 'color4', "Unauthorised"), this.option('color', 'color', "Text Color")
@@ -116,6 +123,11 @@ window.AttendanceContent = (function(superClass) {
 >>>>>>> Add tabs and styling
 =======
       }), this.option('font', 'font', "Font"), this.option('size', 'size', "Text Size"), this.option('color', 'color1', "Present"), this.option('color', 'color2', "Late"), this.option('color', 'color3', "Authorised"), this.option('color', 'color4', "Unauthorised"), this.option('color', 'color', "Text Color")
+=======
+      }), this.option('font', 'font', "Font"), this.option('size', 'size', "Text Size"), this.option('color', 'color1', "Present"), this.option('color', 'color2', "Late"), this.option('color', 'color3', "Authorised"), this.option('color', 'color4', "Unauthorised"), this.option('color', 'color', "Text Color")
+=======
+      }), this.option('font', 'font', "Font"), this.option('size', 'size', "Text Size"), this.option('color', 'color', "Text Color")
+>>>>>>> Add tabs and styling
 >>>>>>> Add tabs and styling
     ];
   };
