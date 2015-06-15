@@ -29,6 +29,14 @@ class window.Properties
                 <input type="number" step="1" id="prop-value-width" class="prop-coord-input" data-fn="width" />
                 <label for="prop-value-height">height</label>
                 <input type="number" step="1" id="prop-value-height" class="prop-coord-input"  data-fn="height"/>
+                <label for="prop-value-ordering">ordering</label>
+                <select id='prop-value-ordering' class='prop-coord-select' data-fn="ordering">
+                  <option></option>
+                  <option value="setWidgetToBack">Send to back</option>
+                  <option value="setWidgetBackOne">Send backward</option>
+                  <option value="setWidgetForwardOne">Bring forward</option>
+                  <option value="setWidgetToFront">Bring to front</option>
+                </select>
               </div>
             </section>
           </div>
@@ -64,8 +72,6 @@ class window.Properties
           </form>
         </div>
       </section>
-      <section class="prop-section prop-config"></section>
-      <section class="prop-section prop-appearance"></section>
     """
     @bindEvents()
     @updateLayoutValues()
