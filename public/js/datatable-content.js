@@ -150,24 +150,33 @@ window.DatatableContent = (function(superClass) {
   DatatableContent.prototype.renderConfigOptions = function() {
     return [
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Add tabs and styling
       this.columSettings(), this.option('select', 'exclusions', 'Subject Blacklist', {
         options: API.subjects(),
         multiple: true,
         hint: "A list of subjects names to be excluded from reports. Hold the shift or command keys for multiple selection."
       }), this.option('select', 'subject_order', "Subject Order", {
+<<<<<<< HEAD
 =======
       this.option('select', 'subject_order', "Subject Order", {
+>>>>>>> Add tabs and styling
+=======
 >>>>>>> Add tabs and styling
         options: {
           alphabetical: "Alphabetical",
           core_first: 'Core First'
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       }), this.columSettings(), this.option('select', 'exclusions', 'Subject Blacklist', {
         options: API.subjects(),
         multiple: true,
         hint: "A list of subjects names to be excluded from reports. Hold the shift or command keys for multiple selection."
+>>>>>>> Add tabs and styling
+=======
 >>>>>>> Add tabs and styling
       })
     ];
@@ -176,9 +185,13 @@ window.DatatableContent = (function(superClass) {
   DatatableContent.prototype.columSettings = function() {
     var col, columnChanged, j, len, node, ref, self, table;
 <<<<<<< HEAD
+<<<<<<< HEAD
     node = $("<div class=\"datatable-cols prop-table-config\">\n  <h4>Table data</h4>\n  <div class=\"prop-table-wrap\">\n    <table>\n      <thead>\n        <tr>\n          <th>Title</th>\n          <th>Value</th>\n        </tr>\n      </thead>\n      <tbody class=\"edit-rows\">\n      </tbody>\n    </table>\n  </div>\n</div>");
 =======
     node = $("<div class=\"datatable-cols prop-table-config\">\n  <h4>Columns</h4>\n  <div class=\"prop-table-wrap\">\n    <table>\n      <thead>\n        <tr>\n          <th>Title</th>\n          <th>Value</th>\n        </tr>\n      </thead>\n      <tbody class=\"edit-rows\">\n      </tbody>\n    </table>\n  </div>\n</div>");
+>>>>>>> Add tabs and styling
+=======
+    node = $("<div class=\"datatable-cols prop-table-config\">\n  <h4>Table data</h4>\n  <div class=\"prop-table-wrap\">\n    <table>\n      <thead>\n        <tr>\n          <th>Title</th>\n          <th>Value</th>\n        </tr>\n      </thead>\n      <tbody class=\"edit-rows\">\n      </tbody>\n    </table>\n  </div>\n</div>");
 >>>>>>> Add tabs and styling
     table = node.find('.edit-rows');
     ref = this.columns;
@@ -306,9 +319,13 @@ window.DatatableContent = (function(superClass) {
       return results;
     })();
 <<<<<<< HEAD
+<<<<<<< HEAD
     return Designer.history.push(this, 'setColumnsFromUndo', oldColumns, this.columns);
 =======
     return Designer.history.push(this, 'setColumnsFromUndo', oldColumns, this.columns, Designer.template.currentPageNumber);
+>>>>>>> Add tabs and styling
+=======
+    return Designer.history.push(this, 'setColumnsFromUndo', oldColumns, this.columns);
 >>>>>>> Add tabs and styling
   };
 

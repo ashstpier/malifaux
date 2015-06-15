@@ -1,8 +1,12 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
 =======
 var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+>>>>>>> Add tabs and styling
+=======
+var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
 >>>>>>> Add tabs and styling
   hasProp = {}.hasOwnProperty;
 
@@ -11,8 +15,11 @@ window.AttendanceContent = (function(superClass) {
 
   function AttendanceContent() {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     this.drawChart = bind(this.drawChart, this);
+>>>>>>> Add tabs and styling
+=======
 >>>>>>> Add tabs and styling
     return AttendanceContent.__super__.constructor.apply(this, arguments);
   }
@@ -64,13 +71,19 @@ window.AttendanceContent = (function(superClass) {
     google.load('visualization', '1.0', {
       'packages': ['corechart'],
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Add tabs and styling
       callback: (function(_this) {
         return function() {
           return _this.drawChart();
         };
       })(this)
+<<<<<<< HEAD
 =======
       callback: this.drawChart
+>>>>>>> Add tabs and styling
+=======
 >>>>>>> Add tabs and styling
     });
     return $("<div class=\"attendance-widget\"></div>");
@@ -83,18 +96,26 @@ window.AttendanceContent = (function(superClass) {
   AttendanceContent.prototype.renderAppearanceOptions = function() {
     return [
 <<<<<<< HEAD
+<<<<<<< HEAD
       this.option('select', 'chartstyle', "Chart style", {
 =======
       this.option('color', 'color1', "Present"), this.option('color', 'color2', "Late"), this.option('color', 'color3', "Authorised"), this.option('color', 'color4', "Unauthorised"), this.option('select', 'chartstyle', "Chart style", {
+>>>>>>> Add tabs and styling
+=======
+      this.option('select', 'chartstyle', "Chart style", {
 >>>>>>> Add tabs and styling
         options: {
           bar: 'Bar',
           pie: 'Pie'
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
       }), this.option('font', 'font', "Font"), this.option('size', 'size', "Text Size"), this.option('color', 'color1', "Present"), this.option('color', 'color2', "Late"), this.option('color', 'color3', "Authorised"), this.option('color', 'color4', "Unauthorised"), this.option('color', 'color', "Text Color")
 =======
       }), this.option('font', 'font', "Font"), this.option('size', 'size', "Text Size"), this.option('color', 'color', "Text Color")
+>>>>>>> Add tabs and styling
+=======
+      }), this.option('font', 'font', "Font"), this.option('size', 'size', "Text Size"), this.option('color', 'color1', "Present"), this.option('color', 'color2', "Late"), this.option('color', 'color3', "Authorised"), this.option('color', 'color4', "Unauthorised"), this.option('color', 'color', "Text Color")
 >>>>>>> Add tabs and styling
     ];
   };
