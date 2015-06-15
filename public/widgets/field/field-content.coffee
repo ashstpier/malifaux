@@ -42,7 +42,7 @@ class window.FieldContent extends WidgetContent
   changeMapping: (newMappings) =>
     oldMappings = @mappings
     @updateMapping(newMappings)
-    Designer.history.push(this, 'updateMapping', oldMappings, newMappings)
+    Designer.history.push(this, 'updateMapping', oldMappings, newMappings, Designer.template.currentPageNumber)
 
   updateMapping: (mappings) =>
     @mappings = mappings

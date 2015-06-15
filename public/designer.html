@@ -22,7 +22,6 @@
 		<script type="text/javascript" src="vendor/jqueryui/ui/minified/jquery-ui.min.js"></script>
 		<script type="text/javascript" src="vendor/store.js/store.min.js"></script>
 		<script type="text/javascript" src="vendor/underscore/underscore.js"></script>
-		<script type="text/javascript" src="vendor/html2canvas/build/html2canvas.min.js"></script>
 		<script type="text/javascript" src="vendor/microevent/microevent.js"></script>
 		<script type="text/javascript" src="vendor/mousetrap/mousetrap.min.js"></script>
 		<script type="text/javascript" src="vendor/async/async.js"></script>
@@ -38,6 +37,7 @@
 		<script type="text/javascript" src="js/widget.js"></script>
 		<script type="text/javascript" src="js/widget-content.js"></script>
 		<script type="text/javascript" src="js/template-storage.js"></script>
+		<script type="text/javascript" src="js/page-template.js"></script>
 		<script type="text/javascript" src="js/template.js"></script>
 		<script type="text/javascript" src="js/properties.js"></script>
 		<script type="text/javascript" src="js/undo-history.js"></script>
@@ -50,13 +50,26 @@
 	<body>
 		<header id="toolbar">
 			<div id="template-name">
-				<i class="glyphicons white file"></i>
 				<h1 contenteditable="true" id="name"></h1>
 			</div>
 			<a href="#" id="undo"><i class="glyphicons white undo"></i></a>
 			<a href="#" id="redo"><i class="glyphicons white redo"></i></a>
 			<div id="save-msg">Unsaved changes.</div>
 			<ul id="nav">
+				<li class="nav-option" id="pages-button">
+					<a href="#">
+						<i class="glyphicons white file"></i>
+						<span id="pages-nav-label">Pages</span>
+					</a>
+					<div class="subnav" id="pages">
+						<div id="page-list">
+						</div>
+						<div class="page-button" id="add-page">
+							<div class="page-icon"></div>
+							Add Page
+						</div>
+					</div>
+				</li>
 				<li class="nav-option" id="widget-options">
 					<a href="#">
 						<i class="glyphicons white circle_plus"></i>
@@ -81,7 +94,6 @@
 		</header>
 
 		<div id="viewport">
-			<div id="page"></div>
 		</div>
 		<div id="properties"></div>
 

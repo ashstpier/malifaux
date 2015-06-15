@@ -24,7 +24,7 @@ class window.WidgetContent
         old = read()
         write(val)
         @redraw()
-        Designer.history.push(this, 'runPropertyUndoSetter', {fn:write, v:old}, {fn:write, v:val})
+        Designer.history.push(this, 'runPropertyUndoSetter', {fn:write, v:old}, {fn:write, v:val}, Designer.template.currentPageNumber)
       else
         read()
 

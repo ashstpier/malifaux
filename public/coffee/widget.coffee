@@ -1,6 +1,5 @@
 class window.Widget
 
-  @PAGE_SELECTOR: '#page'
   @GRID_SIZE: [1,1]
 
   @WIDGETS: {
@@ -47,7 +46,7 @@ class window.Widget
     @applyResizable()
     @el.draggable
       grid:         Widget.GRID_SIZE
-      containment:  Widget.PAGE_SELECTOR
+      containment:  Designer.template.currentPage.el
       drag:         => @trigger 'widget:move', this
       start:        => Designer.select(this)
       stop:         => @moved()
@@ -55,14 +54,14 @@ class window.Widget
   applyResizable: (ratio=null) ->
     @el.resizable
       grid:         Widget.GRID_SIZE
-      containment:  Widget.PAGE_SELECTOR
+      containment:  Designer.template.currentPage.el
       handles:      'n, e, s, w, ne, se, sw, nw'
-      resize:       =>
-        @trigger 'widget:move', this
-        @trigger 'widget:resize', this
-      start:        => Designer.select(this)
-      stop:         => @moved()
-      aspectRatio:  ratio
+      # resize:       =>
+      #   @trigger 'widget:move', this
+      #   @trigger 'widget:resize', this
+      # start:        => Designer.select(this)
+      # stop:         => @moved()
+      # aspectRatio:  ratio
 
   render: (mode) ->
     @el = $("""
@@ -95,7 +94,7 @@ class window.Widget
   moved: ->
     oldPosition = @position
     @cachePosition()
-    Designer.history.push(this, 'moveTo', oldPosition, @position)
+    Designer.history.push(this, 'moveTo', oldPosition, @position, Designer.template.currentPageNumber)
 
   cachePosition: ->
     @position = {x: @x(), y: @y(), width: @width(), height: @height(), zIndex: @zIndex()}
@@ -142,7 +141,7 @@ class window.Widget
     @x(@x()+x) unless x is 0
     @y(@y()+y) unless y is 0
     @cachePosition()
-    Designer.history.push(this, 'moveTo', oldPosition, @position)
+    Designer.history.push(this, 'moveTo', oldPosition, @position, Designer.template.currentPageNumber)
     @trigger 'widget:move', this
 
   saveConfig: ->

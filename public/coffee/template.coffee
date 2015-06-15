@@ -16,9 +16,7 @@ class window.Template
     template = new Template({
       key: utils.guid(),
       name: "Untitled Template",
-      layout: [],
-      orientation: 'portrait',
-      pagetype: 'student'
+      pages: [PageTemplate.create()]
     })
     return template
 
@@ -26,64 +24,59 @@ class window.Template
     TemplateStore.all(cb)
 
   constructor: (description) ->
-    @page = $('#page')
-    @widgets = []
     @key = description.key
     @name = description.name
-    @layout = description.layout
-    @orientation = description.orientation
-    @pagetype = description.pagetype
+    @pages = description.pages
+    @setCurrentPage(0)
+    delegate(this, 'currentPage', [
+      'redraw'
+      'addWidget'
+      'removeWidget'
+      'removeAllWidgets'
+      'getWidget'
+      'getWidgetOrder'
+      'setWidgetOrder'
+    ])
+
+  setSubject: (subject) ->
+    for page in @pages
+      for widget in page.widgets
+        widget.subject = subject
+
+  renderPage: (number, mode, data=null, subject=null) ->
+    console.log number, mode, @pages
+    @pages[number].render(mode, data, subject)
 
   render: (mode, data=null, subject=null) ->
-    for widgetConfig in @layout
-      @addWidget(widgetConfig, mode, data, subject)
-    @layout = []
+    for page in @pages
+      page.render(mode, data, subject)
 
-  addWidget: (widgetConfig, mode, data=null, subject=null) ->
-    data = data or utils.fakeStudentData()
-    subject = subject or utils.subject(@pagetype)
-    widget = if widgetConfig.isWidget then widgetConfig else new Widget(widgetConfig, data, subject)
-    @widgets.push(widget)
-    @page.append(widget.render(mode))
-    widget
+  addPage: ->
+    @pages.push(PageTemplate.create())
 
-  redraw: -> widget.redraw() for widget in @widgets
+  removePage: (number) ->
+    @pages.splice(number, 1)
 
-  removeWidget: (widget) ->
-    widget.remove()
-    @widgets = (w for w in @widgets when w.guid != widget.guid)
-
-  removeAllWidgets: ->
-    @removeWidget(widget) for widget in @widgets
+  setCurrentPage: (n) ->
+    return if @currentPageNumber is n
+    @currentPage.deactivate() if @currentPage
+    @currentPageNumber = n
+    @currentPage = @pages[@currentPageNumber]
+    @currentPage.activate()
+    @currentPage
 
   save: (cb) ->
     data = @serialize()
     data.key = @key
     TemplateStore.save(@key, data, cb)
 
-  getWidget: (guid) =>
-    _.find(@widgets, (w) -> w.guid is guid)
-
-  getWidgetOrder: ->
-    sortedWidgets = _.sortBy(@widgets, (w) -> w.zIndex())
-    _.map(sortedWidgets, (w) -> w.guid)
-
-  setWidgetOrder: (newOrder) ->
-    newlyOrderedWidgets = _.map(newOrder, @getWidget)
-    for widget, index in newlyOrderedWidgets
-      widget.zIndex(index+1)
-
   serialize: ->
-    layout = if @layout.length then @layout else (widget.serialize() for widget in @widgets)
-    data = {
-      layout: layout,
-      name: @name,
-      orientation: @orientation,
-      pagetype: @pagetype,
-      screenshot: @screenshot
+    {
+      pages:        _.map(@pages, (p) -> p.serialize())
+      name:         @name
     }
-    data
 
   @deserialize: (templateData, cb) ->
+    templateData.pages = _.map(templateData.pages, (p) -> new PageTemplate(p))
     template = new Template(templateData)
     cb(template)

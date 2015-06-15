@@ -232,7 +232,7 @@ class window.DynamicTableContent extends WidgetContent
   changeMapping: (newMappings) =>
     oldMappings = @mappings
     @updateMapping(newMappings)
-    Designer.history.push(this, 'updateMapping', oldMappings, newMappings)
+    Designer.history.push(this, 'updateMapping', oldMappings, newMappings, Designer.template.currentPageNumber)
 
   updateMapping: (mappings) =>
     @mappings = mappings
@@ -267,7 +267,7 @@ class window.DynamicTableContent extends WidgetContent
         unless @numberOfRows() == 0 then @tabledata.pop()
       else
         @tabledata.push(@makeRow())
-    Designer.history.push(this, 'updateTable', oldTabledata, @tabledata)
+    Designer.history.push(this, 'updateTable', oldTabledata, @tabledata, Designer.template.currentPageNumber)
     @redraw()
 
 
@@ -284,7 +284,7 @@ class window.DynamicTableContent extends WidgetContent
       else
         for row in @tabledata
           row.push(@makeCell())
-    Designer.history.push(this, 'updateTable', oldTabledata, @tabledata)
+    Designer.history.push(this, 'updateTable', oldTabledata, @tabledata, Designer.template.currentPageNumber)
     @redraw()
 
   makeCell: (value='', dynamic=false, subject='') => {dynamic: dynamic, subject: subject, value: value}
@@ -317,7 +317,7 @@ class window.DynamicTableContent extends WidgetContent
           cellArray.push(@makeCell($cell.val(), false))
       newTabledata.push(cellArray)
 
-    Designer.history.push(this, 'updateTable', @tabledata, newTabledata)
+    Designer.history.push(this, 'updateTable', @tabledata, newTabledata, Designer.template.currentPageNumber)
     @tabledata = newTabledata
 
   updateTable: (newTabledata) =>

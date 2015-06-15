@@ -30,7 +30,7 @@ class window.ImageContent extends WidgetContent
   updateImage: (data) ->
     oldSrc = @src
     @setImage(data)
-    Designer.history.push(this, 'setImage', oldSrc, @src)
+    Designer.history.push(this, 'setImage', oldSrc, @src, Designer.template.currentPageNumber)
 
   setImage: (data, doRedraw=true) ->
     @src = data

@@ -7,13 +7,12 @@ class window.UndoHistory
     @future = []
     @sinceSave = 0
 
-  push: (target, fn, fromState=null, toState=null) ->
+  push: (target, fn, fromState=null, toState=null, page=null) ->
     @future = []
     fromState = @clone(fromState)
     toState = @clone(toState)
-    @past.push({target: target, fn: fn, fromState: fromState, toState:toState})
+    @past.push({target: target, fn: fn, fromState: fromState, toState: toState, page: page})
     @sinceSave += 1
-    # console.log @past.length, UndoHistory.LIMIT
     @past.shift() if @past.length > UndoHistory.LIMIT
     @trigger('history:change')
 
@@ -27,6 +26,7 @@ class window.UndoHistory
   undo: ->
     return false unless @canUndo()
     step = @past.pop()
+    @trigger('history:ensure-page', step.page) if typeof step.page is 'number'
     step.target[step.fn].call(step.target,  @clone(step.fromState))
     @sinceSave -= 1
     @future.push(step)

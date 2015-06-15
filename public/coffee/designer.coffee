@@ -32,6 +32,7 @@ window.Designer = {
   renderControls: ->
     @renderWidgetButtons()
     @renderPropertyPanel()
+    @renderPagesList()
 
   renderPropertyPanel: ->
     @propertyPanel = new Properties(this)
@@ -49,41 +50,52 @@ window.Designer = {
           </div>
         """
 
+  renderPagesList: ->
+    $('#page-list').empty()
+    $('#pages-nav-label').html("Page #{@template.currentPageNumber+1}")
+    for page, n in @template.pages
+      classes = ['page-button']
+      classes.push('page-button-active') if n is @template.currentPageNumber
+      classes.push('page-button-landscape') if page.orientation is 'landscape'
+      classes.push('page-button-subject') if page.pagetype is 'subject'
+      $('#page-list').append """
+        <div class="#{classes.join(' ')}" data-number="#{n}">
+          <div class="page-icon">
+            #{if n is @template.currentPageNumber then '' else '<span class="page-delete-button" title="Remove page" data-number="#{n}">&times;</span>'}
+          </div>
+          Page #{n+1}
+        </div>
+      """
+
   setOrientation: (orientation) ->
-    Designer.history.push(this, 'updateOrientation', @template.orientation, orientation)
+    Designer.history.push(this, 'updateOrientation', @template.currentPage.orientation, orientation, @template.currentPageNumber)
     @updateOrientation(orientation)
 
   updateOrientation: (orientation) ->
-    @template.orientation = orientation
+    @template.currentPage.orientation = orientation
     $("#orientation input:radio").removeAttr('checked')
-    $("#orientation input:radio[value='#{@template.orientation}']").prop('checked', true)
-    @addPageClass()
+    $("#orientation input:radio[value='#{@template.currentPage.orientation}']").prop('checked', true)
+    @updatePageAttributes()
+    @renderPagesList()
 
   setPageType: (pagetype) ->
-    Designer.history.push(this, 'updatePageType', @template.pagetype, pagetype)
+    Designer.history.push(this, 'updatePageType', @template.currentPage.pagetype, pagetype, @template.currentPageNumber)
     @updatePageType(pagetype)
 
   updatePageType: (pagetype) ->
-    @template.pagetype = pagetype
+    @template.currentPage.pagetype = pagetype
     $("#pagetype input:radio").removeAttr('checked')
-    $("#pagetype input:radio[value='#{@template.pagetype}']").prop('checked', true)
-    @addPageClass()
-    @reloadTemplate()
+    $("#pagetype input:radio[value='#{@template.currentPage.pagetype}']").prop('checked', true)
+    @updatePageAttributes()
+    @renderPagesList()
+    @template.setSubject(utils.subject(@template.currentPage.pagetype))
 
-  reloadTemplate: ->
-    config = @template.serialize()
-    @template.removeAllWidgets()
-    @template = new Template(config)
-    @template.render('layout')
+  updatePageAttributes: ->
+    @template.currentPage.updateAttributes()
 
+  isSubjectPage: -> (@template.currentPage.pagetype is 'subject')
 
-  addPageClass: ->
-    $('#page').attr('class', '')
-    $('#page').addClass("#{@template.orientation} #{@template.pagetype}")
-
-  isSubjectPage: -> (@template.pagetype is 'subject')
-
-  isStudentPage: -> (@template.pagetype is 'student')
+  isStudentPage: -> (@template.currentPage.pagetype is 'student')
 
   bindEvents: ->
     $('#save-exit').click => @saveAndExit()
@@ -93,7 +105,7 @@ window.Designer = {
           @history.resetSaveChanges()
         false
     $('#exit a').click => @promptSave()
-    $('#page').on 'mousedown', (e) => @maybeClearSelection(e.target)
+    $('#viewport').on 'mousedown', '.page', (e) => @maybeClearSelection(e.target)
     $('#orientation input:radio').change (e) => @setOrientation($(e.currentTarget).val())
     $('#pagetype input:radio').change (e) => @setPageType($(e.currentTarget).val())
     $('#name').blur => @updateName()
@@ -101,6 +113,10 @@ window.Designer = {
     $('#name').click (e) => $(e.currentTarget).selectText()
     $('#undo').click => @history.undo()
     $('#redo').click => @history.redo()
+    $('#page-list').on 'click', '.page-delete-button', (e) => @deletePage(Number($(e.currentTarget).attr('data-number')))
+    $('#page-list').on 'click', '.page-button', (e) => @switchPage(Number($(e.currentTarget).attr('data-number')))
+    $('#add-page').click => @addPage()
+    @history.bind 'history:ensure-page', (page) => @switchPage(page)
     @history.bind 'history:change', => @updateHistoryButtonState()
     @history.bind 'history:change', => @updateSavedButtonState()
     @bindKeyboardEvents()
@@ -111,7 +127,7 @@ window.Designer = {
       do (className) => $("#add-#{name}").click =>
         $('#gallery').addClass('hidden')
         setTimeout (-> $('#gallery').removeClass('hidden')), 500
-        @addWidget(type: className, zIndex: @template.widgets.length+1)
+        @addWidget(type: className, zIndex: @template.currentPage.widgets.length+1)
         false
 
   bindKeyboardEvents: ->
@@ -161,6 +177,26 @@ window.Designer = {
       @duplicate()
       false
 
+  addPage: ->
+    @template.addPage()
+    @template.setCurrentPage(@template.pages.length-1)
+    @renderPagesList()
+    false
+
+  switchPage: (number) ->
+    return if @template.currentPageNumber is number
+    @clearSelection()
+    @clearEditWidget()
+    @template.setCurrentPage(number)
+    @setPageFormFields()
+    @renderPagesList()
+    false
+
+  deletePage: (number) ->
+    @template.removePage(number)
+    @renderPagesList()
+    false
+
   copy: ->
     return unless @selection
     @clipboard = @selection.serialize()
@@ -190,7 +226,7 @@ window.Designer = {
   clearSelection: -> @select(null)
 
   maybeClearSelection: (target) ->
-    if target is $('#page')[0]
+    if $('.page').is(target)
       @clearSelection()
       @clearEditWidget()
 
@@ -211,14 +247,14 @@ window.Designer = {
     widget = @template.addWidget(widgetConfig, 'layout')
     @select(widget)
     if withHistory
-      Designer.history.push(this, 'addRemoveWidget', {remove:widget}, {add:widget})
+      Designer.history.push(this, 'addRemoveWidget', {remove:widget}, {add:widget}, @template.currentPageNumber)
 
   removeWidget: (widget, withHistory=true) ->
     @currentEditWidget = null if @currentEditWidget is widget
     @clearSelection()
     @template.removeWidget(widget)
     if withHistory
-      Designer.history.push(this, 'addRemoveWidget', {add:widget}, {remove:widget})
+      Designer.history.push(this, 'addRemoveWidget', {add:widget}, {remove:widget}, @template.currentPageNumber)
 
   addRemoveWidget: (action) ->
     @addWidget(action.add, false) if action.add?
@@ -226,18 +262,19 @@ window.Designer = {
 
   load: ->
     $('#name').text(@template.name)
-    $("#orientation input:radio[value='#{@template.orientation}']").attr('checked', true)
-    $("#pagetype input:radio[value='#{@template.pagetype}']").attr('checked', true)
-    $('#page').addClass("#{@template.orientation} #{@template.pagetype}")
+    @setPageFormFields()
     subject = if @isSubjectPage() then utils.fakeSubject() else null
     @template.render("layout")
+
+  setPageFormFields: ->
+    $("#orientation input:radio[value='#{@template.currentPage.orientation}']").prop('checked', true)
+    $("#pagetype input:radio[value='#{@template.currentPage.pagetype}']").prop('checked', true)
 
   discard: -> @exitDesigner()
   clear: -> @template.removeAllWidgets()
 
   promptSave: ->
     if @hasUnsavedChanges()
-      @takeScreenShot() if !utils.is_ccr
       $('#save-modal').modal()
     else
       @exitDesigner()
@@ -260,12 +297,6 @@ window.Designer = {
 
   saveAndExit: ->
     @template.save => @exitDesigner()
-
-  takeScreenShot: ->
-    $('#viewport').addClass('screenshot')
-    utils.screenshot 'page', (data_url) =>
-      @template.screenshot = data_url
-      $('#viewport').removeClass('screenshot')
 
   updateHistoryButtonState: ->
     if @history.canUndo()
@@ -294,7 +325,7 @@ window.Designer = {
     reorder = _.without(currentOrder, guid)
     reorder.unshift(guid)
     @template.setWidgetOrder(reorder)
-    Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder})
+    Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder}, @template.currentPageNumber)
 
   setWidgetBackOne: (guid) ->
     currentOrder = @template.getWidgetOrder()
@@ -303,23 +334,23 @@ window.Designer = {
       reorder = _.without(currentOrder, guid)
       reorder.splice(currentIndex - 1, 0, guid)
       @template.setWidgetOrder(reorder)
-      Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder})
+      Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder}, @template.currentPageNumber)
 
   setWidgetForwardOne: (guid) ->
     currentOrder = @template.getWidgetOrder()
     currentIndex = _.indexOf(currentOrder, guid)
-    unless currentIndex is @template.widgets.length - 1
+    unless currentIndex is @template.currentPage.widgets.length - 1
       reorder = _.without(currentOrder, guid)
       reorder.splice(currentIndex + 1, 0, guid)
       @template.setWidgetOrder(reorder)
-      Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder})
+      Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder}, @template.currentPageNumber)
 
   setWidgetToFront: (guid) ->
     currentOrder = @template.getWidgetOrder()
     reorder = _.without(currentOrder, guid)
     reorder.push(guid)
     @template.setWidgetOrder(reorder)
-    Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder})
+    Designer.history.push(this, 'undoRedoOrderingWidget', {undo:currentOrder}, {redo:reorder}, @template.currentPageNumber)
 
   undoRedoOrderingWidget: (action) ->
     @template.setWidgetOrder(action.undo)

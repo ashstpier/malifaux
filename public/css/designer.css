@@ -3,7 +3,6 @@ body {
   font-family: Helvetica Neue, Helvetica, Arial, Sans-Serif;
   margin: 0;
   padding: 0;
-  min-width: 980px;
 }
 
 #toolbar {
@@ -20,7 +19,7 @@ body {
 
 #template-name {
   float: left;
-  padding: 0 0 0 20px;
+  padding: 0;
 }
 
 #template-name .file {
@@ -29,7 +28,7 @@ body {
 }
 
 #name {
-  margin: 10px 0 10px 30px;
+  margin: 10px;
   padding: 0 5px;
   color: #fff;
   font-size: 24px;
@@ -123,12 +122,19 @@ body {
   overflow: auto;
 }
 
-#page {
-  z-index: 1;
-  position: relative;
+.page {
+  z-index: 100;
+  position: absolute;
+  top: 0;
+  visibility: hidden;
   margin: 10px auto;
   background-color: #fff;
   box-shadow: #c9c9c9 0 0 5px;
+}
+.page-active {
+  z-index: 101;
+  position: relative;
+  visibility: visible;
 }
 
 #properties {
@@ -145,12 +151,12 @@ body {
 
  /* A4 Ratio is ~ 1:1.4 */
 
-.portrait {
+.page[data-orientation='portrait'] {
   width: 960px;
   height: 1344px;
 }
 
-.landscape {
+.page[data-orientation='landscape'] {
   width: 1344px;
   height: 960px;
 }
@@ -204,4 +210,86 @@ body {
   float: left;
   display: none;
   font-size: 0.7em;
+}
+
+#pages {
+  text-align: center;
+}
+
+#page-list {
+  display: inline-block;
+}
+
+.page-button {
+  display: inline-block;
+  padding: 15px;
+  margin: 0;
+  text-align: center;
+  color: #eee;
+  cursor: pointer;
+}
+.page-button:hover {
+  background-color: rgba(0,0,0,0.2);
+}
+.page-button-active {
+  background-color: rgba(0,0,0,0.1);
+  color: #fff;
+  font-weight: bold;
+}
+.page-icon {
+  position: relative;
+  background-color: #fff;
+  width: 100px;
+  height: 140px;
+  margin: 0 0 10px 0;
+}
+
+.page-button-landscape .page-icon,
+.page-button-landscape.page-button-subject .page-icon:before,
+.page-button-landscape.page-button-subject .page-icon:after {
+  width: 140px;
+  height: 100px;
+}
+
+.page-button-subject .page-icon {
+  left: -3px;
+}
+.page-button-subject .page-icon:before,
+.page-button-subject .page-icon:after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100px;
+  height: 140px;
+  background-color: #bbb;
+  top: 3px;
+  left: 3px;
+  z-index: -1;
+}
+.page-button-subject .page-icon:after {
+  background-color: #888;
+  top: 6px;
+  left: 6px;
+  z-index: -2;
+}
+
+
+.page-delete-button {
+  color: #c33;
+  position: absolute;
+  top: 0;
+  right: 0;
+  line-height: 10px;
+  font-size: 20px;
+  padding: 5px;
+}
+.page-delete-button:hover {
+  color: #e22;
+}
+
+#add-page .page-icon {
+  background-color: rgba(255,255,255,0.5);
+}
+#add-page:hover .page-icon {
+  background-color: rgba(255,255,255,0.8);
 }
