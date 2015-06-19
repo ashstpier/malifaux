@@ -97,15 +97,23 @@ class window.Properties
 
 
   selectionMoved: =>
-    @updateLayoutValues()
+    @throttledUpdateLayoutValues()
     true
 
-  updateLayoutValues: () ->
-    @el.find('#prop-value-x').val(@x())
-    @el.find('#prop-value-y').val(@y())
-    @el.find('#prop-value-width').val(@width())
-    @el.find('#prop-value-height').val(@height())
-    @el.find('#prop-value-z-index').val(@zIndex())
+  updateLayoutValues: =>
+    @cachedSelector('#prop-value-x').val(@x())
+    @cachedSelector('#prop-value-y').val(@y())
+    @cachedSelector('#prop-value-width').val(@width())
+    @cachedSelector('#prop-value-height').val(@height())
+    @cachedSelector('#prop-value-z-index').val(@zIndex())
+
+  throttledUpdateLayoutValues: _.throttle(@::updateLayoutValues, 300)
+
+  cachedSelector: (sel) =>
+    @_elCache = {} unless @_elCache
+    @_elCache[sel] = @el.find(sel)
+    @_elCache[sel]
+
 
   redraw: ->
     @setAppearanceOptions()
