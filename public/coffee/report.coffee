@@ -1,31 +1,45 @@
 window.Report = {
 
- init: ->
-  API.loadConfig =>
-    @studentId = window.student_id or utils.querystring('studentid')
-    @templateName = window.template or utils.querystring('template')
-    @page = window.page or utils.querystring('page') or 0
-    @debug = utils.querystring('debug') is '1'
-    Template.load @templateName, (template) =>
-      @template = template
-      API.student @studentId, (data) => @render(data)
+  READY_DELAY: 250
 
- renderDebug: (data) ->
-   if @debug
-     $('body').append("""
-       <div style="height:1344px;" />
-       <hr/>
-       <h3>Student Data</h3>
-       <pre>#{JSON.stringify(data, null, 2)}</pre>
-       <hr/>
-       <h3>Template Data</h3>
-       <pre><code>#{utils.escape(JSON.stringify(@template.description, null, 2))}</code></pre>
-     """)
+  init: ->
+    console.log 'loading configuration data...'
+    API.loadConfig =>
+      @studentId = window.student_id or utils.querystring('studentid')
+      @templateName = window.template or utils.querystring('template')
+      @page = window.page or utils.querystring('page') or 0
+      @debug = utils.querystring('debug') is '1'
+      console.log 'loading page template...'
+      Template.load @templateName, (template) =>
+        @template = template
+        console.log 'loading student data...'
+        API.student @studentId, (data) =>
+          @preload(=> @render(data))
 
- render: (data) ->
-   @template.renderPage(@page, 'display', data)
-   @renderDebug(data) if @debug
-   delay 100, -> window.status = 'ready'
+  preload: (done) ->
+    console.log 'preloading google charts...'
+    google.load('visualization', '1.0', {'packages':['corechart'], callback: done })
+
+  renderDebug: (data) ->
+    if @debug
+      $('body').append("""
+        <div style="height:1344px;" />
+        <hr/>
+        <h3>Student Data</h3>
+        <pre>#{JSON.stringify(data, null, 2)}</pre>
+        <hr/>
+        <h3>Template Data</h3>
+        <pre><code>#{utils.escape(JSON.stringify(@template.description, null, 2))}</code></pre>
+      """)
+
+  render: (data) ->
+    console.log 'rendering...'
+    @template.renderPage(@page, 'display', data)
+    @renderDebug(data) if @debug
+    console.log 'waiting for page to settle...'
+    delay @READY_DELAY, ->
+      console.log 'ready'
+      window.status = 'ready'
 }
 
 $ ->

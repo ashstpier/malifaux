@@ -44,7 +44,6 @@ class window.Template
         widget.subject = subject
 
   renderPage: (number, mode, data=null, subject=null) ->
-    console.log number, mode, @pages
     @pages[number].render(mode, data, subject)
 
   render: (mode, data=null, subject=null) ->
