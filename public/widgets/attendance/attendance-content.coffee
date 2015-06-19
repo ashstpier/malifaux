@@ -31,7 +31,7 @@ class window.AttendanceContent extends WidgetContent
 
     @widget.bind 'widget:move', => @drawChart()
     @attendance = data.attendance
-    google.load('visualization', '1.0', {'packages':['corechart'], callback: => @drawChart() })
+    google.load('visualization', '1.0', {'packages':['corechart'], callback: @drawChart })
 
     $("""<div class="attendance-widget"></div>""")
 
@@ -55,7 +55,7 @@ class window.AttendanceContent extends WidgetContent
       @option('color', 'color', "Text Color")
     ]
 
-  drawChart: () ->
+  drawChart: =>
 
     fontSize = parseInt(utils.sizeMap[@style.size])
     label_position = 'right'
