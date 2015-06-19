@@ -56,12 +56,12 @@ class window.Widget
       grid:         Widget.GRID_SIZE
       containment:  Designer.template.currentPage.el
       handles:      'n, e, s, w, ne, se, sw, nw'
-      # resize:       =>
-      #   @trigger 'widget:move', this
-      #   @trigger 'widget:resize', this
-      # start:        => Designer.select(this)
-      # stop:         => @moved()
-      # aspectRatio:  ratio
+      resize:       =>
+        @trigger 'widget:move', this
+        @trigger 'widget:resize', this
+      start:        => Designer.select(this)
+      stop:         => @moved()
+      aspectRatio:  ratio
 
   render: (mode) ->
     @el = $("""
