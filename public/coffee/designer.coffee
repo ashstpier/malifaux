@@ -226,6 +226,7 @@ window.Designer = {
     Designer.history.push(this, 'updateNameFromHistory', oldName, newName);
 
   select: (widget) ->
+    return true if @selection is widget
     @selection = widget
     @trigger('selection:change', @selection)
 
