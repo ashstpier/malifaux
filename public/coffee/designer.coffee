@@ -205,8 +205,10 @@ window.Designer = {
   paste: ->
     return unless @clipboard
     widgetConfig = $.extend({}, @clipboard)
-    widgetConfig.x = Designer.NUDGE_SIZE
-    widgetConfig.y = Designer.NUDGE_SIZE
+    content = if widgetConfig.type? then new window[widgetConfig.type](this, widgetConfig.content) else new TextContent()
+    width = if widgetConfig.width? then widgetConfig.width else @content.defaultWidth()
+    widgetConfig.x = ((960/2) - (width/2))
+    widgetConfig.y = $('#viewport').scrollTop() + 100
     @addWidget(widgetConfig)
 
   duplicate: ->
