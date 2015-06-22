@@ -1,3 +1,6 @@
 .widget-shape {
   overflow: hidden;
 }
+.widget-shape .widget-content {
+  height: 100%;
+}
