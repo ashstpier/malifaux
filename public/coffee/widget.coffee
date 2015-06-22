@@ -27,7 +27,7 @@ class window.Widget
     zIndex = if config.z_index? then config.z_index else @content.defaultZIndex()
     @origin = {
       x: if config.x? then config.x else ((960/2) - (width/2))
-      y: if config.y? then config.y else 100
+      y: if config.y? then config.y else $('#viewport').scrollTop() + 100
       zIndex: zIndex
       width: width
       height: height
