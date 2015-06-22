@@ -14,11 +14,7 @@ window.Report = {
         @template = template
         console.log 'loading student data...'
         API.student @studentId, (data) =>
-          @preload(=> @render(data))
-
-  preload: (done) ->
-    console.log 'preloading google charts...'
-    google.load('visualization', '1.0', {'packages':['corechart'], callback: done })
+          @render(data)
 
   renderDebug: (data) ->
     if @debug
