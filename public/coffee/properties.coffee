@@ -8,6 +8,35 @@ class window.Properties
   render: ->
     @el.append """
       <h2 class="prop-selection"></h2>
+      <div id="properties-tabs" class="tabs">
+        <nav>
+          <ul>
+            <li><a href="#style-tab">Style</a></li>
+            <li><a href="#data-tab">Configuration</a></li>
+          </ul>
+        </nav>
+        <div class="tab-wrapper">
+          <div id="style-tab" class="tab-content">
+            <section class="prop-section prop-appearance"></section>
+            <section class="prop-section prop-layout">
+              <h3 class="prop-section-header">Layout</h3>
+              <div class="prop-content">
+                <label for="prop-value-x">x</label>
+                <input type="number" step="1" id="prop-value-x" class="prop-coord-input" data-fn="x" />
+                <label for="prop-value-y">y</label>
+                <input type="number" step="1" id="prop-value-y" class="prop-coord-input" data-fn="y" />
+                <label for="prop-value-width">width</label>
+                <input type="number" step="1" id="prop-value-width" class="prop-coord-input" data-fn="width" />
+                <label for="prop-value-height">height</label>
+                <input type="number" step="1" id="prop-value-height" class="prop-coord-input"  data-fn="height"/>
+              </div>
+            </section>
+          </div>
+          <div id="data-tab" class="tab-content">
+            <section class="prop-section prop-config"></section>
+          </div>
+        </div>
+      </div>
       <section class="prop-section prop-page-options">
         <h3 class="prop-section-header">Options</h3>
         <div class="prop-content">
@@ -35,28 +64,6 @@ class window.Properties
           </form>
         </div>
       </section>
-      <section class="prop-section prop-layout">
-        <h3 class="prop-section-header">Layout</h3>
-        <div class="prop-content">
-          <label for="prop-value-x">x</label>
-          <input type="number" step="1" id="prop-value-x" class="prop-coord-input" data-fn="x" />
-          <label for="prop-value-y">y</label>
-          <input type="number" step="1" id="prop-value-y" class="prop-coord-input" data-fn="y" />
-          <label for="prop-value-width">width</label>
-          <input type="number" step="1" id="prop-value-width" class="prop-coord-input" data-fn="width" />
-          <label for="prop-value-height">height</label>
-          <input type="number" step="1" id="prop-value-height" class="prop-coord-input"  data-fn="height"/>
-          <label for="prop-value-ordering">ordering</label>
-          <select id='prop-value-ordering' class='prop-coord-select' data-fn="ordering">
-            <option></option>
-            <option value="setWidgetToBack">Send to back</option>
-            <option value="setWidgetBackOne">Send backward</option>
-            <option value="setWidgetForwardOne">Bring forward</option>
-            <option value="setWidgetToFront">Bring to front</option>
-          </select>
-        </div>
-      </section>
-
       <section class="prop-section prop-config"></section>
       <section class="prop-section prop-appearance"></section>
     """

@@ -83,6 +83,18 @@
 .prop-option:first-child {
   margin-top: 0;
 }
+.prop-option.color {
+  display: inline-block;
+  width: 33.3333333%;
+  text-align: center;
+  margin-top: 5px;
+  padding: 5px;
+}
+
+.prop-option.color label {
+  font-weight: 400;
+  font-size: 14px;
+}
 .prop-label {
   box-sizing: border-box;
   display: inline-block;

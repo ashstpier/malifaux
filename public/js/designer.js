@@ -208,9 +208,11 @@ window.Designer = {
       };
     })(this));
     this.bindKeyboardEvents();
-    $('#widget-options, .assembly-modal-close').click((function(_this) {
+    $('#widget-gallery').assemblyModal();
+    $('#properties-tabs').assemblyTabs();
+    $('#widget-options').click((function(_this) {
       return function() {
-        return _this.toggleGallery();
+        return $('#widget-gallery').assemblyModal('show');
       };
     })(this));
     window.addEventListener("beforeunload", (function(_this) {
@@ -225,10 +227,7 @@ window.Designer = {
       results.push((function(_this) {
         return function(className) {
           return $("#add-" + name).click(function() {
-            $('#gallery').addClass('hidden');
-            setTimeout((function() {
-              return $('#gallery').removeClass('hidden');
-            }), 500);
+            $('#widget-gallery').assemblyModal('hide');
             _this.addWidget({
               type: className,
               zIndex: _this.template.currentPage.widgets.length + 1

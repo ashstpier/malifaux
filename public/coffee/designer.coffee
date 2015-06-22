@@ -121,14 +121,16 @@ window.Designer = {
     @history.bind 'history:change', => @updateSavedButtonState()
     @bindKeyboardEvents()
 
-    $('#widget-options, .assembly-modal-close').click => @toggleGallery()
+    $('#widget-gallery').assemblyModal()
+    $('#properties-tabs').assemblyTabs()
+
+    $('#widget-options').click => $('#widget-gallery').assemblyModal('show')
 
     window.addEventListener "beforeunload", (e) => @reminderToSave(e)
 
     for name, className of Widget.WIDGETS
       do (className) => $("#add-#{name}").click =>
-        $('#gallery').addClass('hidden')
-        setTimeout (-> $('#gallery').removeClass('hidden')), 500
+        $('#widget-gallery').assemblyModal('hide')
         @addWidget(type: className, zIndex: @template.currentPage.widgets.length+1)
         false
 
