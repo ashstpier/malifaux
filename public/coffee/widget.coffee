@@ -19,6 +19,7 @@ class window.Widget
 
   constructor: (config={}, @data=null, @subject=null) ->
     @currentMode = 'layout'
+    @hasEvents = false
     @guid = utils.guid()
     @content = if config.type? then new window[config.type](this, config.content) else new TextContent()
     width = if config.width? then config.width else @content.defaultWidth()
@@ -39,6 +40,7 @@ class window.Widget
   originStyles: -> """position:absolute; top:#{@origin.y}px; left:#{@origin.x}px; width:#{@origin.width}px; height:#{@origin.height}px; z-index:#{@origin.zIndex};"""
 
   bindEvents: ->
+    @hasEvents = true
     Designer.bind 'selection:change', @updateSelectedState
     @el.click => Designer.select(this)
     @el.dblclick => Designer.editWidget(this) if this.content.editable()
@@ -148,9 +150,10 @@ class window.Widget
     @content.saveConfig()
 
   setAspectRatio: (ratio) ->
-    @el.resizable('destroy')
-    @el.height(@el.width()/ratio)
-    @applyResizable(ratio)
+    if @hasEvents
+      @el.resizable('destroy')
+      @el.height(@el.width()/ratio)
+      @applyResizable(ratio)
 
   ordering: (fn) -> Designer[fn].call(Designer, @guid)
 
