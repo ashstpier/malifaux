@@ -63,7 +63,7 @@ class window.PageTemplate
     @layout = (widget.serialize() for widget in @widgets)
 
   serialize: ->
-    @serializeWidgets() unless @layout.length > 0
+    @serializeWidgets()
     data = {
       layout: @layout,
       orientation: @orientation,
