@@ -13,9 +13,9 @@ class window.AttendanceContent extends WidgetContent
     color3: '#e67e22'
     color4: '#9b59b6'
     chartstyle: 'bar'
-    color: '#000000'
-    font: 'Helvetica'
-    size: 'Medium'
+    # color: '#000000'
+    # font: 'Helvetica'
+    # size: 'Medium'
   }
 
   initWithConfig: (config) ->
@@ -56,9 +56,9 @@ class window.AttendanceContent extends WidgetContent
       @option('color', 'color3', "Authorised")
       @option('color', 'color4', "Unauthorised")
       @option('select', 'chartstyle', "Chart style", options: {bar: 'Bar', pie: 'Pie'})
-      @option('font',  'font', "Font")
-      @option('size',  'size', "Text Size")
-      @option('color', 'color', "Text Color")
+      # @option('font',  'font', "Font")
+      # @option('size',  'size', "Text Size")
+      # @option('color', 'color', "Text Color")
     ]
 
   drawChart: (root) =>
@@ -123,6 +123,11 @@ class window.AttendanceContent extends WidgetContent
     colors[@_label3] = @style.color3
     colors[@_label4] = @style.color4
 
+    if @style.chartstyle == 'pie'
+      chartType = 'pie'
+    else
+      chartType = 'bar'
+
     @chart = c3.generate(
       bindto: root,
       data:
@@ -133,7 +138,7 @@ class window.AttendanceContent extends WidgetContent
           [ @_label3, parseFloat(@attendance.authorised) / 100 ]
           [ @_label4, parseFloat(@attendance.unauthorised) / 100 ]
         ]
-        type: "bar"
+        type: chartType
         groups: [ [ @_label1, @_label2, @_label3, @_label4 ] ]
         colors: colors
 
@@ -160,9 +165,6 @@ class window.AttendanceContent extends WidgetContent
       grid:
         y:
           show: true
-          lines: [
-            {value: 0.95, text: '95%'},
-          ]
 
       interaction: {
         enabled: false
@@ -178,9 +180,9 @@ class window.AttendanceContent extends WidgetContent
   color3: @property('style', 'color3')
   color4: @property('style', 'color4')
   chartstyle: @property('style', 'chartstyle')
-  font: @property('style', 'font')
-  size: @property('style', 'size')
-  color: @property('style', 'color')
+  # font: @property('style', 'font')
+  # size: @property('style', 'size')
+  # color: @property('style', 'color')
   label1: @property('_label1')
   label2: @property('_label2')
   label3: @property('_label3')
