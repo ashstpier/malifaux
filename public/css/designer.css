@@ -83,6 +83,20 @@ body {
   padding: 0;
 }
 
+#nav .subnav {
+  display: none;
+  background-color: #09A6B4;
+  position: fixed;
+  top: 50px;
+  left: 0;
+  right: 0;
+  padding: 20px;
+}
+
+#nav .nav-option:hover .subnav {
+  display: block;
+}
+
 #nav .nav-option a {
   display: block;
   position: relative;
@@ -282,7 +296,7 @@ body {
 
 
 .page-delete-button {
-  color: #c33;
+  color: #09A6B4;
   position: absolute;
   top: 0;
   right: 0;
