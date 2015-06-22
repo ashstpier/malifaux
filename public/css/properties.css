@@ -50,6 +50,7 @@
 .prop-block-label {
   display: block;
   padding: .1em 0;
+  font-size: 14px;
 }
 
 .prop-layout .prop-coord-input {

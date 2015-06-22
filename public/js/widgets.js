@@ -1096,129 +1096,6 @@
 }).call(this);
 
 (function() {
-  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.FieldContent = (function(superClass) {
-    extend(FieldContent, superClass);
-
-    function FieldContent() {
-      this.updateMapping = bind(this.updateMapping, this);
-      this.changeMapping = bind(this.changeMapping, this);
-      return FieldContent.__super__.constructor.apply(this, arguments);
-    }
-
-    FieldContent.className = "FieldContent";
-
-    FieldContent.displayName = "Dynamic Text";
-
-    FieldContent.description = "Pull a text field from a student record and style it for display.";
-
-    FieldContent.icon = "nameplate";
-
-    FieldContent.prototype.defaultWidth = function() {
-      return 200;
-    };
-
-    FieldContent.prototype.defaultHeight = function() {
-      return 50;
-    };
-
-    FieldContent.STYLE_DEFAULTS = {
-      color: '#000000',
-      font: 'Helvetica',
-      size: 'Medium'
-    };
-
-    FieldContent.prototype.initWithConfig = function(config) {
-      this._field = this.get(config.field, Object.keys(this.metrics())[0]);
-      this.style = $.extend({}, FieldContent.STYLE_DEFAULTS, this.get(config.style, {}));
-      return this.mappings = this.get(config.mappings, {});
-    };
-
-    FieldContent.prototype.render_layout = function(data) {
-      return $("<div class=\"field-widget\" style=\"" + (this.textStyles()) + "\">" + (this.fieldFrom(data)) + "</div>");
-    };
-
-    FieldContent.prototype.renderAppearanceOptions = function() {
-      return this.option('font', 'font', "Font") + this.option('size', 'size', "Text Size") + this.option('color', 'color', "Text Color");
-    };
-
-    FieldContent.prototype.renderConfigOptions = function() {
-      return [
-        this.option('select', 'field', "Field", {
-          options: this.metrics(),
-          hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output."
-        }), this.mappingSettings()
-      ];
-    };
-
-    FieldContent.prototype.mappingSettings = function() {
-      var node, self;
-      node = $("<div class=\"mapping-option\"><a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(this.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a></div>");
-      self = this;
-      node.on("click", ".mapping", (function(_this) {
-        return function() {
-          return new MappingModal(_this.mappings, _this.changeMapping);
-        };
-      })(this));
-      return node;
-    };
-
-    FieldContent.prototype.changeMapping = function(newMappings) {
-      var oldMappings;
-      oldMappings = this.mappings;
-      this.updateMapping(newMappings);
-      return Designer.history.push(this, 'updateMapping', oldMappings, newMappings, Designer.template.currentPageNumber);
-    };
-
-    FieldContent.prototype.updateMapping = function(mappings) {
-      this.mappings = mappings;
-      return this.redraw();
-    };
-
-    FieldContent.prototype.textStyles = function() {
-      return this.styleString({
-        'color': this.style.color,
-        'font-family': utils.fontMap[this.style.font],
-        'font-size': utils.sizeMap[this.style.size]
-      });
-    };
-
-    FieldContent.prototype.fieldFrom = function(data) {
-      var i, key, len, ref;
-      ref = this._field.split('.');
-      for (i = 0, len = ref.length; i < len; i++) {
-        key = ref[i];
-        data = data != null ? data[key] : void 0;
-      }
-      return this.mappings[data] || data || this.placeholderWithLabel(key);
-    };
-
-    FieldContent.prototype.font = FieldContent.property('style', 'font');
-
-    FieldContent.prototype.size = FieldContent.property('style', 'size');
-
-    FieldContent.prototype.color = FieldContent.property('style', 'color');
-
-    FieldContent.prototype.field = FieldContent.property('_field');
-
-    FieldContent.prototype.serialize = function() {
-      return {
-        field: this._field,
-        style: this.style,
-        mappings: this.mappings
-      };
-    };
-
-    return FieldContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
   var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
@@ -1356,6 +1233,129 @@
     };
 
     return ImageContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.FieldContent = (function(superClass) {
+    extend(FieldContent, superClass);
+
+    function FieldContent() {
+      this.updateMapping = bind(this.updateMapping, this);
+      this.changeMapping = bind(this.changeMapping, this);
+      return FieldContent.__super__.constructor.apply(this, arguments);
+    }
+
+    FieldContent.className = "FieldContent";
+
+    FieldContent.displayName = "Dynamic Text";
+
+    FieldContent.description = "Pull a text field from a student record and style it for display.";
+
+    FieldContent.icon = "nameplate";
+
+    FieldContent.prototype.defaultWidth = function() {
+      return 200;
+    };
+
+    FieldContent.prototype.defaultHeight = function() {
+      return 50;
+    };
+
+    FieldContent.STYLE_DEFAULTS = {
+      color: '#000000',
+      font: 'Helvetica',
+      size: 'Medium'
+    };
+
+    FieldContent.prototype.initWithConfig = function(config) {
+      this._field = this.get(config.field, Object.keys(this.metrics())[0]);
+      this.style = $.extend({}, FieldContent.STYLE_DEFAULTS, this.get(config.style, {}));
+      return this.mappings = this.get(config.mappings, {});
+    };
+
+    FieldContent.prototype.render_layout = function(data) {
+      return $("<div class=\"field-widget\" style=\"" + (this.textStyles()) + "\">" + (this.fieldFrom(data)) + "</div>");
+    };
+
+    FieldContent.prototype.renderAppearanceOptions = function() {
+      return this.option('font', 'font', "Font") + this.option('size', 'size', "Text Size") + this.option('color', 'color', "Text Color");
+    };
+
+    FieldContent.prototype.renderConfigOptions = function() {
+      return [
+        this.option('select', 'field', "Field", {
+          options: this.metrics(),
+          hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output."
+        }), this.mappingSettings()
+      ];
+    };
+
+    FieldContent.prototype.mappingSettings = function() {
+      var node, self;
+      node = $("<div class=\"mapping-option\"><a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(this.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a></div>");
+      self = this;
+      node.on("click", ".mapping", (function(_this) {
+        return function() {
+          return new MappingModal(_this.mappings, _this.changeMapping);
+        };
+      })(this));
+      return node;
+    };
+
+    FieldContent.prototype.changeMapping = function(newMappings) {
+      var oldMappings;
+      oldMappings = this.mappings;
+      this.updateMapping(newMappings);
+      return Designer.history.push(this, 'updateMapping', oldMappings, newMappings, Designer.template.currentPageNumber);
+    };
+
+    FieldContent.prototype.updateMapping = function(mappings) {
+      this.mappings = mappings;
+      return this.redraw();
+    };
+
+    FieldContent.prototype.textStyles = function() {
+      return this.styleString({
+        'color': this.style.color,
+        'font-family': utils.fontMap[this.style.font],
+        'font-size': utils.sizeMap[this.style.size]
+      });
+    };
+
+    FieldContent.prototype.fieldFrom = function(data) {
+      var i, key, len, ref;
+      ref = this._field.split('.');
+      for (i = 0, len = ref.length; i < len; i++) {
+        key = ref[i];
+        data = data != null ? data[key] : void 0;
+      }
+      return this.mappings[data] || data || this.placeholderWithLabel(key);
+    };
+
+    FieldContent.prototype.font = FieldContent.property('style', 'font');
+
+    FieldContent.prototype.size = FieldContent.property('style', 'size');
+
+    FieldContent.prototype.color = FieldContent.property('style', 'color');
+
+    FieldContent.prototype.field = FieldContent.property('_field');
+
+    FieldContent.prototype.serialize = function() {
+      return {
+        field: this._field,
+        style: this.style,
+        mappings: this.mappings
+      };
+    };
+
+    return FieldContent;
 
   })(WidgetContent);
 
@@ -1606,6 +1606,99 @@
 }).call(this);
 
 (function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.TextContent = (function(superClass) {
+    extend(TextContent, superClass);
+
+    function TextContent() {
+      return TextContent.__super__.constructor.apply(this, arguments);
+    }
+
+    TextContent.className = "TextContent";
+
+    TextContent.displayName = "Free Text";
+
+    TextContent.description = "A block of static text with formatting options.";
+
+    TextContent.icon = "font";
+
+    TextContent.prototype.defaultWidth = function() {
+      return 360;
+    };
+
+    TextContent.prototype.defaultHeight = function() {
+      return 240;
+    };
+
+    TextContent.prototype.editable = function() {
+      return this.widget.currentMode === 'layout';
+    };
+
+    TextContent.EDITOR_CONFIG = {
+      imageUpload: false,
+      inlineMode: true,
+      mediaManager: false,
+      placeholder: "Type here...",
+      plainPaste: true,
+      buttons: ["bold", "italic", "underline", "fontSize", "color", "sep", "align", "insertOrderedList", "insertUnorderedList", "outdent", "indent"]
+    };
+
+    TextContent.DEFAULT_CONTENT = "<p>Type text here&hellip;</p>";
+
+    TextContent.STYLE_DEFAULTS = {
+      font: 'Helvetica'
+    };
+
+    TextContent.prototype.initWithConfig = function(config) {
+      this.html = this.get(config.html, TextContent.DEFAULT_CONTENT);
+      return this.style = $.extend({}, TextContent.STYLE_DEFAULTS, this.get(config.style, {}));
+    };
+
+    TextContent.prototype.render_layout = function(data) {
+      var styles;
+      styles = this.styleString({
+        'font-family': utils.fontMap[this.style.font]
+      });
+      return $("<div class=\"text-widget\" style=\"" + styles + "\">" + this.html + "</div>");
+    };
+
+    TextContent.prototype.render_edit = function(data) {
+      var node;
+      node = this.render_layout(data);
+      this.editor = node.editable(TextContent.EDITOR_CONFIG);
+      return node;
+    };
+
+    TextContent.prototype.renderAppearanceOptions = function() {
+      return this.option('font', 'font', "Font");
+    };
+
+    TextContent.prototype.bindEvents = function(el) {
+      return el.on('editable.contentChanged', (function(_this) {
+        return function() {
+          return _this.html = _this.el.editable("getHTML");
+        };
+      })(this));
+    };
+
+    TextContent.prototype.font = TextContent.property('style', 'font');
+
+    TextContent.prototype.serialize = function() {
+      return {
+        html: this.html,
+        style: this.style
+      };
+    };
+
+    return TextContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
   var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
@@ -1718,98 +1811,5 @@
     return SubjectFieldContent;
 
   })(FieldContent);
-
-}).call(this);
-
-(function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.TextContent = (function(superClass) {
-    extend(TextContent, superClass);
-
-    function TextContent() {
-      return TextContent.__super__.constructor.apply(this, arguments);
-    }
-
-    TextContent.className = "TextContent";
-
-    TextContent.displayName = "Free Text";
-
-    TextContent.description = "A block of static text with formatting options.";
-
-    TextContent.icon = "font";
-
-    TextContent.prototype.defaultWidth = function() {
-      return 360;
-    };
-
-    TextContent.prototype.defaultHeight = function() {
-      return 240;
-    };
-
-    TextContent.prototype.editable = function() {
-      return this.widget.currentMode === 'layout';
-    };
-
-    TextContent.EDITOR_CONFIG = {
-      imageUpload: false,
-      inlineMode: true,
-      mediaManager: false,
-      placeholder: "Type here...",
-      plainPaste: true,
-      buttons: ["bold", "italic", "underline", "fontSize", "color", "sep", "align", "insertOrderedList", "insertUnorderedList", "outdent", "indent"]
-    };
-
-    TextContent.DEFAULT_CONTENT = "<p>Type text here&hellip;</p>";
-
-    TextContent.STYLE_DEFAULTS = {
-      font: 'Helvetica'
-    };
-
-    TextContent.prototype.initWithConfig = function(config) {
-      this.html = this.get(config.html, TextContent.DEFAULT_CONTENT);
-      return this.style = $.extend({}, TextContent.STYLE_DEFAULTS, this.get(config.style, {}));
-    };
-
-    TextContent.prototype.render_layout = function(data) {
-      var styles;
-      styles = this.styleString({
-        'font-family': utils.fontMap[this.style.font]
-      });
-      return $("<div class=\"text-widget\" style=\"" + styles + "\">" + this.html + "</div>");
-    };
-
-    TextContent.prototype.render_edit = function(data) {
-      var node;
-      node = this.render_layout(data);
-      this.editor = node.editable(TextContent.EDITOR_CONFIG);
-      return node;
-    };
-
-    TextContent.prototype.renderAppearanceOptions = function() {
-      return this.option('font', 'font', "Font");
-    };
-
-    TextContent.prototype.bindEvents = function(el) {
-      return el.on('editable.contentChanged', (function(_this) {
-        return function() {
-          return _this.html = _this.el.editable("getHTML");
-        };
-      })(this));
-    };
-
-    TextContent.prototype.font = TextContent.property('style', 'font');
-
-    TextContent.prototype.serialize = function() {
-      return {
-        html: this.html,
-        style: this.style
-      };
-    };
-
-    return TextContent;
-
-  })(WidgetContent);
 
 }).call(this);
