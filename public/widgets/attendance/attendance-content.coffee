@@ -95,7 +95,7 @@ class window.AttendanceContent extends WidgetContent
           }
         }
         x: {
-          show: false
+          show: true
           tick: {
             count: 0
           }
