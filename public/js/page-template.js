@@ -30,7 +30,6 @@ window.PageTemplate = (function() {
     if (subject == null) {
       subject = null;
     }
-    this.page.empty();
     ref = this.layout;
     for (i = 0, len = ref.length; i < len; i++) {
       widgetConfig = ref[i];

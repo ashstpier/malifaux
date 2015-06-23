@@ -18,7 +18,6 @@ class window.PageTemplate
     $('#viewport').append(@el)
 
   render: (mode, data=null, subject=null) ->
-    @page.empty()
     for widgetConfig in @layout
       @addWidget(widgetConfig, mode, data, subject)
     @layout = []
