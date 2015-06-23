@@ -1,0 +1,25 @@
+#meta {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 5px 350px 5px 10px;
+  color: #555;
+  background-color: #ececec;
+  z-index: 99;
+  border-top: 1px solid #e6e6e6;
+}
+
+#meta input, select, label {
+  width: auto;
+  display: inline-block;
+  font-size: 12px;
+  margin: 0;
+}
+#meta input, select {
+  height: auto;
+  padding: 2px 5px;
+}
+#meta .prop-coord-input {
+  width: 80px;
+}

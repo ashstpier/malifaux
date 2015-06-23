@@ -1,6 +1,7 @@
 class window.Properties
   constructor: (@designer) ->
     @el = $("#properties")
+    @meta = $("#meta")
     @selected = null
     @designer.bind "selection:change", (newSelection) => @selectionChanged(newSelection)
     @designer.bind "sidebar:redraw",  => @redraw()
@@ -18,27 +19,6 @@ class window.Properties
         <div class="tab-wrapper">
           <div id="style-tab" class="tab-content">
             <section class="prop-section prop-appearance"></section>
-            <section class="prop-section prop-layout">
-              <h3 class="prop-section-header">Layout</h3>
-              <div class="prop-content">
-                <label for="prop-value-x">x</label>
-                <input type="number" step="1" id="prop-value-x" class="prop-coord-input" data-fn="x" />
-                <label for="prop-value-y">y</label>
-                <input type="number" step="1" id="prop-value-y" class="prop-coord-input" data-fn="y" />
-                <label for="prop-value-width">width</label>
-                <input type="number" step="1" id="prop-value-width" class="prop-coord-input" data-fn="width" />
-                <label for="prop-value-height">height</label>
-                <input type="number" step="1" id="prop-value-height" class="prop-coord-input"  data-fn="height"/>
-                <label for="prop-value-ordering">ordering</label>
-                <select id='prop-value-ordering' class='prop-coord-select' data-fn="ordering">
-                  <option></option>
-                  <option value="setWidgetToBack">Send to back</option>
-                  <option value="setWidgetBackOne">Send backward</option>
-                  <option value="setWidgetForwardOne">Bring forward</option>
-                  <option value="setWidgetToFront">Bring to front</option>
-                </select>
-              </div>
-            </section>
           </div>
           <div id="data-tab" class="tab-content">
             <section class="prop-section prop-config"></section>
@@ -73,16 +53,35 @@ class window.Properties
         </div>
       </section>
     """
+
+    @meta.append """
+      <label for="prop-value-x">x</label>
+      <input type="number" step="1" id="prop-value-x" class="prop-coord-input" data-fn="x" />
+      <label for="prop-value-y">y</label>
+      <input type="number" step="1" id="prop-value-y" class="prop-coord-input" data-fn="y" />
+      <label for="prop-value-width">width</label>
+      <input type="number" step="1" id="prop-value-width" class="prop-coord-input" data-fn="width" />
+      <label for="prop-value-height">height</label>
+      <input type="number" step="1" id="prop-value-height" class="prop-coord-input"  data-fn="height"/>
+      <label for="prop-value-ordering">ordering</label>
+      <select id='prop-value-ordering' class='prop-coord-select' data-fn="ordering">
+        <option></option>
+        <option value="setWidgetToBack">Send to back</option>
+        <option value="setWidgetBackOne">Send backward</option>
+        <option value="setWidgetForwardOne">Bring forward</option>
+        <option value="setWidgetToFront">Bring to front</option>
+      </select>
+    """
+
     @bindEvents()
     @updateLayoutValues()
     @disable()
 
-
   bindEvents: ->
-    @el.on 'input', '.prop-coord-input', (e) =>
+    @meta.on 'input', '.prop-coord-input', (e) =>
       input = $(e.target)
       @selected[input.data('fn')].call(@selected, input.val())
-    @el.on 'change', '.prop-coord-select', (e) =>
+    @meta.on 'change', '.prop-coord-select', (e) =>
       input = $(e.target)
       @selected[input.data('fn')].call(@selected, input.val())
       input.val('')
@@ -124,7 +123,7 @@ class window.Properties
 
   cachedSelector: (sel) =>
     @_elCache = {} unless @_elCache
-    @_elCache[sel] = @el.find(sel)
+    @_elCache[sel] = @meta.find(sel)
     @_elCache[sel]
 
   redraw: ->

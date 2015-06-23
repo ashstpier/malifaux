@@ -7,6 +7,7 @@ window.Properties = (function() {
     this.updateLayoutValues = bind(this.updateLayoutValues, this);
     this.selectionMoved = bind(this.selectionMoved, this);
     this.el = $("#properties");
+    this.meta = $("#meta");
     this.selected = null;
     this.designer.bind("selection:change", (function(_this) {
       return function(newSelection) {
@@ -21,21 +22,22 @@ window.Properties = (function() {
   }
 
   Properties.prototype.render = function() {
-    this.el.append("<h2 class=\"prop-selection\"></h2>\n<div id=\"properties-tabs\" class=\"tabs\">\n  <nav>\n    <ul>\n      <li><a href=\"#style-tab\">Style</a></li>\n      <li><a href=\"#data-tab\">Configuration</a></li>\n    </ul>\n  </nav>\n  <div class=\"tab-wrapper\">\n    <div id=\"style-tab\" class=\"tab-content\">\n      <section class=\"prop-section prop-appearance\"></section>\n      <section class=\"prop-section prop-layout\">\n        <h3 class=\"prop-section-header\">Layout</h3>\n        <div class=\"prop-content\">\n          <label for=\"prop-value-x\">x</label>\n          <input type=\"number\" step=\"1\" id=\"prop-value-x\" class=\"prop-coord-input\" data-fn=\"x\" />\n          <label for=\"prop-value-y\">y</label>\n          <input type=\"number\" step=\"1\" id=\"prop-value-y\" class=\"prop-coord-input\" data-fn=\"y\" />\n          <label for=\"prop-value-width\">width</label>\n          <input type=\"number\" step=\"1\" id=\"prop-value-width\" class=\"prop-coord-input\" data-fn=\"width\" />\n          <label for=\"prop-value-height\">height</label>\n          <input type=\"number\" step=\"1\" id=\"prop-value-height\" class=\"prop-coord-input\"  data-fn=\"height\"/>\n          <label for=\"prop-value-ordering\">ordering</label>\n          <select id='prop-value-ordering' class='prop-coord-select' data-fn=\"ordering\">\n            <option></option>\n            <option value=\"setWidgetToBack\">Send to back</option>\n            <option value=\"setWidgetBackOne\">Send backward</option>\n            <option value=\"setWidgetForwardOne\">Bring forward</option>\n            <option value=\"setWidgetToFront\">Bring to front</option>\n          </select>\n        </div>\n      </section>\n    </div>\n    <div id=\"data-tab\" class=\"tab-content\">\n      <section class=\"prop-section prop-config\"></section>\n    </div>\n  </div>\n</div>\n<section class=\"prop-section prop-page-options\">\n  <h3 class=\"prop-section-header\">Options</h3>\n  <div class=\"prop-content\">\n    <form id=\"orientation\" class=\"prop-form\">\n      <h4 class=\"prop-option-header\">Orientation</h4>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"orientation\" value=\"portrait\">\n        Portrait\n      </label>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"orientation\" value=\"landscape\">\n        Landscape\n      </label>\n    </form>\n    <form id=\"pagetype\" class=\"prop-form\">\n      <h4 class=\"prop-option-header\">Report Style</h4>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"pagetype\" value=\"student\">\n        Student per page\n      </label>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"pagetype\" value=\"subject\">\n        Subject per page\n      </label>\n    </form>\n  </div>\n</section>");
+    this.el.append("<h2 class=\"prop-selection\"></h2>\n<div id=\"properties-tabs\" class=\"tabs\">\n  <nav>\n    <ul>\n      <li><a href=\"#style-tab\">Style</a></li>\n      <li><a href=\"#data-tab\">Configuration</a></li>\n    </ul>\n  </nav>\n  <div class=\"tab-wrapper\">\n    <div id=\"style-tab\" class=\"tab-content\">\n      <section class=\"prop-section prop-appearance\"></section>\n    </div>\n    <div id=\"data-tab\" class=\"tab-content\">\n      <section class=\"prop-section prop-config\"></section>\n    </div>\n  </div>\n</div>\n<section class=\"prop-section prop-page-options\">\n  <h3 class=\"prop-section-header\">Options</h3>\n  <div class=\"prop-content\">\n    <form id=\"orientation\" class=\"prop-form\">\n      <h4 class=\"prop-option-header\">Orientation</h4>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"orientation\" value=\"portrait\">\n        Portrait\n      </label>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"orientation\" value=\"landscape\">\n        Landscape\n      </label>\n    </form>\n    <form id=\"pagetype\" class=\"prop-form\">\n      <h4 class=\"prop-option-header\">Report Style</h4>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"pagetype\" value=\"student\">\n        Student per page\n      </label>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"pagetype\" value=\"subject\">\n        Subject per page\n      </label>\n    </form>\n  </div>\n</section>");
+    this.meta.append("<label for=\"prop-value-x\">x</label>\n<input type=\"number\" step=\"1\" id=\"prop-value-x\" class=\"prop-coord-input\" data-fn=\"x\" />\n<label for=\"prop-value-y\">y</label>\n<input type=\"number\" step=\"1\" id=\"prop-value-y\" class=\"prop-coord-input\" data-fn=\"y\" />\n<label for=\"prop-value-width\">width</label>\n<input type=\"number\" step=\"1\" id=\"prop-value-width\" class=\"prop-coord-input\" data-fn=\"width\" />\n<label for=\"prop-value-height\">height</label>\n<input type=\"number\" step=\"1\" id=\"prop-value-height\" class=\"prop-coord-input\"  data-fn=\"height\"/>\n<label for=\"prop-value-ordering\">ordering</label>\n<select id='prop-value-ordering' class='prop-coord-select' data-fn=\"ordering\">\n  <option></option>\n  <option value=\"setWidgetToBack\">Send to back</option>\n  <option value=\"setWidgetBackOne\">Send backward</option>\n  <option value=\"setWidgetForwardOne\">Bring forward</option>\n  <option value=\"setWidgetToFront\">Bring to front</option>\n</select>");
     this.bindEvents();
     this.updateLayoutValues();
     return this.disable();
   };
 
   Properties.prototype.bindEvents = function() {
-    this.el.on('input', '.prop-coord-input', (function(_this) {
+    this.meta.on('input', '.prop-coord-input', (function(_this) {
       return function(e) {
         var input;
         input = $(e.target);
         return _this.selected[input.data('fn')].call(_this.selected, input.val());
       };
     })(this));
-    this.el.on('change', '.prop-coord-select', (function(_this) {
+    this.meta.on('change', '.prop-coord-select', (function(_this) {
       return function(e) {
         var input;
         input = $(e.target);
@@ -99,7 +101,7 @@ window.Properties = (function() {
     if (!this._elCache) {
       this._elCache = {};
     }
-    this._elCache[sel] = this.el.find(sel);
+    this._elCache[sel] = this.meta.find(sel);
     return this._elCache[sel];
   };
 

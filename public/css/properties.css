@@ -109,7 +109,6 @@
   height: 10em;
   width: 100%;
   max-width: 100%;
-  margin-top: .5em;
 }
 .prop-hint {
   font-size: 11px;
@@ -119,6 +118,9 @@
   padding: 0;
 }
 
+.prop-table-config {
+  margin-bottom: 10px;
+}
 .prop-table-config h4 {
   margin: 10px 0 5px 0;
   padding: 0;
