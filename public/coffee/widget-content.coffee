@@ -144,7 +144,6 @@ class window.OptionRenderer
 
   renderSelectInput: (styles) ->
     grouped = false
-    console.log @config.options
     if $.isArray(@config.options) # array format: [[val1, label1], [val2, label2], ...] or [v1,v2,v3]
       if $.isArray(@config.options[0])
         optionsArray = @config.options
