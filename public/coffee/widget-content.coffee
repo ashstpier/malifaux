@@ -102,14 +102,21 @@ class window.OptionRenderer
   constructor: (@receiver, @type, @key, @label, @config={}) ->
 
   render: (styles) ->
-    """
-      <div class="prop-option">
-        <i class="glyphicons edit"></i>
-        <label class="prop-label" for="#{@key}">#{@label}</label>
-        #{@renderInput(styles)}
-        #{@renderHint()}
-      </div>
-    """
+    if @type == 'color'
+      """
+        <div class="prop-option #{@type}">
+          #{@renderInput(styles)}
+          <label class="prop-label" for="#{@key}">#{@label}</label>
+        </div>
+      """
+    else
+      """
+        <div class="prop-option">
+          <label class="prop-label" for="#{@key}">#{@label}</label>
+          #{@renderInput(styles)}
+          #{@renderHint()}
+        </div>
+      """
 
   renderHint: ->
     return '' unless @config.hint

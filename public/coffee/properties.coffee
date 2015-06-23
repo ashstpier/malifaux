@@ -137,6 +137,7 @@ class window.Properties
     @el.removeClass('disabled')
     @el.find('.prop-input').prop('disabled', false)
     @el.find('.prop-selection').text(@selected.displayName())
+    @el.find('.tabs').show()
     @redraw()
 
   disable: ->
@@ -144,6 +145,7 @@ class window.Properties
     @el.find('.prop-page-options').show()
     @el.find('.prop-input').prop('disabled', true)
     @el.find('.prop-selection').html('Page')
+    @el.find('.tabs').hide()
     @clearAppearanceOptions()
     @clearConfigOptions()
 

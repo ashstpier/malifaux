@@ -227,7 +227,11 @@ window.OptionRenderer = (function() {
   }
 
   OptionRenderer.prototype.render = function(styles) {
-    return "<div class=\"prop-option\">\n  <i class=\"glyphicons edit\"></i>\n  <label class=\"prop-label\" for=\"" + this.key + "\">" + this.label + "</label>\n  " + (this.renderInput(styles)) + "\n  " + (this.renderHint()) + "\n</div>";
+    if (this.type === 'color') {
+      return "<div class=\"prop-option " + this.type + "\">\n  " + (this.renderInput(styles)) + "\n  <label class=\"prop-label\" for=\"" + this.key + "\">" + this.label + "</label>\n</div>";
+    } else {
+      return "<div class=\"prop-option\">\n  <label class=\"prop-label\" for=\"" + this.key + "\">" + this.label + "</label>\n  " + (this.renderInput(styles)) + "\n  " + (this.renderHint()) + "\n</div>";
+    }
   };
 
   OptionRenderer.prototype.renderHint = function() {

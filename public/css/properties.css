@@ -1,10 +1,9 @@
 .prop-selection {
   font-size: 18px;
   margin: 0;
-  padding: 15px 20px;
+  padding: 20px 20px 10px 20px;
   line-height: 1;
   font-weight: 400;
-  border-bottom: 1px solid #e6e6e6;
 }
 .disabled .prop-selection {
   background-color: #888;
@@ -60,25 +59,8 @@
 
 
 .prop-option {
-  margin: 10px 0 0 0;
-  padding: 15px;
-  background: #fff;
-  border-radius: 3px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  margin: 0 0 10px 0;
   position: relative;
-  border: 1px solid #fff;
-}
-.prop-option:hover  {
-  border: 1px solid #10B2C1;
-}
-.prop-option .glyphicons {
-  padding-left: 20px;
-}
-.prop-option .glyphicons:before {
-  color: #999;
-  font-size: 16px;
-  margin-right: 5px;
-  top: -10px;
 }
 
 .prop-option:first-child {
@@ -88,12 +70,14 @@
   display: inline-block;
   width: 33.3333333%;
   text-align: center;
-  margin-top: 5px;
+  margin: 0;
   padding: 5px;
 }
 .prop-option.color label {
   font-weight: 400;
   font-size: 14px;
+  padding: 0;
+  margin-top: 5px;
 }
 .prop-label {
   box-sizing: border-box;
@@ -113,10 +97,12 @@
   width: 57%;
 }
 .prop-input[type="color"] {
-  height: 36px;
-  width: 50%;
-  margin: 10px 0 0;
+  height: 80px;
+  width: 100%;
+  margin: 5px 0 0;
   vertical-align: middle;
+  border: none;
+  padding: 5px;
 }
 .prop-input.multiple {
   display: block;

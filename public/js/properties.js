@@ -114,6 +114,7 @@ window.Properties = (function() {
     this.el.removeClass('disabled');
     this.el.find('.prop-input').prop('disabled', false);
     this.el.find('.prop-selection').text(this.selected.displayName());
+    this.el.find('.tabs').show();
     return this.redraw();
   };
 
@@ -122,6 +123,7 @@ window.Properties = (function() {
     this.el.find('.prop-page-options').show();
     this.el.find('.prop-input').prop('disabled', true);
     this.el.find('.prop-selection').html('Page');
+    this.el.find('.tabs').hide();
     this.clearAppearanceOptions();
     return this.clearConfigOptions();
   };
