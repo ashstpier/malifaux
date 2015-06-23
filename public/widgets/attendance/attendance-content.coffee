@@ -32,7 +32,7 @@ class window.AttendanceContent extends WidgetContent
     root = $("""<div class="attendance-widget"></div>""")
     @drawChart(root[0])
     @widget.bind('widget:move', @resizeChart)
-    root
+    $(root).append("""<div class="noclick"></div>""")
 
   resizeChart: =>
     @chart.resize({
