@@ -167,6 +167,7 @@ class window.Widget
     if this is selection
       @el.addClass('selected')
     else
+      @layoutMode()
       @el.removeClass('selected')
 
 MicroEvent.mixin(window.Widget)
