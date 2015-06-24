@@ -6,20 +6,34 @@
   padding: 5px 350px 5px 10px;
   color: #555;
   background-color: #ececec;
-  z-index: 99;
+  z-index: 2;
   border-top: 1px solid #e6e6e6;
 }
 
-#meta input, select, label {
+#meta input, #meta select, #meta label {
   width: auto;
   display: inline-block;
   font-size: 12px;
   margin: 0;
 }
-#meta input, select {
+#meta label {
+  margin: 0 5px;
+}
+#meta input, #meta select {
   height: auto;
   padding: 2px 5px;
+  background: #ddd;
+  border-color: transparent;
+  box-shadow: none;
+}
+#meta input:focus, #meta select:focus {
+  border: 1px solid #7ED0D6;
+  outline: 0;
+  box-shadow: inset 0 0 0 1px #7ed0d6;
 }
 #meta .prop-coord-input {
-  width: 80px;
+  width: 50px;
+}
+#meta .ordering {
+  display: inline-block;
 }

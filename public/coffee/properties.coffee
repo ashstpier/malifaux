@@ -55,22 +55,24 @@ class window.Properties
     """
 
     @meta.append """
-      <label for="prop-value-x">x</label>
+      <label for="prop-value-x">x:</label>
       <input type="number" step="1" id="prop-value-x" class="prop-coord-input" data-fn="x" />
-      <label for="prop-value-y">y</label>
+      <label for="prop-value-y">y:</label>
       <input type="number" step="1" id="prop-value-y" class="prop-coord-input" data-fn="y" />
-      <label for="prop-value-width">width</label>
+      <label for="prop-value-width">width:</label>
       <input type="number" step="1" id="prop-value-width" class="prop-coord-input" data-fn="width" />
-      <label for="prop-value-height">height</label>
+      <label for="prop-value-height">height:</label>
       <input type="number" step="1" id="prop-value-height" class="prop-coord-input"  data-fn="height"/>
-      <label for="prop-value-ordering">ordering</label>
-      <select id='prop-value-ordering' class='prop-coord-select' data-fn="ordering">
-        <option></option>
-        <option value="setWidgetToBack">Send to back</option>
-        <option value="setWidgetBackOne">Send backward</option>
-        <option value="setWidgetForwardOne">Bring forward</option>
-        <option value="setWidgetToFront">Bring to front</option>
-      </select>
+      <div class="ordering float-right">
+        <label for="prop-value-ordering">ordering:</label>
+        <select id='prop-value-ordering' class='prop-coord-select' data-fn="ordering">
+          <option></option>
+          <option value="setWidgetToBack">Send to back</option>
+          <option value="setWidgetBackOne">Send backward</option>
+          <option value="setWidgetForwardOne">Bring forward</option>
+          <option value="setWidgetToFront">Bring to front</option>
+        </select>
+      </div>
     """
 
     @bindEvents()
@@ -137,6 +139,7 @@ class window.Properties
     @el.find('.prop-input').prop('disabled', false)
     @el.find('.prop-selection').text(@selected.displayName())
     @el.find('.tabs').show()
+    @meta.show()
     @redraw()
 
   disable: ->
@@ -145,6 +148,7 @@ class window.Properties
     @el.find('.prop-input').prop('disabled', true)
     @el.find('.prop-selection').html('Page')
     @el.find('.tabs').hide()
+    @meta.hide()
     @clearAppearanceOptions()
     @clearConfigOptions()
 
@@ -189,8 +193,8 @@ class window.Properties
 
   clearConfigOptions: -> @el.find('.prop-config').html('')
 
-  x: -> @selected?.x() or ''
-  y: -> @selected?.y() or ''
+  x: -> @selected?.x() or '0'
+  y: -> @selected?.y() or '0'
   zIndex: -> @selected?.zIndex() or ''
-  width: -> @selected?.width() or ''
-  height: -> @selected?.height() or ''
+  width: -> @selected?.width() or '0'
+  height: -> @selected?.height() or '0'

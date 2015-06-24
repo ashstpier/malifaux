@@ -6,7 +6,7 @@ body {
 }
 
 #toolbar {
-  z-index: 2;
+  z-index: 5;
   position: fixed;
   top: 0;
   left: 0;
@@ -157,7 +157,7 @@ body {
   background-color: #f6f6f6;
   overflow-x: hidden;
   overflow-y: auto;
-  z-index: 999;
+  z-index: 3;
   /*border-left: 1px solid #e6e6e6;*/
   box-shadow: -1px 0 3px rgba(0,0,0,0.1);
 }
@@ -209,7 +209,7 @@ body {
 .add-widget p {
   margin: 0;
   padding: 0;
-  font-weight: 100;
+  font-weight: 300;
   font-size: 14px;
 }
 

@@ -23,7 +23,7 @@ window.Properties = (function() {
 
   Properties.prototype.render = function() {
     this.el.append("<h2 class=\"prop-selection\"></h2>\n<div id=\"properties-tabs\" class=\"tabs\">\n  <nav>\n    <ul>\n      <li><a href=\"#style-tab\">Style</a></li>\n      <li><a href=\"#data-tab\">Configuration</a></li>\n    </ul>\n  </nav>\n  <div class=\"tab-wrapper\">\n    <div id=\"style-tab\" class=\"tab-content\">\n      <section class=\"prop-section prop-appearance\"></section>\n    </div>\n    <div id=\"data-tab\" class=\"tab-content\">\n      <section class=\"prop-section prop-config\"></section>\n    </div>\n  </div>\n</div>\n<section class=\"prop-section prop-page-options\">\n  <h3 class=\"prop-section-header\">Options</h3>\n  <div class=\"prop-content\">\n    <form id=\"orientation\" class=\"prop-form\">\n      <h4 class=\"prop-option-header\">Orientation</h4>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"orientation\" value=\"portrait\">\n        Portrait\n      </label>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"orientation\" value=\"landscape\">\n        Landscape\n      </label>\n    </form>\n    <form id=\"pagetype\" class=\"prop-form\">\n      <h4 class=\"prop-option-header\">Report Style</h4>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"pagetype\" value=\"student\">\n        Student per page\n      </label>\n      <label class=\"prop-block-label\">\n        <input type=\"radio\" name=\"pagetype\" value=\"subject\">\n        Subject per page\n      </label>\n    </form>\n  </div>\n</section>");
-    this.meta.append("<label for=\"prop-value-x\">x</label>\n<input type=\"number\" step=\"1\" id=\"prop-value-x\" class=\"prop-coord-input\" data-fn=\"x\" />\n<label for=\"prop-value-y\">y</label>\n<input type=\"number\" step=\"1\" id=\"prop-value-y\" class=\"prop-coord-input\" data-fn=\"y\" />\n<label for=\"prop-value-width\">width</label>\n<input type=\"number\" step=\"1\" id=\"prop-value-width\" class=\"prop-coord-input\" data-fn=\"width\" />\n<label for=\"prop-value-height\">height</label>\n<input type=\"number\" step=\"1\" id=\"prop-value-height\" class=\"prop-coord-input\"  data-fn=\"height\"/>\n<label for=\"prop-value-ordering\">ordering</label>\n<select id='prop-value-ordering' class='prop-coord-select' data-fn=\"ordering\">\n  <option></option>\n  <option value=\"setWidgetToBack\">Send to back</option>\n  <option value=\"setWidgetBackOne\">Send backward</option>\n  <option value=\"setWidgetForwardOne\">Bring forward</option>\n  <option value=\"setWidgetToFront\">Bring to front</option>\n</select>");
+    this.meta.append("<label for=\"prop-value-x\">x:</label>\n<input type=\"number\" step=\"1\" id=\"prop-value-x\" class=\"prop-coord-input\" data-fn=\"x\" />\n<label for=\"prop-value-y\">y:</label>\n<input type=\"number\" step=\"1\" id=\"prop-value-y\" class=\"prop-coord-input\" data-fn=\"y\" />\n<label for=\"prop-value-width\">width:</label>\n<input type=\"number\" step=\"1\" id=\"prop-value-width\" class=\"prop-coord-input\" data-fn=\"width\" />\n<label for=\"prop-value-height\">height:</label>\n<input type=\"number\" step=\"1\" id=\"prop-value-height\" class=\"prop-coord-input\"  data-fn=\"height\"/>\n<div class=\"ordering float-right\">\n  <label for=\"prop-value-ordering\">ordering:</label>\n  <select id='prop-value-ordering' class='prop-coord-select' data-fn=\"ordering\">\n    <option></option>\n    <option value=\"setWidgetToBack\">Send to back</option>\n    <option value=\"setWidgetBackOne\">Send backward</option>\n    <option value=\"setWidgetForwardOne\">Bring forward</option>\n    <option value=\"setWidgetToFront\">Bring to front</option>\n  </select>\n</div>");
     this.bindEvents();
     this.updateLayoutValues();
     return this.disable();
@@ -117,6 +117,7 @@ window.Properties = (function() {
     this.el.find('.prop-input').prop('disabled', false);
     this.el.find('.prop-selection').text(this.selected.displayName());
     this.el.find('.tabs').show();
+    this.meta.show();
     return this.redraw();
   };
 
@@ -126,6 +127,7 @@ window.Properties = (function() {
     this.el.find('.prop-input').prop('disabled', true);
     this.el.find('.prop-selection').html('Page');
     this.el.find('.tabs').hide();
+    this.meta.hide();
     this.clearAppearanceOptions();
     return this.clearConfigOptions();
   };
@@ -201,12 +203,12 @@ window.Properties = (function() {
 
   Properties.prototype.x = function() {
     var ref;
-    return ((ref = this.selected) != null ? ref.x() : void 0) || '';
+    return ((ref = this.selected) != null ? ref.x() : void 0) || '0';
   };
 
   Properties.prototype.y = function() {
     var ref;
-    return ((ref = this.selected) != null ? ref.y() : void 0) || '';
+    return ((ref = this.selected) != null ? ref.y() : void 0) || '0';
   };
 
   Properties.prototype.zIndex = function() {
@@ -216,12 +218,12 @@ window.Properties = (function() {
 
   Properties.prototype.width = function() {
     var ref;
-    return ((ref = this.selected) != null ? ref.width() : void 0) || '';
+    return ((ref = this.selected) != null ? ref.width() : void 0) || '0';
   };
 
   Properties.prototype.height = function() {
     var ref;
-    return ((ref = this.selected) != null ? ref.height() : void 0) || '';
+    return ((ref = this.selected) != null ? ref.height() : void 0) || '0';
   };
 
   return Properties;
