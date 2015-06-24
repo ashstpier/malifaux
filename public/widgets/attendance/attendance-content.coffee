@@ -62,10 +62,10 @@ class window.AttendanceContent extends WidgetContent
   drawChart: (root) =>
 
     colors = {}
-    colors[@_label1] = @style.color1
-    colors[@_label2] = @style.color2
-    colors[@_label3] = @style.color3
-    colors[@_label4] = @style.color4
+    colors["#{@_label1} #{@attendance.present}%"] = @style.color1
+    colors["#{@_label2} #{@attendance.late}%"] = @style.color2
+    colors["#{@_label3} #{@attendance.authorised}%"] = @style.color3
+    colors["#{@_label4} #{@attendance.unauthorised}%"] = @style.color4
 
     if @style.chartstyle == 'pie'
       chartType = 'pie'
@@ -77,13 +77,19 @@ class window.AttendanceContent extends WidgetContent
       data:
         order: 'asc'
         columns: [
-          [ @_label1, parseFloat(@attendance.present) / 100 ]
-          [ @_label2, parseFloat(@attendance.late) / 100 ]
-          [ @_label3, parseFloat(@attendance.authorised) / 100 ]
-          [ @_label4, parseFloat(@attendance.unauthorised) / 100 ]
+          [ "#{@_label1} #{@attendance.present || 0}%", parseFloat(@attendance.present) / 100 ]
+          [ "#{@_label2} #{@attendance.late || 0}%", parseFloat(@attendance.late) / 100 ]
+          [ "#{@_label3} #{@attendance.authorised || 0}%", parseFloat(@attendance.authorised) / 100 ]
+          [ "#{@_label4} #{@attendance.unauthorised || 0}%", parseFloat(@attendance.unauthorised) / 100 ]
         ]
         type: chartType
-        groups: [ [ @_label1, @_label2, @_label3, @_label4 ] ]
+        groups: [
+          [
+            "#{@_label1} #{@attendance.present || 0}%",
+            "#{@_label2} #{@attendance.late || 0}%",
+            "#{@_label3} #{@attendance.authorised || 0}%",
+            "#{@_label4} #{@attendance.unauthorised || 0}%"
+          ]]
         colors: colors
 
       axis: {
@@ -95,7 +101,7 @@ class window.AttendanceContent extends WidgetContent
           }
         }
         x: {
-          show: true
+          show: false
           tick: {
             count: 0
           }
