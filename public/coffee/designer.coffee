@@ -289,7 +289,8 @@ window.Designer = {
 
   promptSave: ->
     if @hasUnsavedChanges()
-      $('#save-modal').modal()
+      $('#save-modal').assemblyModal()
+      $('#save-modal').assemblyModal('show')
     else
       @exitDesigner()
     false

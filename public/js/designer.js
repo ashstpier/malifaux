@@ -502,7 +502,8 @@ window.Designer = {
   },
   promptSave: function() {
     if (this.hasUnsavedChanges()) {
-      $('#save-modal').modal();
+      $('#save-modal').assemblyModal();
+      $('#save-modal').assemblyModal('show');
     } else {
       this.exitDesigner();
     }

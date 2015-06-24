@@ -90,11 +90,7 @@
 .prop-input {
   box-sizing: border-box;
   display: block;
-  margin: 10px 0 0 0;
 
-}
-.prop-input[type='text'] {
-  width: 57%;
 }
 .prop-input[type="color"] {
   height: 80px;

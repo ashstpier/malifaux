@@ -1,7 +1,7 @@
 class window.Properties
   constructor: (@designer) ->
     @el = $("#properties")
-    @meta = $("#meta")
+    @meta = $("#meta .meta-content")
     @selected = null
     @designer.bind "selection:change", (newSelection) => @selectionChanged(newSelection)
     @designer.bind "sidebar:redraw",  => @redraw()

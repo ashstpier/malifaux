@@ -7,7 +7,7 @@ window.Properties = (function() {
     this.updateLayoutValues = bind(this.updateLayoutValues, this);
     this.selectionMoved = bind(this.selectionMoved, this);
     this.el = $("#properties");
-    this.meta = $("#meta");
+    this.meta = $("#meta .meta-content");
     this.selected = null;
     this.designer.bind("selection:change", (function(_this) {
       return function(newSelection) {

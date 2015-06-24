@@ -98,24 +98,39 @@
 			</ul>
 		</header>
 
+		<div id="viewport">
+		</div>
+		<div id="properties"></div>
+		<div id="meta"><div class="meta-content"></div></div>
+
 		<div id="widget-gallery" class="assembly-modal full-height large-modal">
 			<div class="assembly-modal-wrapper">
 				<div class="assembly-modal-header">
 					Add a widget
 					<div class="assembly-modal-close">
-            <i class="fa fa-times"></i>
+            <i class="fa fa-times close-icon"></i>
           </div>
 				</div>
 				<div class="assembly-modal-content"></div>
 			</div>
 		</div>
 
-		<div id="viewport">
+		<div id="save-modal" class="assembly-modal">
+			<div class="assembly-modal-wrapper">
+				<div class="assembly-modal-header">
+					Save Changes?
+					<div class="assembly-modal-close">
+            <i class="fa fa-times close-icon"></i>
+          </div>
+				</div>
+				<div class="modal-footer">
+	        <button type="button" id="discard" class="btn btn-cancel assembly-modal-close">Discard</button>
+	        <button type="button" id="save-exit" class="btn btn-primary assembly-modal-close">Save</button>
+	      </div>
+			</div>
 		</div>
-		<div id="properties"></div>
-		<div id="meta"></div>
 
-		<div class="modal fade" id="save-modal" tabindex="-1" role="dialog" aria-labelledby="label" aria-hidden="true">
+		<!-- <div class="modal fade" id="save-modal" tabindex="-1" role="dialog" aria-labelledby="label" aria-hidden="true">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-body">
@@ -127,6 +142,6 @@
 		      </div>
 		    </div>
 		  </div>
-		</div>
+		</div> -->
 	</body>
 </html>
