@@ -42,8 +42,8 @@ class window.MappingModal
         </div>
         <div class="assembly-modal-footer">
           <button type="button" class="btn btn-success float-left" id="add-mapping"><i class="fa fa-plus"></i> Add</button>
-          <button type="button" class="btn btn-cancel assembly-modal-close" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
-          <button type="button" class="btn btn-primary assembly-modal-close" id="save-mapping"><i class="fa fa-save"></i> Save</button>
+          <button type="button" class="btn btn-cancel assembly-modal-close" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary assembly-modal-close" id="save-mapping">Save</button>
         </div>
       </div>
     </div>"""
