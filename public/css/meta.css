@@ -3,12 +3,12 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  min-height: 40px;
-  padding: 5px 350px 5px 10px;
+  height: 40px;
+  padding: 0 340px 0 10px;
   color: #555;
-  background-color: #ececec;
-  z-index: 2;
-  border-top: 1px solid #e6e6e6;
+  background-color: #f6f6f6;
+  z-index: 5;
+  border-top: 1px solid #ddd;
 }
 
 #meta input, #meta select, #meta label {
@@ -20,7 +20,7 @@
 #meta label {
   margin: 0 5px;
 }
-#meta input, #meta select {
+#meta input, #meta select, #meta button {
   height: auto;
   padding: 2px 5px;
   background: #ddd;
@@ -37,4 +37,24 @@
 }
 #meta .ordering {
   display: inline-block;
+  height: 40px;
+}
+#meta .ordering button {
+  height: 100%;
+  margin: 0;
+  padding: 10px;
+  border-radius: 0;
+  float: left;
+  background: transparent;
+}
+#meta .ordering button:hover {
+  background: #ddd;
+}
+#meta .ordering button img {
+  height: 18px;
+  opacity: 0.5;
+}
+#meta .coordinates {
+  display: inline-block;
+  padding: 7px 0;
 }

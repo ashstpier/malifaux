@@ -6,7 +6,7 @@ body {
 }
 
 #toolbar {
-  z-index: 5;
+  z-index: 7;
   position: fixed;
   top: 0;
   left: 0;
@@ -129,11 +129,11 @@ body {
   right: 340px;
   padding: 0 10px;
   overflow: auto;
-  background: #eee;
+  background: #e6e6e6;
 }
 
 .page {
-  z-index: 100;
+  z-index: 3;
   position: absolute;
   top: 0;
   visibility: hidden;
@@ -142,7 +142,7 @@ body {
   box-shadow: #c9c9c9 0 0 5px;
 }
 .page-active {
-  z-index: 101;
+  z-index: 4;
   position: relative;
   visibility: visible;
 }
@@ -157,9 +157,8 @@ body {
   background-color: #f6f6f6;
   overflow-x: hidden;
   overflow-y: auto;
-  z-index: 3;
-  /*border-left: 1px solid #e6e6e6;*/
-  box-shadow: -1px 0 3px rgba(0,0,0,0.1);
+  z-index: 6;
+  border-left: 1px solid #ddd;
 }
 
  /* A4 Ratio is ~ 1:1.4 */

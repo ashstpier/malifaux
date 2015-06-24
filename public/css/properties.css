@@ -92,6 +92,10 @@
   display: block;
 
 }
+.prop-input[type="checkbox"] {
+  float: right;
+  margin: 5px;
+}
 .prop-input[type="color"] {
   height: 80px;
   width: 100%;

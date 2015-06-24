@@ -3,15 +3,15 @@ class window.Widget
   @GRID_SIZE: [1,1]
 
   @WIDGETS: {
-    'text':           'TextContent'
-    'field':          'FieldContent'
     'image':          'ImageContent'
     'image-gallery':  'ImageGalleryContent'
-    'dynamictable':   'DynamicTableContent'
+    'text':           'TextContent'
     'datatable':      'DatatableContent'
+    'field':          'FieldContent'
     'name':           'NameContent'
     'subject-field':  'SubjectFieldContent'
     'attendance':     'AttendanceContent'
+    'dynamictable':   'DynamicTableContent'
     'shape':          'ShapeContent'
   }
 
@@ -157,7 +157,6 @@ class window.Widget
 
   ordering: (fn) -> Designer[fn].call(Designer, @guid)
 
-  ordering: (fn) -> Designer[fn].call(Designer, @guid)
   zIndex: (n) -> if n? then @el.css('z-index', "#{Math.round(n)}") else Math.round(@el.zIndex())
   width: (n) -> if n? then @el.width(Math.round(n)) else Math.round(@el.width())
   height: (n) -> if n? then @el.height(Math.round(n)) else Math.round(@el.height())

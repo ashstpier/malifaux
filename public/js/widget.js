@@ -4,15 +4,15 @@ window.Widget = (function() {
   Widget.GRID_SIZE = [1, 1];
 
   Widget.WIDGETS = {
-    'text': 'TextContent',
-    'field': 'FieldContent',
     'image': 'ImageContent',
     'image-gallery': 'ImageGalleryContent',
-    'dynamictable': 'DynamicTableContent',
+    'text': 'TextContent',
     'datatable': 'DatatableContent',
+    'field': 'FieldContent',
     'name': 'NameContent',
     'subject-field': 'SubjectFieldContent',
     'attendance': 'AttendanceContent',
+    'dynamictable': 'DynamicTableContent',
     'shape': 'ShapeContent'
   };
 
@@ -251,10 +251,6 @@ window.Widget = (function() {
       this.el.height(this.el.width() / ratio);
       return this.applyResizable(ratio);
     }
-  };
-
-  Widget.prototype.ordering = function(fn) {
-    return Designer[fn].call(Designer, this.guid);
   };
 
   Widget.prototype.ordering = function(fn) {

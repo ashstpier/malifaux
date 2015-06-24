@@ -55,23 +55,29 @@ class window.Properties
     """
 
     @meta.append """
-      <label for="prop-value-x">x:</label>
-      <input type="number" step="1" id="prop-value-x" class="prop-coord-input" data-fn="x" />
-      <label for="prop-value-y">y:</label>
-      <input type="number" step="1" id="prop-value-y" class="prop-coord-input" data-fn="y" />
-      <label for="prop-value-width">width:</label>
-      <input type="number" step="1" id="prop-value-width" class="prop-coord-input" data-fn="width" />
-      <label for="prop-value-height">height:</label>
-      <input type="number" step="1" id="prop-value-height" class="prop-coord-input"  data-fn="height"/>
+      <div class="coordinates">
+        <label for="prop-value-x">x:</label>
+        <input type="number" step="1" id="prop-value-x" class="prop-coord-input" data-fn="x" />
+        <label for="prop-value-y">y:</label>
+        <input type="number" step="1" id="prop-value-y" class="prop-coord-input" data-fn="y" />
+        <label for="prop-value-width">width:</label>
+        <input type="number" step="1" id="prop-value-width" class="prop-coord-input" data-fn="width" />
+        <label for="prop-value-height">height:</label>
+        <input type="number" step="1" id="prop-value-height" class="prop-coord-input"  data-fn="height"/>
+      </div>
       <div class="ordering float-right">
-        <label for="prop-value-ordering">ordering:</label>
-        <select id='prop-value-ordering' class='prop-coord-select' data-fn="ordering">
-          <option></option>
-          <option value="setWidgetToBack">Send to back</option>
-          <option value="setWidgetBackOne">Send backward</option>
-          <option value="setWidgetForwardOne">Bring forward</option>
-          <option value="setWidgetToFront">Bring to front</option>
-        </select>
+        <button class="btn-small prop-order" value="setWidgetToBack" data-fn="ordering" title="Send to back">
+          <img src="images/glyphicons-486-send-to-back@2x.png" />
+        </button>
+        <button class="btn-small prop-order" value="setWidgetBackOne" data-fn="ordering" title="Send backward">
+          <img src="images/glyphicons-485-send-backward@2x.png" />
+        </button>
+        <button class="btn-small prop-order" value="setWidgetForwardOne" data-fn="ordering" title="Bring forward">
+          <img src="images/glyphicons-483-bring-forward@2x.png" />
+        </button>
+        <button class="btn-small prop-order" value="setWidgetToFront" data-fn="ordering" title="Bring to front">
+          <img src="images/glyphicons-484-bring-to-front@2x.png" />
+        </button>
       </div>
     """
 
@@ -83,10 +89,9 @@ class window.Properties
     @meta.on 'input', '.prop-coord-input', (e) =>
       input = $(e.target)
       @selected[input.data('fn')].call(@selected, input.val())
-    @meta.on 'change', '.prop-coord-select', (e) =>
-      input = $(e.target)
+    @meta.on 'click', '.prop-order', (e) =>
+      input = $(e.target).closest('button')
       @selected[input.data('fn')].call(@selected, input.val())
-      input.val('')
     @el.on 'input', 'input.prop-input', (e) =>
       input = $(e.target)
       @selected.content[input.data('fn')].call(@selected.content, input.val())
