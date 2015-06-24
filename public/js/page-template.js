@@ -19,7 +19,7 @@ window.PageTemplate = (function() {
     this.orientation = description.orientation;
     this.pagetype = description.pagetype;
     this.el = $("<div class=\"page\" data-orientation=\"" + this.orientation + "\"\" data-pagetype=\"" + this.pagetype + "\"/>");
-    $('#viewport').append(this.el);
+    $('#viewport #pages').append(this.el);
   }
 
   PageTemplate.prototype.render = function(mode, data, subject) {

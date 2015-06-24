@@ -124,12 +124,20 @@ body {
 #viewport {
   position: fixed;
   top: 50px;
-  bottom: 0;
+  bottom: 40px;
   left: 0;
   right: 340px;
-  padding: 0 10px;
+  padding: 0;
   overflow: auto;
   background: #e6e6e6;
+  font-size: 0;
+}
+#pages {
+  font-size: 16px;
+  margin: 0 auto;
+  padding: 15px;
+  overflow: hidden;
+  display: inline-block;
 }
 
 .page {
@@ -137,7 +145,6 @@ body {
   position: absolute;
   top: 0;
   visibility: hidden;
-  margin: 10px auto;
   background-color: #fff;
   box-shadow: #c9c9c9 0 0 5px;
 }
