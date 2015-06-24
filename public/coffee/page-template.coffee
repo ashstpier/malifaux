@@ -15,7 +15,7 @@ class window.PageTemplate
     @orientation = description.orientation
     @pagetype = description.pagetype
     @el = $("""<div class="page" data-orientation="#{@orientation}"" data-pagetype="#{@pagetype}"/>""")
-    $('#viewport').append(@el)
+    $('#viewport #pages').append(@el)
 
   render: (mode, data=null, subject=null) ->
     for widgetConfig in @layout

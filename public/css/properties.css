@@ -1,11 +1,9 @@
 .prop-selection {
   font-size: 18px;
   margin: 0;
-  padding: 10px;
+  padding: 20px 20px 10px 20px;
   line-height: 1;
-  background-color: #888;
-  color: #fff;
-  font-weight: 300;
+  font-weight: 400;
 }
 .disabled .prop-selection {
   background-color: #888;
@@ -16,16 +14,17 @@
   margin: 0;
   padding: 7px 10px;
   line-height: 1;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   background-color: #bfbfbf;
   color: #666;
+  display: none;
 }
 
 .prop-content {
-  margin: 20px 10px;
-  font-size: 13px;
-  color: #333;
+  padding: 20px;
+  font-size: 12px;
+  border-bottom: 1px solid #e6e6e6;
 }
 .disabled .prop-content {
   color: #999;
@@ -37,19 +36,20 @@
   text-align: right;
   margin-right: 3%;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .prop-option-header {
   margin: 0 0 .25em 0;
   padding: .5em 0;
-  border-bottom: 1px solid #ccc;
   font-weight: bold;
-  font-size: 1em;
+  font-size: 14px;
 }
 
 .prop-block-label {
   display: block;
-  padding: .25em 0;
+  padding: .1em 0;
+  font-size: 14px;
 }
 
 .prop-layout .prop-coord-input {
@@ -59,33 +59,56 @@
 
 
 .prop-option {
-  margin: 10px 0 0 0;
-  padding: 0;
+  margin: 0 0 10px 0;
+  position: relative;
 }
+
 .prop-option:first-child {
   margin-top: 0;
+}
+.prop-option.color {
+  display: inline-block;
+  width: 33.3333333%;
+  text-align: center;
+  margin: 0;
+  padding: 5px;
+}
+.prop-option.color label {
+  font-weight: 400;
+  font-size: 14px;
+  padding: 0;
+  margin-top: 5px;
 }
 .prop-label {
   box-sizing: border-box;
   display: inline-block;
-  width: 40%;
   padding-right: 5px;
-  font-weight: bold;
+  font-weight: 400;
+  vertical-align: middle;
+  font-size: 14px;
 }
 .prop-input {
   box-sizing: border-box;
-  display: inline-block;
-  max-width: 57%;
+  display: block;
+
 }
-.prop-input[type='text'] {
-  width: 57%;
+.prop-input[type="checkbox"] {
+  float: right;
+  margin: 5px;
+}
+.prop-input[type="color"] {
+  height: 80px;
+  width: 100%;
+  margin: 5px 0 0;
+  vertical-align: middle;
+  border: none;
+  padding: 5px;
 }
 .prop-input.multiple {
   display: block;
   height: 10em;
   width: 100%;
   max-width: 100%;
-  margin-top: .5em;
 }
 .prop-hint {
   font-size: 11px;
@@ -95,6 +118,9 @@
   padding: 0;
 }
 
+.prop-table-config {
+  margin-bottom: 10px;
+}
 .prop-table-config h4 {
   margin: 10px 0 5px 0;
   padding: 0;
@@ -107,25 +133,26 @@
   max-width: 100%;
 }
 .prop-table-wrap {
-  border: 1px solid #c0c0c0;
+  border: 1px solid #e6e6e6;
+  border-radius: 3px;
 }
 .prop-table-config th {
   font-size: 12px;
   font-weight: bold;
-  padding: 5px;
+  padding: 10px;
   line-height: 1;
-  background-color: #cfcfcf;
-  color: #333;
-  border-bottom: 1px solid #c0c0c0;
+  background-color: #fff;
+  color: #555;
+  border-bottom: 1px solid #e6e6e6;
 }
 .prop-table-config td {
   vertical-align: top;
   padding: 5px;
 }
 .prop-table-config tr:nth-child(odd) td {
-  background-color: #ececec;
+  background-color: #fcfcfc;
 }.prop-table-config tr:nth-child(even) td {
-  background-color: #f3f3f3;
+  background-color: #fcfcfc;
 }
 .prop-table-config input {
   border: 1px solid #ddd;
@@ -138,4 +165,7 @@
 
 #orientation, #multipage {
   margin: 0 0 1.5em 0;
+}
+.style-tab-button.hidden, .data-tab-button.hidden {
+  display: none;
 }

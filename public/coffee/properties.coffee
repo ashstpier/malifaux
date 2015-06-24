@@ -1,6 +1,7 @@
 class window.Properties
   constructor: (@designer) ->
     @el = $("#properties")
+    @meta = $("#meta .meta-content")
     @selected = null
     @designer.bind "selection:change", (newSelection) => @selectionChanged(newSelection)
     @designer.bind "sidebar:redraw",  => @redraw()
@@ -8,6 +9,22 @@ class window.Properties
   render: ->
     @el.append """
       <h2 class="prop-selection"></h2>
+      <div id="properties-tabs" class="tabs">
+        <nav>
+          <ul>
+            <li class="style-tab-button"><a href="#style-tab">Style</a></li>
+            <li class="data-tab-button"><a href="#data-tab">Configuration</a></li>
+          </ul>
+        </nav>
+        <div class="tab-wrapper">
+          <div id="style-tab" class="tab-content">
+            <section class="prop-section prop-appearance"></section>
+          </div>
+          <div id="data-tab" class="tab-content">
+            <section class="prop-section prop-config"></section>
+          </div>
+        </div>
+      </div>
       <section class="prop-section prop-page-options">
         <h3 class="prop-section-header">Options</h3>
         <div class="prop-content">
@@ -35,44 +52,46 @@ class window.Properties
           </form>
         </div>
       </section>
-      <section class="prop-section prop-layout">
-        <h3 class="prop-section-header">Layout</h3>
-        <div class="prop-content">
-          <label for="prop-value-x">x</label>
-          <input type="number" step="1" id="prop-value-x" class="prop-coord-input" data-fn="x" />
-          <label for="prop-value-y">y</label>
-          <input type="number" step="1" id="prop-value-y" class="prop-coord-input" data-fn="y" />
-          <label for="prop-value-width">width</label>
-          <input type="number" step="1" id="prop-value-width" class="prop-coord-input" data-fn="width" />
-          <label for="prop-value-height">height</label>
-          <input type="number" step="1" id="prop-value-height" class="prop-coord-input"  data-fn="height"/>
-          <label for="prop-value-ordering">ordering</label>
-          <select id='prop-value-ordering' class='prop-coord-select' data-fn="ordering">
-            <option></option>
-            <option value="setWidgetToBack">Send to back</option>
-            <option value="setWidgetBackOne">Send backward</option>
-            <option value="setWidgetForwardOne">Bring forward</option>
-            <option value="setWidgetToFront">Bring to front</option>
-          </select>
-        </div>
-      </section>
-
-      <section class="prop-section prop-config"></section>
-      <section class="prop-section prop-appearance"></section>
     """
+
+    @meta.append """
+      <div class="coordinates">
+        <label for="prop-value-x">x:</label>
+        <input type="number" step="1" id="prop-value-x" class="prop-coord-input" data-fn="x" />
+        <label for="prop-value-y">y:</label>
+        <input type="number" step="1" id="prop-value-y" class="prop-coord-input" data-fn="y" />
+        <label for="prop-value-width">width:</label>
+        <input type="number" step="1" id="prop-value-width" class="prop-coord-input" data-fn="width" />
+        <label for="prop-value-height">height:</label>
+        <input type="number" step="1" id="prop-value-height" class="prop-coord-input"  data-fn="height"/>
+      </div>
+      <div class="ordering float-right">
+        <button class="btn-small prop-order" value="setWidgetToBack" data-fn="ordering" title="Send to back">
+          <img src="images/glyphicons-486-send-to-back@2x.png" />
+        </button>
+        <button class="btn-small prop-order" value="setWidgetBackOne" data-fn="ordering" title="Send backward">
+          <img src="images/glyphicons-485-send-backward@2x.png" />
+        </button>
+        <button class="btn-small prop-order" value="setWidgetForwardOne" data-fn="ordering" title="Bring forward">
+          <img src="images/glyphicons-483-bring-forward@2x.png" />
+        </button>
+        <button class="btn-small prop-order" value="setWidgetToFront" data-fn="ordering" title="Bring to front">
+          <img src="images/glyphicons-484-bring-to-front@2x.png" />
+        </button>
+      </div>
+    """
+
     @bindEvents()
     @updateLayoutValues()
     @disable()
 
-
   bindEvents: ->
-    @el.on 'input', '.prop-coord-input', (e) =>
+    @meta.on 'input', '.prop-coord-input', (e) =>
       input = $(e.target)
       @selected[input.data('fn')].call(@selected, input.val())
-    @el.on 'change', '.prop-coord-select', (e) =>
-      input = $(e.target)
+    @meta.on 'click', '.prop-order', (e) =>
+      input = $(e.target).closest('button')
       @selected[input.data('fn')].call(@selected, input.val())
-      input.val('')
     @el.on 'input', 'input.prop-input', (e) =>
       input = $(e.target)
       @selected.content[input.data('fn')].call(@selected.content, input.val())
@@ -111,9 +130,8 @@ class window.Properties
 
   cachedSelector: (sel) =>
     @_elCache = {} unless @_elCache
-    @_elCache[sel] = @el.find(sel)
+    @_elCache[sel] = @meta.find(sel)
     @_elCache[sel]
-
 
   redraw: ->
     @setAppearanceOptions()
@@ -125,6 +143,8 @@ class window.Properties
     @el.removeClass('disabled')
     @el.find('.prop-input').prop('disabled', false)
     @el.find('.prop-selection').text(@selected.displayName())
+    @el.find('.tabs').show()
+    @meta.show()
     @redraw()
 
   disable: ->
@@ -132,6 +152,8 @@ class window.Properties
     @el.find('.prop-page-options').show()
     @el.find('.prop-input').prop('disabled', true)
     @el.find('.prop-selection').html('Page')
+    @el.find('.tabs').hide()
+    @meta.hide()
     @clearAppearanceOptions()
     @clearConfigOptions()
 
@@ -140,6 +162,7 @@ class window.Properties
     if options is false
       @clearAppearanceOptions()
     else
+      $('.style-tab-button').removeClass('hidden')
       options = [options] unless $.isArray(options)
       options = for o in options
         if typeof o is 'string' then $(o) else o
@@ -153,13 +176,17 @@ class window.Properties
       """
       appearance.find('.prop-content').append(options)
 
-  clearAppearanceOptions: -> @el.find('.prop-appearance').html('')
+  clearAppearanceOptions: ->
+    @el.find('.prop-appearance').html('')
+    $('.style-tab-button').addClass('hidden')
+    $('#properties-tabs').assemblyTabs('show',1)
 
   setConfigOptions: ->
     options = @selected.renderConfigOptions()
     if options is false
       @clearConfigOptions()
     else
+      $('.data-tab-button').removeClass('hidden')
       options = [options] unless $.isArray(options)
       options = for o in options
         if typeof o is 'string' then $(o) else o
@@ -174,10 +201,13 @@ class window.Properties
       for option in options
         config.find('.prop-content').append(option)
 
-  clearConfigOptions: -> @el.find('.prop-config').html('')
+  clearConfigOptions: ->
+    @el.find('.prop-config').html('')
+    $('.data-tab-button').addClass('hidden')
+    $('#properties-tabs').assemblyTabs('show',0)
 
-  x: -> @selected?.x() or ''
-  y: -> @selected?.y() or ''
+  x: -> @selected?.x() or '0'
+  y: -> @selected?.y() or '0'
   zIndex: -> @selected?.zIndex() or ''
-  width: -> @selected?.width() or ''
-  height: -> @selected?.height() or ''
+  width: -> @selected?.width() or '0'
+  height: -> @selected?.height() or '0'

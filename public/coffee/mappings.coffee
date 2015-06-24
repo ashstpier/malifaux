@@ -2,56 +2,76 @@ class window.MappingModal
   constructor: (@mappings, @callback) ->
 
     inputrows = for k, v of @mappings
-      """<div class="mapping-row">
-          <input type="text" name="mapping-input" class="mapping-input" value="#{k}">
-          <input type="text" name="mapping-output" class="mapping-output" value="#{v}">
+      """<div class="row mapping-row">
+          <div class="col-md-6">
+            <input type="text" name="mapping-input" class="mapping-input" value="#{k}">
+          </div>
+          <div class="col-md-6">
+            <input type="text" name="mapping-output" class="mapping-output" value="#{v}">
+          </div>
         </div>"""
     inputrow = inputrows.join("\n")
 
-    extrarow = """<div class="mapping-row">
+    extrarow = """
+      <div class="row mapping-row">
+        <div class="col-md-6">
           <input type="text" name="mapping-input" class="mapping-input">
+        </div>
+        <div class="col-md-6">
           <input type="text" name="mapping-output" class="mapping-output">
-        </div>"""
+        </div>
+      </div>"""
 
-    modal = """<div class="modal fade" id="mapping-modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Word mapping</h4>
+    modal = """<div id="mapping-modal" class="assembly-modal">
+      <div class="assembly-modal-wrapper">
+        <div class="assembly-modal-header">
+          Word mapping
+          <div class="assembly-modal-close">
+            <i class="fa fa-times close-icon"></i>
           </div>
-          <div class="modal-body">
-            <h4 class="mapping-heading">Replace</h4>
-            <h4 class="mapping-heading right">With</h4>
+        </div>
+        <div class="assembly-modal-content">
+          <div class="row">
+            <div class="col-md-6">
+              <h4>Replace</h4>
+            </div>
+            <div class="col-md-6">
+              <h4>With</h4>
+            </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-success pull-left" id="add-mapping">+ Add</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" id="save-mapping">Save</button>
-          </div>
+        </div>
+        <div class="assembly-modal-footer">
+          <button type="button" class="btn btn-success float-left" id="add-mapping"><i class="fa fa-plus"></i> Add</button>
+          <button type="button" class="btn btn-cancel assembly-modal-close" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+          <button type="button" class="btn btn-primary assembly-modal-close" id="save-mapping"><i class="fa fa-save"></i> Save</button>
         </div>
       </div>
     </div>"""
 
     $('body').append(modal)
-    $('#mapping-modal').modal('show')
 
-    modalbody = $('#mapping-modal .modal-body')
+    modalbody = $('#mapping-modal .assembly-modal-content')
     if $.isEmptyObject(@mappings)
       modalbody.append(extrarow)
     else
       modalbody.append(inputrow)
 
+    $('#mapping-modal').assemblyModal()
+    setTimeout ->
+      $('#mapping-modal').assemblyModal('show')
+    , 100
+
     $('#add-mapping').on "click", ->
       modalbody.append(extrarow)
 
     $('#save-mapping').on "click", =>
-      @close()
+      @close(modal)
 
-    $('#mapping-modal').on 'hidden.bs.modal', =>
+    $('#mapping-modal').find('.assembly-modal-close').on 'click', =>
       $('#mapping-modal').remove()
       Designer.trigger('sidebar:redraw')
 
-  close: ->
+  close: (modal) ->
     newMappings = {}
     rows = $('.mapping-row')
     for row in rows

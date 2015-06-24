@@ -42,9 +42,9 @@ window.Designer = {
     for name, className of Widget.WIDGETS
       type = window[className]
       if type.active
-        $("#gallery").append """
+        $("#widget-gallery .assembly-modal-content").append """
           <div id="add-#{name}" class="add-widget">
-            <i class="glyphicons white #{type.icon}"></i>
+            <i class="glyphicons #{type.icon}"></i>
             <h4>#{type.displayName}</h4>
             <p>#{type.description}</p>
           </div>
@@ -90,6 +90,7 @@ window.Designer = {
     @renderPagesList()
     @template.setSubject(utils.subject(@template.currentPage.pagetype))
 
+
   updatePageAttributes: ->
     @template.currentPage.updateAttributes()
 
@@ -121,12 +122,16 @@ window.Designer = {
     @history.bind 'history:change', => @updateSavedButtonState()
     @bindKeyboardEvents()
 
+    $('#widget-gallery').assemblyModal()
+    $('#properties-tabs').assemblyTabs()
+
+    $('#widget-options').click => $('#widget-gallery').assemblyModal('show')
+
     window.addEventListener "beforeunload", (e) => @reminderToSave(e)
 
     for name, className of Widget.WIDGETS
       do (className) => $("#add-#{name}").click =>
-        $('#gallery').addClass('hidden')
-        setTimeout (-> $('#gallery').removeClass('hidden')), 500
+        $('#widget-gallery').assemblyModal('hide')
         @addWidget(type: className, zIndex: @template.currentPage.widgets.length+1)
         false
 
@@ -284,7 +289,8 @@ window.Designer = {
 
   promptSave: ->
     if @hasUnsavedChanges()
-      $('#save-modal').modal()
+      $('#save-modal').assemblyModal()
+      $('#save-modal').assemblyModal('show')
     else
       @exitDesigner()
     false

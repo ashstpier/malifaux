@@ -2,16 +2,19 @@
 <html>
 		<title>Parent Reports</title>
 
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="http://localhost:8080/dist/css/assembly.min.css">
+
 		<link rel="stylesheet" href="vendor/froala/css/font-awesome.min.css">
 		<link rel="stylesheet" href="vendor/froala/css/froala_editor.min.css">
 		<link rel="stylesheet" href="vendor/jqueryui/themes/base/minified/jquery-ui.min.css">
 		<link rel="stylesheet" type="text/css" href="css/glyphicons.css">
 		<link rel="stylesheet" type="text/css" href="css/modal.css">
-		<link rel="stylesheet" type="text/css" href="css/btn.css">
 		<link rel="stylesheet" type="text/css" href="css/site.css">
 		<link rel="stylesheet" type="text/css" href="css/designer.css">
 		<link rel="stylesheet" type="text/css" href="css/properties.css">
 		<link rel="stylesheet" type="text/css" href="css/widgets.css">
+		<link rel="stylesheet" type="text/css" href="css/meta.css">
 
 		<link href="vendor/c3/c3.min.css" rel="stylesheet" type="text/css">
 
@@ -31,7 +34,7 @@
   	<script type="text/javascript" src="vendor/c3/c3.min.js"></script>
 		<script type="text/javascript" src="vendor/jquery-select-text/jquery-select-text.js"></script>
 
-		<script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="http://localhost:8080/dist/js/assembly.min.js"></script>
 
 		<script type="text/javascript" src="js/endpoints.js"></script>
 		<script type="text/javascript" src="js/utils.js"></script>
@@ -77,7 +80,6 @@
 						<i class="glyphicons white circle_plus"></i>
 						Widgets
 					</a>
-					<div class="subnav" id="gallery"></div>
 				</li>
         <li class="nav-option" id="save">
             <a href="#">
@@ -96,21 +98,36 @@
 		</header>
 
 		<div id="viewport">
+			<div id="pages"></div>
 		</div>
 		<div id="properties"></div>
+		<div id="meta"><div class="meta-content"></div></div>
 
-		<div class="modal fade" id="save-modal" tabindex="-1" role="dialog" aria-labelledby="label" aria-hidden="true">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-body">
-		      	<h4 class="modal-title" id="label">Save Changes?</h4>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" id="discard" class="btn btn-default" data-dismiss="modal">Discard</button>
-		        <button type="button" id="save-exit" class="btn btn-primary">Save</button>
-		      </div>
-		    </div>
-		  </div>
+		<div id="widget-gallery" class="assembly-modal large-modal">
+			<div class="assembly-modal-wrapper">
+				<div class="assembly-modal-header">
+					Add a widget
+					<div class="assembly-modal-close">
+            <i class="fa fa-times close-icon"></i>
+          </div>
+				</div>
+				<div class="assembly-modal-content"></div>
+			</div>
+		</div>
+
+		<div id="save-modal" class="assembly-modal small-modal">
+			<div class="assembly-modal-wrapper">
+				<div class="assembly-modal-header">
+					Save Changes?
+					<div class="assembly-modal-close">
+            <i class="fa fa-times close-icon"></i>
+          </div>
+				</div>
+				<div class="assembly-modal-footer">
+	        <button type="button" id="discard" class="btn btn-cancel assembly-modal-close">Discard</button>
+	        <button type="button" id="save-exit" class="btn btn-primary assembly-modal-close">Save</button>
+	      </div>
+			</div>
 		</div>
 	</body>
 </html>
