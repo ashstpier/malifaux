@@ -12,8 +12,8 @@ class window.Properties
       <div id="properties-tabs" class="tabs">
         <nav>
           <ul>
-            <li><a href="#style-tab">Style</a></li>
-            <li><a href="#data-tab">Configuration</a></li>
+            <li class="style-tab-button"><a href="#style-tab">Style</a></li>
+            <li class="data-tab-button"><a href="#data-tab">Configuration</a></li>
           </ul>
         </nav>
         <div class="tab-wrapper">
@@ -162,6 +162,7 @@ class window.Properties
     if options is false
       @clearAppearanceOptions()
     else
+      $('.style-tab-button').removeClass('hidden')
       options = [options] unless $.isArray(options)
       options = for o in options
         if typeof o is 'string' then $(o) else o
@@ -175,13 +176,17 @@ class window.Properties
       """
       appearance.find('.prop-content').append(options)
 
-  clearAppearanceOptions: -> @el.find('.prop-appearance').html('')
+  clearAppearanceOptions: ->
+    @el.find('.prop-appearance').html('')
+    $('.style-tab-button').addClass('hidden')
+    $('#properties-tabs').assemblyTabs('show',1)
 
   setConfigOptions: ->
     options = @selected.renderConfigOptions()
     if options is false
       @clearConfigOptions()
     else
+      $('.data-tab-button').removeClass('hidden')
       options = [options] unless $.isArray(options)
       options = for o in options
         if typeof o is 'string' then $(o) else o
@@ -196,7 +201,10 @@ class window.Properties
       for option in options
         config.find('.prop-content').append(option)
 
-  clearConfigOptions: -> @el.find('.prop-config').html('')
+  clearConfigOptions: ->
+    @el.find('.prop-config').html('')
+    $('.data-tab-button').addClass('hidden')
+    $('#properties-tabs').assemblyTabs('show',0)
 
   x: -> @selected?.x() or '0'
   y: -> @selected?.y() or '0'

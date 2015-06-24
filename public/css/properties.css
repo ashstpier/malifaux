@@ -166,3 +166,6 @@
 #orientation, #multipage {
   margin: 0 0 1.5em 0;
 }
+.style-tab-button.hidden, .data-tab-button.hidden {
+  display: none;
+}
