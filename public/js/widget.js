@@ -301,6 +301,7 @@ window.Widget = (function() {
     if (this === selection) {
       return this.el.addClass('selected');
     } else {
+      this.layoutMode();
       return this.el.removeClass('selected');
     }
   };

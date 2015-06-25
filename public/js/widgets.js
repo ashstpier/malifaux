@@ -1,21 +1,4 @@
 (function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window._EXAMPLEContent = (function(superClass) {
-    extend(_EXAMPLEContent, superClass);
-
-    function _EXAMPLEContent() {
-      return _EXAMPLEContent.__super__.constructor.apply(this, arguments);
-    }
-
-    return _EXAMPLEContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
   var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
@@ -104,10 +87,10 @@
     AttendanceContent.prototype.drawChart = function(root) {
       var chartType, colors;
       colors = {};
-      colors[this._label1] = this.style.color1;
-      colors[this._label2] = this.style.color2;
-      colors[this._label3] = this.style.color3;
-      colors[this._label4] = this.style.color4;
+      colors[this._label1 + " " + this.attendance.present + "%"] = this.style.color1;
+      colors[this._label2 + " " + this.attendance.late + "%"] = this.style.color2;
+      colors[this._label3 + " " + this.attendance.authorised + "%"] = this.style.color3;
+      colors[this._label4 + " " + this.attendance.unauthorised + "%"] = this.style.color4;
       if (this.style.chartstyle === 'pie') {
         chartType = 'pie';
       } else {
@@ -117,9 +100,9 @@
         bindto: root,
         data: {
           order: 'asc',
-          columns: [[this._label1, parseFloat(this.attendance.present) / 100], [this._label2, parseFloat(this.attendance.late) / 100], [this._label3, parseFloat(this.attendance.authorised) / 100], [this._label4, parseFloat(this.attendance.unauthorised) / 100]],
+          columns: [[this._label1 + " " + (this.attendance.present || 0) + "%", parseFloat(this.attendance.present) / 100], [this._label2 + " " + (this.attendance.late || 0) + "%", parseFloat(this.attendance.late) / 100], [this._label3 + " " + (this.attendance.authorised || 0) + "%", parseFloat(this.attendance.authorised) / 100], [this._label4 + " " + (this.attendance.unauthorised || 0) + "%", parseFloat(this.attendance.unauthorised) / 100]],
           type: chartType,
-          groups: [[this._label1, this._label2, this._label3, this._label4]],
+          groups: [[this._label1 + " " + (this.attendance.present || 0) + "%", this._label2 + " " + (this.attendance.late || 0) + "%", this._label3 + " " + (this.attendance.authorised || 0) + "%", this._label4 + " " + (this.attendance.unauthorised || 0) + "%"]],
           colors: colors
         },
         axis: {
@@ -131,7 +114,7 @@
             }
           },
           x: {
-            show: true,
+            show: false,
             tick: {
               count: 0
             }
@@ -1809,6 +1792,23 @@
     };
 
     return TextContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window._EXAMPLEContent = (function(superClass) {
+    extend(_EXAMPLEContent, superClass);
+
+    function _EXAMPLEContent() {
+      return _EXAMPLEContent.__super__.constructor.apply(this, arguments);
+    }
+
+    return _EXAMPLEContent;
 
   })(WidgetContent);
 
