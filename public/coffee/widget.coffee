@@ -6,12 +6,12 @@ class window.Widget
     'image':          'ImageContent'
     'image-gallery':  'ImageGalleryContent'
     'text':           'TextContent'
-    'datatable':      'DatatableContent'
     'field':          'FieldContent'
     'name':           'NameContent'
     'subject-field':  'SubjectFieldContent'
-    'attendance':     'AttendanceContent'
+    'datatable':      'DatatableContent'
     'dynamictable':   'DynamicTableContent'
+    'attendance':     'AttendanceContent'
     'shape':          'ShapeContent'
   }
 

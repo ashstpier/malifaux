@@ -12,16 +12,16 @@ class window.Properties
       <div id="properties-tabs" class="tabs">
         <nav>
           <ul>
-            <li class="style-tab-button"><a href="#style-tab">Style</a></li>
             <li class="data-tab-button"><a href="#data-tab">Configuration</a></li>
+            <li class="style-tab-button"><a href="#style-tab">Style</a></li>
           </ul>
         </nav>
         <div class="tab-wrapper">
-          <div id="style-tab" class="tab-content">
-            <section class="prop-section prop-appearance"></section>
-          </div>
           <div id="data-tab" class="tab-content">
             <section class="prop-section prop-config"></section>
+          </div>
+          <div id="style-tab" class="tab-content">
+            <section class="prop-section prop-appearance"></section>
           </div>
         </div>
       </div>
@@ -179,7 +179,7 @@ class window.Properties
   clearAppearanceOptions: ->
     @el.find('.prop-appearance').html('')
     $('.style-tab-button').addClass('hidden')
-    $('#properties-tabs').assemblyTabs('show',1)
+    $('#properties-tabs').assemblyTabs('show',0)
 
   setConfigOptions: ->
     options = @selected.renderConfigOptions()
@@ -204,7 +204,7 @@ class window.Properties
   clearConfigOptions: ->
     @el.find('.prop-config').html('')
     $('.data-tab-button').addClass('hidden')
-    $('#properties-tabs').assemblyTabs('show',0)
+    $('#properties-tabs').assemblyTabs('show',1)
 
   x: -> @selected?.x() or '0'
   y: -> @selected?.y() or '0'
