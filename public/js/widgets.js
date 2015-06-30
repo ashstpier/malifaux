@@ -3,185 +3,6 @@
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  window.AttendanceContent = (function(superClass) {
-    extend(AttendanceContent, superClass);
-
-    function AttendanceContent() {
-      this.drawChart = bind(this.drawChart, this);
-      this.resizeChart = bind(this.resizeChart, this);
-      return AttendanceContent.__super__.constructor.apply(this, arguments);
-    }
-
-    AttendanceContent.className = "AttendanceContent";
-
-    AttendanceContent.displayName = "Attendance Chart";
-
-    AttendanceContent.description = "Show a visual representation of student attendance.";
-
-    AttendanceContent.icon = "bell";
-
-    AttendanceContent.prototype.defaultWidth = function() {
-      return 400;
-    };
-
-    AttendanceContent.prototype.defaultHeight = function() {
-      return 300;
-    };
-
-    AttendanceContent.STYLE_DEFAULTS = {
-      color1: '#77cc33',
-      color2: '#cc0000',
-      color3: '#e67e22',
-      color4: '#9b59b6',
-      chartstyle: 'bar',
-      font: 'Helvetica',
-      legend: 'right'
-    };
-
-    AttendanceContent.prototype.initWithConfig = function(config) {
-      this.style = $.extend({}, AttendanceContent.STYLE_DEFAULTS, this.get(config.style, {}));
-      this.options = this.get(config.options, {});
-      this.labels = this.get(config.labels, ['Present', 'Late', 'Authorised', 'Unauthorised']);
-      this._label1 = this.labels[0];
-      this._label2 = this.labels[1];
-      this._label3 = this.labels[2];
-      return this._label4 = this.labels[3];
-    };
-
-    AttendanceContent.prototype.render_layout = function(data) {
-      var root;
-      this.attendance = data.attendance;
-      root = $("<div class=\"attendance-widget\"></div>");
-      this.drawChart(root[0]);
-      this.widget.bind('widget:move', this.resizeChart);
-      return $(root).append("<div class=\"noclick\"></div>");
-    };
-
-    AttendanceContent.prototype.resizeChart = function() {
-      return this.chart.resize({
-        height: this.widget.height(),
-        width: this.widget.width()
-      });
-    };
-
-    AttendanceContent.prototype.renderConfigOptions = function() {
-      return [this.option('text', 'label1', "Present label"), this.option('text', 'label2', "Late label"), this.option('text', 'label3', "Authorised label"), this.option('text', 'label4', "Unauthorised label")];
-    };
-
-    AttendanceContent.prototype.renderAppearanceOptions = function() {
-      return [
-        this.option('select', 'chartstyle', "Chart style", {
-          options: {
-            bar: 'Bar',
-            pie: 'Pie'
-          }
-        }), this.option('select', 'legend', "Legend position", {
-          options: {
-            right: 'Right',
-            bottom: 'Bottom'
-          }
-        }), this.option('font', 'font', "Font"), this.option('color', 'color1', "Present"), this.option('color', 'color2', "Late"), this.option('color', 'color3', "Authorised"), this.option('color', 'color4', "Unauthorised")
-      ];
-    };
-
-    AttendanceContent.prototype.drawChart = function(root) {
-      var chartType, colors;
-      colors = {};
-      colors[this._label1 + " " + this.attendance.present + "%"] = this.style.color1;
-      colors[this._label2 + " " + this.attendance.late + "%"] = this.style.color2;
-      colors[this._label3 + " " + this.attendance.authorised + "%"] = this.style.color3;
-      colors[this._label4 + " " + this.attendance.unauthorised + "%"] = this.style.color4;
-      if (this.style.chartstyle === 'pie') {
-        chartType = 'pie';
-      } else {
-        chartType = 'bar';
-      }
-      this.chart = c3.generate({
-        bindto: root,
-        data: {
-          order: 'asc',
-          columns: [[this._label1 + " " + (this.attendance.present || 0) + "%", parseFloat(this.attendance.present) / 100], [this._label2 + " " + (this.attendance.late || 0) + "%", parseFloat(this.attendance.late) / 100], [this._label3 + " " + (this.attendance.authorised || 0) + "%", parseFloat(this.attendance.authorised) / 100], [this._label4 + " " + (this.attendance.unauthorised || 0) + "%", parseFloat(this.attendance.unauthorised) / 100]],
-          type: chartType,
-          groups: [[this._label1 + " " + (this.attendance.present || 0) + "%", this._label2 + " " + (this.attendance.late || 0) + "%", this._label3 + " " + (this.attendance.authorised || 0) + "%", this._label4 + " " + (this.attendance.unauthorised || 0) + "%"]],
-          colors: colors
-        },
-        axis: {
-          y: {
-            max: .99,
-            "default": [0, 100],
-            tick: {
-              format: d3.format(",%")
-            }
-          },
-          x: {
-            show: false,
-            tick: {
-              count: 0
-            }
-          }
-        },
-        legend: {
-          position: this.style.legend
-        },
-        grid: {
-          y: {
-            show: true
-          }
-        },
-        interaction: {
-          enabled: false
-        },
-        size: {
-          width: this.widget.width(),
-          height: this.widget.height()
-        }
-      });
-      $(root).find('.tick').css('font-family', this.style.font);
-      return $(root).find('.c3-legend-item').css('font-family', this.style.font);
-    };
-
-    AttendanceContent.prototype.color1 = AttendanceContent.property('style', 'color1');
-
-    AttendanceContent.prototype.color2 = AttendanceContent.property('style', 'color2');
-
-    AttendanceContent.prototype.color3 = AttendanceContent.property('style', 'color3');
-
-    AttendanceContent.prototype.color4 = AttendanceContent.property('style', 'color4');
-
-    AttendanceContent.prototype.chartstyle = AttendanceContent.property('style', 'chartstyle');
-
-    AttendanceContent.prototype.legend = AttendanceContent.property('style', 'legend');
-
-    AttendanceContent.prototype.font = AttendanceContent.property('style', 'font');
-
-    AttendanceContent.prototype.label1 = AttendanceContent.property('_label1');
-
-    AttendanceContent.prototype.label2 = AttendanceContent.property('_label2');
-
-    AttendanceContent.prototype.label3 = AttendanceContent.property('_label3');
-
-    AttendanceContent.prototype.label4 = AttendanceContent.property('_label4');
-
-    AttendanceContent.prototype.serialize = function() {
-      return {
-        columns: this.columns,
-        style: this.style,
-        options: this.options,
-        labels: [this._label1, this._label2, this._label3, this._label4]
-      };
-    };
-
-    return AttendanceContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
-  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
   window.DatatableContent = (function(superClass) {
     extend(DatatableContent, superClass);
 
@@ -543,6 +364,732 @@
     };
 
     return DatatableContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window._EXAMPLEContent = (function(superClass) {
+    extend(_EXAMPLEContent, superClass);
+
+    function _EXAMPLEContent() {
+      return _EXAMPLEContent.__super__.constructor.apply(this, arguments);
+    }
+
+    return _EXAMPLEContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.AttendanceContent = (function(superClass) {
+    extend(AttendanceContent, superClass);
+
+    function AttendanceContent() {
+      this.drawChart = bind(this.drawChart, this);
+      this.resizeChart = bind(this.resizeChart, this);
+      return AttendanceContent.__super__.constructor.apply(this, arguments);
+    }
+
+    AttendanceContent.className = "AttendanceContent";
+
+    AttendanceContent.displayName = "Attendance Chart";
+
+    AttendanceContent.description = "Show a visual representation of student attendance.";
+
+    AttendanceContent.icon = "bell";
+
+    AttendanceContent.prototype.defaultWidth = function() {
+      return 400;
+    };
+
+    AttendanceContent.prototype.defaultHeight = function() {
+      return 300;
+    };
+
+    AttendanceContent.STYLE_DEFAULTS = {
+      color1: '#77cc33',
+      color2: '#cc0000',
+      color3: '#e67e22',
+      color4: '#9b59b6',
+      chartstyle: 'bar',
+      font: 'Helvetica',
+      legend: 'right'
+    };
+
+    AttendanceContent.prototype.initWithConfig = function(config) {
+      this.style = $.extend({}, AttendanceContent.STYLE_DEFAULTS, this.get(config.style, {}));
+      this.options = this.get(config.options, {});
+      this.labels = this.get(config.labels, ['Present', 'Late', 'Authorised', 'Unauthorised']);
+      this._label1 = this.labels[0];
+      this._label2 = this.labels[1];
+      this._label3 = this.labels[2];
+      return this._label4 = this.labels[3];
+    };
+
+    AttendanceContent.prototype.render_layout = function(data) {
+      var root;
+      this.attendance = data.attendance;
+      root = $("<div class=\"attendance-widget\"></div>");
+      this.drawChart(root[0]);
+      this.widget.bind('widget:move', this.resizeChart);
+      return $(root).append("<div class=\"noclick\"></div>");
+    };
+
+    AttendanceContent.prototype.resizeChart = function() {
+      return this.chart.resize({
+        height: this.widget.height(),
+        width: this.widget.width()
+      });
+    };
+
+    AttendanceContent.prototype.renderConfigOptions = function() {
+      return [this.option('text', 'label1', "Present label"), this.option('text', 'label2', "Late label"), this.option('text', 'label3', "Authorised label"), this.option('text', 'label4', "Unauthorised label")];
+    };
+
+    AttendanceContent.prototype.renderAppearanceOptions = function() {
+      return [
+        this.option('select', 'chartstyle', "Chart style", {
+          options: {
+            bar: 'Bar',
+            pie: 'Pie'
+          }
+        }), this.option('select', 'legend', "Legend position", {
+          options: {
+            right: 'Right',
+            bottom: 'Bottom'
+          }
+        }), this.option('font', 'font', "Font"), this.option('color', 'color1', "Present"), this.option('color', 'color2', "Late"), this.option('color', 'color3', "Authorised"), this.option('color', 'color4', "Unauthorised")
+      ];
+    };
+
+    AttendanceContent.prototype.drawChart = function(root) {
+      var chartType, colors;
+      colors = {};
+      colors[this._label1 + " " + this.attendance.present + "%"] = this.style.color1;
+      colors[this._label2 + " " + this.attendance.late + "%"] = this.style.color2;
+      colors[this._label3 + " " + this.attendance.authorised + "%"] = this.style.color3;
+      colors[this._label4 + " " + this.attendance.nonAuthorised + "%"] = this.style.color4;
+      if (this.style.chartstyle === 'pie') {
+        chartType = 'pie';
+      } else {
+        chartType = 'bar';
+      }
+      this.chart = c3.generate({
+        bindto: root,
+        data: {
+          order: 'asc',
+          columns: [[this._label1 + " " + (this.attendance.present || 0) + "%", parseFloat(this.attendance.present) / 100], [this._label2 + " " + (this.attendance.late || 0) + "%", parseFloat(this.attendance.late) / 100], [this._label3 + " " + (this.attendance.authorised || 0) + "%", parseFloat(this.attendance.authorised) / 100], [this._label4 + " " + (this.attendance.nonAuthorised || 0) + "%", parseFloat(this.attendance.nonAuthorised) / 100]],
+          type: chartType,
+          groups: [[this._label1 + " " + (this.attendance.present || 0) + "%", this._label2 + " " + (this.attendance.late || 0) + "%", this._label3 + " " + (this.attendance.authorised || 0) + "%", this._label4 + " " + (this.attendance.nonAuthorised || 0) + "%"]],
+          colors: colors
+        },
+        axis: {
+          y: {
+            max: .99,
+            "default": [0, 100],
+            tick: {
+              format: d3.format(",%")
+            }
+          },
+          x: {
+            show: false,
+            tick: {
+              count: 0
+            }
+          }
+        },
+        legend: {
+          position: this.style.legend
+        },
+        grid: {
+          y: {
+            show: true
+          }
+        },
+        interaction: {
+          enabled: false
+        },
+        size: {
+          width: this.widget.width(),
+          height: this.widget.height()
+        }
+      });
+      $(root).find('.tick').css('font-family', this.style.font);
+      return $(root).find('.c3-legend-item').css('font-family', this.style.font);
+    };
+
+    AttendanceContent.prototype.color1 = AttendanceContent.property('style', 'color1');
+
+    AttendanceContent.prototype.color2 = AttendanceContent.property('style', 'color2');
+
+    AttendanceContent.prototype.color3 = AttendanceContent.property('style', 'color3');
+
+    AttendanceContent.prototype.color4 = AttendanceContent.property('style', 'color4');
+
+    AttendanceContent.prototype.chartstyle = AttendanceContent.property('style', 'chartstyle');
+
+    AttendanceContent.prototype.legend = AttendanceContent.property('style', 'legend');
+
+    AttendanceContent.prototype.font = AttendanceContent.property('style', 'font');
+
+    AttendanceContent.prototype.label1 = AttendanceContent.property('_label1');
+
+    AttendanceContent.prototype.label2 = AttendanceContent.property('_label2');
+
+    AttendanceContent.prototype.label3 = AttendanceContent.property('_label3');
+
+    AttendanceContent.prototype.label4 = AttendanceContent.property('_label4');
+
+    AttendanceContent.prototype.serialize = function() {
+      return {
+        columns: this.columns,
+        style: this.style,
+        options: this.options,
+        labels: [this._label1, this._label2, this._label3, this._label4]
+      };
+    };
+
+    return AttendanceContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.DynamicTableContent = (function(superClass) {
+    extend(DynamicTableContent, superClass);
+
+    function DynamicTableContent() {
+      this.updateTable = bind(this.updateTable, this);
+      this.makeCell = bind(this.makeCell, this);
+      this.numberOfColumns = bind(this.numberOfColumns, this);
+      this.updateMapping = bind(this.updateMapping, this);
+      this.changeMapping = bind(this.changeMapping, this);
+      return DynamicTableContent.__super__.constructor.apply(this, arguments);
+    }
+
+    DynamicTableContent.className = "DynamicTableContent";
+
+    DynamicTableContent.displayName = "Dynamic Table";
+
+    DynamicTableContent.description = "A blank table that can be filled with static or dynamic text.";
+
+    DynamicTableContent.icon = "table";
+
+    DynamicTableContent.prototype.defaultWidth = function() {
+      return 360;
+    };
+
+    DynamicTableContent.prototype.defaultHeight = function() {
+      return 110;
+    };
+
+    DynamicTableContent.prototype.editable = function() {
+      return this.widget.currentMode === 'layout';
+    };
+
+    DynamicTableContent.STYLE_DEFAULTS = {
+      header_position: 'top',
+      alignment: 'left',
+      heading_text_color: '#000000',
+      heading_background_color: '#DDDDDD',
+      cell_text_color: '#000000',
+      cell_background_color_odd: '#FFFFFF',
+      cell_background_color_even: '#FFFFFF',
+      font: 'Helvetica',
+      size: 'Medium'
+    };
+
+    DynamicTableContent.DEFAULT_COLUMNS = 3;
+
+    DynamicTableContent.DEFAULT_ROWS = 3;
+
+    DynamicTableContent.prototype.header_position = DynamicTableContent.property('style', 'header_position');
+
+    DynamicTableContent.prototype.alignment = DynamicTableContent.property('style', 'alignment');
+
+    DynamicTableContent.prototype.font = DynamicTableContent.property('style', 'font');
+
+    DynamicTableContent.prototype.size = DynamicTableContent.property('style', 'size');
+
+    DynamicTableContent.prototype.heading_text_color = DynamicTableContent.property('style', 'heading_text_color');
+
+    DynamicTableContent.prototype.heading_background_color = DynamicTableContent.property('style', 'heading_background_color');
+
+    DynamicTableContent.prototype.cell_text_color = DynamicTableContent.property('style', 'cell_text_color');
+
+    DynamicTableContent.prototype.cell_background_color_odd = DynamicTableContent.property('style', 'cell_background_color_odd');
+
+    DynamicTableContent.prototype.cell_background_color_even = DynamicTableContent.property('style', 'cell_background_color_even');
+
+    DynamicTableContent.prototype.initWithConfig = function(config) {
+      this.style = $.extend({}, DynamicTableContent.STYLE_DEFAULTS, this.get(config.style, {}));
+      this.mappings = this.get(config.mappings, {});
+      this.tabledata = this.get(config.tabledata, this.makeDefaultTable());
+      return this._subject = this.get(config.subject, 'PH');
+    };
+
+    DynamicTableContent.prototype.makeDefaultTable = function() {
+      var c, j, r, ref, results;
+      results = [];
+      for (r = j = 1, ref = DynamicTableContent.DEFAULT_ROWS; 1 <= ref ? j <= ref : j >= ref; r = 1 <= ref ? ++j : --j) {
+        results.push((function() {
+          var k, ref1, results1;
+          results1 = [];
+          for (c = k = 1, ref1 = DynamicTableContent.DEFAULT_COLUMNS; 1 <= ref1 ? k <= ref1 : k >= ref1; c = 1 <= ref1 ? ++k : --k) {
+            results1.push(this.makeCell());
+          }
+          return results1;
+        }).call(this));
+      }
+      return results;
+    };
+
+    DynamicTableContent.prototype.render_layout = function(data, edit) {
+      var c, column, i, j, k, l, len, len1, len2, len3, len4, len5, m, n, o, ref, row, self, table, tbody, tr;
+      if (edit == null) {
+        edit = false;
+      }
+      table = $("<div class=\"dynamictable-widget\">\n  <table class=\"dynamictable " + (edit ? "edited" : void 0) + "\" style=\"" + (this.styleString({
+        'font-family': utils.fontMap[this.style.font],
+        'font-size': utils.sizeMap[this.style.size],
+        'color': this.style.color,
+        'text-align': this.style.alignment
+      })) + "\">\n    <tbody></tbody>\n  </table>\n</div>");
+      tbody = table.find('tbody');
+      ref = this.tabledata;
+      for (i = j = 0, len = ref.length; j < len; i = ++j) {
+        row = ref[i];
+        tr = $('<tr></tr>');
+        if (this.style.header_position === 'top') {
+          if (i === 0) {
+            for (k = 0, len1 = row.length; k < len1; k++) {
+              column = row[k];
+              tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, data, edit)) + "</th>");
+            }
+          } else {
+            for (l = 0, len2 = row.length; l < len2; l++) {
+              column = row[l];
+              tr.append("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(column, data, edit)) + "</td>");
+            }
+          }
+        } else if (this.style.header_position === 'left') {
+          for (c = m = 0, len3 = row.length; m < len3; c = ++m) {
+            column = row[c];
+            if (c === 0) {
+              tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, data, edit)) + "</th>");
+            } else {
+              tr.append("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(column, data, edit)) + "</td>");
+            }
+          }
+        } else {
+          if (i === 0) {
+            for (n = 0, len4 = row.length; n < len4; n++) {
+              column = row[n];
+              tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, data, edit)) + "</th>");
+            }
+          } else {
+            for (c = o = 0, len5 = row.length; o < len5; c = ++o) {
+              column = row[c];
+              if (c === 0) {
+                tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, data, edit)) + "</th>");
+              } else {
+                tr.append("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(column, data, edit)) + "</td>");
+              }
+            }
+          }
+        }
+        tbody.append(tr);
+      }
+      self = this;
+      table.on("click", "input:text", function() {
+        var el, td;
+        el = $(this);
+        self.el.parents('.widget-dynamictable').css('overflow', 'visible');
+        $('.dynamic-list').remove();
+        td = el.parent();
+        td.append(self.dynamicOptions(el));
+        $('.dynamic-list').css('top', el.height() + 1);
+        $('.dynamic-list').on("change", "#category-select", function() {
+          $(".dynamic-select").remove();
+          if ($(this).val() === "basic") {
+            return $('.dynamic-list').append(self.basicInfoSelect(el));
+          } else {
+            return $('.dynamic-list').append(self.assessmentInfoSelect(el));
+          }
+        });
+        $('.dynamic-list').on("change", "#field-select", function() {
+          var cell, option;
+          option = $(this).val();
+          el.data('dynamic', true);
+          el.data('key', option);
+          el.data('subject', '');
+          $('.dynamic-list').remove();
+          cell = self.makeCell(option, true);
+          return el.val(self.cellValue(cell, data, false));
+        });
+        return $('.dynamic-list').on("change", "#assessment-select", function() {
+          var cell, option, subject;
+          option = $(this).val();
+          subject = $("#category-select").val();
+          el.data('dynamic', true);
+          el.data('key', option);
+          el.data('subject', subject);
+          $('.dynamic-list').remove();
+          cell = self.makeCell(option, true, subject);
+          return el.val(self.cellValue(cell, data, false));
+        });
+      });
+      return table;
+    };
+
+    DynamicTableContent.prototype.cellContent = function(cell, data, edit) {
+      if (edit) {
+        return "<input type=\"text\" data-dynamic=\"" + cell.dynamic + "\" data-key=\"" + cell.value + "\" data-subject=\"" + (cell.subject || '') + "\" value=\"" + (this.cellValue(cell, data, false)) + "\">";
+      } else {
+        return this.cellValue(cell, data);
+      }
+    };
+
+    DynamicTableContent.prototype.cellValue = function(cell, data, html) {
+      var ref, subject, subjectData, value;
+      if (html == null) {
+        html = true;
+      }
+      subject = null;
+      if (cell.dynamic) {
+        if (Object.keys(this.metrics()).indexOf(cell.value) === -1) {
+          subject = this.widget.subject || cell.subject;
+          subjectData = data.subjects[subject];
+          value = null;
+          if (subjectData) {
+            value = subjectData[cell.value] || ((ref = subjectData.results) != null ? ref[cell.value] : void 0);
+          }
+        } else {
+          value = this.fieldFrom(cell.value, data);
+        }
+        return this.mappings[value] || value || this.placeholderWithLabel([subject, cell.value].join(':'), html);
+      } else {
+        return cell.value;
+      }
+    };
+
+    DynamicTableContent.prototype.dynamicOptions = function(el) {
+      var options;
+      options = "<div class=\"dynamic-list\"><p>Type free text or select a dynamic option from below</p>";
+      options += this.categorySelect(el);
+      if (el.data('subject')) {
+        options += this.assessmentInfoSelect(el);
+      } else {
+        options += this.basicInfoSelect(el);
+      }
+      return options += "</div>";
+    };
+
+    DynamicTableContent.prototype.categorySelect = function(el) {
+      var category_select, name, option, ref;
+      if (this.widget.subject) {
+        return category_select = "<select id=\"category-select\">\n<option value=\"basic\">Basic Information</option>\n<option value=\"assessment\" " + (el.data('subject') ? 'selected' : void 0) + ">Assessment Information</option>\n</select>";
+      } else {
+        category_select = "<select id=\"category-select\"><option value=\"basic\">Basic Information</option>";
+        ref = API.subjects();
+        for (option in ref) {
+          name = ref[option];
+          if (option !== '') {
+            if (el.data('subject') === option) {
+              category_select += "<option value=\"" + option + "\" selected>" + name + "</option>";
+            } else {
+              category_select += "<option value=\"" + option + "\">" + name + "</option>";
+            }
+          }
+        }
+        return category_select += "</select>";
+      }
+    };
+
+    DynamicTableContent.prototype.basicInfoSelect = function(el) {
+      var field_select, name, option, ref;
+      field_select = "<select id=\"field-select\" class=\"dynamic-select\"><option value=\"\" disabled selected>Select an option...</option>";
+      ref = this.metrics();
+      for (option in ref) {
+        name = ref[option];
+        if (el.data('key') === option) {
+          field_select += "<option value=\"" + option + "\" selected>" + name + "</option>";
+        } else {
+          field_select += "<option value=\"" + option + "\">" + name + "</option>";
+        }
+      }
+      return field_select += "</select>";
+    };
+
+    DynamicTableContent.prototype.assessmentInfoSelect = function(el) {
+      var field, field_select, j, len, name, point, ref, ref1;
+      field_select = "<select id=\"assessment-select\" class=\"dynamic-select\"><option value=\"\" disabled selected>Select an option...</option>";
+      field_select += "<optgroup label=\"Basic Info\">";
+      ref = API.subjectFields();
+      for (field in ref) {
+        name = ref[field];
+        if (el.data('key') === field) {
+          field_select += "<option value=\"" + field + "\" selected>" + name + "</option>";
+        } else {
+          field_select += "<option value=\"" + field + "\">" + name + "</option>";
+        }
+      }
+      field_select += "</optgroup><optgroup label=\"Assessment Points\">";
+      ref1 = this.assessmentPoints();
+      for (j = 0, len = ref1.length; j < len; j++) {
+        point = ref1[j];
+        if (el.data('key') === point.code) {
+          field_select += "<option value=\"" + point.code + "\" selected>" + point.longName + "</option>";
+        } else {
+          field_select += "<option value=\"" + point.code + "\">" + point.longName + "</option>";
+        }
+      }
+      return field_select += "</optgroup></select>";
+    };
+
+    DynamicTableContent.prototype.renderAppearanceOptions = function() {
+      return [this.option('font', 'font', "Font"), this.option('size', 'size', "Text Size"), this.option('color', 'heading_text_color', "Heading Text"), this.option('color', 'heading_background_color', "Heading Bg"), this.option('color', 'cell_text_color', "Cell Text"), this.option('color', 'cell_background_color_odd', "Cell Bg Odd"), this.option('color', 'cell_background_color_even', "Cell Bg Even")];
+    };
+
+    DynamicTableContent.prototype.renderConfigOptions = function() {
+      return [
+        this.option('select', 'header_position', "Header position", {
+          options: {
+            top: "Top",
+            left: 'Left',
+            both: "Both"
+          }
+        }), this.option('select', 'alignment', "Cell alignment", {
+          options: {
+            left: "Left",
+            center: 'Center',
+            right: 'Right'
+          }
+        }), this.option('text', 'numberOfColumns', "No. of columns"), this.option('text', 'numberOfRows', "No. of rows"), this.mappingSettings()
+      ];
+    };
+
+    DynamicTableContent.prototype.mappingSettings = function() {
+      var node, self;
+      node = $("<div class=\"mapping-option\"><a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(this.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a></div>");
+      self = this;
+      node.on("click", ".mapping", (function(_this) {
+        return function() {
+          return new MappingModal(_this.mappings, _this.changeMapping);
+        };
+      })(this));
+      return node;
+    };
+
+    DynamicTableContent.prototype.changeMapping = function(newMappings) {
+      var oldMappings;
+      oldMappings = this.mappings;
+      this.updateMapping(newMappings);
+      return Designer.history.push(this, 'updateMapping', oldMappings, newMappings, Designer.template.currentPageNumber);
+    };
+
+    DynamicTableContent.prototype.updateMapping = function(mappings) {
+      this.mappings = mappings;
+      return this.redraw();
+    };
+
+    DynamicTableContent.prototype.headingStyles = function() {
+      return this.styleString({
+        'background-color': this.style.heading_background_color,
+        color: this.style.heading_text_color
+      });
+    };
+
+    DynamicTableContent.prototype.cellStyles = function(row) {
+      var bg_color;
+      bg_color = row % 2 === 0 ? this.style.cell_background_color_even : this.style.cell_background_color_odd;
+      return this.styleString({
+        'background-color': bg_color,
+        color: this.style.cell_text_color
+      });
+    };
+
+    DynamicTableContent.prototype.numberOfRows = function(val) {
+      if (val == null) {
+        val = null;
+      }
+      if ((val != null) && val.length > 0) {
+        val = Number(val);
+        if (val > 0) {
+          this.setRows(val);
+        }
+      }
+      return this.tabledata.length;
+    };
+
+    DynamicTableContent.prototype.numberOfColumns = function(val) {
+      if (val == null) {
+        val = null;
+      }
+      if ((val != null) && val.length > 0 && Number(val)) {
+        val = Number(val);
+        if (val > 0) {
+          this.setColumns(val);
+        }
+      }
+      return this.tabledata[0].length;
+    };
+
+    DynamicTableContent.prototype.setRows = function(rowCount) {
+      var oldTabledata;
+      if (rowCount === this.numberOfRows()) {
+        return;
+      }
+      oldTabledata = $.extend(true, [], this.tabledata);
+      while (rowCount !== this.numberOfRows()) {
+        if (this.numberOfRows() > rowCount) {
+          if (this.numberOfRows() !== 0) {
+            this.tabledata.pop();
+          }
+        } else {
+          this.tabledata.push(this.makeRow());
+        }
+      }
+      Designer.history.push(this, 'updateTable', oldTabledata, this.tabledata, Designer.template.currentPageNumber);
+      return this.redraw();
+    };
+
+    DynamicTableContent.prototype.makeRow = function() {
+      var c, j, ref, results;
+      results = [];
+      for (c = j = 1, ref = this.numberOfColumns(); 1 <= ref ? j <= ref : j >= ref; c = 1 <= ref ? ++j : --j) {
+        results.push(this.makeCell());
+      }
+      return results;
+    };
+
+    DynamicTableContent.prototype.setColumns = function(columnCount) {
+      var j, k, len, len1, oldTabledata, ref, ref1, row;
+      if (columnCount === this.numberOfColumns()) {
+        return;
+      }
+      oldTabledata = $.extend(true, [], this.tabledata);
+      while (columnCount !== this.numberOfColumns()) {
+        if (this.numberOfColumns() > columnCount) {
+          if (this.numberOfColumns() !== 0) {
+            ref = this.tabledata;
+            for (j = 0, len = ref.length; j < len; j++) {
+              row = ref[j];
+              row.pop();
+            }
+          }
+        } else {
+          ref1 = this.tabledata;
+          for (k = 0, len1 = ref1.length; k < len1; k++) {
+            row = ref1[k];
+            row.push(this.makeCell());
+          }
+        }
+      }
+      Designer.history.push(this, 'updateTable', oldTabledata, this.tabledata, Designer.template.currentPageNumber);
+      return this.redraw();
+    };
+
+    DynamicTableContent.prototype.makeCell = function(value, dynamic, subject) {
+      if (value == null) {
+        value = '';
+      }
+      if (dynamic == null) {
+        dynamic = false;
+      }
+      if (subject == null) {
+        subject = '';
+      }
+      return {
+        dynamic: dynamic,
+        subject: subject,
+        value: value
+      };
+    };
+
+    DynamicTableContent.prototype.render_edit = function(data) {
+      return this.render_layout(data, true);
+    };
+
+    DynamicTableContent.prototype.bindEvents = function(el) {
+      var updateFn;
+      updateFn = (function(_this) {
+        return function() {
+          return _this.buildTabledata(el);
+        };
+      })(this);
+      el.on('input', 'input', function() {
+        $(this).data('dynamic', false);
+        return $(this).data('key', '');
+      });
+      el.on('change', updateFn);
+      this.widget.unbind('widget:layout-switching', updateFn);
+      return this.widget.bind('widget:layout-switching', updateFn);
+    };
+
+    DynamicTableContent.prototype.buildTabledata = function(el) {
+      var $cell, cell, cellArray, cells, j, k, len, len1, newTabledata, row, rows;
+      newTabledata = [];
+      rows = $(el).find('tr');
+      for (j = 0, len = rows.length; j < len; j++) {
+        row = rows[j];
+        cells = $(row).find('input');
+        cellArray = [];
+        for (k = 0, len1 = cells.length; k < len1; k++) {
+          cell = cells[k];
+          $cell = $(cell);
+          if ($cell.data('dynamic')) {
+            cellArray.push(this.makeCell($cell.data('key'), true, $cell.data('subject')));
+          } else {
+            cellArray.push(this.makeCell($cell.val(), false));
+          }
+        }
+        newTabledata.push(cellArray);
+      }
+      Designer.history.push(this, 'updateTable', this.tabledata, newTabledata, Designer.template.currentPageNumber);
+      return this.tabledata = newTabledata;
+    };
+
+    DynamicTableContent.prototype.updateTable = function(newTabledata) {
+      this.tabledata = newTabledata;
+      this.redraw();
+      return Designer.select(this.widget);
+    };
+
+    DynamicTableContent.prototype.fieldFrom = function(field, data) {
+      var j, key, len, ref;
+      ref = field.split('.');
+      for (j = 0, len = ref.length; j < len; j++) {
+        key = ref[j];
+        data = data[key];
+      }
+      return data;
+    };
+
+    DynamicTableContent.prototype.serialize = function() {
+      return {
+        tabledata: this.tabledata,
+        style: this.style,
+        mappings: this.mappings
+      };
+    };
+
+    return DynamicTableContent;
 
   })(WidgetContent);
 
@@ -1262,553 +1809,6 @@
     };
 
     return TextContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window._EXAMPLEContent = (function(superClass) {
-    extend(_EXAMPLEContent, superClass);
-
-    function _EXAMPLEContent() {
-      return _EXAMPLEContent.__super__.constructor.apply(this, arguments);
-    }
-
-    return _EXAMPLEContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
-  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.DynamicTableContent = (function(superClass) {
-    extend(DynamicTableContent, superClass);
-
-    function DynamicTableContent() {
-      this.updateTable = bind(this.updateTable, this);
-      this.makeCell = bind(this.makeCell, this);
-      this.numberOfColumns = bind(this.numberOfColumns, this);
-      this.updateMapping = bind(this.updateMapping, this);
-      this.changeMapping = bind(this.changeMapping, this);
-      return DynamicTableContent.__super__.constructor.apply(this, arguments);
-    }
-
-    DynamicTableContent.className = "DynamicTableContent";
-
-    DynamicTableContent.displayName = "Dynamic Table";
-
-    DynamicTableContent.description = "A blank table that can be filled with static or dynamic text.";
-
-    DynamicTableContent.icon = "table";
-
-    DynamicTableContent.prototype.defaultWidth = function() {
-      return 360;
-    };
-
-    DynamicTableContent.prototype.defaultHeight = function() {
-      return 110;
-    };
-
-    DynamicTableContent.prototype.editable = function() {
-      return this.widget.currentMode === 'layout';
-    };
-
-    DynamicTableContent.STYLE_DEFAULTS = {
-      header_position: 'top',
-      alignment: 'left',
-      heading_text_color: '#000000',
-      heading_background_color: '#DDDDDD',
-      cell_text_color: '#000000',
-      cell_background_color_odd: '#FFFFFF',
-      cell_background_color_even: '#FFFFFF',
-      font: 'Helvetica',
-      size: 'Medium'
-    };
-
-    DynamicTableContent.DEFAULT_COLUMNS = 3;
-
-    DynamicTableContent.DEFAULT_ROWS = 3;
-
-    DynamicTableContent.prototype.header_position = DynamicTableContent.property('style', 'header_position');
-
-    DynamicTableContent.prototype.alignment = DynamicTableContent.property('style', 'alignment');
-
-    DynamicTableContent.prototype.font = DynamicTableContent.property('style', 'font');
-
-    DynamicTableContent.prototype.size = DynamicTableContent.property('style', 'size');
-
-    DynamicTableContent.prototype.heading_text_color = DynamicTableContent.property('style', 'heading_text_color');
-
-    DynamicTableContent.prototype.heading_background_color = DynamicTableContent.property('style', 'heading_background_color');
-
-    DynamicTableContent.prototype.cell_text_color = DynamicTableContent.property('style', 'cell_text_color');
-
-    DynamicTableContent.prototype.cell_background_color_odd = DynamicTableContent.property('style', 'cell_background_color_odd');
-
-    DynamicTableContent.prototype.cell_background_color_even = DynamicTableContent.property('style', 'cell_background_color_even');
-
-    DynamicTableContent.prototype.initWithConfig = function(config) {
-      this.style = $.extend({}, DynamicTableContent.STYLE_DEFAULTS, this.get(config.style, {}));
-      this.mappings = this.get(config.mappings, {});
-      this.tabledata = this.get(config.tabledata, this.makeDefaultTable());
-      return this._subject = this.get(config.subject, 'PH');
-    };
-
-    DynamicTableContent.prototype.makeDefaultTable = function() {
-      var c, j, r, ref, results;
-      results = [];
-      for (r = j = 1, ref = DynamicTableContent.DEFAULT_ROWS; 1 <= ref ? j <= ref : j >= ref; r = 1 <= ref ? ++j : --j) {
-        results.push((function() {
-          var k, ref1, results1;
-          results1 = [];
-          for (c = k = 1, ref1 = DynamicTableContent.DEFAULT_COLUMNS; 1 <= ref1 ? k <= ref1 : k >= ref1; c = 1 <= ref1 ? ++k : --k) {
-            results1.push(this.makeCell());
-          }
-          return results1;
-        }).call(this));
-      }
-      return results;
-    };
-
-    DynamicTableContent.prototype.render_layout = function(data, edit) {
-      var c, column, i, j, k, l, len, len1, len2, len3, len4, len5, m, n, o, ref, row, self, table, tbody, tr;
-      if (edit == null) {
-        edit = false;
-      }
-      table = $("<div class=\"dynamictable-widget\">\n  <table class=\"dynamictable " + (edit ? "edited" : void 0) + "\" style=\"" + (this.styleString({
-        'font-family': utils.fontMap[this.style.font],
-        'font-size': utils.sizeMap[this.style.size],
-        'color': this.style.color,
-        'text-align': this.style.alignment
-      })) + "\">\n    <tbody></tbody>\n  </table>\n</div>");
-      tbody = table.find('tbody');
-      ref = this.tabledata;
-      for (i = j = 0, len = ref.length; j < len; i = ++j) {
-        row = ref[i];
-        tr = $('<tr></tr>');
-        if (this.style.header_position === 'top') {
-          if (i === 0) {
-            for (k = 0, len1 = row.length; k < len1; k++) {
-              column = row[k];
-              tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, data, edit)) + "</th>");
-            }
-          } else {
-            for (l = 0, len2 = row.length; l < len2; l++) {
-              column = row[l];
-              tr.append("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(column, data, edit)) + "</td>");
-            }
-          }
-        } else if (this.style.header_position === 'left') {
-          for (c = m = 0, len3 = row.length; m < len3; c = ++m) {
-            column = row[c];
-            if (c === 0) {
-              tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, data, edit)) + "</th>");
-            } else {
-              tr.append("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(column, data, edit)) + "</td>");
-            }
-          }
-        } else {
-          if (i === 0) {
-            for (n = 0, len4 = row.length; n < len4; n++) {
-              column = row[n];
-              tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, data, edit)) + "</th>");
-            }
-          } else {
-            for (c = o = 0, len5 = row.length; o < len5; c = ++o) {
-              column = row[c];
-              if (c === 0) {
-                tr.append("<th style=\"" + (this.headingStyles()) + "\">" + (this.cellContent(column, data, edit)) + "</th>");
-              } else {
-                tr.append("<td style=\"" + (this.cellStyles(i + 1)) + "\">" + (this.cellContent(column, data, edit)) + "</td>");
-              }
-            }
-          }
-        }
-        tbody.append(tr);
-      }
-      self = this;
-      table.on("click", "input:text", function() {
-        var el, td;
-        el = $(this);
-        self.el.parents('.widget-dynamictable').css('overflow', 'visible');
-        $('.dynamic-list').remove();
-        td = el.parent();
-        td.append(self.dynamicOptions(el));
-        $('.dynamic-list').css('top', el.height() + 1);
-        $('.dynamic-list').on("change", "#category-select", function() {
-          $(".dynamic-select").remove();
-          if ($(this).val() === "basic") {
-            return $('.dynamic-list').append(self.basicInfoSelect(el));
-          } else {
-            return $('.dynamic-list').append(self.assessmentInfoSelect(el));
-          }
-        });
-        $('.dynamic-list').on("change", "#field-select", function() {
-          var cell, option;
-          option = $(this).val();
-          el.data('dynamic', true);
-          el.data('key', option);
-          el.data('subject', '');
-          $('.dynamic-list').remove();
-          cell = self.makeCell(option, true);
-          return el.val(self.cellValue(cell, data, false));
-        });
-        return $('.dynamic-list').on("change", "#assessment-select", function() {
-          var cell, option, subject;
-          option = $(this).val();
-          subject = $("#category-select").val();
-          el.data('dynamic', true);
-          el.data('key', option);
-          el.data('subject', subject);
-          $('.dynamic-list').remove();
-          cell = self.makeCell(option, true, subject);
-          return el.val(self.cellValue(cell, data, false));
-        });
-      });
-      return table;
-    };
-
-    DynamicTableContent.prototype.cellContent = function(cell, data, edit) {
-      if (edit) {
-        return "<input type=\"text\" data-dynamic=\"" + cell.dynamic + "\" data-key=\"" + cell.value + "\" data-subject=\"" + (cell.subject || '') + "\" value=\"" + (this.cellValue(cell, data, false)) + "\">";
-      } else {
-        return this.cellValue(cell, data);
-      }
-    };
-
-    DynamicTableContent.prototype.cellValue = function(cell, data, html) {
-      var ref, subject, subjectData, value;
-      if (html == null) {
-        html = true;
-      }
-      subject = null;
-      if (cell.dynamic) {
-        if (Object.keys(this.metrics()).indexOf(cell.value) === -1) {
-          subject = this.widget.subject || cell.subject;
-          subjectData = data.subjects[subject];
-          value = null;
-          if (subjectData) {
-            value = subjectData[cell.value] || ((ref = subjectData.results) != null ? ref[cell.value] : void 0);
-          }
-        } else {
-          value = this.fieldFrom(cell.value, data);
-        }
-        return this.mappings[value] || value || this.placeholderWithLabel([subject, cell.value].join(':'), html);
-      } else {
-        return cell.value;
-      }
-    };
-
-    DynamicTableContent.prototype.dynamicOptions = function(el) {
-      var options;
-      options = "<div class=\"dynamic-list\"><p>Type free text or select a dynamic option from below</p>";
-      options += this.categorySelect(el);
-      if (el.data('subject')) {
-        options += this.assessmentInfoSelect(el);
-      } else {
-        options += this.basicInfoSelect(el);
-      }
-      return options += "</div>";
-    };
-
-    DynamicTableContent.prototype.categorySelect = function(el) {
-      var category_select, name, option, ref;
-      if (this.widget.subject) {
-        return category_select = "<select id=\"category-select\">\n<option value=\"basic\">Basic Information</option>\n<option value=\"assessment\" " + (el.data('subject') ? 'selected' : void 0) + ">Assessment Information</option>\n</select>";
-      } else {
-        category_select = "<select id=\"category-select\"><option value=\"basic\">Basic Information</option>";
-        ref = API.subjects();
-        for (option in ref) {
-          name = ref[option];
-          if (option !== '') {
-            if (el.data('subject') === option) {
-              category_select += "<option value=\"" + option + "\" selected>" + name + "</option>";
-            } else {
-              category_select += "<option value=\"" + option + "\">" + name + "</option>";
-            }
-          }
-        }
-        return category_select += "</select>";
-      }
-    };
-
-    DynamicTableContent.prototype.basicInfoSelect = function(el) {
-      var field_select, name, option, ref;
-      field_select = "<select id=\"field-select\" class=\"dynamic-select\"><option value=\"\" disabled selected>Select an option...</option>";
-      ref = this.metrics();
-      for (option in ref) {
-        name = ref[option];
-        if (el.data('key') === option) {
-          field_select += "<option value=\"" + option + "\" selected>" + name + "</option>";
-        } else {
-          field_select += "<option value=\"" + option + "\">" + name + "</option>";
-        }
-      }
-      return field_select += "</select>";
-    };
-
-    DynamicTableContent.prototype.assessmentInfoSelect = function(el) {
-      var field, field_select, j, len, name, point, ref, ref1;
-      field_select = "<select id=\"assessment-select\" class=\"dynamic-select\"><option value=\"\" disabled selected>Select an option...</option>";
-      field_select += "<optgroup label=\"Basic Info\">";
-      ref = API.subjectFields();
-      for (field in ref) {
-        name = ref[field];
-        if (el.data('key') === field) {
-          field_select += "<option value=\"" + field + "\" selected>" + name + "</option>";
-        } else {
-          field_select += "<option value=\"" + field + "\">" + name + "</option>";
-        }
-      }
-      field_select += "</optgroup><optgroup label=\"Assessment Points\">";
-      ref1 = this.assessmentPoints();
-      for (j = 0, len = ref1.length; j < len; j++) {
-        point = ref1[j];
-        if (el.data('key') === point.code) {
-          field_select += "<option value=\"" + point.code + "\" selected>" + point.longName + "</option>";
-        } else {
-          field_select += "<option value=\"" + point.code + "\">" + point.longName + "</option>";
-        }
-      }
-      return field_select += "</optgroup></select>";
-    };
-
-    DynamicTableContent.prototype.renderAppearanceOptions = function() {
-      return [this.option('font', 'font', "Font"), this.option('size', 'size', "Text Size"), this.option('color', 'heading_text_color', "Heading Text"), this.option('color', 'heading_background_color', "Heading Bg"), this.option('color', 'cell_text_color', "Cell Text"), this.option('color', 'cell_background_color_odd', "Cell Bg Odd"), this.option('color', 'cell_background_color_even', "Cell Bg Even")];
-    };
-
-    DynamicTableContent.prototype.renderConfigOptions = function() {
-      return [
-        this.option('select', 'header_position', "Header position", {
-          options: {
-            top: "Top",
-            left: 'Left',
-            both: "Both"
-          }
-        }), this.option('select', 'alignment', "Cell alignment", {
-          options: {
-            left: "Left",
-            center: 'Center',
-            right: 'Right'
-          }
-        }), this.option('text', 'numberOfColumns', "No. of columns"), this.option('text', 'numberOfRows', "No. of rows"), this.mappingSettings()
-      ];
-    };
-
-    DynamicTableContent.prototype.mappingSettings = function() {
-      var node, self;
-      node = $("<div class=\"mapping-option\"><a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(this.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a></div>");
-      self = this;
-      node.on("click", ".mapping", (function(_this) {
-        return function() {
-          return new MappingModal(_this.mappings, _this.changeMapping);
-        };
-      })(this));
-      return node;
-    };
-
-    DynamicTableContent.prototype.changeMapping = function(newMappings) {
-      var oldMappings;
-      oldMappings = this.mappings;
-      this.updateMapping(newMappings);
-      return Designer.history.push(this, 'updateMapping', oldMappings, newMappings, Designer.template.currentPageNumber);
-    };
-
-    DynamicTableContent.prototype.updateMapping = function(mappings) {
-      this.mappings = mappings;
-      return this.redraw();
-    };
-
-    DynamicTableContent.prototype.headingStyles = function() {
-      return this.styleString({
-        'background-color': this.style.heading_background_color,
-        color: this.style.heading_text_color
-      });
-    };
-
-    DynamicTableContent.prototype.cellStyles = function(row) {
-      var bg_color;
-      bg_color = row % 2 === 0 ? this.style.cell_background_color_even : this.style.cell_background_color_odd;
-      return this.styleString({
-        'background-color': bg_color,
-        color: this.style.cell_text_color
-      });
-    };
-
-    DynamicTableContent.prototype.numberOfRows = function(val) {
-      if (val == null) {
-        val = null;
-      }
-      if ((val != null) && val.length > 0) {
-        val = Number(val);
-        if (val > 0) {
-          this.setRows(val);
-        }
-      }
-      return this.tabledata.length;
-    };
-
-    DynamicTableContent.prototype.numberOfColumns = function(val) {
-      if (val == null) {
-        val = null;
-      }
-      if ((val != null) && val.length > 0 && Number(val)) {
-        val = Number(val);
-        if (val > 0) {
-          this.setColumns(val);
-        }
-      }
-      return this.tabledata[0].length;
-    };
-
-    DynamicTableContent.prototype.setRows = function(rowCount) {
-      var oldTabledata;
-      if (rowCount === this.numberOfRows()) {
-        return;
-      }
-      oldTabledata = $.extend(true, [], this.tabledata);
-      while (rowCount !== this.numberOfRows()) {
-        if (this.numberOfRows() > rowCount) {
-          if (this.numberOfRows() !== 0) {
-            this.tabledata.pop();
-          }
-        } else {
-          this.tabledata.push(this.makeRow());
-        }
-      }
-      Designer.history.push(this, 'updateTable', oldTabledata, this.tabledata, Designer.template.currentPageNumber);
-      return this.redraw();
-    };
-
-    DynamicTableContent.prototype.makeRow = function() {
-      var c, j, ref, results;
-      results = [];
-      for (c = j = 1, ref = this.numberOfColumns(); 1 <= ref ? j <= ref : j >= ref; c = 1 <= ref ? ++j : --j) {
-        results.push(this.makeCell());
-      }
-      return results;
-    };
-
-    DynamicTableContent.prototype.setColumns = function(columnCount) {
-      var j, k, len, len1, oldTabledata, ref, ref1, row;
-      if (columnCount === this.numberOfColumns()) {
-        return;
-      }
-      oldTabledata = $.extend(true, [], this.tabledata);
-      while (columnCount !== this.numberOfColumns()) {
-        if (this.numberOfColumns() > columnCount) {
-          if (this.numberOfColumns() !== 0) {
-            ref = this.tabledata;
-            for (j = 0, len = ref.length; j < len; j++) {
-              row = ref[j];
-              row.pop();
-            }
-          }
-        } else {
-          ref1 = this.tabledata;
-          for (k = 0, len1 = ref1.length; k < len1; k++) {
-            row = ref1[k];
-            row.push(this.makeCell());
-          }
-        }
-      }
-      Designer.history.push(this, 'updateTable', oldTabledata, this.tabledata, Designer.template.currentPageNumber);
-      return this.redraw();
-    };
-
-    DynamicTableContent.prototype.makeCell = function(value, dynamic, subject) {
-      if (value == null) {
-        value = '';
-      }
-      if (dynamic == null) {
-        dynamic = false;
-      }
-      if (subject == null) {
-        subject = '';
-      }
-      return {
-        dynamic: dynamic,
-        subject: subject,
-        value: value
-      };
-    };
-
-    DynamicTableContent.prototype.render_edit = function(data) {
-      return this.render_layout(data, true);
-    };
-
-    DynamicTableContent.prototype.bindEvents = function(el) {
-      var updateFn;
-      updateFn = (function(_this) {
-        return function() {
-          return _this.buildTabledata(el);
-        };
-      })(this);
-      el.on('input', 'input', function() {
-        $(this).data('dynamic', false);
-        return $(this).data('key', '');
-      });
-      el.on('change', updateFn);
-      this.widget.unbind('widget:layout-switching', updateFn);
-      return this.widget.bind('widget:layout-switching', updateFn);
-    };
-
-    DynamicTableContent.prototype.buildTabledata = function(el) {
-      var $cell, cell, cellArray, cells, j, k, len, len1, newTabledata, row, rows;
-      newTabledata = [];
-      rows = $(el).find('tr');
-      for (j = 0, len = rows.length; j < len; j++) {
-        row = rows[j];
-        cells = $(row).find('input');
-        cellArray = [];
-        for (k = 0, len1 = cells.length; k < len1; k++) {
-          cell = cells[k];
-          $cell = $(cell);
-          if ($cell.data('dynamic')) {
-            cellArray.push(this.makeCell($cell.data('key'), true, $cell.data('subject')));
-          } else {
-            cellArray.push(this.makeCell($cell.val(), false));
-          }
-        }
-        newTabledata.push(cellArray);
-      }
-      Designer.history.push(this, 'updateTable', this.tabledata, newTabledata, Designer.template.currentPageNumber);
-      return this.tabledata = newTabledata;
-    };
-
-    DynamicTableContent.prototype.updateTable = function(newTabledata) {
-      this.tabledata = newTabledata;
-      this.redraw();
-      return Designer.select(this.widget);
-    };
-
-    DynamicTableContent.prototype.fieldFrom = function(field, data) {
-      var j, key, len, ref;
-      ref = field.split('.');
-      for (j = 0, len = ref.length; j < len; j++) {
-        key = ref[j];
-        data = data[key];
-      }
-      return data;
-    };
-
-    DynamicTableContent.prototype.serialize = function() {
-      return {
-        tabledata: this.tabledata,
-        style: this.style,
-        mappings: this.mappings
-      };
-    };
-
-    return DynamicTableContent;
 
   })(WidgetContent);
 
