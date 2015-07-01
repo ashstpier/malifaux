@@ -3,6 +3,185 @@
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
+  window.AttendanceContent = (function(superClass) {
+    extend(AttendanceContent, superClass);
+
+    function AttendanceContent() {
+      this.drawChart = bind(this.drawChart, this);
+      this.resizeChart = bind(this.resizeChart, this);
+      return AttendanceContent.__super__.constructor.apply(this, arguments);
+    }
+
+    AttendanceContent.className = "AttendanceContent";
+
+    AttendanceContent.displayName = "Attendance Chart";
+
+    AttendanceContent.description = "Show a visual representation of student attendance.";
+
+    AttendanceContent.icon = "bell";
+
+    AttendanceContent.prototype.defaultWidth = function() {
+      return 400;
+    };
+
+    AttendanceContent.prototype.defaultHeight = function() {
+      return 300;
+    };
+
+    AttendanceContent.STYLE_DEFAULTS = {
+      color1: '#77cc33',
+      color2: '#cc0000',
+      color3: '#e67e22',
+      color4: '#9b59b6',
+      chartstyle: 'bar',
+      font: 'Helvetica',
+      legend: 'right'
+    };
+
+    AttendanceContent.prototype.initWithConfig = function(config) {
+      this.style = $.extend({}, AttendanceContent.STYLE_DEFAULTS, this.get(config.style, {}));
+      this.options = this.get(config.options, {});
+      this.labels = this.get(config.labels, ['Present', 'Late', 'Authorised', 'Unauthorised']);
+      this._label1 = this.labels[0];
+      this._label2 = this.labels[1];
+      this._label3 = this.labels[2];
+      return this._label4 = this.labels[3];
+    };
+
+    AttendanceContent.prototype.render_layout = function(data) {
+      var root;
+      this.attendance = data.attendance;
+      root = $("<div class=\"attendance-widget\"></div>");
+      this.drawChart(root[0]);
+      this.widget.bind('widget:move', this.resizeChart);
+      return $(root).append("<div class=\"noclick\"></div>");
+    };
+
+    AttendanceContent.prototype.resizeChart = function() {
+      return this.chart.resize({
+        height: this.widget.height(),
+        width: this.widget.width()
+      });
+    };
+
+    AttendanceContent.prototype.renderConfigOptions = function() {
+      return [this.option('text', 'label1', "Present label"), this.option('text', 'label2', "Late label"), this.option('text', 'label3', "Authorised label"), this.option('text', 'label4', "Unauthorised label")];
+    };
+
+    AttendanceContent.prototype.renderAppearanceOptions = function() {
+      return [
+        this.option('select', 'chartstyle', "Chart style", {
+          options: {
+            bar: 'Bar',
+            pie: 'Pie'
+          }
+        }), this.option('select', 'legend', "Legend position", {
+          options: {
+            right: 'Right',
+            bottom: 'Bottom'
+          }
+        }), this.option('font', 'font', "Font"), this.option('color', 'color1', "Present"), this.option('color', 'color2', "Late"), this.option('color', 'color3', "Authorised"), this.option('color', 'color4', "Unauthorised")
+      ];
+    };
+
+    AttendanceContent.prototype.drawChart = function(root) {
+      var chartType, colors;
+      colors = {};
+      colors[this._label1 + " " + this.attendance.present + "%"] = this.style.color1;
+      colors[this._label2 + " " + this.attendance.late + "%"] = this.style.color2;
+      colors[this._label3 + " " + this.attendance.authorised + "%"] = this.style.color3;
+      colors[this._label4 + " " + this.attendance.nonAuthorised + "%"] = this.style.color4;
+      if (this.style.chartstyle === 'pie') {
+        chartType = 'pie';
+      } else {
+        chartType = 'bar';
+      }
+      this.chart = c3.generate({
+        bindto: root,
+        data: {
+          order: 'asc',
+          columns: [[this._label1 + " " + (this.attendance.present || 0) + "%", parseFloat(this.attendance.present) / 100], [this._label2 + " " + (this.attendance.late || 0) + "%", parseFloat(this.attendance.late) / 100], [this._label3 + " " + (this.attendance.authorised || 0) + "%", parseFloat(this.attendance.authorised) / 100], [this._label4 + " " + (this.attendance.nonAuthorised || 0) + "%", parseFloat(this.attendance.nonAuthorised) / 100]],
+          type: chartType,
+          groups: [[this._label1 + " " + (this.attendance.present || 0) + "%", this._label2 + " " + (this.attendance.late || 0) + "%", this._label3 + " " + (this.attendance.authorised || 0) + "%", this._label4 + " " + (this.attendance.nonAuthorised || 0) + "%"]],
+          colors: colors
+        },
+        axis: {
+          y: {
+            max: .99,
+            "default": [0, 100],
+            tick: {
+              format: d3.format(",%")
+            }
+          },
+          x: {
+            show: false,
+            tick: {
+              count: 0
+            }
+          }
+        },
+        legend: {
+          position: this.style.legend
+        },
+        grid: {
+          y: {
+            show: true
+          }
+        },
+        interaction: {
+          enabled: false
+        },
+        size: {
+          width: this.widget.width(),
+          height: this.widget.height()
+        }
+      });
+      $(root).find('.tick').css('font-family', this.style.font);
+      return $(root).find('.c3-legend-item').css('font-family', this.style.font);
+    };
+
+    AttendanceContent.prototype.color1 = AttendanceContent.property('style', 'color1');
+
+    AttendanceContent.prototype.color2 = AttendanceContent.property('style', 'color2');
+
+    AttendanceContent.prototype.color3 = AttendanceContent.property('style', 'color3');
+
+    AttendanceContent.prototype.color4 = AttendanceContent.property('style', 'color4');
+
+    AttendanceContent.prototype.chartstyle = AttendanceContent.property('style', 'chartstyle');
+
+    AttendanceContent.prototype.legend = AttendanceContent.property('style', 'legend');
+
+    AttendanceContent.prototype.font = AttendanceContent.property('style', 'font');
+
+    AttendanceContent.prototype.label1 = AttendanceContent.property('_label1');
+
+    AttendanceContent.prototype.label2 = AttendanceContent.property('_label2');
+
+    AttendanceContent.prototype.label3 = AttendanceContent.property('_label3');
+
+    AttendanceContent.prototype.label4 = AttendanceContent.property('_label4');
+
+    AttendanceContent.prototype.serialize = function() {
+      return {
+        columns: this.columns,
+        style: this.style,
+        options: this.options,
+        labels: [this._label1, this._label2, this._label3, this._label4]
+      };
+    };
+
+    return AttendanceContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
   window.DatatableContent = (function(superClass) {
     extend(DatatableContent, superClass);
 
@@ -370,6 +549,725 @@
 }).call(this);
 
 (function() {
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.FieldContent = (function(superClass) {
+    extend(FieldContent, superClass);
+
+    function FieldContent() {
+      this.updateMapping = bind(this.updateMapping, this);
+      this.changeMapping = bind(this.changeMapping, this);
+      return FieldContent.__super__.constructor.apply(this, arguments);
+    }
+
+    FieldContent.className = "FieldContent";
+
+    FieldContent.displayName = "Dynamic Text";
+
+    FieldContent.description = "Pull a text field from a student record and style it for display.";
+
+    FieldContent.icon = "nameplate";
+
+    FieldContent.prototype.defaultWidth = function() {
+      return 200;
+    };
+
+    FieldContent.prototype.defaultHeight = function() {
+      return 50;
+    };
+
+    FieldContent.STYLE_DEFAULTS = {
+      color: '#000000',
+      font: 'Helvetica',
+      size: 'Medium'
+    };
+
+    FieldContent.prototype.initWithConfig = function(config) {
+      this._field = this.get(config.field, Object.keys(this.metrics())[0]);
+      this.style = $.extend({}, FieldContent.STYLE_DEFAULTS, this.get(config.style, {}));
+      return this.mappings = this.get(config.mappings, {});
+    };
+
+    FieldContent.prototype.render_layout = function(data) {
+      return $("<div class=\"field-widget\" style=\"" + (this.textStyles()) + "\">" + (this.fieldFrom(data)) + "</div>");
+    };
+
+    FieldContent.prototype.renderAppearanceOptions = function() {
+      return this.option('font', 'font', "Font") + this.option('size', 'size', "Text Size") + this.option('color', 'color', "Text Color");
+    };
+
+    FieldContent.prototype.renderConfigOptions = function() {
+      return [
+        this.option('select', 'field', "Field", {
+          options: this.metrics(),
+          hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output."
+        }), this.mappingSettings()
+      ];
+    };
+
+    FieldContent.prototype.mappingSettings = function() {
+      var node, self;
+      node = $("<div class=\"mapping-option\"><a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(this.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a></div>");
+      self = this;
+      node.on("click", ".mapping", (function(_this) {
+        return function() {
+          return new MappingModal(_this.mappings, _this.changeMapping);
+        };
+      })(this));
+      return node;
+    };
+
+    FieldContent.prototype.changeMapping = function(newMappings) {
+      var oldMappings;
+      oldMappings = this.mappings;
+      this.updateMapping(newMappings);
+      return Designer.history.push(this, 'updateMapping', oldMappings, newMappings, Designer.template.currentPageNumber);
+    };
+
+    FieldContent.prototype.updateMapping = function(mappings) {
+      this.mappings = mappings;
+      return this.redraw();
+    };
+
+    FieldContent.prototype.textStyles = function() {
+      return this.styleString({
+        'color': this.style.color,
+        'font-family': utils.fontMap[this.style.font],
+        'font-size': utils.sizeMap[this.style.size]
+      });
+    };
+
+    FieldContent.prototype.fieldFrom = function(data) {
+      var i, key, len, ref;
+      ref = this._field.split('.');
+      for (i = 0, len = ref.length; i < len; i++) {
+        key = ref[i];
+        data = data != null ? data[key] : void 0;
+      }
+      return this.mappings[data] || data || this.placeholderWithLabel(key);
+    };
+
+    FieldContent.prototype.font = FieldContent.property('style', 'font');
+
+    FieldContent.prototype.size = FieldContent.property('style', 'size');
+
+    FieldContent.prototype.color = FieldContent.property('style', 'color');
+
+    FieldContent.prototype.field = FieldContent.property('_field');
+
+    FieldContent.prototype.serialize = function() {
+      return {
+        field: this._field,
+        style: this.style,
+        mappings: this.mappings
+      };
+    };
+
+    return FieldContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.ImageContent = (function(superClass) {
+    extend(ImageContent, superClass);
+
+    function ImageContent() {
+      return ImageContent.__super__.constructor.apply(this, arguments);
+    }
+
+    ImageContent.className = "ImageContent";
+
+    ImageContent.displayName = "Image";
+
+    ImageContent.description = "A static photograph, logo or graphic";
+
+    ImageContent.icon = "picture";
+
+    ImageContent.prototype.defaultWidth = function() {
+      return 240;
+    };
+
+    ImageContent.prototype.defaultHeight = function() {
+      return 240;
+    };
+
+    ImageContent.DEFAULT_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+    ImageContent.prototype.initWithConfig = function(config) {
+      this.setImage(this.get(config.src, ImageContent.DEFAULT_IMAGE), false);
+      return this._maintainAspectRatio = this.get(config.maintainAspectRatio, true);
+    };
+
+    ImageContent.prototype.bindEvents = function(el) {
+      el.find(".picker").change((function(_this) {
+        return function(e) {
+          return _this.setImageFromFile(e.currentTarget.files[0]);
+        };
+      })(this));
+      return el.find(".content").dblclick((function(_this) {
+        return function() {
+          return _this.openFilePicker();
+        };
+      })(this));
+    };
+
+    ImageContent.prototype.openFilePicker = function() {
+      var picker;
+      picker = this.el.find(".picker");
+      picker.click();
+      return false;
+    };
+
+    ImageContent.prototype.setImageFromFile = function(file) {
+      var reader;
+      reader = new FileReader();
+      reader.onload = (function(_this) {
+        return function(e) {
+          return _this.updateImage(e.target.result);
+        };
+      })(this);
+      return reader.readAsDataURL(file);
+    };
+
+    ImageContent.prototype.updateImage = function(data) {
+      var oldSrc;
+      oldSrc = this.src;
+      this.setImage(data);
+      return Designer.history.push(this, 'setImage', oldSrc, this.src, Designer.template.currentPageNumber);
+    };
+
+    ImageContent.prototype.setImage = function(data, doRedraw) {
+      if (doRedraw == null) {
+        doRedraw = true;
+      }
+      this.src = data;
+      this.maybeWarnAboutGif();
+      if (doRedraw) {
+        return this.redraw();
+      }
+    };
+
+    ImageContent.prototype.aspectRatio = function() {
+      var img;
+      if (this.maintainAspectRatio()) {
+        img = new Image();
+        img.src = this.src;
+        return img.width / img.height;
+      } else {
+        return false;
+      }
+    };
+
+    ImageContent.prototype.render_layout = function(data) {
+      setTimeout(((function(_this) {
+        return function() {
+          return _this.setAspectRatio(_this.aspectRatio());
+        };
+      })(this)), 0);
+      return $("<div class=\"image-widget " + (this.src === ImageContent.DEFAULT_IMAGE ? 'image-blank' : void 0) + "\">\n  <img class=\"content\" src=\"" + this.src + "\">\n  <input class=\"picker\" type=\"file\" accept=\"image/png, image/jpeg\">\n</div>");
+    };
+
+    ImageContent.prototype.render_edit = function(data) {
+      var node;
+      node = this.render_layout(data);
+      this.bindEvents(node);
+      return node;
+    };
+
+    ImageContent.prototype.render_display = function(data) {
+      return $("<div class=\"image-widget\">\n  <img class=\"content\" src=\"" + this.src + "\">\n</div>");
+    };
+
+    ImageContent.prototype.renderConfigOptions = function() {
+      return [this.option('checkbox', 'maintainAspectRatio', "Maintain Aspect Ratio")];
+    };
+
+    ImageContent.prototype.maintainAspectRatio = ImageContent.property('_maintainAspectRatio');
+
+    ImageContent.prototype.maybeWarnAboutGif = function() {
+      var isGif;
+      isGif = this.src && this.src !== ImageContent.DEFAULT_IMAGE && this.src.indexOf("image/gif;") > -1;
+      if (isGif && this.widget.currentMode === 'layout') {
+        return delay(1000, function() {
+          return alert("Your template contains one or more GIF images.\n\nGIF files are not currently supported and may not display correctly when printed.\n\nPlease replace all GIF images with alternatives in either JPG or PNG format.");
+        });
+      }
+    };
+
+    ImageContent.prototype.serialize = function() {
+      return {
+        src: this.src,
+        maintainAspectRatio: this.maintainAspectRatio()
+      };
+    };
+
+    return ImageContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.ImageGalleryContent = (function(superClass) {
+    extend(ImageGalleryContent, superClass);
+
+    function ImageGalleryContent() {
+      return ImageGalleryContent.__super__.constructor.apply(this, arguments);
+    }
+
+    ImageGalleryContent.className = "ImageGalleryContent";
+
+    ImageGalleryContent.displayName = "Dynamic Images";
+
+    ImageGalleryContent.description = "A dynamic photograph, logo or graphic";
+
+    ImageGalleryContent.icon = "picture";
+
+    ImageGalleryContent.prototype.editable = function() {
+      return this.widget.currentMode === 'layout';
+    };
+
+    ImageGalleryContent.prototype.initWithConfig = function(config) {
+      this._field = this.get(config.field, Object.keys(this.images())[0]);
+      return this._stretchImage = this.get(config.stretchImage, true);
+    };
+
+    ImageGalleryContent.prototype.bindEvents = function(el) {
+      return this.widget.bind('widget:resize', (function(_this) {
+        return function() {
+          return _this.imageCSS();
+        };
+      })(this));
+    };
+
+    ImageGalleryContent.prototype.imageCSS = function() {
+      $('.image-gallery-widget img').removeClass(this.cssImageClass);
+      this.calcImageCSS();
+      return $('.image-gallery-widget img').addClass(this.cssImageClass);
+    };
+
+    ImageGalleryContent.prototype.calcImageCSS = function() {
+      if (this.width >= this.height && (this.stretchImage() || this.width > this.widget.width())) {
+        return this.cssImageClass = 'wider';
+      } else if (this.height > this.width && (this.stretchImage() || this.height > this.widget.height())) {
+        return this.cssImageClass = 'taller';
+      } else {
+        return this.cssImageClass = '';
+      }
+    };
+
+    ImageGalleryContent.prototype.render_layout = function(data) {
+      var img;
+      img = new Image();
+      img.src = "data:image/gif;base64," + (this.fieldFrom(data));
+      img.width / img.height;
+      this.width = img.width;
+      this.height = img.height;
+      this.calcImageCSS();
+      if (this.editable()) {
+        setTimeout(((function(_this) {
+          return function() {
+            return _this.setAspectRatio(1);
+          };
+        })(this)), 0);
+      }
+      return $("<div class=\"image-gallery-widget\">\n  <img class=\"content " + this.cssImageClass + "\" src=\"" + img.src + "\">\n</div>");
+    };
+
+    ImageGalleryContent.prototype.renderConfigOptions = function() {
+      return [
+        this.option('checkbox', 'stretchImage', "Stretch Image"), this.option('select', 'field', "Field", {
+          options: this.images(),
+          hint: "This is the gallery image you would like to be merged, the image shown is only a placeholder of the final output."
+        })
+      ];
+    };
+
+    ImageGalleryContent.prototype.stretchImage = ImageGalleryContent.property('_stretchImage');
+
+    ImageGalleryContent.prototype.fieldFrom = function(data) {
+      var i, key, len, ref, ref1, results;
+      ref = this._field.split('.');
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        key = ref[i];
+        results.push(data = (ref1 = data['images']) != null ? ref1[key] : void 0);
+      }
+      return results;
+    };
+
+    ImageGalleryContent.prototype.field = ImageGalleryContent.property('_field');
+
+    ImageGalleryContent.prototype.serialize = function() {
+      return {
+        field: this._field,
+        stretchImage: this.stretchImage()
+      };
+    };
+
+    return ImageGalleryContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.ShapeContent = (function(superClass) {
+    extend(ShapeContent, superClass);
+
+    function ShapeContent() {
+      return ShapeContent.__super__.constructor.apply(this, arguments);
+    }
+
+    ShapeContent.className = "ShapeContent";
+
+    ShapeContent.displayName = "Shape";
+
+    ShapeContent.description = "A simple shape to be used for drawing.";
+
+    ShapeContent.icon = "vector_path_square";
+
+    ShapeContent.prototype.defaultWidth = function() {
+      return 200;
+    };
+
+    ShapeContent.prototype.defaultHeight = function() {
+      return 200;
+    };
+
+    ShapeContent.border_widths = {
+      "0": "none",
+      "1": "1",
+      "3": "3",
+      "5": "5",
+      "8": "8",
+      "10": "10",
+      "15": "15"
+    };
+
+    ShapeContent.STYLE_DEFAULTS = {
+      fill_color: '#CCCCCC',
+      stroke_color: '#888888',
+      stroke_width: '0',
+      shape: 'rectangle',
+      border_radius: '0'
+    };
+
+    ShapeContent.prototype.fill_color = ShapeContent.property('style', 'fill_color');
+
+    ShapeContent.prototype.stroke_color = ShapeContent.property('style', 'stroke_color');
+
+    ShapeContent.prototype.stroke_width = ShapeContent.property('style', 'stroke_width');
+
+    ShapeContent.prototype.shape = ShapeContent.property('style', 'shape');
+
+    ShapeContent.prototype.border_radius = ShapeContent.property('style', 'border_radius');
+
+    ShapeContent.prototype.maintainAspectRatio = ShapeContent.property('_maintainAspectRatio');
+
+    ShapeContent.prototype.initWithConfig = function(config) {
+      return this.style = $.extend({}, ShapeContent.STYLE_DEFAULTS, this.get(config.style, {}));
+    };
+
+    ShapeContent.prototype.renderAppearanceOptions = function() {
+      return [
+        this.option('select', 'shape', "Shape", {
+          options: {
+            rectangle: "Rectangle",
+            ellipse: "Ellipse"
+          }
+        }), this.option('color', 'fill_color', "Fill colour"), this.option('color', 'stroke_color', "Border colour"), this.option('select', 'stroke_width', "Border width", {
+          options: ShapeContent.border_widths
+        }), this.option('select', 'border_radius', "Corner radius", {
+          options: ShapeContent.border_widths
+        })
+      ];
+    };
+
+    ShapeContent.prototype.renderConfigOptions = function() {
+      return [this.option('checkbox', 'maintainAspectRatio', "Maintain Aspect Ratio")];
+    };
+
+    ShapeContent.prototype.render_layout = function() {
+      if (this.maintainAspectRatio()) {
+        this.setAspectRatio(1);
+      } else {
+        setTimeout(((function(_this) {
+          return function() {
+            return _this.setAspectRatio(0);
+          };
+        })(this)), 0);
+      }
+      if (this.style.shape === 'rectangle') {
+        return $("<svg width='100%' height='100%'> <rect x='" + (this.style.stroke_width / 1.6) + "%' y='" + (this.style.stroke_width / 1.6) + "%' width='" + (100 - this.style.stroke_width / 0.8) + "%' height='" + (100 - this.style.stroke_width / 0.8) + "%' rx='" + this.style.border_radius + "' ry='" + this.style.border_radius + "' style='fill:" + this.style.fill_color + ";stroke-width:" + this.style.stroke_width + ";stroke:" + this.style.stroke_color + "' /> </svg>");
+      } else {
+        return $("<svg height='100%' width='100%'> <ellipse cx='50%' cy='50%' rx='" + (45 - this.style.stroke_width / 1.8) + "%' ry='" + (45 - this.style.stroke_width / 1.8) + "%' stroke='" + this.style.stroke_color + "' stroke-width='" + this.style.stroke_width + "' fill='" + this.style.fill_color + "' /> </svg>");
+      }
+    };
+
+    ShapeContent.prototype.serialize = function() {
+      return {
+        style: this.style,
+        maintainAspectRatio: this.maintainAspectRatio()
+      };
+    };
+
+    return ShapeContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.NameContent = (function(superClass) {
+    extend(NameContent, superClass);
+
+    function NameContent() {
+      return NameContent.__super__.constructor.apply(this, arguments);
+    }
+
+    NameContent.className = "NameContent";
+
+    NameContent.displayName = "Student Name";
+
+    NameContent.description = "Name of the student in the format \"last, first\"";
+
+    NameContent.icon = "girl";
+
+    NameContent.active = false;
+
+    return NameContent;
+
+  })(FieldContent);
+
+}).call(this);
+
+(function() {
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.SubjectFieldContent = (function(superClass) {
+    extend(SubjectFieldContent, superClass);
+
+    function SubjectFieldContent() {
+      this.updateMapping = bind(this.updateMapping, this);
+      this.changeMapping = bind(this.changeMapping, this);
+      return SubjectFieldContent.__super__.constructor.apply(this, arguments);
+    }
+
+    SubjectFieldContent.className = "SubjectFieldContent";
+
+    SubjectFieldContent.displayName = "Subject Dynamic Text";
+
+    SubjectFieldContent.description = "Pull a text field from a specific subject and style it for display.";
+
+    SubjectFieldContent.icon = "book";
+
+    SubjectFieldContent.prototype.defaultWidth = function() {
+      return 280;
+    };
+
+    SubjectFieldContent.prototype.defaultHeight = function() {
+      return 80;
+    };
+
+    SubjectFieldContent.prototype.initWithConfig = function(config) {
+      SubjectFieldContent.__super__.initWithConfig.call(this, config);
+      this._subject = this.get(config.subject, 'PH');
+      this._field = this.get(config.field, 'subjectName');
+      return this.mappings = this.get(config.mappings, {});
+    };
+
+    SubjectFieldContent.prototype.render_layout = function(data) {
+      return $("<div class=\"subject-field-widget\" style=\"" + (this.textStyles()) + "\">" + (this.fieldFrom(data)) + "</div>");
+    };
+
+    SubjectFieldContent.prototype.renderConfigOptions = function() {
+      var fields, i, len, options, point, ref;
+      fields = {
+        "Subject": [['subjectName', 'Subject Name'], ['teacherNames', 'Teacher Names'], ['teachingGroupCode', 'Teaching Group Code']],
+        "Results": []
+      };
+      ref = this.assessmentPoints();
+      for (i = 0, len = ref.length; i < len; i++) {
+        point = ref[i];
+        fields.Results.push([point.code, point.longName]);
+      }
+      options = [
+        this.option('select', 'field', "Field", {
+          options: fields,
+          hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output."
+        }), this.mappingSettings()
+      ];
+      if (this.widget.subject === null) {
+        options.unshift(this.option('select', 'subject', "Subject", {
+          options: API.subjects()
+        }));
+      }
+      return options;
+    };
+
+    SubjectFieldContent.prototype.mappingSettings = function() {
+      var node, self;
+      node = $("<div class=\"mapping-option\"><a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(this.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a></div>");
+      self = this;
+      node.on("click", ".mapping", (function(_this) {
+        return function() {
+          return new MappingModal(_this.mappings, _this.changeMapping);
+        };
+      })(this));
+      return node;
+    };
+
+    SubjectFieldContent.prototype.changeMapping = function(newMappings) {
+      var oldMappings;
+      oldMappings = this.mappings;
+      this.updateMapping(newMappings);
+      return Designer.history.push(this, 'updateMapping', oldMappings, newMappings, Designer.template.currentPageNumber);
+    };
+
+    SubjectFieldContent.prototype.updateMapping = function(mappings) {
+      this.mappings = mappings;
+      return this.redraw();
+    };
+
+    SubjectFieldContent.prototype.fieldFrom = function(data) {
+      var defaultValue, ref, subject, subjectScope, value;
+      subject = this.widget.subject ? this.widget.subject : this.subject();
+      defaultValue = this.placeholderWithLabel(this.field());
+      subjectScope = data.subjects[subject];
+      value = (subjectScope != null ? (ref = subjectScope.results) != null ? ref[this.field()] : void 0 : void 0) || (subjectScope != null ? subjectScope[this.field()] : void 0) || defaultValue;
+      return this.mappings[value] || value;
+    };
+
+    SubjectFieldContent.prototype.subject = SubjectFieldContent.property('_subject');
+
+    SubjectFieldContent.prototype.serialize = function() {
+      return {
+        field: this.field(),
+        subject: this.subject(),
+        style: this.style,
+        mappings: this.mappings
+      };
+    };
+
+    return SubjectFieldContent;
+
+  })(FieldContent);
+
+}).call(this);
+
+(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  window.TextContent = (function(superClass) {
+    extend(TextContent, superClass);
+
+    function TextContent() {
+      return TextContent.__super__.constructor.apply(this, arguments);
+    }
+
+    TextContent.className = "TextContent";
+
+    TextContent.displayName = "Free Text";
+
+    TextContent.description = "A block of static text with formatting options.";
+
+    TextContent.icon = "font";
+
+    TextContent.prototype.defaultWidth = function() {
+      return 360;
+    };
+
+    TextContent.prototype.defaultHeight = function() {
+      return 240;
+    };
+
+    TextContent.prototype.editable = function() {
+      return this.widget.currentMode === 'layout';
+    };
+
+    TextContent.EDITOR_CONFIG = {
+      imageUpload: false,
+      inlineMode: true,
+      mediaManager: false,
+      placeholder: "Type here...",
+      plainPaste: true,
+      buttons: ["bold", "italic", "underline", "fontSize", "color", "sep", "align", "insertOrderedList", "insertUnorderedList", "outdent", "indent"]
+    };
+
+    TextContent.DEFAULT_CONTENT = "<p>Type text here&hellip;</p>";
+
+    TextContent.STYLE_DEFAULTS = {
+      font: 'Helvetica'
+    };
+
+    TextContent.prototype.initWithConfig = function(config) {
+      this.html = this.get(config.html, TextContent.DEFAULT_CONTENT);
+      return this.style = $.extend({}, TextContent.STYLE_DEFAULTS, this.get(config.style, {}));
+    };
+
+    TextContent.prototype.render_layout = function(data) {
+      var styles;
+      styles = this.styleString({
+        'font-family': utils.fontMap[this.style.font]
+      });
+      return $("<div class=\"text-widget\" style=\"" + styles + "\">" + this.html + "</div>");
+    };
+
+    TextContent.prototype.render_edit = function(data) {
+      var node;
+      node = this.render_layout(data);
+      this.editor = node.editable(TextContent.EDITOR_CONFIG);
+      return node;
+    };
+
+    TextContent.prototype.renderAppearanceOptions = function() {
+      return this.option('font', 'font', "Font");
+    };
+
+    TextContent.prototype.bindEvents = function(el) {
+      return el.on('editable.contentChanged', (function(_this) {
+        return function() {
+          return _this.html = _this.el.editable("getHTML");
+        };
+      })(this));
+    };
+
+    TextContent.prototype.font = TextContent.property('style', 'font');
+
+    TextContent.prototype.serialize = function() {
+      return {
+        html: this.html,
+        style: this.style
+      };
+    };
+
+    return TextContent;
+
+  })(WidgetContent);
+
+}).call(this);
+
+(function() {
   var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
@@ -381,185 +1279,6 @@
     }
 
     return _EXAMPLEContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
-  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.AttendanceContent = (function(superClass) {
-    extend(AttendanceContent, superClass);
-
-    function AttendanceContent() {
-      this.drawChart = bind(this.drawChart, this);
-      this.resizeChart = bind(this.resizeChart, this);
-      return AttendanceContent.__super__.constructor.apply(this, arguments);
-    }
-
-    AttendanceContent.className = "AttendanceContent";
-
-    AttendanceContent.displayName = "Attendance Chart";
-
-    AttendanceContent.description = "Show a visual representation of student attendance.";
-
-    AttendanceContent.icon = "bell";
-
-    AttendanceContent.prototype.defaultWidth = function() {
-      return 400;
-    };
-
-    AttendanceContent.prototype.defaultHeight = function() {
-      return 300;
-    };
-
-    AttendanceContent.STYLE_DEFAULTS = {
-      color1: '#77cc33',
-      color2: '#cc0000',
-      color3: '#e67e22',
-      color4: '#9b59b6',
-      chartstyle: 'bar',
-      font: 'Helvetica',
-      legend: 'right'
-    };
-
-    AttendanceContent.prototype.initWithConfig = function(config) {
-      this.style = $.extend({}, AttendanceContent.STYLE_DEFAULTS, this.get(config.style, {}));
-      this.options = this.get(config.options, {});
-      this.labels = this.get(config.labels, ['Present', 'Late', 'Authorised', 'Unauthorised']);
-      this._label1 = this.labels[0];
-      this._label2 = this.labels[1];
-      this._label3 = this.labels[2];
-      return this._label4 = this.labels[3];
-    };
-
-    AttendanceContent.prototype.render_layout = function(data) {
-      var root;
-      this.attendance = data.attendance;
-      root = $("<div class=\"attendance-widget\"></div>");
-      this.drawChart(root[0]);
-      this.widget.bind('widget:move', this.resizeChart);
-      return $(root).append("<div class=\"noclick\"></div>");
-    };
-
-    AttendanceContent.prototype.resizeChart = function() {
-      return this.chart.resize({
-        height: this.widget.height(),
-        width: this.widget.width()
-      });
-    };
-
-    AttendanceContent.prototype.renderConfigOptions = function() {
-      return [this.option('text', 'label1', "Present label"), this.option('text', 'label2', "Late label"), this.option('text', 'label3', "Authorised label"), this.option('text', 'label4', "Unauthorised label")];
-    };
-
-    AttendanceContent.prototype.renderAppearanceOptions = function() {
-      return [
-        this.option('select', 'chartstyle', "Chart style", {
-          options: {
-            bar: 'Bar',
-            pie: 'Pie'
-          }
-        }), this.option('select', 'legend', "Legend position", {
-          options: {
-            right: 'Right',
-            bottom: 'Bottom'
-          }
-        }), this.option('font', 'font', "Font"), this.option('color', 'color1', "Present"), this.option('color', 'color2', "Late"), this.option('color', 'color3', "Authorised"), this.option('color', 'color4', "Unauthorised")
-      ];
-    };
-
-    AttendanceContent.prototype.drawChart = function(root) {
-      var chartType, colors;
-      colors = {};
-      colors[this._label1 + " " + this.attendance.present + "%"] = this.style.color1;
-      colors[this._label2 + " " + this.attendance.late + "%"] = this.style.color2;
-      colors[this._label3 + " " + this.attendance.authorised + "%"] = this.style.color3;
-      colors[this._label4 + " " + this.attendance.nonAuthorised + "%"] = this.style.color4;
-      if (this.style.chartstyle === 'pie') {
-        chartType = 'pie';
-      } else {
-        chartType = 'bar';
-      }
-      this.chart = c3.generate({
-        bindto: root,
-        data: {
-          order: 'asc',
-          columns: [[this._label1 + " " + (this.attendance.present || 0) + "%", parseFloat(this.attendance.present) / 100], [this._label2 + " " + (this.attendance.late || 0) + "%", parseFloat(this.attendance.late) / 100], [this._label3 + " " + (this.attendance.authorised || 0) + "%", parseFloat(this.attendance.authorised) / 100], [this._label4 + " " + (this.attendance.nonAuthorised || 0) + "%", parseFloat(this.attendance.nonAuthorised) / 100]],
-          type: chartType,
-          groups: [[this._label1 + " " + (this.attendance.present || 0) + "%", this._label2 + " " + (this.attendance.late || 0) + "%", this._label3 + " " + (this.attendance.authorised || 0) + "%", this._label4 + " " + (this.attendance.nonAuthorised || 0) + "%"]],
-          colors: colors
-        },
-        axis: {
-          y: {
-            max: .99,
-            "default": [0, 100],
-            tick: {
-              format: d3.format(",%")
-            }
-          },
-          x: {
-            show: false,
-            tick: {
-              count: 0
-            }
-          }
-        },
-        legend: {
-          position: this.style.legend
-        },
-        grid: {
-          y: {
-            show: true
-          }
-        },
-        interaction: {
-          enabled: false
-        },
-        size: {
-          width: this.widget.width(),
-          height: this.widget.height()
-        }
-      });
-      $(root).find('.tick').css('font-family', this.style.font);
-      return $(root).find('.c3-legend-item').css('font-family', this.style.font);
-    };
-
-    AttendanceContent.prototype.color1 = AttendanceContent.property('style', 'color1');
-
-    AttendanceContent.prototype.color2 = AttendanceContent.property('style', 'color2');
-
-    AttendanceContent.prototype.color3 = AttendanceContent.property('style', 'color3');
-
-    AttendanceContent.prototype.color4 = AttendanceContent.property('style', 'color4');
-
-    AttendanceContent.prototype.chartstyle = AttendanceContent.property('style', 'chartstyle');
-
-    AttendanceContent.prototype.legend = AttendanceContent.property('style', 'legend');
-
-    AttendanceContent.prototype.font = AttendanceContent.property('style', 'font');
-
-    AttendanceContent.prototype.label1 = AttendanceContent.property('_label1');
-
-    AttendanceContent.prototype.label2 = AttendanceContent.property('_label2');
-
-    AttendanceContent.prototype.label3 = AttendanceContent.property('_label3');
-
-    AttendanceContent.prototype.label4 = AttendanceContent.property('_label4');
-
-    AttendanceContent.prototype.serialize = function() {
-      return {
-        columns: this.columns,
-        style: this.style,
-        options: this.options,
-        labels: [this._label1, this._label2, this._label3, this._label4]
-      };
-    };
-
-    return AttendanceContent;
 
   })(WidgetContent);
 
@@ -1090,725 +1809,6 @@
     };
 
     return DynamicTableContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
-  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.FieldContent = (function(superClass) {
-    extend(FieldContent, superClass);
-
-    function FieldContent() {
-      this.updateMapping = bind(this.updateMapping, this);
-      this.changeMapping = bind(this.changeMapping, this);
-      return FieldContent.__super__.constructor.apply(this, arguments);
-    }
-
-    FieldContent.className = "FieldContent";
-
-    FieldContent.displayName = "Dynamic Text";
-
-    FieldContent.description = "Pull a text field from a student record and style it for display.";
-
-    FieldContent.icon = "nameplate";
-
-    FieldContent.prototype.defaultWidth = function() {
-      return 200;
-    };
-
-    FieldContent.prototype.defaultHeight = function() {
-      return 50;
-    };
-
-    FieldContent.STYLE_DEFAULTS = {
-      color: '#000000',
-      font: 'Helvetica',
-      size: 'Medium'
-    };
-
-    FieldContent.prototype.initWithConfig = function(config) {
-      this._field = this.get(config.field, Object.keys(this.metrics())[0]);
-      this.style = $.extend({}, FieldContent.STYLE_DEFAULTS, this.get(config.style, {}));
-      return this.mappings = this.get(config.mappings, {});
-    };
-
-    FieldContent.prototype.render_layout = function(data) {
-      return $("<div class=\"field-widget\" style=\"" + (this.textStyles()) + "\">" + (this.fieldFrom(data)) + "</div>");
-    };
-
-    FieldContent.prototype.renderAppearanceOptions = function() {
-      return this.option('font', 'font', "Font") + this.option('size', 'size', "Text Size") + this.option('color', 'color', "Text Color");
-    };
-
-    FieldContent.prototype.renderConfigOptions = function() {
-      return [
-        this.option('select', 'field', "Field", {
-          options: this.metrics(),
-          hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output."
-        }), this.mappingSettings()
-      ];
-    };
-
-    FieldContent.prototype.mappingSettings = function() {
-      var node, self;
-      node = $("<div class=\"mapping-option\"><a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(this.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a></div>");
-      self = this;
-      node.on("click", ".mapping", (function(_this) {
-        return function() {
-          return new MappingModal(_this.mappings, _this.changeMapping);
-        };
-      })(this));
-      return node;
-    };
-
-    FieldContent.prototype.changeMapping = function(newMappings) {
-      var oldMappings;
-      oldMappings = this.mappings;
-      this.updateMapping(newMappings);
-      return Designer.history.push(this, 'updateMapping', oldMappings, newMappings, Designer.template.currentPageNumber);
-    };
-
-    FieldContent.prototype.updateMapping = function(mappings) {
-      this.mappings = mappings;
-      return this.redraw();
-    };
-
-    FieldContent.prototype.textStyles = function() {
-      return this.styleString({
-        'color': this.style.color,
-        'font-family': utils.fontMap[this.style.font],
-        'font-size': utils.sizeMap[this.style.size]
-      });
-    };
-
-    FieldContent.prototype.fieldFrom = function(data) {
-      var i, key, len, ref;
-      ref = this._field.split('.');
-      for (i = 0, len = ref.length; i < len; i++) {
-        key = ref[i];
-        data = data != null ? data[key] : void 0;
-      }
-      return this.mappings[data] || data || this.placeholderWithLabel(key);
-    };
-
-    FieldContent.prototype.font = FieldContent.property('style', 'font');
-
-    FieldContent.prototype.size = FieldContent.property('style', 'size');
-
-    FieldContent.prototype.color = FieldContent.property('style', 'color');
-
-    FieldContent.prototype.field = FieldContent.property('_field');
-
-    FieldContent.prototype.serialize = function() {
-      return {
-        field: this._field,
-        style: this.style,
-        mappings: this.mappings
-      };
-    };
-
-    return FieldContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.ImageContent = (function(superClass) {
-    extend(ImageContent, superClass);
-
-    function ImageContent() {
-      return ImageContent.__super__.constructor.apply(this, arguments);
-    }
-
-    ImageContent.className = "ImageContent";
-
-    ImageContent.displayName = "Image";
-
-    ImageContent.description = "A static photograph, logo or graphic";
-
-    ImageContent.icon = "picture";
-
-    ImageContent.prototype.defaultWidth = function() {
-      return 240;
-    };
-
-    ImageContent.prototype.defaultHeight = function() {
-      return 240;
-    };
-
-    ImageContent.DEFAULT_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-
-    ImageContent.prototype.initWithConfig = function(config) {
-      this.setImage(this.get(config.src, ImageContent.DEFAULT_IMAGE), false);
-      return this._maintainAspectRatio = this.get(config.maintainAspectRatio, true);
-    };
-
-    ImageContent.prototype.bindEvents = function(el) {
-      el.find(".picker").change((function(_this) {
-        return function(e) {
-          return _this.setImageFromFile(e.currentTarget.files[0]);
-        };
-      })(this));
-      return el.find(".content").dblclick((function(_this) {
-        return function() {
-          return _this.openFilePicker();
-        };
-      })(this));
-    };
-
-    ImageContent.prototype.openFilePicker = function() {
-      var picker;
-      picker = this.el.find(".picker");
-      picker.click();
-      return false;
-    };
-
-    ImageContent.prototype.setImageFromFile = function(file) {
-      var reader;
-      reader = new FileReader();
-      reader.onload = (function(_this) {
-        return function(e) {
-          return _this.updateImage(e.target.result);
-        };
-      })(this);
-      return reader.readAsDataURL(file);
-    };
-
-    ImageContent.prototype.updateImage = function(data) {
-      var oldSrc;
-      oldSrc = this.src;
-      this.setImage(data);
-      return Designer.history.push(this, 'setImage', oldSrc, this.src, Designer.template.currentPageNumber);
-    };
-
-    ImageContent.prototype.setImage = function(data, doRedraw) {
-      if (doRedraw == null) {
-        doRedraw = true;
-      }
-      this.src = data;
-      this.maybeWarnAboutGif();
-      if (doRedraw) {
-        return this.redraw();
-      }
-    };
-
-    ImageContent.prototype.aspectRatio = function() {
-      var img;
-      if (this.maintainAspectRatio()) {
-        img = new Image();
-        img.src = this.src;
-        return img.width / img.height;
-      } else {
-        return false;
-      }
-    };
-
-    ImageContent.prototype.render_layout = function(data) {
-      setTimeout(((function(_this) {
-        return function() {
-          return _this.setAspectRatio(_this.aspectRatio());
-        };
-      })(this)), 0);
-      return $("<div class=\"image-widget " + (this.src === ImageContent.DEFAULT_IMAGE ? 'image-blank' : void 0) + "\">\n  <img class=\"content\" src=\"" + this.src + "\">\n  <input class=\"picker\" type=\"file\" accept=\"image/png, image/jpeg\">\n</div>");
-    };
-
-    ImageContent.prototype.render_edit = function(data) {
-      var node;
-      node = this.render_layout(data);
-      this.bindEvents(node);
-      return node;
-    };
-
-    ImageContent.prototype.render_display = function(data) {
-      return $("<div class=\"image-widget\">\n  <img class=\"content\" src=\"" + this.src + "\">\n</div>");
-    };
-
-    ImageContent.prototype.renderConfigOptions = function() {
-      return [this.option('checkbox', 'maintainAspectRatio', "Maintain Aspect Ratio")];
-    };
-
-    ImageContent.prototype.maintainAspectRatio = ImageContent.property('_maintainAspectRatio');
-
-    ImageContent.prototype.maybeWarnAboutGif = function() {
-      var isGif;
-      isGif = this.src && this.src !== ImageContent.DEFAULT_IMAGE && this.src.indexOf("image/gif;") > -1;
-      if (isGif && this.widget.currentMode === 'layout') {
-        return delay(1000, function() {
-          return alert("Your template contains one or more GIF images.\n\nGIF files are not currently supported and may not display correctly when printed.\n\nPlease replace all GIF images with alternatives in either JPG or PNG format.");
-        });
-      }
-    };
-
-    ImageContent.prototype.serialize = function() {
-      return {
-        src: this.src,
-        maintainAspectRatio: this.maintainAspectRatio()
-      };
-    };
-
-    return ImageContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.ImageGalleryContent = (function(superClass) {
-    extend(ImageGalleryContent, superClass);
-
-    function ImageGalleryContent() {
-      return ImageGalleryContent.__super__.constructor.apply(this, arguments);
-    }
-
-    ImageGalleryContent.className = "ImageGalleryContent";
-
-    ImageGalleryContent.displayName = "Dynamic Images";
-
-    ImageGalleryContent.description = "A dynamic photograph, logo or graphic";
-
-    ImageGalleryContent.icon = "picture";
-
-    ImageGalleryContent.prototype.editable = function() {
-      return this.widget.currentMode === 'layout';
-    };
-
-    ImageGalleryContent.prototype.initWithConfig = function(config) {
-      this._field = this.get(config.field, Object.keys(this.images())[0]);
-      return this._stretchImage = this.get(config.stretchImage, true);
-    };
-
-    ImageGalleryContent.prototype.bindEvents = function(el) {
-      return this.widget.bind('widget:resize', (function(_this) {
-        return function() {
-          return _this.imageCSS();
-        };
-      })(this));
-    };
-
-    ImageGalleryContent.prototype.imageCSS = function() {
-      $('.image-gallery-widget img').removeClass(this.cssImageClass);
-      this.calcImageCSS();
-      return $('.image-gallery-widget img').addClass(this.cssImageClass);
-    };
-
-    ImageGalleryContent.prototype.calcImageCSS = function() {
-      if (this.width >= this.height && (this.stretchImage() || this.width > this.widget.width())) {
-        return this.cssImageClass = 'wider';
-      } else if (this.height > this.width && (this.stretchImage() || this.height > this.widget.height())) {
-        return this.cssImageClass = 'taller';
-      } else {
-        return this.cssImageClass = '';
-      }
-    };
-
-    ImageGalleryContent.prototype.render_layout = function(data) {
-      var img;
-      img = new Image();
-      img.src = "data:image/gif;base64," + (this.fieldFrom(data));
-      img.width / img.height;
-      this.width = img.width;
-      this.height = img.height;
-      this.calcImageCSS();
-      if (this.editable()) {
-        setTimeout(((function(_this) {
-          return function() {
-            return _this.setAspectRatio(1);
-          };
-        })(this)), 0);
-      }
-      return $("<div class=\"image-gallery-widget\">\n  <img class=\"content " + this.cssImageClass + "\" src=\"" + img.src + "\">\n</div>");
-    };
-
-    ImageGalleryContent.prototype.renderConfigOptions = function() {
-      return [
-        this.option('checkbox', 'stretchImage', "Stretch Image"), this.option('select', 'field', "Field", {
-          options: this.images(),
-          hint: "This is the gallery image you would like to be merged, the image shown is only a placeholder of the final output."
-        })
-      ];
-    };
-
-    ImageGalleryContent.prototype.stretchImage = ImageGalleryContent.property('_stretchImage');
-
-    ImageGalleryContent.prototype.fieldFrom = function(data) {
-      var i, key, len, ref, ref1, results;
-      ref = this._field.split('.');
-      results = [];
-      for (i = 0, len = ref.length; i < len; i++) {
-        key = ref[i];
-        results.push(data = (ref1 = data['images']) != null ? ref1[key] : void 0);
-      }
-      return results;
-    };
-
-    ImageGalleryContent.prototype.field = ImageGalleryContent.property('_field');
-
-    ImageGalleryContent.prototype.serialize = function() {
-      return {
-        field: this._field,
-        stretchImage: this.stretchImage()
-      };
-    };
-
-    return ImageGalleryContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.NameContent = (function(superClass) {
-    extend(NameContent, superClass);
-
-    function NameContent() {
-      return NameContent.__super__.constructor.apply(this, arguments);
-    }
-
-    NameContent.className = "NameContent";
-
-    NameContent.displayName = "Student Name";
-
-    NameContent.description = "Name of the student in the format \"last, first\"";
-
-    NameContent.icon = "girl";
-
-    NameContent.active = false;
-
-    return NameContent;
-
-  })(FieldContent);
-
-}).call(this);
-
-(function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.ShapeContent = (function(superClass) {
-    extend(ShapeContent, superClass);
-
-    function ShapeContent() {
-      return ShapeContent.__super__.constructor.apply(this, arguments);
-    }
-
-    ShapeContent.className = "ShapeContent";
-
-    ShapeContent.displayName = "Shape";
-
-    ShapeContent.description = "A simple shape to be used for drawing.";
-
-    ShapeContent.icon = "vector_path_square";
-
-    ShapeContent.prototype.defaultWidth = function() {
-      return 200;
-    };
-
-    ShapeContent.prototype.defaultHeight = function() {
-      return 200;
-    };
-
-    ShapeContent.border_widths = {
-      "0": "none",
-      "1": "1",
-      "3": "3",
-      "5": "5",
-      "8": "8",
-      "10": "10",
-      "15": "15"
-    };
-
-    ShapeContent.STYLE_DEFAULTS = {
-      fill_color: '#CCCCCC',
-      stroke_color: '#888888',
-      stroke_width: '0',
-      shape: 'rectangle',
-      border_radius: '0'
-    };
-
-    ShapeContent.prototype.fill_color = ShapeContent.property('style', 'fill_color');
-
-    ShapeContent.prototype.stroke_color = ShapeContent.property('style', 'stroke_color');
-
-    ShapeContent.prototype.stroke_width = ShapeContent.property('style', 'stroke_width');
-
-    ShapeContent.prototype.shape = ShapeContent.property('style', 'shape');
-
-    ShapeContent.prototype.border_radius = ShapeContent.property('style', 'border_radius');
-
-    ShapeContent.prototype.maintainAspectRatio = ShapeContent.property('_maintainAspectRatio');
-
-    ShapeContent.prototype.initWithConfig = function(config) {
-      return this.style = $.extend({}, ShapeContent.STYLE_DEFAULTS, this.get(config.style, {}));
-    };
-
-    ShapeContent.prototype.renderAppearanceOptions = function() {
-      return [
-        this.option('select', 'shape', "Shape", {
-          options: {
-            rectangle: "Rectangle",
-            ellipse: "Ellipse"
-          }
-        }), this.option('color', 'fill_color', "Fill colour"), this.option('color', 'stroke_color', "Border colour"), this.option('select', 'stroke_width', "Border width", {
-          options: ShapeContent.border_widths
-        }), this.option('select', 'border_radius', "Corner radius", {
-          options: ShapeContent.border_widths
-        })
-      ];
-    };
-
-    ShapeContent.prototype.renderConfigOptions = function() {
-      return [this.option('checkbox', 'maintainAspectRatio', "Maintain Aspect Ratio")];
-    };
-
-    ShapeContent.prototype.render_layout = function() {
-      if (this.maintainAspectRatio()) {
-        this.setAspectRatio(1);
-      } else {
-        setTimeout(((function(_this) {
-          return function() {
-            return _this.setAspectRatio(0);
-          };
-        })(this)), 0);
-      }
-      if (this.style.shape === 'rectangle') {
-        return $("<svg width='100%' height='100%'> <rect x='" + (this.style.stroke_width / 1.6) + "%' y='" + (this.style.stroke_width / 1.6) + "%' width='" + (100 - this.style.stroke_width / 0.8) + "%' height='" + (100 - this.style.stroke_width / 0.8) + "%' rx='" + this.style.border_radius + "' ry='" + this.style.border_radius + "' style='fill:" + this.style.fill_color + ";stroke-width:" + this.style.stroke_width + ";stroke:" + this.style.stroke_color + "' /> </svg>");
-      } else {
-        return $("<svg height='100%' width='100%'> <ellipse cx='50%' cy='50%' rx='" + (45 - this.style.stroke_width / 1.8) + "%' ry='" + (45 - this.style.stroke_width / 1.8) + "%' stroke='" + this.style.stroke_color + "' stroke-width='" + this.style.stroke_width + "' fill='" + this.style.fill_color + "' /> </svg>");
-      }
-    };
-
-    ShapeContent.prototype.serialize = function() {
-      return {
-        style: this.style,
-        maintainAspectRatio: this.maintainAspectRatio()
-      };
-    };
-
-    return ShapeContent;
-
-  })(WidgetContent);
-
-}).call(this);
-
-(function() {
-  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.SubjectFieldContent = (function(superClass) {
-    extend(SubjectFieldContent, superClass);
-
-    function SubjectFieldContent() {
-      this.updateMapping = bind(this.updateMapping, this);
-      this.changeMapping = bind(this.changeMapping, this);
-      return SubjectFieldContent.__super__.constructor.apply(this, arguments);
-    }
-
-    SubjectFieldContent.className = "SubjectFieldContent";
-
-    SubjectFieldContent.displayName = "Subject Dynamic Text";
-
-    SubjectFieldContent.description = "Pull a text field from a specific subject and style it for display.";
-
-    SubjectFieldContent.icon = "book";
-
-    SubjectFieldContent.prototype.defaultWidth = function() {
-      return 280;
-    };
-
-    SubjectFieldContent.prototype.defaultHeight = function() {
-      return 80;
-    };
-
-    SubjectFieldContent.prototype.initWithConfig = function(config) {
-      SubjectFieldContent.__super__.initWithConfig.call(this, config);
-      this._subject = this.get(config.subject, 'PH');
-      this._field = this.get(config.field, 'subjectName');
-      return this.mappings = this.get(config.mappings, {});
-    };
-
-    SubjectFieldContent.prototype.render_layout = function(data) {
-      return $("<div class=\"subject-field-widget\" style=\"" + (this.textStyles()) + "\">" + (this.fieldFrom(data)) + "</div>");
-    };
-
-    SubjectFieldContent.prototype.renderConfigOptions = function() {
-      var fields, i, len, options, point, ref;
-      fields = {
-        "Subject": [['subjectName', 'Subject Name'], ['teacherNames', 'Teacher Names'], ['teachingGroupCode', 'Teaching Group Code']],
-        "Results": []
-      };
-      ref = this.assessmentPoints();
-      for (i = 0, len = ref.length; i < len; i++) {
-        point = ref[i];
-        fields.Results.push([point.code, point.longName]);
-      }
-      options = [
-        this.option('select', 'field', "Field", {
-          options: fields,
-          hint: "This is the CCR! field you would like to be merged, the data shown is only a sample of the final output."
-        }), this.mappingSettings()
-      ];
-      if (this.widget.subject === null) {
-        options.unshift(this.option('select', 'subject', "Subject", {
-          options: API.subjects()
-        }));
-      }
-      return options;
-    };
-
-    SubjectFieldContent.prototype.mappingSettings = function() {
-      var node, self;
-      node = $("<div class=\"mapping-option\"><a href=\"#\" class=\"mapping\">" + ($.isEmptyObject(this.mappings) ? 'Add word mappings...' : 'Edit word mappings...') + "</a></div>");
-      self = this;
-      node.on("click", ".mapping", (function(_this) {
-        return function() {
-          return new MappingModal(_this.mappings, _this.changeMapping);
-        };
-      })(this));
-      return node;
-    };
-
-    SubjectFieldContent.prototype.changeMapping = function(newMappings) {
-      var oldMappings;
-      oldMappings = this.mappings;
-      this.updateMapping(newMappings);
-      return Designer.history.push(this, 'updateMapping', oldMappings, newMappings, Designer.template.currentPageNumber);
-    };
-
-    SubjectFieldContent.prototype.updateMapping = function(mappings) {
-      this.mappings = mappings;
-      return this.redraw();
-    };
-
-    SubjectFieldContent.prototype.fieldFrom = function(data) {
-      var defaultValue, ref, subject, subjectScope, value;
-      subject = this.widget.subject ? this.widget.subject : this.subject();
-      defaultValue = this.placeholderWithLabel(this.field());
-      subjectScope = data.subjects[subject];
-      value = (subjectScope != null ? (ref = subjectScope.results) != null ? ref[this.field()] : void 0 : void 0) || (subjectScope != null ? subjectScope[this.field()] : void 0) || defaultValue;
-      return this.mappings[value] || value;
-    };
-
-    SubjectFieldContent.prototype.subject = SubjectFieldContent.property('_subject');
-
-    SubjectFieldContent.prototype.serialize = function() {
-      return {
-        field: this.field(),
-        subject: this.subject(),
-        style: this.style,
-        mappings: this.mappings
-      };
-    };
-
-    return SubjectFieldContent;
-
-  })(FieldContent);
-
-}).call(this);
-
-(function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  window.TextContent = (function(superClass) {
-    extend(TextContent, superClass);
-
-    function TextContent() {
-      return TextContent.__super__.constructor.apply(this, arguments);
-    }
-
-    TextContent.className = "TextContent";
-
-    TextContent.displayName = "Free Text";
-
-    TextContent.description = "A block of static text with formatting options.";
-
-    TextContent.icon = "font";
-
-    TextContent.prototype.defaultWidth = function() {
-      return 360;
-    };
-
-    TextContent.prototype.defaultHeight = function() {
-      return 240;
-    };
-
-    TextContent.prototype.editable = function() {
-      return this.widget.currentMode === 'layout';
-    };
-
-    TextContent.EDITOR_CONFIG = {
-      imageUpload: false,
-      inlineMode: true,
-      mediaManager: false,
-      placeholder: "Type here...",
-      plainPaste: true,
-      buttons: ["bold", "italic", "underline", "fontSize", "color", "sep", "align", "insertOrderedList", "insertUnorderedList", "outdent", "indent"]
-    };
-
-    TextContent.DEFAULT_CONTENT = "<p>Type text here&hellip;</p>";
-
-    TextContent.STYLE_DEFAULTS = {
-      font: 'Helvetica'
-    };
-
-    TextContent.prototype.initWithConfig = function(config) {
-      this.html = this.get(config.html, TextContent.DEFAULT_CONTENT);
-      return this.style = $.extend({}, TextContent.STYLE_DEFAULTS, this.get(config.style, {}));
-    };
-
-    TextContent.prototype.render_layout = function(data) {
-      var styles;
-      styles = this.styleString({
-        'font-family': utils.fontMap[this.style.font]
-      });
-      return $("<div class=\"text-widget\" style=\"" + styles + "\">" + this.html + "</div>");
-    };
-
-    TextContent.prototype.render_edit = function(data) {
-      var node;
-      node = this.render_layout(data);
-      this.editor = node.editable(TextContent.EDITOR_CONFIG);
-      return node;
-    };
-
-    TextContent.prototype.renderAppearanceOptions = function() {
-      return this.option('font', 'font', "Font");
-    };
-
-    TextContent.prototype.bindEvents = function(el) {
-      return el.on('editable.contentChanged', (function(_this) {
-        return function() {
-          return _this.html = _this.el.editable("getHTML");
-        };
-      })(this));
-    };
-
-    TextContent.prototype.font = TextContent.property('style', 'font');
-
-    TextContent.prototype.serialize = function() {
-      return {
-        html: this.html,
-        style: this.style
-      };
-    };
-
-    return TextContent;
 
   })(WidgetContent);
 
