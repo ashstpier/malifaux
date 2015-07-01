@@ -65,7 +65,7 @@ class window.AttendanceContent extends WidgetContent
     colors["#{@_label1} #{@attendance.present}%"] = @style.color1
     colors["#{@_label2} #{@attendance.late}%"] = @style.color2
     colors["#{@_label3} #{@attendance.authorised}%"] = @style.color3
-    colors["#{@_label4} #{@attendance.unauthorised}%"] = @style.color4
+    colors["#{@_label4} #{@attendance.nonAuthorised}%"] = @style.color4
 
     if @style.chartstyle == 'pie'
       chartType = 'pie'
@@ -80,7 +80,7 @@ class window.AttendanceContent extends WidgetContent
           [ "#{@_label1} #{@attendance.present || 0}%", parseFloat(@attendance.present) / 100 ]
           [ "#{@_label2} #{@attendance.late || 0}%", parseFloat(@attendance.late) / 100 ]
           [ "#{@_label3} #{@attendance.authorised || 0}%", parseFloat(@attendance.authorised) / 100 ]
-          [ "#{@_label4} #{@attendance.unauthorised || 0}%", parseFloat(@attendance.unauthorised) / 100 ]
+          [ "#{@_label4} #{@attendance.nonAuthorised || 0}%", parseFloat(@attendance.nonAuthorised) / 100 ]
         ]
         type: chartType
         groups: [
@@ -88,7 +88,7 @@ class window.AttendanceContent extends WidgetContent
             "#{@_label1} #{@attendance.present || 0}%",
             "#{@_label2} #{@attendance.late || 0}%",
             "#{@_label3} #{@attendance.authorised || 0}%",
-            "#{@_label4} #{@attendance.unauthorised || 0}%"
+            "#{@_label4} #{@attendance.nonAuthorised || 0}%"
           ]]
         colors: colors
 
