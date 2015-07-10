@@ -138,6 +138,7 @@ body {
   padding: 15px;
   overflow: hidden;
   display: inline-block;
+  min-width: 100%;
 }
 
 .page {
@@ -152,6 +153,7 @@ body {
   z-index: 4;
   position: relative;
   visibility: visible;
+  margin: 0 auto;
 }
 
 #properties {
