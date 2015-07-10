@@ -13,6 +13,7 @@ class window.DynamicTableContent extends WidgetContent
     alignment: 'left'
     heading_text_color: '#000000'
     heading_background_color: '#DDDDDD'
+    border_color: '#999'
     cell_text_color: '#000000'
     cell_background_color_odd: '#FFFFFF'
     cell_background_color_even: '#FFFFFF'
