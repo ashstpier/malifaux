@@ -85,3 +85,18 @@
   margin-top: 10px;
   font-size: 12px;
 }
+
+.dynamictable .traffic-light {
+  display: inline-block;
+  font-size: 1px;
+  text-indent: -100px;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+  background-color: #ffbb22;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.dynamictable .traffic-light.dark-green { background-color: #019442; }
+.dynamictable .traffic-light.light-green { background-color: #7AE073; }
+.dynamictable .traffic-light.red   { background-color: #ee2222; }
