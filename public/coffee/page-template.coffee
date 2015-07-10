@@ -55,6 +55,8 @@ class window.PageTemplate
     for widget, index in newlyOrderedWidgets
       widget.zIndex(index+1)
 
+  nextAvailableZIndex: -> @widgets.length + 1
+
   updateAttributes: ->
     @el.attr('data-orientation', @orientation)
     @el.attr('data-pagetype', @pagetype)

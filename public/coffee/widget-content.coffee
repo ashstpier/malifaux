@@ -65,7 +65,7 @@ class window.WidgetContent
 
   defaultWidth: -> 160
   defaultHeight: -> 160
-  defaultZIndex: -> 1
+  defaultZIndex: -> Designer.nextAvailableZIndex()
   editable: -> false
 
   assessmentPoints: ->

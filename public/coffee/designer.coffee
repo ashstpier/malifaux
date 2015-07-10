@@ -370,6 +370,8 @@ window.Designer = {
   undoRedoOrderingWidget: (action) ->
     @template.setWidgetOrder(action.undo)
     @template.setWidgetOrder(action.redo)
+
+  nextAvailableZIndex: -> @template.nextAvailableZIndex()
 }
 
 MicroEvent.mixin(Designer)

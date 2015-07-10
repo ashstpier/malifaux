@@ -36,6 +36,7 @@ class window.Template
       'getWidget'
       'getWidgetOrder'
       'setWidgetOrder'
+      'nextAvailableZIndex'
     ])
 
   setSubject: (subject) ->
