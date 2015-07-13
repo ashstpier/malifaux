@@ -8,10 +8,11 @@ class window.ImageContent extends WidgetContent
   defaultHeight: -> 240
 
   @DEFAULT_IMAGE: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+  @DEFAULT_ASPECT_RATIO: 1
 
   initWithConfig: (config) ->
     @setImage(@get(config.src, ImageContent.DEFAULT_IMAGE), false)
-    @_maintainAspectRatio = @get(config.maintainAspectRatio, true)
+    @_maintainAspectRatio = $.extend({}, ImageContent.DEFAULT_ASPECT_RATIO, @get(config.maintainAspectRatio, true))
 
   bindEvents: (el) ->
     el.find(".picker").change (e) => @setImageFromFile(e.currentTarget.files[0])
