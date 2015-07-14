@@ -15,10 +15,8 @@
   height: 100%;
   empty-cells: show;
 }
-.dynamictable tr {
-  page-break-inside: avoid;
-}
 .dynamictable th, .dynamictable td {
+  page-break-inside: avoid;
   width: 1%;
   position: relative;
   background-clip: padding-box;

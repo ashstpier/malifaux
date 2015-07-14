@@ -4,15 +4,12 @@
   border-collapse: collapse;
 }
 
-.datatable tr {
-  page-break-inside: avoid;
-}
-
 .datatable th {
   border: 1px solid #666;
   margin: 0;
   padding: .5em;
   text-align: center;
+  page-break-inside: avoid;
 }
 
 .datatable td {
@@ -20,6 +17,7 @@
   margin: 0;
   padding: .2em;
   text-align: center;
+  page-break-inside: avoid;
 }
 
 .datatable .subject, .datatable .teacher {
