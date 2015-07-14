@@ -95,7 +95,16 @@ class window.DynamicTableContent extends WidgetContent
           $('.dynamic-list').append(self.assessmentInfoSelect(el))
           $('.dynamic-list').append(self.compareSelect(el))
 
-      $('.dynamic-list').on "change", ".dynamic-select", ->
+      $('.dynamic-list').on "change", "#field-select", ->
+        option = $(this).val()
+        el.data('dynamic', true)
+        el.data('key', option)
+        el.data('subject', '')
+        $('.dynamic-list').remove()
+        cell = self.makeCell(option, true)
+        el.val(self.cellValue(cell, data, false))
+
+      $('.dynamic-list').on "change", "#assessment-select, #category-select, #compare-select", ->
         assessment = $("#assessment-select").val()
         subject = $("#category-select").val()
         compare = $('#compare-select').val()
@@ -123,11 +132,10 @@ class window.DynamicTableContent extends WidgetContent
         subject = @widget.subject or cell.subject
         subjectData = data.subjects[subject]
         value = null
-        console.log subjectData
-        if subjectData
-          if cell.compare and cell.compare isnt ''
-            return @comparisonValue(subjectData, cell, html)
-          else
+        if cell.compare and cell.compare isnt ''
+          return @comparisonValue(subjectData, cell, html)
+        else
+          if subjectData
             value = subjectData[cell.value] or subjectData.results?[cell.value]
       else
         value = @fieldFrom(cell.value, data)
@@ -138,7 +146,7 @@ class window.DynamicTableContent extends WidgetContent
   comparisonValue: (subjectData, cell, html) ->
     console.log 'compare', cell, subjectData
     placeholder = @placeholderWithLabel(['COMP', cell.value, cell.compare].join(':'), html)
-    if html and subjectData.internalPoints
+    if html and subjectData and subjectData.internalPoints
       a = subjectData.internalPoints[cell.value]
       b = subjectData.internalPoints[cell.compare]
       tlClass = 'dark-green' if a > b
@@ -146,7 +154,6 @@ class window.DynamicTableContent extends WidgetContent
       tlClass = 'amber' if a == b - 1
       tlClass = 'red' if a < b - 1
       """<span class="traffic-light #{tlClass}"></span>"""
-
     else
       placeholder
 
