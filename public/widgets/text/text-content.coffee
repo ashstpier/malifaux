@@ -13,7 +13,8 @@ class window.TextContent extends WidgetContent
     inlineMode: true
     mediaManager: false
     placeholder: "Type here..."
-    plainPaste: true
+    plainPaste: true,
+    spellcheck: true,
     buttons: [
       "bold", "italic",
       "underline",
