@@ -95,6 +95,7 @@ class window.DynamicTableContent extends WidgetContent
           $('.dynamic-list').append(self.basicInfoSelect(el))
         else
           $('.dynamic-list').append(self.assessmentInfoSelect(el))
+          $('.dynamic-list').append(self.compareSelect(el))
 
       $('.dynamic-list').on "change", "#field-select", ->
         option = $(this).val()
@@ -105,22 +106,24 @@ class window.DynamicTableContent extends WidgetContent
         cell = self.makeCell(option, true)
         el.val(self.cellValue(cell, data, false))
 
-      $('.dynamic-list').on "change", "#assessment-select", ->
-        option = $(this).val()
+      $('.dynamic-list').on "change", "#assessment-select, #category-select, #compare-select", ->
+        assessment = $("#assessment-select").val()
         subject = $("#category-select").val()
+        compare = $('#compare-select').val()
         el.data('dynamic', true)
-        el.data('key', option)
+        el.data('key', assessment)
         el.data('subject', subject)
-        $('.dynamic-list').remove()
-        cell = self.makeCell(option, true, subject)
+        el.data('compare', compare)
+        cell = self.makeCell(assessment, true, subject, compare)
         el.val(self.cellValue(cell, data, false))
+
     table
 
 
 
   cellContent: (cell, data, edit) ->
     if edit
-      """<input type="text" data-dynamic="#{cell.dynamic}" data-key="#{cell.value}" data-subject="#{cell.subject or ''}" value="#{@cellValue(cell, data, false)}">"""
+      """<input type="text" data-dynamic="#{cell.dynamic}" data-key="#{cell.value}" data-subject="#{cell.subject or ''}" data-compare="#{cell.compare or ''}" value="#{@cellValue(cell, data, false)}">"""
     else
       @cellValue(cell, data)
 
@@ -131,13 +134,29 @@ class window.DynamicTableContent extends WidgetContent
         subject = @widget.subject or cell.subject
         subjectData = data.subjects[subject]
         value = null
-        if subjectData
-          value = subjectData[cell.value] or subjectData.results?[cell.value]
+        if cell.compare and cell.compare isnt ''
+          return @comparisonValue(subjectData, cell, html)
+        else
+          if subjectData
+            value = subjectData[cell.value] or subjectData.results?[cell.value]
       else
         value = @fieldFrom(cell.value, data)
       @mappings[value] or value or @placeholderWithLabel([subject,cell.value].join(':'), html)
     else
       cell.value
+
+  comparisonValue: (subjectData, cell, html) ->
+    placeholder = @placeholderWithLabel(['COMP', cell.value, cell.compare].join(':'), html)
+    if html and subjectData and subjectData.internalPoints
+      a = subjectData.internalPoints[cell.value]
+      b = subjectData.internalPoints[cell.compare]
+      tlClass = 'dark-green' if a > b
+      tlClass = 'light-green' if a == b
+      tlClass = 'amber' if a == b - 1
+      tlClass = 'red' if a < b - 1
+      """<span class="traffic-light #{tlClass}"></span>"""
+    else
+      placeholder
 
   dynamicOptions: (el) ->
 
@@ -145,6 +164,7 @@ class window.DynamicTableContent extends WidgetContent
     options += @categorySelect(el)
     if el.data('subject')
       options += @assessmentInfoSelect(el)
+      options += @compareSelect(el)
     else
       options += @basicInfoSelect(el)
     options += """</div>"""
@@ -153,7 +173,7 @@ class window.DynamicTableContent extends WidgetContent
   categorySelect: (el)->
     if @widget.subject
 
-      category_select = """<select id="category-select">
+      category_select = """<select id="category-select" class="dynamic-select">
       <option value="basic">Basic Information</option>
       <option value="assessment" #{if el.data('subject') then 'selected'}>Assessment Information</option>
       </select>"""
@@ -202,6 +222,16 @@ class window.DynamicTableContent extends WidgetContent
         field_select += """<option value="#{point.code}">#{point.longName}</option>"""
 
     field_select += """</optgroup></select>"""
+
+  compareSelect: (el) ->
+    field_select = """<select id="compare-select" class="dynamic-select"><option value="" selected>Compared against...</option>"""
+    for point in @assessmentPoints()
+      if el.data('compare') isnt '' and el.data('compare') is point.code
+        field_select += """<option value="#{point.code}" selected>#{point.longName}</option>"""
+      else
+        field_select += """<option value="#{point.code}">#{point.longName}</option>"""
+
+    field_select += """</select>"""
 
 
   renderAppearanceOptions: ->
@@ -290,7 +320,9 @@ class window.DynamicTableContent extends WidgetContent
     Designer.history.push(this, 'updateTable', oldTabledata, @tabledata, Designer.template.currentPageNumber)
     @redraw()
 
-  makeCell: (value='', dynamic=false, subject='') => {dynamic: dynamic, subject: subject, value: value}
+  makeCell: (value='', dynamic=false, subject='', compare='') =>
+    val = {dynamic: dynamic, subject: subject, value: value, compare: compare}
+    val
 
   render_edit: (data) ->
     @render_layout(data, true)
@@ -305,7 +337,6 @@ class window.DynamicTableContent extends WidgetContent
     @widget.bind 'widget:layout-switching', updateFn
 
   buildTabledata: (el) ->
-    # el.parents('.widget-dynamictable').css('overflow', 'hidden')
     newTabledata = []
 
     rows = $(el).find('tr')
@@ -315,7 +346,7 @@ class window.DynamicTableContent extends WidgetContent
       for cell in cells
         $cell = $(cell)
         if $cell.data('dynamic')
-          cellArray.push(@makeCell($cell.data('key'), true, $cell.data('subject')))
+          cellArray.push(@makeCell($cell.data('key'), true, $cell.data('subject'), $cell.data('compare')))
         else
           cellArray.push(@makeCell($cell.val(), false))
       newTabledata.push(cellArray)
