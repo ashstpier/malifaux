@@ -144,7 +144,6 @@ class window.DynamicTableContent extends WidgetContent
       cell.value
 
   comparisonValue: (subjectData, cell, html) ->
-    console.log 'compare', cell, subjectData
     placeholder = @placeholderWithLabel(['COMP', cell.value, cell.compare].join(':'), html)
     if html and subjectData and subjectData.internalPoints
       a = subjectData.internalPoints[cell.value]
@@ -224,8 +223,6 @@ class window.DynamicTableContent extends WidgetContent
 
   compareSelect: (el) ->
     field_select = """<select id="compare-select" class="dynamic-select"><option value="" selected>Compared against...</option>"""
-
-    # console.log el.data()
     for point in @assessmentPoints()
       if el.data('compare') isnt '' and el.data('compare') is point.code
         field_select += """<option value="#{point.code}" selected>#{point.longName}</option>"""
