@@ -4,6 +4,10 @@
   border-collapse: collapse;
 }
 
+.datatable tr {
+  page-break-inside: avoid;
+}
+
 .datatable th {
   border: 1px solid #666;
   margin: 0;
