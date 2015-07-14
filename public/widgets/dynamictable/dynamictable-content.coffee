@@ -13,6 +13,7 @@ class window.DynamicTableContent extends WidgetContent
     alignment: 'left'
     heading_text_color: '#000000'
     heading_background_color: '#DDDDDD'
+    border_color: '#999999'
     cell_text_color: '#000000'
     cell_background_color_odd: '#FFFFFF'
     cell_background_color_even: '#FFFFFF'
@@ -29,6 +30,7 @@ class window.DynamicTableContent extends WidgetContent
   size: @property('style', 'size')
   heading_text_color: @property('style', 'heading_text_color')
   heading_background_color: @property('style', 'heading_background_color')
+  border_color: @property('style', 'border_color')
   cell_text_color: @property('style', 'cell_text_color')
   cell_background_color_odd: @property('style', 'cell_background_color_odd')
   cell_background_color_even: @property('style', 'cell_background_color_even')
@@ -45,7 +47,7 @@ class window.DynamicTableContent extends WidgetContent
 
   render_layout: (data, edit=false) ->
     table = $("""<div class="dynamictable-widget">
-      <table class="dynamictable #{if edit then "edited"}" style="#{@styleString('font-family': utils.fontMap[@style.font], 'font-size': utils.sizeMap[@style.size], 'color': @style.color, 'text-align': @style.alignment)}">
+      <table class="dynamictable #{if edit then "edited"}" style="#{@styleString('font-family': utils.fontMap[@style.font], 'font-size': utils.sizeMap[@style.size], 'color': @style.color, 'text-align': @style.alignment, 'border-color': @style.border_color)}">
         <tbody></tbody>
       </table>
     </div>""")
@@ -211,6 +213,7 @@ class window.DynamicTableContent extends WidgetContent
       @option('color', 'cell_text_color', "Cell Text")
       @option('color', 'cell_background_color_odd', "Cell Bg Odd")
       @option('color', 'cell_background_color_even', "Cell Bg Even")
+      @option('color', 'border_color', "Border")
     ]
 
   renderConfigOptions: ->
@@ -239,11 +242,11 @@ class window.DynamicTableContent extends WidgetContent
     @redraw()
 
   headingStyles: ->
-    @styleString('background-color': @style.heading_background_color, color: @style.heading_text_color)
+    @styleString('background-color': @style.heading_background_color, color: @style.heading_text_color, 'border-color': @style.border_color)
 
   cellStyles: (row) ->
     bg_color = if row % 2 is 0 then @style.cell_background_color_even else @style.cell_background_color_odd
-    @styleString('background-color': bg_color, color: @style.cell_text_color)
+    @styleString('background-color': bg_color, color: @style.cell_text_color, 'border-color': @style.border_color)
 
   numberOfRows: (val=null) ->
     if val? and val.length > 0
