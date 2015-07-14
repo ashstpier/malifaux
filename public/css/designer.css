@@ -233,11 +233,15 @@ body {
 }
 
 #save-msg {
-  margin: 15px 0;
+  margin: 11px 0;
   color: #fff;
   float: left;
   display: none;
   font-size: 14px;
+  background: #FF6B6B;
+  border: 1px solid #DF5252;
+  padding: 3px 10px;
+  border-radius: 5px;
 }
 
 #pages {
