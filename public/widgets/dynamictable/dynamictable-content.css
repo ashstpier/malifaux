@@ -16,6 +16,7 @@
   empty-cells: show;
 }
 .dynamictable th, .dynamictable td {
+  page-break-inside: avoid;
   width: 1%;
   position: relative;
   background-clip: padding-box;
