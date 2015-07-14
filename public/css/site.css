@@ -79,6 +79,7 @@ body {
 }
 .widget.widget-edit-mode {
   outline: 1px solid #666;
+  z-index: 999!important;
 }
 .widget.widget-layout-mode.selected {
   outline: 1px solid #4184D3;
