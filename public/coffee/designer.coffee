@@ -114,7 +114,10 @@ window.Designer = {
     $('#name').click (e) => $(e.currentTarget).selectText()
     $('#undo').click => @history.undo()
     $('#redo').click => @history.redo()
-    $('#page-list').on 'click', '.page-delete-button', (e) => @deletePage(Number($(e.currentTarget).attr('data-number')))
+    $('#page-list').on 'click', '.page-delete-button', (e) =>
+      pagebutton = $(e.currentTarget).closest('.page-button')
+      pageNumber = Number(pagebutton.attr('data-number'))
+      @deletePage(pageNumber)
     $('#page-list').on 'click', '.page-button', (e) => @switchPage(Number($(e.currentTarget).attr('data-number')))
     $('#add-page').click => @addPage()
     @history.bind 'history:ensure-page', (page) => @switchPage(page)
