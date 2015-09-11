@@ -12,7 +12,7 @@ class window.ImageContent extends WidgetContent
 
   initWithConfig: (config) ->
     @setImage(@get(config.src, ImageContent.DEFAULT_IMAGE), false)
-    @_maintainAspectRatio = $.extend({}, ImageContent.DEFAULT_ASPECT_RATIO, @get(config.maintainAspectRatio, true))
+    @_maintainAspectRatio = @get(config.maintainAspectRatio, ImageContent.DEFAULT_ASPECT_RATIO)
 
   bindEvents: (el) ->
     el.find(".picker").change (e) => @setImageFromFile(e.currentTarget.files[0])
