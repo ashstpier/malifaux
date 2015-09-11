@@ -11,37 +11,38 @@ class window.ImageGalleryContent extends WidgetContent
     @_stretchImage = @get(config.stretchImage, true)
 
   bindEvents: (el) ->
-    @widget.bind 'widget:resize', => @imageCSS()
+    @widget.bind 'widget:resize', => @imageSize()
 
-  imageCSS: ->
-    $('.image-gallery-widget img').removeClass(@cssImageClass)
-    @calcImageCSS()
-    $('.image-gallery-widget img').addClass(@cssImageClass)
+  imageSize: ->
+    @calcImageSize()
+    $('.image-gallery-widget img').attr('width': @width + 'px').attr('height': @height + 'px')
 
-  calcImageCSS: ->
-    if @width >= @height && (@stretchImage() || @width > @widget.width())
-      @cssImageClass = 'wider'
-    else if @height > @width && (@stretchImage() || @height > @widget.height())
-      @cssImageClass = 'taller'
+  calcImageSize: ->
+    if @width >= @height
+      if @widget.width() < @defaultWidth  || @stretchImage()
+        @height = Math.round(@height * (@widget.width()/@width))
+        @width = @widget.width()
     else
-      @cssImageClass = ''
+      if @widget.height() < @defaultHeight || @stretchImage()
+        @width = Math.round(@width * (@widget.height()/@height))
+        @height = @widget.height()
 
   render_layout: (data) ->
     img = new Image()
     img.src = "data:image/gif;base64,#{@fieldFrom(data)}"
     img.width / img.height
 
-    @width  = img.width
-    @height = img.height
+    @defaultWidth = @width  = img.width
+    @defaultHeight = @height = img.height
 
-    @calcImageCSS()
+    @calcImageSize()
 
     if @editable()
       setTimeout (=> @setAspectRatio(1)), 0
 
     $("""
       <div class="image-gallery-widget">
-        <img class="content #{@cssImageClass}" src="#{img.src}">
+        <img class="content" width="#{@width}px" height="#{@height}px" src="#{img.src}">
       </div>
     """)
 
