@@ -17,13 +17,20 @@ class window.ImageContent extends WidgetContent
   bindEvents: (el) ->
     el.find(".picker").change (e) => @setImageFromFile(e.currentTarget.files[0])
     el.find(".content").dblclick => @openFilePicker()
+    $("#save-file").click => @setImageFromFile(@file, true)
+
 
   openFilePicker: ->
     picker = @el.find(".picker")
     picker.click()
     false
 
-  setImageFromFile: (file) ->
+  setImageFromFile: (file, ignoreSize=false) ->
+    if file.size > 50000 && !ignoreSize
+      @file = file
+      $('#file-size').text(Math.ceil(file.size/1000))
+      $('#file-too-large-modal').assemblyModal().assemblyModal('show')
+      return
     reader = new FileReader()
     reader.onload = (e) => @updateImage(e.target.result)
     reader.readAsDataURL(file)

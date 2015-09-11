@@ -127,5 +127,19 @@
 	      </div>
 			</div>
 		</div>
+        <div id="file-too-large-modal" class="assembly-modal small-modal">
+            <div class="assembly-modal-wrapper">
+                <div class="assembly-modal-header">
+                    Image file should not exceed 50 KB (currently <span id="file-size"></span> KB)
+                    <div class="assembly-modal-close">
+                        <i class="fa fa-times close-icon"></i>
+                    </div>
+                </div>
+                <div class="assembly-modal-footer">
+                    <button type="button" id="cancel-file" class="btn btn-cancel assembly-modal-close">Cancel</button>
+                    <button type="button" id="save-file" class="btn btn-primary assembly-modal-close">Continue</button>
+                </div>
+            </div>
+        </div>
 	</body>
 </html>
