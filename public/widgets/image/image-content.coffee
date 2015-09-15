@@ -18,6 +18,7 @@ class window.ImageContent extends WidgetContent
     el.find(".picker").change (e) => @setImageFromFile(e.currentTarget.files[0])
     el.find(".content").dblclick => @openFilePicker()
     $("#save-file").click => @setImageFromFile(@file, true)
+    $("#cancel-file").click => @redraw()
 
 
   openFilePicker: ->
