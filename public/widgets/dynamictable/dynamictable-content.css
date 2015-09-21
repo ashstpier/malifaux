@@ -60,6 +60,9 @@
 .dynamictable i:before {
   font-size: 14px;
 }
+.dynamic-list-holder {
+    font-size: 14px;
+}
 .dynamic-list {
   position: absolute;
   top: 20px;

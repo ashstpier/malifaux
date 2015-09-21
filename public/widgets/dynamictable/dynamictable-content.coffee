@@ -160,14 +160,14 @@ class window.DynamicTableContent extends WidgetContent
 
   dynamicOptions: (el) ->
 
-    options = """<div class="dynamic-list"><p>Type free text or select a dynamic option from below</p>"""
+    options = """<div class="dynamic-list-holder"><div class="dynamic-list"><p>Type free text or select a dynamic option from below</p>"""
     options += @categorySelect(el)
     if el.data('subject')
       options += @assessmentInfoSelect(el)
       options += @compareSelect(el)
     else
       options += @basicInfoSelect(el)
-    options += """</div>"""
+    options += """</div></div>"""
 
 
   categorySelect: (el)->
