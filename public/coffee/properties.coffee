@@ -57,9 +57,9 @@ class window.Properties
     @meta.append """
       <div class="coordinates">
         <label for="prop-value-x">x:</label>
-        <input type="number" step="1" id="prop-value-x" class="prop-coord-input" data-fn="x" />
+        <input type="number" step="1" id="prop-value-x" class="prop-coord-input" data-fn="setXWithHistory" />
         <label for="prop-value-y">y:</label>
-        <input type="number" step="1" id="prop-value-y" class="prop-coord-input" data-fn="y" />
+        <input type="number" step="1" id="prop-value-y" class="prop-coord-input" data-fn="setYWithHistory" />
         <label for="prop-value-width">width:</label>
         <input type="number" step="1" id="prop-value-width" class="prop-coord-input" data-fn="width" />
         <label for="prop-value-height">height:</label>

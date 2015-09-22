@@ -163,6 +163,14 @@ class window.Widget
   x: (n) -> if n? then @el.css('left', "#{Math.round(n)}px") else Math.round(@el.position().left)
   y: (n) -> if n? then @el.css('top', "#{Math.round(n)}px") else Math.round(@el.position().top)
 
+  setXWithHistory: (n) =>
+    @x(n)
+    @moved()
+
+  setYWithHistory: (n) =>
+    @y(n)
+    @moved()
+
   updateSelectedState: (selection) =>
     if this is selection
       @el.addClass('selected')
