@@ -360,7 +360,9 @@ class window.DynamicTableContent extends WidgetContent
     Designer.select(@widget)
 
   fieldFrom: (field, data) ->
-    data = data[key] for key in field.split('.')
+    for key in field.split('.')
+      if data?
+        data = data[key]
     data
 
 
