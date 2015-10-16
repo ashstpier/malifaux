@@ -53,7 +53,12 @@ class window.FieldContent extends WidgetContent
 
   fieldFrom: (data) ->
     data = data?[key] for key in @_field.split('.')
-    @mappings[data] or data or @placeholderWithLabel(key)
+    if @mappings[data]?
+      @mappings[data]
+    else if data?
+      data
+    else
+      @placeholderWithLabel(key)
 
   font: @property('style', 'font')
   size: @property('style', 'size')

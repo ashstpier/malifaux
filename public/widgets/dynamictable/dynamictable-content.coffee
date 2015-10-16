@@ -141,7 +141,13 @@ class window.DynamicTableContent extends WidgetContent
             value = subjectData[cell.value] or subjectData.results?[cell.value]
       else
         value = @fieldFrom(cell.value, data)
-      @mappings[value] or value or @placeholderWithLabel([subject,cell.value].join(':'), html)
+
+      if @mappings[value]?
+        @mappings[value]
+      else if value?
+        value
+      else
+        @placeholderWithLabel([subject,cell.value].join(':'), html)
     else
       cell.value
 
