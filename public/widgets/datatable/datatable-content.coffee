@@ -59,9 +59,12 @@ class window.DatatableContent extends WidgetContent
   filter_subjects: (subjects) =>
     if @widget.subject
       return [subjects[@widget.subject]]
-    _.filter subjects, (subject, code) =>
+    subjects = _.map subjects, (subject, code) ->
+      subject.code = code
+      subject
+    _.filter subjects, (subject) =>
       return true unless @exclusions()
-      !_.contains(@exclusions(), code)
+      !_.contains(@exclusions(), subject.code)
 
   buildEditRow: (col={title:'', value:'', compare_to:'', mappings:{}}) ->
     col.mappings = {} unless col.mappings
@@ -212,17 +215,18 @@ class window.DatatableContent extends WidgetContent
     alphabetical = subjects.sort (a,b) => if a.subjectName >= b.subjectName then 1 else -1
     return alphabetical if @style.subject_order is 'alphabetical'
     rank = {
-      'english':     1
-      'maths':       2
-      'mathematics': 2
-      'science':     3
+      'EN': 1
+      'MA': 2
+      'SC': 3
     }
     _.sortBy alphabetical, (subject) ->
-        name = subject.subjectName.toLowerCase()
-        if rank[name]
-          rank[name]
-        else
-          name.charCodeAt(0)
+        code = subject.code
+        return rank[code] if rank[code]
+        prefix_match = _.find Object.keys(rank), (c) ->
+          prefix_matcher = new RegExp("^#{c}_")
+          code.match(prefix_matcher) isnt null
+        return rank[prefix_match] if prefix_match
+        subject.subjectName.charCodeAt(0)
 
   serialize: ->
     {columns: @columns, style: @style, exclusions: @_exclusions}
