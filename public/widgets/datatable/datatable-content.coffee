@@ -116,8 +116,14 @@ class window.DatatableContent extends WidgetContent
     [
       @option('select', 'subject_order', "Subject Order", options: {alphabetical: "Alphabetical", core_first: 'Core First'})
       @columSettings()
-      @option('select', 'exclusions', 'Subject Blacklist', options: API.subjects(), multiple: true, hint: "A list of subjects names to be excluded from reports. Hold the shift or command keys for multiple selection.")
+      @option('select', 'exclusions', 'Subject Blacklist', options: @orderedSubjectsForSelect(), multiple: true, hint: "A list of subjects names to be excluded from reports. Hold the shift or command keys for multiple selection.")
     ]
+
+  orderedSubjectsForSelect: ->
+    subjects = for code, name of API.subjects()
+      label = if code is name then name else "#{name} [#{code}]"
+      [code, label]
+    _.sortBy(subjects, (s) -> s[1])
 
   columSettings: ->
     node = $("""
