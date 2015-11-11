@@ -1,6 +1,7 @@
 var gulp          = require('gulp'),
   fs              = require('fs'),
   s3              = require('gulp-s3')
+  sort            = require('gulp-sort')
   express         = require('express'),
   gulpBowerFiles  = require('gulp-bower-files'),
   coffee          = require('gulp-coffee'),
@@ -83,6 +84,7 @@ gulp.task('coffee', ['app', 'widgets'], function() {});
 gulp.task('app', function() {
   gulp.src('./public/coffee/*.coffee')
     .pipe(coffee({bare: true}).on('error', gutil.log))
+    .pipe(sort())
     .pipe(flatten())
     .pipe(gulp.dest('./public/js'))
 });
@@ -91,6 +93,7 @@ gulp.task('widgets', function() {
   gulp.src('./public/widgets/**/*.coffee')
     .pipe(coffee().on('error', gutil.log))
     .pipe(flatten())
+    .pipe(sort())
     .pipe(concat('widgets.js'))
     .pipe(gulp.dest('./public/js'))
 });
