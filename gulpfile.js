@@ -75,6 +75,7 @@ gulp.task('server', ["express", "css", "coffee", "jit"], function() { } );
 
 gulp.task('css', function() {
   gulp.src('./public/widgets/**/*.css')
+    .pipe(sort())
     .pipe(concat('widgets.css'))
     .pipe(gulp.dest('./public/css'))
 });
@@ -84,7 +85,6 @@ gulp.task('coffee', ['app', 'widgets'], function() {});
 gulp.task('app', function() {
   gulp.src('./public/coffee/*.coffee')
     .pipe(coffee({bare: true}).on('error', gutil.log))
-    .pipe(sort())
     .pipe(flatten())
     .pipe(gulp.dest('./public/js'))
 });
