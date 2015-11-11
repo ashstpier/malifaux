@@ -18,14 +18,13 @@
     "gulp-watch": "^0.6.7",
     "gutil": "^1.2.0",
     "node-libs-browser": "^0.5.2",
-    "secret": "git://github.com/nkostelnik/node.secret.git#master",
     "underscore": "^1.6.0",
     "webpack": "^1.10.1",
     "yargs": "~1.2.6"
   },
   "scripts": {
     "start": "./node_modules/.bin/gulp server",
-    "build": "./node_modules/.bin/gulp coffee"
+    "build": "./node_modules/.bin/gulp coffee css"
   },
   "repository": {
     "type": "git",

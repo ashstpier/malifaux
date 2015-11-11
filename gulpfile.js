@@ -9,7 +9,7 @@ var gulp          = require('gulp'),
   watch           = require('gulp-watch'),
   flatten         = require('gulp-flatten')
   bodyParser      = require('body-parser'),
-  secret          = require( 'secret' ),
+  secret          = {},
   _               = require('underscore'),
   argv            = require('yargs').argv,
   concat          = require('gulp-concat');
@@ -34,8 +34,8 @@ gulp.task('sideload', function() {
   if (argv.template) {
     fs.readFile(argv.template, 'utf8', function (err, body) {
       if (err) { return console.log(err); }
-      var data = JSON.parse(body)
-      secret.set(data.key, data)
+      var data = JSON.parse(body);
+      secret[data.key] = data;
     });
   }
 });
@@ -57,15 +57,21 @@ gulp.task('express', function() {
 
   router.route('/reports')
     .get(function(req, res) {
-      storage = secret.getAll()
-      templates = _.map(storage, function(v, k) { return v; })
+      templates = _.map(secret, function(v, k) { return v; })
       res.send( templates );
     });
 
   router.route('/reports/:key')
-    .get(function(req, res) { res.json(secret.get(req.params.key)); })
-    .put(function(req, res) { res.json(secret.set(req.params.key, req.body)); })
-    .delete(function(req, res) { res.json(secret.remove(req.params.key)); });
+    .get(function(req, res) { res.json(secret[req.params.key]); })
+    .put(function(req, res) {
+      secret[req.params.key] = req.body;
+      res.json(req.body);
+    })
+    .delete(function(req, res) {
+      var data = secret[req.params.key];
+      delete secret[req.params.key];
+      res.json(data);
+    });
 
   app.use(router);
   app.listen(9000);
