@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "./node_modules/.bin/webpack && node server.js",
-    "test": "mocha --compilers js:babel-core/register --recursive",
+    "test": "./node_modules/.bin/mocha --compilers js:babel-core/register --recursive",
     "test:watch": "npm test -- --watch"
   }
 }
