@@ -1,9 +1,6 @@
 .DS_Store
 node_modules
-aws.json
 npm-debug.log
-public/js/*
-public/css/widgets.css
-private/*.json
+dist/bundle.js
 .idea
 .vagrant
