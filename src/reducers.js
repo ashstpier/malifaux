@@ -1,7 +1,10 @@
 import { combineReducers } from 'redux'
-import { SET_TITLE } from './actions'
+import { SET_TITLE, SET_PAGE_ORIENTATION } from './actions'
 
 const UNTITLED = "Untitled"
+const BLANK_PAGE = {
+  orientation: 'portrait'
+}
 
 export function title(state = UNTITLED, action) {
   switch (action.type) {
@@ -12,8 +15,20 @@ export function title(state = UNTITLED, action) {
   }
 }
 
+export function page(state = BLANK_PAGE, action) {
+  switch (action.type) {
+    case SET_PAGE_ORIENTATION:
+      return Object.assign({}, state, {
+        orientation: action.orientation
+      })
+    default:
+      return state
+  }
+}
+
 const reportsApp = combineReducers({
-  title
+  title,
+  page
 })
 
 export default reportsApp

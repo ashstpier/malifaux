@@ -142,17 +142,10 @@ body {
 }
 
 .page {
-  z-index: 3;
-  position: absolute;
-  top: 0;
-  visibility: hidden;
   background-color: #fff;
   box-shadow: #c9c9c9 0 0 5px;
-}
-.page-active {
   z-index: 4;
   position: relative;
-  visibility: visible;
   margin: 0 auto;
 }
 

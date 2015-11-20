@@ -1,15 +1,24 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { setTitle } from '../actions'
+import { setTitle, setPageOrientation } from '../actions'
 import Toolbar from '../components/Toolbar'
+import Viewport from '../components/Viewport'
+import Sidebar from '../components/Sidebar'
 
 class App extends Component {
   render() {
     // Injected by connect() call:
-    const { dispatch, title } = this.props
+    const { dispatch, title, page } = this.props
     return (
       <div>
-        <Toolbar title={title} onTitleChange={title => dispatch(setTitle(title))} />
+        <Toolbar
+          title={title}
+          onTitleChange={title => dispatch(setTitle(title))} />
+        <Viewport
+          page={page} />
+        <Sidebar
+          orientation={page.orientation}
+          onPageOrientationChange={orientation => dispatch(setPageOrientation(orientation))}/>
       </div>
     )
   }

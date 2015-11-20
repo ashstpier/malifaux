@@ -1,6 +1,6 @@
 import expect from 'expect'
-import { setTitle } from '../src/actions'
-import { title } from '../src/reducers'
+import { setTitle, setPageOrientation } from '../src/actions'
+import { title, page } from '../src/reducers'
 
 describe('title reducer', () => {
   it('returns initial state', () => {
@@ -13,5 +13,19 @@ describe('title reducer', () => {
     expect(
       title('', setTitle('Test'))
     ).toEqual('Test')
+  })
+})
+
+describe('page reducer', () => {
+  it('returns initial state', () => {
+    expect(
+      page(undefined, {})
+    ).toEqual({orientation: 'portrait'})
+  })
+
+  it('handles SET_PAGE_ORIENTATION', () => {
+    expect(
+      page({orientation: 'portrait'}, setPageOrientation('landscape'))
+    ).toEqual({orientation: 'landscape'})
   })
 })
