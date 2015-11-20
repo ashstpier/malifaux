@@ -7,6 +7,6 @@ export function setTitle(text) {
   return { type: SET_TITLE, text }
 }
 
-export function setPageOrientation(orientation) {
-  return { type: SET_PAGE_ORIENTATION, orientation }
+export function setPageOrientation(page, orientation) {
+  return { type: SET_PAGE_ORIENTATION, page, orientation }
 }

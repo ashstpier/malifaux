@@ -15,12 +15,14 @@ describe('actions', () => {
 
   describe('setPageOrientation', () => {
     it('should return a SET_PAGE_ORIENTATION action', () => {
+      const page = 0
       const orientation = 'landscape'
       const expectedAction = {
         type: actions.SET_PAGE_ORIENTATION,
+        page,
         orientation
       }
-      expect(actions.setPageOrientation(orientation)).toEqual(expectedAction)
+      expect(actions.setPageOrientation(0, orientation)).toEqual(expectedAction)
     })
   })
 })
