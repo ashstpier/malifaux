@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { setTitle } from '../actions'
-import Header from '../components/Header'
+import Toolbar from '../components/Toolbar'
 
 class App extends Component {
   render() {
@@ -9,7 +9,7 @@ class App extends Component {
     const { dispatch, title } = this.props
     return (
       <div>
-        <Header title={title} onTitleChange={title => dispatch(setTitle(title))} />
+        <Toolbar title={title} onTitleChange={title => dispatch(setTitle(title))} />
       </div>
     )
   }

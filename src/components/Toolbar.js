@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ContentEditable from './ContentEditable'
 
-export default class Header extends Component {
+class Toolbar extends Component {
   render() {
     return (
       <header id="toolbar">
@@ -14,12 +14,14 @@ export default class Header extends Component {
     )
   }
 
-  titleChange(evt) {
-    this.props.onTitleChange(evt.target.value);
+  titleChange(html) {
+    this.props.onTitleChange(html);
   }
 }
 
-Header.propTypes = {
+Toolbar.propTypes = {
   title: PropTypes.string.isRequired,
   onTitleChange: PropTypes.func.isRequired
 }
+
+export default Toolbar
