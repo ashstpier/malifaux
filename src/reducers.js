@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux'
 import { SET_TITLE, SET_PAGE_ORIENTATION } from './actions'
+import { List, Map } from 'immutable'
 
 const UNTITLED = "Untitled"
-const BLANK_PAGE = {
+const BLANK_PAGE = Map({
   orientation: 'portrait'
-}
+})
+const INITIAL_PAGE_LIST = List.of(BLANK_PAGE)
 
 export function title(state = UNTITLED, action) {
   switch (action.type) {
@@ -15,16 +17,10 @@ export function title(state = UNTITLED, action) {
   }
 }
 
-export function pages(state = [BLANK_PAGE], action) {
+export function pages(state = INITIAL_PAGE_LIST, action) {
   switch (action.type) {
     case SET_PAGE_ORIENTATION:
-      return [
-        ...state.slice(0, action.page),
-        Object.assign({}, state[action.page], {
-          orientation: action.orientation
-        }),
-        ...state.slice(action.page + 1)
-      ]
+      return state.update(action.page, page => page.set('orientation', action.orientation))
     default:
       return state
   }

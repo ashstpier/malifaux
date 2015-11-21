@@ -1,4 +1,6 @@
 import React, { Component, PropTypes } from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+
 import Page from './Page'
 
 class Viewport extends Component {
@@ -7,7 +9,7 @@ class Viewport extends Component {
     return (
       <div id="viewport">
         <div id="pages">
-          <Page orientation={page.orientation} />
+          <Page orientation={page.get('orientation')} />
         </div>
       </div>
     )
@@ -15,7 +17,7 @@ class Viewport extends Component {
 }
 
 Viewport.propTypes = {
-  page: PropTypes.shape({
+  page: ImmutablePropTypes.contains({
     orientation: PropTypes.string.isRequired
   }).isRequired
 }

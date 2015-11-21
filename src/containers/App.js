@@ -9,6 +9,7 @@ import { createSelector } from 'reselect'
 class App extends Component {
   render() {
     // Injected by connect() call:
+    console.log(this.props)
     const { dispatch, title, currentPage } = this.props
     return (
       <div>
@@ -18,8 +19,8 @@ class App extends Component {
         <Viewport
           page={currentPage} />
         <Sidebar
-          orientation={currentPage.orientation}
-          onPageOrientationChange={orientation => dispatch(setPageOrientation(currentPage.index, orientation))}/>
+          orientation={currentPage.get('orientation')}
+          onPageOrientationChange={orientation => dispatch(setPageOrientation(currentPage.get('index'), orientation))}/>
       </div>
     )
   }
@@ -29,10 +30,7 @@ App.propTypes = {
   title: PropTypes.string.isRequired
 }
 
-const currentPageSelector = state =>
-  Object.assign({}, state.pages[state.currentPageIndex], {
-    index: state.currentPageIndex
-  })
+const currentPageSelector = state => state.pages.get(state.currentPageIndex).set('index', state.currentPageIndex)
 const titleSelector = state => state.title
 
 export const select = createSelector(
