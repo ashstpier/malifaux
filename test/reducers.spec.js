@@ -15,8 +15,13 @@ describe('title reducer', () => {
 })
 
 describe('page reducer', () => {
-  it('returns initial state', () => {
-    expect( pages(undefined, {}), 'to equal', fromJS([{orientation: 'portrait'}]))
+  describe('initial state', () => {
+    it('has a single page with portrait orientation', () => {
+      expect( pages(undefined, {}).toJS(), 'to satisfy', [{orientation: 'portrait'}])
+    })
+    it('has a single widget', () => {
+      expect( pages(undefined, {}).toJS(), 'to satisfy', [{widgets: [{type: 'text'}]}])
+    })
   })
 
   it('handles SET_PAGE_ORIENTATION', () => {

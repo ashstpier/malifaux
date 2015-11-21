@@ -10,12 +10,21 @@ class Toolbar extends Component {
             <ContentEditable html={this.props.title} onChange={e => this.titleChange(e)}/>
           </h1>
         </div>
+        <button onClick={e => this.toggleOrientation()}>{this.props.orientation}</button>
       </header>
     )
   }
 
   titleChange(html) {
-    this.props.onTitleChange(html);
+    this.props.onTitleChange(html)
+  }
+
+  toggleOrientation() {
+    if(this.props.orientation == 'portrait') {
+      this.props.onPageOrientationChange('landscape')
+    } else {
+      this.props.onPageOrientationChange('portrait')
+    }
   }
 }
 

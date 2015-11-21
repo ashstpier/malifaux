@@ -3,8 +3,17 @@ import { SET_TITLE, SET_PAGE_ORIENTATION } from './actions'
 import { List, Map } from 'immutable'
 
 const UNTITLED = "Untitled"
+
+const SIMPLE_WIDGET = Map({
+  type: 'text',
+  data: Map({
+    value: 'hello world'
+  })
+})
+
 const BLANK_PAGE = Map({
-  orientation: 'portrait'
+  orientation: 'portrait',
+  widgets: List.of(SIMPLE_WIDGET)
 })
 const INITIAL_PAGE_LIST = List.of(BLANK_PAGE)
 

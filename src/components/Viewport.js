@@ -9,7 +9,9 @@ class Viewport extends Component {
     return (
       <div id="viewport">
         <div id="pages">
-          <Page orientation={page.get('orientation')} />
+          <Page
+            orientation={page.get('orientation')}
+            widgets={page.get('widgets')} />
         </div>
       </div>
     )
@@ -18,7 +20,8 @@ class Viewport extends Component {
 
 Viewport.propTypes = {
   page: ImmutablePropTypes.contains({
-    orientation: PropTypes.string.isRequired
+    orientation: PropTypes.string.isRequired,
+    widgets: ImmutablePropTypes.list.isRequired
   }).isRequired
 }
 
