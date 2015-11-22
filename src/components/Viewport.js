@@ -1,5 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
+import { DropTarget, DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+
 
 import Page from './Page'
 
@@ -11,7 +14,8 @@ class Viewport extends Component {
         <div id="pages">
           <Page
             orientation={page.get('orientation')}
-            widgets={widgets} />
+            widgets={widgets}
+            onMoveSelection={this.props.onMoveSelection}/>
         </div>
       </div>
     )
@@ -21,8 +25,9 @@ class Viewport extends Component {
 Viewport.propTypes = {
   page: ImmutablePropTypes.contains({
     orientation: PropTypes.string.isRequired,
-    widgets: ImmutablePropTypes.list.isRequired
+    widgets: ImmutablePropTypes.list.isRequired,
+    onMoveSelection: PropTypes.func.isRequired
   }).isRequired
 }
 
-export default Viewport
+export default DragDropContext(HTML5Backend)(Viewport)

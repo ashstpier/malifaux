@@ -13,5 +13,10 @@ export function setPageOrientation(page, orientation) {
 }
 
 export function updateWidgetPosition(id, changes) {
-  return { type: UPDATE_WIDGET_POSITION, id, changes }
+  return { type: UPDATE_WIDGET_POSITION, id, changes, relative: false }
+}
+
+
+export function updateRelativeWidgetPosition(id, changes) {
+  return { type: UPDATE_WIDGET_POSITION, id, changes, relative: true }
 }

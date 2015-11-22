@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import { connect } from 'react-redux'
-import { setTitle, setPageOrientation, updateWidgetPosition } from '../actions'
+import { setTitle, setPageOrientation, updateWidgetPosition, updateRelativeWidgetPosition } from '../actions'
 import { createSelector } from 'reselect'
 
 import Toolbar from '../components/Toolbar'
@@ -22,7 +22,8 @@ class App extends Component {
           onPageOrientationChange={orientation => dispatch(setPageOrientation(currentPageIndex, orientation))} />
         <Viewport
           page={currentPage}
-          widgets={widgetsOnCurrentPage} />
+          widgets={widgetsOnCurrentPage}
+          onMoveSelection={(positionDiff) => dispatch(updateRelativeWidgetPosition(currentSelection.get('id'), positionDiff))} />
         <StatusBar
           x={currentSelectionPosition.get('x')}
           y={currentSelectionPosition.get('y')}

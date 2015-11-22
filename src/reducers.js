@@ -47,7 +47,13 @@ export function pages(state = INITIAL_PAGE_LIST, action) {
 export function widgets(state = INITIAL_WIDGETS_MAP, action) {
   switch (action.type) {
     case UPDATE_WIDGET_POSITION:
-      const mutator = (pos) => Map(action.changes).forEach((v,k) => pos.set(k, v))
+      var applyChanges;
+      if(action.relative) {
+        applyChanges = (pos) => (v,k) => pos.set(k, (pos.get(k) + v))
+      } else {
+        applyChanges = (pos) => (v,k) => pos.set(k, v)
+      }
+      const mutator = (pos) => Map(action.changes).forEach(applyChanges(pos))
       return state.update(action.id, (widget) => {
         return widget.update('position', (w) => w.withMutations(mutator))
       })
