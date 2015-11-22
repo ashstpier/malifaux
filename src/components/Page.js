@@ -10,6 +10,7 @@ class Page extends Component {
       <div className="page" data-orientation={orientation}>
         {widgets.map((widget, index) =>
           <Widget type={widget.get('type')}
+                  position={widget.get('position')}
                   data={widget.get('data')}
                   key={index} />
         )}

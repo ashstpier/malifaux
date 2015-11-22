@@ -20,7 +20,7 @@ describe('page reducer', () => {
       expect( pages(undefined, {}).toJS(), 'to satisfy', [{orientation: 'portrait'}])
     })
     it('has a single widget', () => {
-      expect( pages(undefined, {}).toJS(), 'to satisfy', [{widgets: [{type: 'text'}]}])
+      expect( pages(undefined, {}).toJS(), 'to satisfy', [{widgets: ['widget-1']}])
     })
   })
 

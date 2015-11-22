@@ -5,13 +5,13 @@ import Page from './Page'
 
 class Viewport extends Component {
   render() {
-    const { page } = this.props;
+    const { page, widgets } = this.props;
     return (
       <div id="viewport">
         <div id="pages">
           <Page
             orientation={page.get('orientation')}
-            widgets={page.get('widgets')} />
+            widgets={widgets} />
         </div>
       </div>
     )
