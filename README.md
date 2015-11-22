@@ -9,13 +9,13 @@ Currently almost nothing beyond the concept of widgets positioned on pages is ac
 
 It's an attempt to reimplement the parent reports functionality using a bunch of shiney new technologies. Namely...
 
-- React
-- Redux
-- Immutable.js
-- Babel/ES6
-- Webpack
-- Mocha
-- unxpected
+- React (https://facebook.github.io/react/index.html)
+- Redux (http://redux.js.org/)
+- Immutable.js (http://facebook.github.io/immutable-js/)
+- Babel/ES6 (https://babeljs.io/)
+- Webpack (https://webpack.github.io/)
+- Mocha (https://mochajs.org/)
+- unxpected (http://unexpected.js.org/)
 
 
 ## Why?
