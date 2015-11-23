@@ -2,19 +2,20 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-  devtool: 'eval',
+  devtool: 'cheap-module-eval-source-map',
   entry: [
-    'webpack-dev-server/client?http://0.0.0.0:3000', // WebpackDevServer host and port
-    'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
-    path.resolve(__dirname + "/src/main.js"),
+    'webpack-hot-middleware/client',
+    './src/main.js',
   ],
   output: {
-    path: path.resolve(__dirname + "/dist"),
+    path: path.join(__dirname, "dist"),
     filename: 'bundle.js',
     publicPath: '/static/'
   },
   plugins: [
+    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
+    // new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
       __DEV__: true,
     })
@@ -22,10 +23,14 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.jsx?/,
-        loaders: ['react-hot', 'babel'],
+        test: /\.jsx?$/,
+        loaders: [ 'babel' ],
         exclude: /node_modules/
-      }
+      }, {
+      test: /\.css?$/,
+      loaders: [ 'style', 'raw' ],
+      include: path.join(__dirname, 'styles')
+    }
     ],
     resolve: {
       root: path.resolve(__dirname + "/src")

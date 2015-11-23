@@ -26,8 +26,8 @@ Viewport.propTypes = {
   page: ImmutablePropTypes.contains({
     orientation: PropTypes.string.isRequired,
     widgets: ImmutablePropTypes.list.isRequired,
-    onMoveSelection: PropTypes.func.isRequired
-  }).isRequired
+  }).isRequired,
+  onMoveSelection: PropTypes.func.isRequired
 }
 
 export default DragDropContext(HTML5Backend)(Viewport)
