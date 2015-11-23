@@ -11,6 +11,7 @@ class Toolbar extends Component {
           </h1>
         </div>
         <button onClick={e => this.toggleOrientation()}>{this.props.orientation}</button>
+        <button onClick={e => this.props.onAddWidget('text')}>Add Widget</button>
       </header>
     )
   }
@@ -30,7 +31,8 @@ class Toolbar extends Component {
 
 Toolbar.propTypes = {
   title: PropTypes.string.isRequired,
-  onTitleChange: PropTypes.func.isRequired
+  onTitleChange: PropTypes.func.isRequired,
+  onAddWidget: PropTypes.func.isRequired
 }
 
 export default Toolbar

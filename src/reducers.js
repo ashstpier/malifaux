@@ -1,30 +1,31 @@
 import { combineReducers } from 'redux'
-import { SET_TITLE, SET_PAGE_ORIENTATION, UPDATE_WIDGET_POSITION } from './actions'
+import { SET_TITLE, SET_PAGE_ORIENTATION, UPDATE_WIDGET_POSITION, ADD_WIDGET, ADD_WIDGET_TO_PAGE, SET_SELECTION } from './actions'
 import { List, Map } from 'immutable'
 
 const UNTITLED = "Untitled"
 
-const SIMPLE_WIDGET = Map({
-  id: 'widget-1',
-  type: 'text',
-  position: Map({
-    x: 20,
-    y: 20,
-    width: 160,
-    height: 160
-  }),
-  data: Map({
-    value: 'hello world'
-  })
+const INITIAL_POSITION = Map({
+  x: 20,
+  y: 20,
+  width: 160,
+  height: 160
 })
+
+const buildWidget = (id, type, position=INITIAL_POSITION, data={value: 'hello world'}) => {
+  return Map({
+    id,
+    type,
+    position,
+    data: Map(data)
+  })
+}
 
 const BLANK_PAGE = Map({
   orientation: 'portrait',
-  widgets: List.of('widget-1')
+  widgets: List()
 })
 
 const INITIAL_PAGE_LIST = List.of(BLANK_PAGE)
-const INITIAL_WIDGETS_MAP = Map({'widget-1': SIMPLE_WIDGET})
 
 export function title(state = UNTITLED, action) {
   switch (action.type) {
@@ -37,6 +38,9 @@ export function title(state = UNTITLED, action) {
 
 export function pages(state = INITIAL_PAGE_LIST, action) {
   switch (action.type) {
+    case ADD_WIDGET_TO_PAGE:
+      let addWidget = (widgets) => widgets.push(action.id)
+      return state.update(action.page, page => page.update('widgets', addWidget))
     case SET_PAGE_ORIENTATION:
       return state.update(action.page, page => page.set('orientation', action.orientation))
     default:
@@ -44,8 +48,11 @@ export function pages(state = INITIAL_PAGE_LIST, action) {
   }
 }
 
-export function widgets(state = INITIAL_WIDGETS_MAP, action) {
+export function widgets(state = Map(), action) {
   switch (action.type) {
+    case ADD_WIDGET:
+      console.log(action)
+      return state.set(action.id, buildWidget(action.id, action.widgetType))
     case UPDATE_WIDGET_POSITION:
       var applyChanges;
       if(action.relative) {
@@ -69,8 +76,10 @@ export function currentPageIndex(state = 0, action) {
   }
 }
 
-export function currentlySelectedWidgets(state = List.of('widget-1'), action) {
+export function currentlySelectedWidgets(state = List(), action) {
   switch (action.type) {
+    case SET_SELECTION:
+      return List(action.ids)
     default:
       return state
   }

@@ -5,6 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 class PositionInput extends Component {
   render() {
     const { name, value, onChange } = this.props
+    const disabled = (value === undefined)
     return (
       <span>
       <label htmlFor="prop-value-{name}">{name}:</label>
@@ -13,7 +14,8 @@ class PositionInput extends Component {
               id="prop-value-{name}"
               className="prop-coord-input"
               value={value}
-              onChange={onChange} />
+              onChange={onChange}
+              disabled={disabled} />
       </span>
     )
   }

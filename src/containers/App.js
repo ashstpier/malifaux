@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import { connect } from 'react-redux'
-import { setTitle, setPageOrientation, updateWidgetPosition, updateRelativeWidgetPosition } from '../actions'
+import { setTitle, setPageOrientation, updateWidgetPosition, updateRelativeWidgetPosition, addWidget, addWidgetToPage, setSelection } from '../actions'
 import { createSelector } from 'reselect'
+import uuid from 'node-uuid'
 
 import Toolbar from '../components/Toolbar'
 import Viewport from '../components/Viewport'
@@ -11,7 +12,7 @@ import StatusBar from '../components/StatusBar'
 class App extends Component {
   render() {
     const { dispatch, title, currentPage, currentSelection, widgetsOnCurrentPage } = this.props
-    const currentSelectionPosition = currentSelection.get('position')
+    const currentSelectionPosition = currentSelection ? currentSelection.get('position').toJS() : {}
     const currentPageIndex = currentPage.get('index')
     return (
       <div>
@@ -19,26 +20,34 @@ class App extends Component {
           title={title}
           onTitleChange={title => dispatch(setTitle(title))}
           orientation={currentPage.get('orientation')}
-          onPageOrientationChange={orientation => dispatch(setPageOrientation(currentPageIndex, orientation))} />
+          onPageOrientationChange={orientation => dispatch(setPageOrientation(currentPageIndex, orientation))}
+          onAddWidget={(type) => this.onAddWidget(type)} />
         <Viewport
           page={currentPage}
           widgets={widgetsOnCurrentPage}
           onMoveSelection={(positionDiff) => dispatch(updateRelativeWidgetPosition(currentSelection.get('id'), positionDiff))} />
         <StatusBar
-          x={currentSelectionPosition.get('x')}
-          y={currentSelectionPosition.get('y')}
-          width={currentSelectionPosition.get('width')}
-          height={currentSelectionPosition.get('height')}
+          x={currentSelectionPosition.x}
+          y={currentSelectionPosition.y}
+          width={currentSelectionPosition.width}
+          height={currentSelectionPosition.height}
           onPostionChange={(changes) => dispatch(updateWidgetPosition(currentSelection.get('id'), changes))} />
       </div>
     )
+  }
+
+  onAddWidget(type) {
+    let id = uuid.v1()
+    this.props.dispatch(addWidget(id, type))
+    this.props.dispatch(addWidgetToPage(id, this.props.currentPage.get('index')))
+    this.props.dispatch(setSelection([id]))
   }
 }
 
 App.propTypes = {
   title:                PropTypes.string.isRequired,
   currentPage:          ImmutablePropTypes.map.isRequired,
-  currentSelection:     ImmutablePropTypes.map.isRequired,
+  currentSelection:     ImmutablePropTypes.map,
   widgetsOnCurrentPage: ImmutablePropTypes.list.isRequired,
 }
 
