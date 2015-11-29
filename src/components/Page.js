@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import ImmutablePropTypes from 'react-immutable-proptypes'
 import Widget from './Widget'
 import { DropTarget } from 'react-dnd';
 
@@ -22,9 +21,9 @@ class Page extends Component {
     return connectDropTarget(
       <div className="page" data-orientation={orientation}>
         {widgets.map((widget, index) =>
-          <Widget type={widget.get('type')}
-                  position={widget.get('position')}
-                  data={widget.get('data')}
+          <Widget type={widget.type}
+                  position={widget.position}
+                  data={widget.data}
                   key={index} />
         )}
       </div>
@@ -41,7 +40,7 @@ Page.propTypes = {
     'portrait',
     'landscape'
   ]).isRequired,
-  widgets: ImmutablePropTypes.list.isRequired,
+  widgets: PropTypes.array.isRequired,
   onMoveSelection: PropTypes.func.isRequired
 }
 

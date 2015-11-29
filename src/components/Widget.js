@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import ImmutablePropTypes from 'react-immutable-proptypes'
 import { DragSource } from 'react-dnd';
 
 const widgetSource = {
@@ -21,15 +20,15 @@ class Widget extends Component {
     const { type, position, data } = this.props
     const { connectDragSource, isDragging } = this.props
     const style = {
-      left:   position.get('x'),
-      top:    position.get('y'),
-      width:  position.get('width'),
-      height: position.get('height'),
+      left:   position.x,
+      top:    position.y,
+      width:  position.width,
+      height: position.height,
       opacity: isDragging ? 0.5 : 1
     }
     return connectDragSource(
       <div className="widget" style={style}>
-        {data.get('value')}
+        {data.value}
       </div>
     )
   }
@@ -37,8 +36,8 @@ class Widget extends Component {
 
 Widget.propTypes = {
   type: PropTypes.string.isRequired,
-  position: ImmutablePropTypes.map.isRequired,
-  data: ImmutablePropTypes.map,
+  position: PropTypes.object.isRequired,
+  data: PropTypes.object,
   connectDragSource: PropTypes.func.isRequired,
   isDragging: PropTypes.bool.isRequired
 }

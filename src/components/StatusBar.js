@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import ImmutablePropTypes from 'react-immutable-proptypes'
 
 
 class PositionInput extends Component {

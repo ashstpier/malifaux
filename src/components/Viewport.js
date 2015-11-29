@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import ImmutablePropTypes from 'react-immutable-proptypes'
 import { DropTarget, DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
@@ -13,7 +12,7 @@ class Viewport extends Component {
       <div id="viewport">
         <div id="pages">
           <Page
-            orientation={page.get('orientation')}
+            orientation={page.orientation}
             widgets={widgets}
             onMoveSelection={this.props.onMoveSelection}/>
         </div>
@@ -23,9 +22,9 @@ class Viewport extends Component {
 }
 
 Viewport.propTypes = {
-  page: ImmutablePropTypes.contains({
+  page: PropTypes.shape({
     orientation: PropTypes.string.isRequired,
-    widgets: ImmutablePropTypes.list.isRequired,
+    widgets: PropTypes.array.isRequired,
   }).isRequired,
   onMoveSelection: PropTypes.func.isRequired
 }
