@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
-import { SET_TITLE, SET_PAGE_ORIENTATION, UPDATE_WIDGET_POSITION, ADD_WIDGET, ADD_WIDGET_TO_PAGE, SET_SELECTION } from './actions'
+import { SET_TITLE, SET_PAGE_ORIENTATION, UPDATE_WIDGET_POSITION, ADD_WIDGET, ADD_WIDGET_TO_PAGE, SET_SELECTION, ADD_SELECTION } from './actions'
 import update from 'react-addons-update'
-import { clone, transform } from 'lodash'
+import { clone, transform, reduce } from 'lodash'
 
 const UNTITLED = "Untitled"
 
@@ -50,6 +50,9 @@ export function pages(state = INITIAL_PAGE_LIST, action) {
   }
 }
 
+
+
+
 export function widgets(state = {}, action) {
   switch (action.type) {
     case ADD_WIDGET:
@@ -58,19 +61,24 @@ export function widgets(state = {}, action) {
           [action.id]: buildWidget(action.id, action.widgetType)
         }
       })
+
     case UPDATE_WIDGET_POSITION:
-      var newPosition = clone(action.changes)
-      if(action.relative) {
-        let oldPosition = state[action.id].position
-        newPosition = transform(newPosition, (p,v,k) => p[k] = oldPosition[k] + v)
-      }
-      return update(state, {
-        [action.id]: {
-          position: {
-            $merge: newPosition
-          }
+      return reduce(action.ids, (s, id) => {
+        var newPosition = clone(action.changes)
+        if(action.relative) {
+          let oldPosition = s[id].position
+          newPosition = transform(newPosition, (p,v,k) => p[k] = oldPosition[k] + v)
         }
-      })
+        return update(s, {
+          [id]: {
+            position: {
+              $merge: newPosition
+            }
+          }
+        })
+        return s
+      }, state)
+
     default:
       return state
   }
@@ -85,6 +93,8 @@ export function currentPageIndex(state = 0, action) {
 
 export function currentlySelectedWidgets(state = [], action) {
   switch (action.type) {
+    case ADD_SELECTION:
+      return update(state, { $push: action.ids })
     case SET_SELECTION:
       return action.ids
     default:

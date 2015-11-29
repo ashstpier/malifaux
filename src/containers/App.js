@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { setTitle, setPageOrientation, updateWidgetPosition, updateRelativeWidgetPosition, addWidget, addWidgetToPage, setSelection } from '../actions'
+import { setTitle, setPageOrientation, updateWidgetPosition, updateRelativeWidgetPosition, addWidget, addWidgetToPage, setSelection, addSelection } from '../actions'
 import { createSelector } from 'reselect'
 import uuid from 'node-uuid'
 
@@ -24,7 +24,7 @@ class App extends Component {
         <Viewport
           page={currentPage}
           widgets={widgetsOnCurrentPage}
-          onMoveSelection={(positionDiff) => dispatch(updateRelativeWidgetPosition(currentSelection.id, positionDiff))} />
+          onMoveSelection={(positionDiff) => dispatch(updateRelativeWidgetPosition(currentSelection.widgetIds, positionDiff))} />
         <StatusBar
           x={currentSelectionPosition.x}
           y={currentSelectionPosition.y}
@@ -46,7 +46,15 @@ class App extends Component {
 App.propTypes = {
   title:                PropTypes.string.isRequired,
   currentPage:          PropTypes.object.isRequired,
-  currentSelection:     PropTypes.object,
+  currentSelection:     PropTypes.shape({
+    widgetIds: PropTypes.arrayOf(PropTypes.string),
+    position: PropTypes.shape({
+      x: PropTypes.number,
+      y: PropTypes.number,
+      width: PropTypes.number,
+      height: PropTypes.number,
+    })
+  }),
   widgetsOnCurrentPage: PropTypes.array.isRequired,
 }
 
@@ -56,12 +64,44 @@ const currentPageSelector = state => {
 }
 const titleSelector = state => state.title
 
-const currentSelectionSelector = state => state.widgets[state.currentlySelectedWidgets[0]]
+const widgetsOnCurrentPageSelector = createSelector(
+  currentPageSelector,
+  state => state.widgets,
+  (currentPage, widgets) => currentPage.widgets.map(id => widgets[id])
+)
 
-const widgetsOnCurrentPageSelector = state => {
-  const ids = currentPageSelector(state).widgets
-  return ids.map(id => state.widgets[id])
+const minCoordinateSelector = (selected) => {
+  if(selected.length === 0) {
+    return {x: null, y: null, width: null, height: null}
+  }
+  const x_list = selected.map(widget => widget.position.x)
+  const y_list = selected.map(widget => widget.position.y)
+  return {
+    x: Math.min(...x_list),
+    y: Math.min(...y_list),
+    width: null,
+    height: null
+  }
 }
+
+const selectedWidgetIdsSelector = (state) => {
+  return state.currentlySelectedWidgets
+}
+
+const selectedWidgetsSelector = (state) => {
+  return state.currentlySelectedWidgets.map(id => state.widgets[id])
+}
+
+const currentSelectionSelector = createSelector(
+  selectedWidgetIdsSelector,
+  selectedWidgetsSelector,
+  (selectedWidgetIds, selectedWidgets) => {
+    return {
+      widgetIds: selectedWidgetIds,
+      position: minCoordinateSelector(selectedWidgets)
+    }
+  }
+)
 
 export const select = createSelector(
   currentPageSelector,

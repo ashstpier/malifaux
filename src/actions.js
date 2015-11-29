@@ -6,6 +6,7 @@ export const UPDATE_WIDGET_POSITION = 'UPDATE_WIDGET_POSITION'
 export const ADD_WIDGET = 'ADD_WIDGET'
 export const ADD_WIDGET_TO_PAGE = 'ADD_WIDGET_TO_PAGE'
 export const SET_SELECTION = 'SET_SELECTION'
+export const ADD_SELECTION = 'ADD_SELECTION'
 
 
 export function setTitle(text) {
@@ -21,8 +22,8 @@ export function updateWidgetPosition(id, changes) {
 }
 
 
-export function updateRelativeWidgetPosition(id, changes) {
-  return { type: UPDATE_WIDGET_POSITION, id, changes, relative: true }
+export function updateRelativeWidgetPosition(ids, changes) {
+  return { type: UPDATE_WIDGET_POSITION, ids, changes, relative: true }
 }
 
 export function addWidget(id, widgetType) {
@@ -35,4 +36,8 @@ export function addWidgetToPage(id, page) {
 
 export function setSelection(ids) {
   return { type: SET_SELECTION, ids }
+}
+
+export function addSelection(ids) {
+  return { type: ADD_SELECTION, ids }
 }
