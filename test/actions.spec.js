@@ -1,12 +1,15 @@
 import expect from 'unexpected'
+
 import * as actions from '../src/actions'
+import * as types   from '../src/actionTypes'
+
 
 describe('actions', () => {
   describe('setTitle', () => {
     it('should return a SET_TITLE action', () => {
       const text = 'A Title'
       const expectedAction = {
-        type: actions.SET_TITLE,
+        type: types.SET_TITLE,
         text
       }
       expect(actions.setTitle(text), 'to equal', expectedAction)
@@ -18,7 +21,7 @@ describe('actions', () => {
       const page = 0
       const orientation = 'landscape'
       const expectedAction = {
-        type: actions.SET_PAGE_ORIENTATION,
+        type: types.SET_PAGE_ORIENTATION,
         page,
         orientation
       }
