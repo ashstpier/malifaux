@@ -24,6 +24,7 @@ class Page extends Component {
           <Widget type={widget.type}
                   position={widget.position}
                   data={widget.data}
+                  selected={widget.selected}
                   key={index} />
         )}
       </div>

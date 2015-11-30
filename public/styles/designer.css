@@ -356,6 +356,9 @@ body {
   cursor: move;
   outline: 1px dashed #ccc;
 }
+.widget-selected {
+  background-color: yellow;
+}
 
 
 

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { DragSource } from 'react-dnd';
+import classNames from 'classnames';
 
 const widgetSource = {
   beginDrag(props) {
@@ -17,7 +18,7 @@ function collect(connect, monitor) {
 
 class Widget extends Component {
   render() {
-    const { type, position, data } = this.props
+    const { type, position, data, selected } = this.props
     const { connectDragSource, isDragging } = this.props
     const style = {
       left:   position.x,
@@ -27,7 +28,7 @@ class Widget extends Component {
       opacity: isDragging ? 0.5 : 1
     }
     return connectDragSource(
-      <div className="widget" style={style}>
+      <div className={classNames('widget', {'widget-selected': selected})} style={style}>
         {data.value}
       </div>
     )
@@ -39,7 +40,8 @@ Widget.propTypes = {
   position: PropTypes.object.isRequired,
   data: PropTypes.object,
   connectDragSource: PropTypes.func.isRequired,
-  isDragging: PropTypes.bool.isRequired
+  isDragging: PropTypes.bool.isRequired,
+  selected: PropTypes.bool.isRequired
 }
 
 export default DragSource('widget', widgetSource, collect)(Widget);
