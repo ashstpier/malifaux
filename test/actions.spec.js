@@ -1,4 +1,4 @@
-import expect from 'expect'
+import expect from 'unexpected'
 import * as actions from '../src/actions'
 
 describe('actions', () => {
@@ -9,7 +9,7 @@ describe('actions', () => {
         type: actions.SET_TITLE,
         text
       }
-      expect(actions.setTitle(text)).toEqual(expectedAction)
+      expect(actions.setTitle(text), 'to equal', expectedAction)
     })
   })
 
@@ -22,7 +22,7 @@ describe('actions', () => {
         page,
         orientation
       }
-      expect(actions.setPageOrientation(0, orientation)).toEqual(expectedAction)
+      expect(actions.setPageOrientation(0, orientation), 'to equal', expectedAction)
     })
   })
 })

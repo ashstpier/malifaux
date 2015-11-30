@@ -44,14 +44,15 @@ export function pages(state = INITIAL_PAGE_LIST, action) {
         [action.page]: { widgets: { $push: [action.id] } }
       })
     case SET_PAGE_ORIENTATION:
-      return state.update(action.page, page => page.set('orientation', action.orientation))
+      return update(state, {
+        [action.page]: {
+          orientation: { $set: action.orientation }
+        }
+      })
     default:
       return state
   }
 }
-
-
-
 
 export function widgets(state = {}, action) {
   switch (action.type) {
