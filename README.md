@@ -16,6 +16,7 @@ It's an attempt to reimplement the parent reports functionality using a bunch of
 - Webpack (https://webpack.github.io/)
 - Mocha (https://mochajs.org/)
 - unxpected (http://unexpected.js.org/)
+- Standard JS (http://standardjs.com)
 
 
 ## Why?
