@@ -27,13 +27,13 @@ function setup() {
 
 
 describe('component: Toolbar', () => {
-  it('should render correctly', () => {
+  it('renders header#toolbar', () => {
     const { output } = setup()
     expect(output.type).toBe('header')
     expect(output.props.id).toBe('toolbar')
   })
 
-  it('should call onTitleChange when the title is edited', () => {
+  it('calls onTitleChange when the title is edited', () => {
     const { output, props } = setup()
     let editable = findWithType(output, ContentEditable)
     editable.props.onChange("Hello")
