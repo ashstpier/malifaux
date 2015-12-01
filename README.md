@@ -28,6 +28,12 @@ It's an attempt to reimplement the parent reports functionality using a bunch of
   - coffeescript
 
 
+## How can I help out?
+
+**Yay! Come join me in paradise...**
+See [TODOS.md](https://github.com/assembly-edu/parent-reports/blob/redux/TODO.md) for an up to date list of stuff.
+
+
 ## How do I run it?
 
 Install deps with...
