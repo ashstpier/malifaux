@@ -9,6 +9,7 @@
 
 ## Refactoring ##
 
+- add JSHint, dicide on some sane options and work out how to make it work with JSX/Webpack
 - improve all component's PropTypes statements
 - decide how to split out and name selectors
 - consider using FSA (Flux Stand Actions) format for actions e.g. {type, payload, meta}
