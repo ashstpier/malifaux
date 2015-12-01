@@ -8,8 +8,8 @@ export function setPageOrientation (page, orientation) {
   return { type: types.SET_PAGE_ORIENTATION, page, orientation }
 }
 
-export function updateWidgetPosition (id, changes) {
-  return { type: types.UPDATE_WIDGET_POSITION, id, changes, relative: false }
+export function updateWidgetPosition (ids, changes) {
+  return { type: types.UPDATE_WIDGET_POSITION, ids, changes, relative: false }
 }
 
 export function updateRelativeWidgetPosition (ids, changes) {

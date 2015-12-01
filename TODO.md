@@ -2,7 +2,6 @@
 
 ## Tests ##
 
-- better test coverage for actions
 - better test coverage for components
 - add tests for selectors
 
