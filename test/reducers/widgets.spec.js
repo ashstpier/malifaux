@@ -1,12 +1,10 @@
 import expect from 'unexpected'
 
-import { ADD_WIDGET,
-         UPDATE_WIDGET_POSITION } from '../../src/actionTypes'
-import widgets, { buildWidget }   from '../../src/reducers/widgets'
-
+import { ADD_WIDGET, UPDATE_WIDGET_POSITION } from '../../src/actionTypes'
+import widgets, { buildWidget } from '../../src/reducers/widgets'
 
 describe('reducer: widgets', () => {
-  describe("initial state", () => {
+  describe('initial state', () => {
     it('consists of an empty widget collection', () => {
       expect(widgets(undefined, {}), 'to equal', {})
     })
@@ -19,10 +17,10 @@ describe('reducer: widgets', () => {
       const finalState = widgets(initialState, action)
       expect(finalState, 'to only have key', 'widget_1')
       expect(finalState.widget_1, 'to satisfy', {
-        id:       'widget_1',
-        type:     'Text',
+        id: 'widget_1',
+        type: 'Text',
         position: {},
-        data:     {}
+        data: {}
       })
     })
   })

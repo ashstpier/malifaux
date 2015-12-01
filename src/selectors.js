@@ -15,7 +15,7 @@ const widgetsOnCurrentPageSelector = createSelector(
 )
 
 const minCoordinateSelector = (selected) => {
-  if(selected.length === 0) {
+  if (selected.length === 0) {
     return {x: null, y: null, width: null, height: null}
   }
   const x_list = selected.map(widget => widget.position.x)

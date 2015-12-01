@@ -1,11 +1,10 @@
 import expect from 'unexpected'
 
 import { SET_TITLE } from '../../src/actionTypes'
-import title         from '../../src/reducers/title'
-
+import title from '../../src/reducers/title'
 
 describe('reducer: title', () => {
-  describe("initial state", () => {
+  describe('initial state', () => {
     it('has a default title of "Untitled"', () => {
       expect(title(undefined, {}), 'to equal', 'Untitled')
     })

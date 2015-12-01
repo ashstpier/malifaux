@@ -1,14 +1,14 @@
-var path = require('path');
-var webpack = require('webpack');
+var path = require('path')
+var webpack = require('webpack')
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
   entry: [
     'webpack-hot-middleware/client',
-    './src/main.js',
+    './src/main.js'
   ],
   output: {
-    path: path.join(__dirname, "dist"),
+    path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
     publicPath: '/static/'
   },
@@ -17,7 +17,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     // new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
-      __DEV__: true,
+      __DEV__: true
     })
   ],
   module: {
@@ -27,13 +27,13 @@ module.exports = {
         loaders: [ 'babel' ],
         exclude: /node_modules/
       }, {
-      test: /\.css?$/,
-      loaders: [ 'style', 'raw' ],
-      include: path.join(__dirname, 'styles')
-    }
+        test: /\.css?$/,
+        loaders: [ 'style', 'raw' ],
+        include: path.join(__dirname, 'styles')
+      }
     ],
     resolve: {
-      root: path.resolve(__dirname + "/src")
+      root: path.resolve(__dirname + '/src')
     }
   }
 }

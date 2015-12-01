@@ -1,18 +1,16 @@
 import expect from 'unexpected'
 
-import { SET_PAGE_ORIENTATION,
-         ADD_WIDGET_TO_PAGE }   from '../../src/actionTypes'
-import  pages                   from '../../src/reducers/pages'
-
+import { SET_PAGE_ORIENTATION, ADD_WIDGET_TO_PAGE } from '../../src/actionTypes'
+import pages from '../../src/reducers/pages'
 
 describe('reducer: pages', () => {
   describe('initial state', () => {
     it('has a single page with portrait orientation', () => {
-      expect( pages(undefined, {}), 'to satisfy', [{orientation: 'portrait'}])
+      expect(pages(undefined, {}), 'to satisfy', [{orientation: 'portrait'}])
     })
 
     it('has no widgets', () => {
-      expect( pages(undefined, {}), 'to satisfy', [{widgets: []}])
+      expect(pages(undefined, {}), 'to satisfy', [{widgets: []}])
     })
   })
 

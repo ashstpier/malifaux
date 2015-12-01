@@ -22,6 +22,8 @@
     "redux": "^3.0.4",
     "redux-devtools": "^2.1.5",
     "reselect": "^2.0.1",
+    "snazzy": "^2.0.1",
+    "standard": "^5.4.1",
     "unexpected": "^10.2.0",
     "webpack": "^1.12.6",
     "webpack-dev-middleware": "^1.2.0",
@@ -29,7 +31,15 @@
   },
   "scripts": {
     "start": "node server.js",
-    "test": "./node_modules/.bin/mocha --compilers js:babel-core/register --require ./test/setup.js $(find test -name '*.spec.js')",
-    "test:watch": "npm test -- --watch"
+    "test": "./node_modules/.bin/snazzy && ./node_modules/.bin/mocha --compilers js:babel-core/register --require ./test/setup.js $(find test -name '*.spec.js')",
+    "test:watch": "npm test -- --watch",
+    "lint": "./node_modules/.bin/snazzy"
+  },
+  "standard": {
+    "globals": [
+      "it",
+      "describe",
+      "__DEV__"
+    ]
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { compose, createStore, applyMiddleware } from 'redux'
+import { compose, createStore } from 'redux'
 import { Provider } from 'react-redux'
 import App from './containers/App'
 import todoApp from './reducers'
@@ -8,17 +8,17 @@ import todoApp from './reducers'
 let root = document.getElementById('app')
 
 // TODO: Find a way to exclude these requires in production
-import { devTools, persistState } from 'redux-devtools';
-import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
+import { devTools } from 'redux-devtools'
+import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react'
 
-if(__DEV__) {
+if (__DEV__) {
   const finalCreateStore = compose(
     // Enables your middleware:
     // applyMiddleware(m1, m2, m3), // any Redux middleware, e.g. redux-thunk
     // Provides support for DevTools:
     devTools()
-    // Lets you write ?debug_session=<name> in address bar to persist debug sessions
-    // persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
+  // Lets you write ?debug_session=<name> in address bar to persist debug sessions
+  // persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
   )(createStore)
 
   const store = finalCreateStore(todoApp)
@@ -32,7 +32,7 @@ if(__DEV__) {
         <DevTools store={store} monitor={LogMonitor} />
       </DebugPanel>
     </div>
-  , root)
+    , root)
 } else {
   const store = createStore(todoApp)
 
@@ -40,5 +40,5 @@ if(__DEV__) {
     <Provider store={store}>
       <App />
     </Provider>
-  , root)
+    , root)
 }

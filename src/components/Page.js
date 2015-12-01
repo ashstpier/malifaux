@@ -1,14 +1,14 @@
 import React, { Component, PropTypes } from 'react'
 import Widget from './Widget'
-import { DropTarget } from 'react-dnd';
+import { DropTarget } from 'react-dnd'
 
 const pageTarget = {
-  drop(props, monitor, component) {
-    component.moveSelection(monitor.getDifferenceFromInitialOffset());
+  drop (props, monitor, component) {
+    component.moveSelection(monitor.getDifferenceFromInitialOffset())
   }
 }
 
-function collect(connect, monitor) {
+function collect (connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver()
@@ -16,22 +16,21 @@ function collect(connect, monitor) {
 }
 
 class Page extends Component {
-  render() {
+  render () {
     const { orientation, widgets, connectDropTarget } = this.props
     return connectDropTarget(
-      <div className="page" data-orientation={orientation}>
-        {widgets.map((widget, index) =>
-          <Widget type={widget.type}
-                  position={widget.position}
-                  data={widget.data}
-                  selected={widget.selected}
-                  key={index} />
-        )}
+      <div className='page' data-orientation={orientation}>
+        {widgets.map((widget, index) => <Widget type={widget.type}
+        position={widget.position}
+        data={widget.data}
+        selected={widget.selected}
+        key={index} />
+      )}
       </div>
     )
   }
 
-  moveSelection(positionDiff) {
+  moveSelection (positionDiff) {
     this.props.onMoveSelection(positionDiff)
   }
 }
@@ -42,7 +41,8 @@ Page.propTypes = {
     'landscape'
   ]).isRequired,
   widgets: PropTypes.array.isRequired,
-  onMoveSelection: PropTypes.func.isRequired
+  onMoveSelection: PropTypes.func.isRequired,
+  connectDropTarget: PropTypes.func
 }
 
 export default DropTarget('widget', pageTarget, collect)(Page)

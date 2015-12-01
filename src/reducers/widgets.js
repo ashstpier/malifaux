@@ -10,7 +10,7 @@ const INITIAL_POSITION = {
   height: 160
 }
 
-export const buildWidget = (id, type, position=INITIAL_POSITION, data={value: 'hello world'}) => {
+export const buildWidget = (id, type, position = INITIAL_POSITION, data = {value: 'hello world'}) => {
   return {
     id,
     type,
@@ -19,10 +19,8 @@ export const buildWidget = (id, type, position=INITIAL_POSITION, data={value: 'h
   }
 }
 
-
-export default function widgets(state = {}, action) {
+export default function widgets (state = {}, action) {
   switch (action.type) {
-
     case ADD_WIDGET:
       return update(state, {
         $merge: {
@@ -33,9 +31,9 @@ export default function widgets(state = {}, action) {
     case UPDATE_WIDGET_POSITION:
       return reduce(action.ids, (s, id) => {
         var newPosition = clone(action.changes)
-        if(action.relative) {
+        if (action.relative) {
           let oldPosition = s[id].position
-          newPosition = transform(newPosition, (p,v,k) => p[k] = oldPosition[k] + v)
+          newPosition = transform(newPosition, (p, v, k) => p[k] = oldPosition[k] + v)
         }
         return update(s, {
           [id]: {
@@ -44,7 +42,6 @@ export default function widgets(state = {}, action) {
             }
           }
         })
-        return s
       }, state)
 
     default:

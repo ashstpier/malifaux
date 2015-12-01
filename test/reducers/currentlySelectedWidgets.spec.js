@@ -1,11 +1,10 @@
 import expect from 'unexpected'
 
 import { SET_SELECTION, ADD_SELECTION } from '../../src/actionTypes'
-import currentlySelectedWidgets         from '../../src/reducers/currentlySelectedWidgets'
-
+import currentlySelectedWidgets from '../../src/reducers/currentlySelectedWidgets'
 
 describe('reducer: currentlySelectedWidgets', () => {
-  describe("initial state", () => {
+  describe('initial state', () => {
     it('has an empty list of widgets', () => {
       expect(currentlySelectedWidgets(undefined, {}), 'to equal', [])
     })

@@ -1,8 +1,7 @@
 import expect from 'unexpected'
 
 import * as actions from '../src/actions'
-import * as types   from '../src/actionTypes'
-
+import * as types from '../src/actionTypes'
 
 describe('actions', () => {
   describe('setTitle', () => {
