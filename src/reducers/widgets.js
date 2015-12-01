@@ -1,7 +1,7 @@
 import update from 'react-addons-update'
 import { clone, transform, reduce } from 'lodash'
 
-import { UPDATE_WIDGET_POSITION, ADD_WIDGET } from '../actiontypes'
+import { UPDATE_WIDGET_POSITION, ADD_WIDGET } from '../actionTypes'
 
 const INITIAL_POSITION = {
   x: 20,
