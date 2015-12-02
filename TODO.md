@@ -10,6 +10,7 @@
 
 - decide how to split out and name selectors
 - consider using FSA (Flux Stand Actions) format for actions e.g. {type, payload, meta}
+  (using https://github.com/acdlite/redux-actions looks like it might be work well)
 - look into connecting something other than the top level App component to redux
 - decide what to do about CSS beyond just a single big file
 
