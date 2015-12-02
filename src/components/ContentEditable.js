@@ -12,8 +12,7 @@ export default class ContentEditable extends Component {
       onInput={this.emitChange}
       onBlur={this.emitChange}
       contentEditable='true'
-      dangerouslySetInnerHTML={{__html: this.props.html}}>
-    </div>
+      dangerouslySetInnerHTML={{__html: this.props.html}} />
   }
 
   shouldComponentUpdate (nextProps) {
