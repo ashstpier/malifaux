@@ -10,10 +10,10 @@ class Viewport extends Component {
     return (
     <div id='viewport'>
         <div id='pages'>
-          <Page
-    orientation={page.orientation}
-    widgets={widgets}
-    onMoveSelection={this.props.onMoveSelection}/>
+          <Page orientation={page.orientation}
+                widgets={widgets}
+                onMoveSelection={this.props.onMoveSelection}
+                onSelectWidget={this.props.onSelectWidget} />
         </div>
       </div>
     )
@@ -26,7 +26,8 @@ Viewport.propTypes = {
     widgets: PropTypes.array.isRequired
   }).isRequired,
   widgets: PropTypes.array.isRequired,
-  onMoveSelection: PropTypes.func.isRequired
+  onMoveSelection: PropTypes.func,
+  onSelectWidget: PropTypes.func
 }
 
 export default DragDropContext(HTML5Backend)(Viewport)

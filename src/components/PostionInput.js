@@ -7,13 +7,14 @@ class PositionInput extends Component {
     return (
     <span>
       <label htmlFor='prop-value-{name}'>{name}:</label>
-      <input type='number'
-    step='1'
-    id='prop-value-{name}'
-    className='prop-coord-input'
-    value={value}
-    onChange={onChange}
-    disabled={disabled} />
+      <input
+        type='number'
+        step='1'
+        id='prop-value-{name}'
+        className='prop-coord-input'
+        value={value}
+        onChange={onChange}
+        disabled={disabled} />
       </span>
     )
   }

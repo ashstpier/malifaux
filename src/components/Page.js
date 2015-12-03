@@ -20,11 +20,14 @@ class Page extends Component {
     const { orientation, widgets, connectDropTarget } = this.props
     return connectDropTarget(
       <div className='page' data-orientation={orientation}>
-        {widgets.map((widget, index) => <Widget type={widget.type}
-        position={widget.position}
-        data={widget.data}
-        selected={widget.selected}
-        key={index} />
+        {widgets.map((widget, index) => <Widget
+          id={widget.id}
+          type={widget.type}
+          position={widget.position}
+          data={widget.data}
+          selected={widget.selected}
+          key={index}
+          onClick={this.props.onSelectWidget} />
       )}
       </div>
     )
@@ -42,7 +45,8 @@ Page.propTypes = {
   ]).isRequired,
   widgets: PropTypes.array.isRequired,
   onMoveSelection: PropTypes.func.isRequired,
-  connectDropTarget: PropTypes.func
+  connectDropTarget: PropTypes.func,
+  onSelectWidget: PropTypes.func
 }
 
 export default DropTarget('widget', pageTarget, collect)(Page)

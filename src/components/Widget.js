@@ -19,6 +19,7 @@ class Widget extends Component {
   render () {
     const { position, data, selected } = this.props
     const { connectDragSource, isDragging } = this.props
+    const { onClick } = this.props
     const style = {
       left: position.x,
       top: position.y,
@@ -27,7 +28,10 @@ class Widget extends Component {
       opacity: isDragging ? 0.5 : 1
     }
     return connectDragSource(
-      <div className={classNames('widget', {'widget-selected': selected})} style={style}>
+      <div
+        className={classNames('widget', {'widget-selected': selected})}
+        style={style}
+        onClick={(e) => onClick(this.props.id)}>
         {data.value}
       </div>
     )
@@ -35,12 +39,14 @@ class Widget extends Component {
 }
 
 Widget.propTypes = {
+  id: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   position: PropTypes.object.isRequired,
   data: PropTypes.object,
   connectDragSource: PropTypes.func.isRequired,
   isDragging: PropTypes.bool.isRequired,
-  selected: PropTypes.bool.isRequired
+  selected: PropTypes.bool.isRequired,
+  onClick: PropTypes.func
 }
 
 export default DragSource('widget', widgetSource, collect)(Widget)

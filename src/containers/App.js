@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { setTitle, setPageOrientation, updateWidgetPosition, updateRelativeWidgetPosition, addWidget, addWidgetToPage, setSelection } from '../actions'
 import uuid from 'node-uuid'
 
-import appSelector from '../selectors'
+import { appSelector } from '../selectors'
 import Toolbar from '../components/Toolbar'
 import Viewport from '../components/Viewport'
 import StatusBar from '../components/StatusBar'
@@ -16,21 +16,22 @@ class App extends Component {
     return (
     <div>
         <Toolbar
-    title={title}
-    onTitleChange={title => dispatch(setTitle(title))}
-    orientation={currentPage.orientation}
-    onPageOrientationChange={orientation => dispatch(setPageOrientation(currentPageIndex, orientation))}
-    onAddWidget={(type) => this.onAddWidget(type)} />
+          title={title}
+          onTitleChange={title => dispatch(setTitle(title))}
+          orientation={currentPage.orientation}
+          onPageOrientationChange={orientation => dispatch(setPageOrientation(currentPageIndex, orientation))}
+          onAddWidget={(type) => this.onAddWidget(type)} />
         <Viewport
-    page={currentPage}
-    widgets={widgetsOnCurrentPage}
-    onMoveSelection={(positionDiff) => dispatch(updateRelativeWidgetPosition(currentSelection.widgetIds, positionDiff))} />
+          page={currentPage}
+          widgets={widgetsOnCurrentPage}
+          onMoveSelection={(positionDiff) => dispatch(updateRelativeWidgetPosition(currentSelection.widgetIds, positionDiff))}
+          onSelectWidget={(id) => dispatch(setSelection([id]))} />
         <StatusBar
-    x={currentSelectionPosition.x}
-    y={currentSelectionPosition.y}
-    width={currentSelectionPosition.width}
-    height={currentSelectionPosition.height}
-    onPostionChange={(changes) => dispatch(updateWidgetPosition(currentSelection.id, changes))} />
+          x={currentSelectionPosition.x}
+          y={currentSelectionPosition.y}
+          width={currentSelectionPosition.width}
+          height={currentSelectionPosition.height}
+          onPostionChange={(changes) => dispatch(updateWidgetPosition(currentSelection.id, changes))} />
       </div>
     )
   }
