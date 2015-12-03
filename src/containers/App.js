@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { setTitle, setPageOrientation, updateWidgetPosition, updateRelativeWidgetPosition, addWidget, addWidgetToPage, setSelection } from '../actions'
 import uuid from 'node-uuid'
 
-import { appSelector } from '../selectors'
+import appSelector from '../selectors'
 import Toolbar from '../components/Toolbar'
 import Viewport from '../components/Viewport'
 import StatusBar from '../components/StatusBar'

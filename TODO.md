@@ -3,7 +3,6 @@
 ## Tests ##
 
 - better test coverage for components
-- add tests for selectors
 
 
 ## Refactoring ##

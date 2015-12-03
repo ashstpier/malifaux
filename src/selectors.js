@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { includes } from 'lodash'
+import { includes, min } from 'lodash'
 
 const currentPageSelector = state => {
   const page = state.pages[state.currentPageIndex]
@@ -18,13 +18,12 @@ const minCoordinateSelector = (selected) => {
   if (selected.length === 0) {
     return {x: null, y: null, width: null, height: null}
   }
-  const x_list = selected.map(widget => widget.position.x)
-  const y_list = selected.map(widget => widget.position.y)
+  const findMin = (attr) => min(selected, widget => widget.position[attr]).position[attr]
   return {
-    x: Math.min(...x_list),
-    y: Math.min(...y_list),
-    width: null,
-    height: null
+    x: findMin('x'),
+    y: findMin('y'),
+    width: findMin('width'),
+    height: findMin('height')
   }
 }
 
