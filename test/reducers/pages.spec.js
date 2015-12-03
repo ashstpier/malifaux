@@ -17,7 +17,7 @@ describe('reducer: pages', () => {
   describe('SET_PAGE_ORIENTATION', () => {
     it('changes the page orientation', () => {
       const initialState = [{orientation: 'portrait'}, {orientation: 'portrait'}]
-      const action = { type: SET_PAGE_ORIENTATION, page: 1, orientation: 'landscape' }
+      const action = { type: SET_PAGE_ORIENTATION, payload: {page: 1, orientation: 'landscape'} }
       const finalState = pages(initialState, action)
       expect(finalState, 'to equal', [{orientation: 'portrait'}, {orientation: 'landscape'}])
     })
@@ -26,14 +26,14 @@ describe('reducer: pages', () => {
   describe('ADD_WIDGET_TO_PAGE', () => {
     it('adds a widget to the page', () => {
       const initialState = [ {orientation: 'portrait', widgets: ['widget-1']} ]
-      const action = { type: ADD_WIDGET_TO_PAGE, page: 0, id: 'widget-2' }
+      const action = { type: ADD_WIDGET_TO_PAGE, payload: {page: 0, id: 'widget-2'} }
       const finalState = pages(initialState, action)
       expect(finalState, 'to equal', [ {orientation: 'portrait', widgets: ['widget-1', 'widget-2']} ])
     })
 
     it("doesn't add a widget that already exists on the page", () => {
       const initialState = [ {orientation: 'portrait', widgets: ['widget-1']} ]
-      const action = { type: ADD_WIDGET_TO_PAGE, page: 0, id: 'widget-1' }
+      const action = { type: ADD_WIDGET_TO_PAGE, payload: {page: 0, id: 'widget-1'} }
       const finalState = pages(initialState, action)
       expect(finalState, 'to equal', [ {orientation: 'portrait', widgets: ['widget-1']} ])
     })

@@ -13,7 +13,7 @@ describe('reducer: title', () => {
   describe('SET_TITLE', () => {
     it('sets the title to the newly provided value', () => {
       const initialState = 'Old'
-      const action = { type: SET_TITLE, text: 'New' }
+      const action = { type: SET_TITLE, payload: 'New' }
       const finalState = title(initialState, action)
       expect(finalState, 'to equal', 'New')
     })

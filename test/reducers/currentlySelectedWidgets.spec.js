@@ -13,7 +13,7 @@ describe('reducer: currentlySelectedWidgets', () => {
   describe('SET_SELECTION', () => {
     it('overrides the current selection ', () => {
       const initialState = ['test-3']
-      const setSelection = { type: SET_SELECTION, ids: ['test-1', 'test-2'] }
+      const setSelection = { type: SET_SELECTION, payload: ['test-1', 'test-2'] }
       const finalState = currentlySelectedWidgets(initialState, setSelection)
       expect(finalState, 'to equal', ['test-1', 'test-2'])
     })
@@ -22,7 +22,7 @@ describe('reducer: currentlySelectedWidgets', () => {
   describe('ADD_SELECTION', () => {
     it('appends to the current selection ', () => {
       const initialState = ['test-1']
-      const addSelection = { type: ADD_SELECTION, ids: ['test-2', 'test-3'] }
+      const addSelection = { type: ADD_SELECTION, payload: ['test-2', 'test-3'] }
       const finalState = currentlySelectedWidgets(initialState, addSelection)
       expect(finalState, 'to equal', ['test-1', 'test-2', 'test-3'])
     })

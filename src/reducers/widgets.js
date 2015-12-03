@@ -1,8 +1,10 @@
 import update from 'react-addons-update'
 import { clone, transform, reduce } from 'lodash'
+import { handleActions } from 'redux-actions'
 
 import { UPDATE_WIDGET_POSITION, ADD_WIDGET } from '../actionTypes'
 
+const NO_WIDGETS = {}
 const INITIAL_POSITION = {
   x: 20,
   y: 20,
@@ -19,32 +21,33 @@ export const buildWidget = (id, type, position = INITIAL_POSITION, data = {value
   }
 }
 
-export default function widgets (state = {}, action) {
-  switch (action.type) {
-    case ADD_WIDGET:
-      return update(state, {
-        $merge: {
-          [action.id]: buildWidget(action.id, action.widgetType)
+const reducer = handleActions({
+  [ADD_WIDGET]: (state, action) => {
+    const payload = action.payload
+    return update(state, {
+      $merge: {
+        [payload.id]: buildWidget(payload.id, payload.widgetType)
+      }
+    })
+  },
+
+  [UPDATE_WIDGET_POSITION]: (state, action) => {
+    const payload = action.payload
+    return reduce(payload.ids, (s, id) => {
+      var newPosition = clone(payload.changes)
+      if (payload.relative) {
+        let oldPosition = s[id].position
+        newPosition = transform(newPosition, (p, v, k) => p[k] = oldPosition[k] + v)
+      }
+      return update(s, {
+        [id]: {
+          position: {
+            $merge: newPosition
+          }
         }
       })
-
-    case UPDATE_WIDGET_POSITION:
-      return reduce(action.ids, (s, id) => {
-        var newPosition = clone(action.changes)
-        if (action.relative) {
-          let oldPosition = s[id].position
-          newPosition = transform(newPosition, (p, v, k) => p[k] = oldPosition[k] + v)
-        }
-        return update(s, {
-          [id]: {
-            position: {
-              $merge: newPosition
-            }
-          }
-        })
-      }, state)
-
-    default:
-      return state
+    }, state)
   }
-}
+}, NO_WIDGETS)
+
+export default reducer

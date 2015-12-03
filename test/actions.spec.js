@@ -6,12 +6,12 @@ import * as types from '../src/actionTypes'
 describe('actions', () => {
   describe('setTitle', () => {
     it('returns a SET_TITLE action', () => {
-      const text = 'A Title'
+      const payload = 'A Title'
       const expectedAction = {
         type: types.SET_TITLE,
-        text
+        payload
       }
-      expect(actions.setTitle(text), 'to equal', expectedAction)
+      expect(actions.setTitle(payload), 'to equal', expectedAction)
     })
   })
 
@@ -21,8 +21,7 @@ describe('actions', () => {
       const orientation = 'landscape'
       const expectedAction = {
         type: types.SET_PAGE_ORIENTATION,
-        page,
-        orientation
+        payload: { page, orientation }
       }
       expect(actions.setPageOrientation(0, orientation), 'to equal', expectedAction)
     })
@@ -34,9 +33,7 @@ describe('actions', () => {
       const changes = {x: 1}
       const expectedAction = {
         type: types.UPDATE_WIDGET_POSITION,
-        ids,
-        changes,
-        relative: false
+        payload: { ids, changes, relative: false }
       }
       expect(actions.updateWidgetPosition(ids, changes), 'to equal', expectedAction)
     })
@@ -48,9 +45,7 @@ describe('actions', () => {
       const changes = {x: 1}
       const expectedAction = {
         type: types.UPDATE_WIDGET_POSITION,
-        ids,
-        changes,
-        relative: true
+        payload: { ids, changes, relative: true }
       }
       expect(actions.updateRelativeWidgetPosition(ids, changes), 'to equal', expectedAction)
     })
@@ -62,8 +57,7 @@ describe('actions', () => {
       const widgetType = 'Text'
       const expectedAction = {
         type: types.ADD_WIDGET,
-        id,
-        widgetType
+        payload: { id, widgetType }
       }
       expect(actions.addWidget(id, widgetType), 'to equal', expectedAction)
     })
@@ -75,8 +69,7 @@ describe('actions', () => {
       const page = 0
       const expectedAction = {
         type: types.ADD_WIDGET_TO_PAGE,
-        id,
-        page
+        payload: { id, page }
       }
       expect(actions.addWidgetToPage(id, page), 'to equal', expectedAction)
     })
@@ -87,7 +80,7 @@ describe('actions', () => {
       const ids = ['w1']
       const expectedAction = {
         type: types.SET_SELECTION,
-        ids
+        payload: ids
       }
       expect(actions.setSelection(ids), 'to equal', expectedAction)
     })
@@ -98,17 +91,9 @@ describe('actions', () => {
       const ids = ['w1']
       const expectedAction = {
         type: types.ADD_SELECTION,
-        ids
+        payload: ids
       }
       expect(actions.addSelection(ids), 'to equal', expectedAction)
     })
   })
-
-// export function setSelection (ids) {
-//   return { type: types.SET_SELECTION, ids }
-// }
-
-// export function addSelection (ids) {
-//   return { type: types.ADD_SELECTION, ids }
-// }
 })

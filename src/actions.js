@@ -1,33 +1,28 @@
 import * as types from './actionTypes'
+import { createAction } from 'redux-actions'
 
-export function setTitle (text) {
-  return { type: types.SET_TITLE, text }
-}
+export const setTitle = createAction(types.SET_TITLE, title => title)
 
-export function setPageOrientation (page, orientation) {
-  return { type: types.SET_PAGE_ORIENTATION, page, orientation }
-}
+export const setPageOrientation = createAction(types.SET_PAGE_ORIENTATION, (page, orientation) => {
+  return { page, orientation }
+})
 
-export function updateWidgetPosition (ids, changes) {
-  return { type: types.UPDATE_WIDGET_POSITION, ids, changes, relative: false }
-}
+export const updateWidgetPosition = createAction(types.UPDATE_WIDGET_POSITION, (ids, changes) => {
+  return { ids, changes, relative: false }
+})
 
-export function updateRelativeWidgetPosition (ids, changes) {
-  return { type: types.UPDATE_WIDGET_POSITION, ids, changes, relative: true }
-}
+export const updateRelativeWidgetPosition = createAction(types.UPDATE_WIDGET_POSITION, (ids, changes) => {
+  return { ids, changes, relative: true }
+})
 
-export function addWidget (id, widgetType) {
-  return { type: types.ADD_WIDGET, id, widgetType }
-}
+export const addWidget = createAction(types.ADD_WIDGET, (id, widgetType) => {
+  return { id, widgetType }
+})
 
-export function addWidgetToPage (id, page) {
-  return { type: types.ADD_WIDGET_TO_PAGE, id, page }
-}
+export const addWidgetToPage = createAction(types.ADD_WIDGET_TO_PAGE, (id, page) => {
+  return { id, page }
+})
 
-export function setSelection (ids) {
-  return { type: types.SET_SELECTION, ids }
-}
+export const setSelection = createAction(types.SET_SELECTION, ids => ids)
 
-export function addSelection (ids) {
-  return { type: types.ADD_SELECTION, ids }
-}
+export const addSelection = createAction(types.ADD_SELECTION, ids => ids)
