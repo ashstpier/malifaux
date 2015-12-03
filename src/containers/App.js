@@ -31,7 +31,7 @@ class App extends Component {
           y={currentSelectionPosition.y}
           width={currentSelectionPosition.width}
           height={currentSelectionPosition.height}
-          onPostionChange={(changes) => dispatch(updateWidgetPosition(currentSelection.id, changes))} />
+          onPostionChange={(changes) => dispatch(updateWidgetPosition(currentSelection.widgetIds, changes))} />
       </div>
     )
   }
