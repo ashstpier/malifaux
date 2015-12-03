@@ -17,8 +17,8 @@
 ## Functionality ##
 
 - selections
-  - allow clocking on things to select them
-  - allow shift clikcing to select multiple elements
+  - allow clicking on things to select them
+  - allow shift clicking to select multiple elements
 - multiple widget types
 - editable widget configuration UI
 - read/write parent reports file format
