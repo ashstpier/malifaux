@@ -3,7 +3,7 @@ import { render } from 'react-dom'
 import { compose, createStore } from 'redux'
 import { Provider } from 'react-redux'
 import App from './containers/App'
-import todoApp from './reducers'
+import malifauxApp from './reducers'
 
 let root = document.getElementById('app')
 
@@ -21,7 +21,7 @@ if (__DEV__) {
   // persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
   )(createStore)
 
-  const store = finalCreateStore(todoApp)
+  const store = finalCreateStore(malifauxApp)
 
   render(
     <div>
@@ -34,7 +34,7 @@ if (__DEV__) {
     </div>
     , root)
 } else {
-  const store = createStore(todoApp)
+  const store = createStore(malifauxApp)
 
   render(
     <Provider store={store}>

@@ -1,17 +1,10 @@
 import { combineReducers } from 'redux'
+import crewOptions from './reducers/crewOptions'
+import modelData from './reducers/modelData'
 
-import title from './reducers/title'
-import currentPageIndex from './reducers/currentPageIndex'
-import pages from './reducers/pages'
-import currentlySelectedWidgets from './reducers/currentlySelectedWidgets'
-import widgets from './reducers/widgets'
-
-const reportsApp = combineReducers({
-  title,
-  pages,
-  widgets,
-  currentPageIndex,
-  currentlySelectedWidgets
+const malifauxApp = combineReducers({
+  modelData,
+  crewOptions
 })
 
-export default reportsApp
+export default malifauxApp
