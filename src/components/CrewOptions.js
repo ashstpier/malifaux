@@ -23,7 +23,7 @@ class CrewOptions extends Component {
 
     var totems = map(modelData.factions[crewOptions.selectedFaction].leaders[crewOptions.selectedLeader].totems, function(totem, id) {
       return (
-        <option key={id} value={id}>{totem.name}</option>
+        <option key={id} value={id}>{totem.name} - {totem.cost}ss</option>
       );
     }, this);
 
