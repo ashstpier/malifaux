@@ -1,21 +1,35 @@
 import React, { Component, PropTypes } from 'react'
+import { map } from 'lodash'
 
 class CrewList extends Component {
   render () {
+    const { modelData, crewOptions, crew } = this.props
 
-    var modelData = this.props.modelData;
-    var crewOptions = this.props.crewOptions;
     var faction = modelData.factions[crewOptions.selectedFaction];
-    var leader = faction.leaders[crewOptions.selectedLeader];
-    var totem = leader.totems[crewOptions.selectedTotem];
+    var leader = modelData.leaders[crewOptions.selectedLeader];
+    var totem = modelData.totems[crewOptions.selectedTotem];
 
-    if(totem) var totem_el = <p>{totem.name} - {totem.cost}ss</p>
+    if(totem){
+       var totem_el = <p className='totem'>{totem.name} - {totem.cost}ss</p>
+    }
+
+    var members = map(crew.members, function(m, id) {
+      let member = modelData.members[m]
+      return (
+        <li key={id}>{member.name}</li>
+      );
+    });
 
     return (
       <div id='crew-list'>
-        <p>{faction.name}</p>
-        <p>{leader.name} - {leader.cache}ss</p>
+        <h2 className='faction' style={{color: faction.color}}>{faction.name}</h2>
+        <p className='leader'>{leader.name} - {leader.cache}ss</p>
         {totem_el}
+        <div id='crew-list'>
+          <ul>
+            {members}
+          </ul>
+        </div>
       </div>
     )
   }
@@ -23,7 +37,8 @@ class CrewList extends Component {
 
 CrewList.propTypes = {
   modelData: PropTypes.object.isRequired,
-  crewOptions: PropTypes.object.isRequired
+  crewOptions: PropTypes.object.isRequired,
+  crew: PropTypes.object.isRequired
 }
 
 export default CrewList

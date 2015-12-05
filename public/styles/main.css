@@ -1,3 +1,11 @@
+body {
+  font-family: "raleway";
+}
+
+h1, h2, h3, h4 {
+  font-family: "chinese-rocks";
+}
+
 .hidden {
   display: none;
 }
