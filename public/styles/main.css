@@ -6,6 +6,27 @@ h1, h2, h3, h4 {
   font-family: "chinese-rocks";
 }
 
-.hidden {
-  display: none;
+.member-list ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+input[type="submit"],
+button {
+  background: #3CA2A2;
+  color: #fff;
+  border: none;
+  outline: none;
+  padding: 8px 20px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.9em;
+  letter-spacing: 0.05em;
+}
+
+input[type="submit"]:hover,
+button:hover {
+  background: #318E8E;
 }

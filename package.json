@@ -38,5 +38,9 @@
       "describe",
       "__DEV__"
     ]
+  },
+  "dependencies": {
+    "node-sass": "^3.4.2",
+    "react-select": "^0.9.1"
   }
 }

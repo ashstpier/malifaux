@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import { map } from 'lodash'
+import { map, reduce } from 'lodash'
 
 class CrewList extends Component {
   render () {
@@ -13,19 +13,19 @@ class CrewList extends Component {
        var totem_el = <p className='totem'>{totem.name} - {totem.cost}ss</p>
     }
 
-    var members = map(crew.members, function(m, id) {
-      let member = modelData.members[m]
+    var members = map(crew.members, function(member, id) {
       return (
-        <li key={id}>{member.name}</li>
+        <li key={id}>{member.name} <button onClick={this.deleteMember.bind(this, id)}>Delete</button></li>
       );
-    });
+    }, this);
 
     return (
-      <div id='crew-list'>
-        <h2 className='faction' style={{color: faction.color}}>{faction.name}</h2>
+      <div id='crew'>
+        <h1 className='faction' style={{color: faction.color}}>{faction.name}</h1>
+        <p>{crew.soulstonesRemaining} / {crew.soulstoneAmount}</p>
         <p className='leader'>{leader.name} - {leader.cache}ss</p>
         {totem_el}
-        <div id='crew-list'>
+        <div className='member-list'>
           <ul>
             {members}
           </ul>
@@ -33,9 +33,14 @@ class CrewList extends Component {
       </div>
     )
   }
+
+  deleteMember (index){
+    this.props.onMemberDelete(index);
+  }
 }
 
 CrewList.propTypes = {
+  onMemberDelete: PropTypes.func.isRequired,
   modelData: PropTypes.object.isRequired,
   crewOptions: PropTypes.object.isRequired,
   crew: PropTypes.object.isRequired

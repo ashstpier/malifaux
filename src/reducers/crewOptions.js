@@ -1,11 +1,12 @@
 import update from 'react-addons-update'
 import { handleActions } from 'redux-actions'
-import { SET_FACTION, SET_LEADER, SET_TOTEM } from '../actionTypes'
+import { SET_FACTION, SET_LEADER, SET_TOTEM, UPDATE_SOULSTONES } from '../actionTypes'
 
 const CREW_OPTION_STATE = {
   selectedFaction: "1",
   selectedLeader: "1",
-  selectedTotem: ""
+  selectedTotem: "",
+  selectedSoulstones: 50
 }
 
 const reducer = handleActions({
@@ -22,6 +23,11 @@ const reducer = handleActions({
   [SET_TOTEM]: (state, action) => {
     return update(state, {
       selectedTotem: { $set: action.payload }
+    })
+  },
+  [UPDATE_SOULSTONES]: (state, action) => {
+    return update(state, {
+      selectedSoulstones: { $set: action.payload }
     })
   }
 }, CREW_OPTION_STATE)

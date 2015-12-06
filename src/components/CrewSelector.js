@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react'
 import { map } from 'lodash'
+import Select from 'react-select'
 
 class CrewSelector extends Component {
   render () {
+    const { modelData, crewOptions, crew } = this.props
 
-    var modelData = this.props.modelData;
-    var crewOptions = this.props.crewOptions;
     var faction = modelData.factions[crewOptions.selectedFaction];
     var leader = modelData.leaders[crewOptions.selectedLeader];
 
@@ -14,7 +14,7 @@ class CrewSelector extends Component {
       let merc = member.factions.indexOf(parseInt(crewOptions.selectedFaction)) > -1;
       let cost = merc ? member.cost : member.cost + 1
       return (
-        <option key={m} value={m}>{member.name} - {cost}ss</option>
+        {value: m, label: member.name}
       );
     });
 
@@ -23,7 +23,7 @@ class CrewSelector extends Component {
       let merc = member.factions.indexOf(parseInt(crewOptions.selectedFaction)) > -1;
       let cost = merc ? member.cost : member.cost + 1
       return (
-        <option key={m} value={m}>{member.name} - {cost}ss</option>
+        {value: m, label: member.name}
       );
     });
 
@@ -31,38 +31,58 @@ class CrewSelector extends Component {
       <div id='crew-selector'>
         <form onSubmit={e => this.handleAddMember(e)}>
           <label>Models</label>
-          <select onChange={e => this.handleSelectMember(e)} value={this.props.crew.selectedMember}>
-            {members}
-          </select>
+          <Select
+            name="member-select"
+            value={crew.selectedMember}
+            options={members}
+            onChange={e => this.handleSelectMember(e)}
+            placeholder="Select member..."
+            clearable={false} />
           <input value="Add crew member" type="submit" />
         </form>
         <form onSubmit={e => this.handleAddMerc(e)}>
           <label>Mercenaries</label>
-          <select onChange={e => this.handleSelectMerc(e)} value={this.props.crew.selectedMerc}>
-            {mercs}
-          </select>
-          <input value="Add crew member" type="submit" />
+          <Select
+            name="merc-select"
+            value={crew.selectedMerc}
+            options={mercs}
+            onChange={e => this.handleSelectMerc(e)}
+            placeholder="Select mercenary..."
+            clearable={false} />
+          <input value="Add mercenary" type="submit" />
         </form>
       </div>
     )
   }
 
   handleSelectMember (e) {
-    this.props.onMemberSelect(e.target.value);
+    this.props.onMemberSelect(e);
   }
 
   handleSelectMerc (e) {
-    this.props.onMercSelect(e.target.value);
+    this.props.onMercSelect(e);
   }
 
   handleAddMember (e) {
     e.preventDefault();
-    this.props.onMemberAdd(this.props.crew.selectedMember);
+    let model = this.props.modelData.members[this.props.crew.selectedMember];
+    if(this.props.crew.soulstonesRemaining >= parseInt(model.cost)){
+      this.props.onMemberAdd(model);
+    }
   }
 
   handleAddMerc (e) {
     e.preventDefault();
-    this.props.onMercAdd(this.props.crew.selectedMerc);
+    let model = this.props.modelData.members[this.props.crew.selectedMerc];
+    if(this.props.crew.soulstonesRemaining >= parseInt(model.cost)){
+      let cost = model.cost;
+      let merc = {
+        name: this.props.modelData.members[this.props.crew.selectedMerc].name,
+        cost: parseInt(cost) + 1,
+        merc: true
+      }
+      this.props.onMercAdd(merc);
+    }
   }
 }
 

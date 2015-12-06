@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { map } from 'lodash'
+import Select from 'react-select'
 
 class CrewOptions extends Component {
   render () {
@@ -7,24 +8,27 @@ class CrewOptions extends Component {
     var modelData = this.props.modelData;
     var crewOptions = this.props.crewOptions;
 
-    var factions = map(modelData.factions, function(faction, id) {
+    var factions = map(modelData.factions, function(faction, f) {
       return (
-        <option key={id} value={id}>{faction.name}</option>
+        {value: f, label: faction.name}
       );
     });
 
     return (
       <div className="faction-options">
         <label>Faction</label>
-        <select onChange={e => this.handleChangeFaction(e)} value={crewOptions.selectedFaction}>
-          {factions}
-        </select>
+        <Select
+          name="faction-select"
+          value={crewOptions.selectedFaction}
+          options={factions}
+          onChange={e => this.handleChangeFaction(e)}
+          clearable={false} />
       </div>
     )
   }
 
   handleChangeFaction (e) {
-    this.props.switchFaction(e.target.value);
+    this.props.switchFaction(e);
   }
 }
 
