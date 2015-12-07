@@ -10,22 +10,12 @@ class CrewSelector extends Component {
     var leader = modelData.leaders[crewOptions.selectedLeader];
 
     var members = map(faction.members, function(m) {
-      let member = modelData.members[m];
-      let merc = member.factions.indexOf(parseInt(crewOptions.selectedFaction)) > -1;
-      let cost = merc ? member.cost : member.cost + 1
-      return (
-        {value: m, label: member.name}
-      );
-    });
+      return this.buildMember(m)
+    }, this);
 
     var mercs = map(faction.mercs, function(m) {
-      let member = modelData.members[m];
-      let merc = member.factions.indexOf(parseInt(crewOptions.selectedFaction)) > -1;
-      let cost = merc ? member.cost : member.cost + 1
-      return (
-        {value: m, label: member.name}
-      );
-    });
+      return this.buildMember(m)
+    }, this);
 
     return (
       <div id='crew-selector'>
@@ -53,6 +43,15 @@ class CrewSelector extends Component {
         </form>
       </div>
     )
+  }
+
+  buildMember (m) {
+    let member = this.props.modelData.members[m];
+    let merc = member.factions.indexOf(parseInt(this.props.crewOptions.selectedFaction)) > -1;
+    let cost = merc ? member.cost : member.cost + 1
+    return (
+      {value: m, label: member.name}
+    );
   }
 
   handleSelectMember (e) {

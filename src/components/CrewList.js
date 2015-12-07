@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { map, reduce } from 'lodash'
+import classNames from 'classnames'
 
 class CrewList extends Component {
   render () {
@@ -19,10 +20,12 @@ class CrewList extends Component {
       );
     }, this);
 
+    var negativeClass = classNames({red: crew.soulstonesRemaining < 0});
+
     return (
       <div id='crew'>
         <h1 className='faction' style={{color: faction.color}}>{faction.name}</h1>
-        <p>{crew.soulstonesRemaining} / {crew.soulstoneAmount}</p>
+        <p><span className={negativeClass}>{crew.soulstonesRemaining}</span> / {crew.soulstoneAmount}</p>
         <p className='leader'>{leader.name} - {leader.cache}ss</p>
         {totem_el}
         <div className='member-list'>

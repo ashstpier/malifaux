@@ -40,7 +40,10 @@ const reducer = handleActions({
   },
   [SET_SOULSTONES]: (state, action) => {
     return update(state, {
-      soulstoneAmount: { $set: action.payload }
+      soulstoneAmount: { $set: parseInt(action.payload) },
+      soulstonesRemaining: {
+        $set: parseInt(action.payload) - (state.soulstoneAmount - state.soulstonesRemaining)
+      }
     })
   }
 }, CREW_STATE)

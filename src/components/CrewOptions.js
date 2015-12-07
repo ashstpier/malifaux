@@ -39,6 +39,7 @@ class CrewOptions extends Component {
   onLeaderChange (val) {
     this.props.onLeaderChange(val);
     this.props.onTotemChange("");
+    this.props.onClearMembers();
   }
 
   onTotemChange (val) {
@@ -51,7 +52,7 @@ class CrewOptions extends Component {
 
   handleUpdateSoulstones (e) {
     e.preventDefault();
-    var ss = this.props.crewOptions.selectedSoulstones;
+    var ss = String(this.props.crewOptions.selectedSoulstones);
     var regex=/^[0-9]+$/;
     if (ss.match(regex)){
       if(parseInt(ss) < 10){
@@ -75,6 +76,7 @@ CrewOptions.propTypes = {
   onSoulstonesChange: PropTypes.func.isRequired,
   onSoulstonesUpdate: PropTypes.func.isRequired,
   onResetForm: PropTypes.func.isRequired,
+  onClearMembers: PropTypes.func.isRequired,
   modelData: PropTypes.object.isRequired,
   crewOptions: PropTypes.object.isRequired
 }

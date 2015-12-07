@@ -8,6 +8,9 @@
     "express": "^4.13.3",
     "jsdom": "^7.0.2",
     "json-loader": "^0.5.4",
+    "sass-loader": "^0.5.0",
+    "node-sass": "^3.4.2",
+    "react-select": "^0.9.1",
     "lodash": "^3.10.1",
     "mocha": "^2.3.4",
     "node-uuid": "^1.4.7",
@@ -38,9 +41,5 @@
       "describe",
       "__DEV__"
     ]
-  },
-  "dependencies": {
-    "node-sass": "^3.4.2",
-    "react-select": "^0.9.1"
   }
 }

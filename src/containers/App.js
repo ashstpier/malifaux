@@ -18,6 +18,8 @@ import CrewOptions from '../components/CrewOptions'
 import CrewSelector from '../components/CrewSelector'
 import CrewList from '../components/CrewList'
 
+require("../styles/main.scss")
+
 class App extends Component {
   render () {
     const { dispatch, modelData, crewOptions, crew } = this.props
@@ -36,7 +38,8 @@ class App extends Component {
                 onTotemChange={totem_id => dispatch(setTotem(totem_id))}
                 onSoulstonesChange={soulstones => dispatch(changeSoulstones(soulstones))}
                 onSoulstonesUpdate={soulstones => dispatch(setSoulstones(soulstones))}
-                onResetForm={this.resetForm.bind(this)} />
+                onResetForm={this.resetForm.bind(this)}
+                onClearMembers={this.clearMembers.bind(this)} />
               <CrewSelector
                 modelData={modelData}
                 crewOptions={crewOptions}
@@ -57,6 +60,10 @@ class App extends Component {
         </div>
       </div>
     )
+  }
+
+  clearMembers () {
+    this.props.dispatch(clearMembers());
   }
 
   resetForm (faction_id) {
