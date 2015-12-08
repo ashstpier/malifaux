@@ -1,0 +1,32 @@
+.leader {
+  padding: 15px;
+  background: $grey;
+  h2 {
+    font-family: $sans;
+    margin: 0;
+  }
+}
+
+.member-list ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  margin: 20px 0;
+
+  li {
+    padding: 10px 15px;
+    background: $grey;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+}
+
+.soulstone-amount {
+  font-size: 2.5em;
+  font-family: $display;
+}
+
+.delete-icon {
+  cursor: pointer;
+  font-weight: bold;
+}

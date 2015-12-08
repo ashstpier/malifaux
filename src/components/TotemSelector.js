@@ -2,22 +2,22 @@ import React, { Component, PropTypes } from 'react'
 import { map } from 'lodash'
 import Select from 'react-select'
 
-class CrewOptions extends Component {
+class TotemSelect extends Component {
   render () {
 
     var modelData = this.props.modelData;
-    var crewOptions = this.props.crewOptions;
-    var faction = modelData.factions[crewOptions.selectedFaction];
-    var leader = modelData.leaders[crewOptions.selectedLeader];
+    var crew = this.props.crew;
+    var faction = modelData.factions[crew.selectedFaction];
+    var leader = modelData.leaders[crew.selectedLeader];
 
     var totems = map(modelData.totems, function(faction, t) {
       let totem = modelData.totems[t];
-      let isLeader = totem.leaders.indexOf(parseInt(crewOptions.selectedLeader)) > -1 || totem.merc;
+      let isLeader = totem.leaders.indexOf(parseInt(crew.selectedLeader)) > -1 || totem.merc;
       if(isLeader){
-        let merc = totem.merc && totem.factions.indexOf(parseInt(crewOptions.selectedFaction)) == -1;
+        let merc = totem.merc && totem.factions.indexOf(parseInt(crew.selectedFaction)) == -1;
         let cost = merc ? totem.cost + 1 : totem.cost
         return (
-          {value: t, label: totem.name}
+          {value: t, label: totem.name, cost: totem.cost}
         );
       }
     }).filter(function(n){ return n != undefined });
@@ -27,24 +27,31 @@ class CrewOptions extends Component {
         <label>Totem</label>
         <Select
           name="totem-select"
-          value={crewOptions.selectedTotem}
+          value={crew.selectedTotem.id}
           options={totems}
           onChange={e => this.handleChangeTotem(e)}
+          optionRenderer={this.renderOption}
           placeholder="Select totem..."
           clearable={false} />
       </div>
     )
   }
 
+  renderOption (option) {
+    return <span>{option.label} <strong className="float-right">{option.cost}ss</strong></span>;
+  }
+
   handleChangeTotem (e) {
-    this.props.switchTotem(e);
+    this.props.switchTotem({
+      id: e,
+      data: this.props.modelData.totems[e]
+    });
   }
 }
 
-CrewOptions.propTypes = {
+TotemSelect.propTypes = {
   switchTotem: PropTypes.func.isRequired,
-  modelData: PropTypes.object.isRequired,
-  crewOptions: PropTypes.object.isRequired
+  modelData: PropTypes.object.isRequired
 }
 
-export default CrewOptions
+export default TotemSelect

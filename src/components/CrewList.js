@@ -4,19 +4,19 @@ import classNames from 'classnames'
 
 class CrewList extends Component {
   render () {
-    const { modelData, crewOptions, crew } = this.props
+    const { modelData, crew } = this.props
 
-    var faction = modelData.factions[crewOptions.selectedFaction];
-    var leader = modelData.leaders[crewOptions.selectedLeader];
-    var totem = modelData.totems[crewOptions.selectedTotem];
+    var faction = modelData.factions[crew.selectedFaction];
+    var leader = modelData.leaders[crew.selectedLeader];
+    var totem = modelData.totems[crew.selectedTotem];
 
     if(totem){
-       var totem_el = <p className='totem'>{totem.name} - {totem.cost}ss</p>
+       var totem_el = <li className='totem'>{totem.name} - {totem.cost}ss <span className="float-right delete-icon" onClick={this.deleteTotem.bind(this, totem.cost)}>x</span></li>
     }
 
     var members = map(crew.members, function(member, id) {
       return (
-        <li key={id}>{member.name} <button onClick={this.deleteMember.bind(this, id)}>Delete</button></li>
+        <li key={id}>{member.name} <span className="float-right delete-icon" onClick={this.deleteMember.bind(this, id, member.cost)}>x</span></li>
       );
     }, this);
 
@@ -25,11 +25,15 @@ class CrewList extends Component {
     return (
       <div id='crew'>
         <h1 className='faction' style={{color: faction.color}}>{faction.name}</h1>
-        <p><span className={negativeClass}>{crew.soulstonesRemaining}</span> / {crew.soulstoneAmount}</p>
-        <p className='leader'>{leader.name} - {leader.cache}ss</p>
-        {totem_el}
+        <div className='soulstone-amount'>
+          <span className={negativeClass}>{crew.soulstonesRemaining}</span>/{crew.soulstoneAmount}
+        </div>
+        <div className='leader'>
+          <h2>{leader.name} <span className='float-right'>cache: {leader.cache}</span></h2>
+        </div>
         <div className='member-list'>
           <ul>
+            {totem_el}
             {members}
           </ul>
         </div>
@@ -37,15 +41,22 @@ class CrewList extends Component {
     )
   }
 
-  deleteMember (index){
-    this.props.onMemberDelete(index);
+  deleteMember (index, cost){
+    this.props.onMemberDelete({
+      id: index,
+      cost: cost
+    });
+  }
+  deleteTotem (cost){
+    console.log(cost)
+    this.props.onTotemDelete(cost);
   }
 }
 
 CrewList.propTypes = {
   onMemberDelete: PropTypes.func.isRequired,
+  onTotemDelete: PropTypes.func.isRequired,
   modelData: PropTypes.object.isRequired,
-  crewOptions: PropTypes.object.isRequired,
   crew: PropTypes.object.isRequired
 }
 

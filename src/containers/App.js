@@ -10,7 +10,8 @@ import {
   selectMerc,
   clearMembers,
   setSoulstones,
-  changeSoulstones
+  changeSoulstones,
+  deleteTotem
 } from '../actions'
 
 import { appSelector } from '../selectors'
@@ -32,7 +33,7 @@ class App extends Component {
               <h1>Malifaux Crew Builder</h1>
               <CrewOptions
                 modelData={modelData}
-                crewOptions={crewOptions}
+                crew={crew}
                 onFactionChange={faction_id => dispatch(setFaction(faction_id))}
                 onLeaderChange={leader_id => dispatch(setLeader(leader_id))}
                 onTotemChange={totem_id => dispatch(setTotem(totem_id))}
@@ -42,7 +43,6 @@ class App extends Component {
                 onClearMembers={this.clearMembers.bind(this)} />
               <CrewSelector
                 modelData={modelData}
-                crewOptions={crewOptions}
                 crew={crew}
                 onMemberAdd={member => dispatch(addMember(member))}
                 onMemberSelect={member => dispatch(selectMember(member))}
@@ -52,9 +52,9 @@ class App extends Component {
             <div className="col-md-8">
               <CrewList
                 modelData={modelData}
-                crewOptions={crewOptions}
                 crew={crew}
-                onMemberDelete={member_index => dispatch(deleteMember(member_index))} />
+                onMemberDelete={member_index => dispatch(deleteMember(member_index))}
+                onTotemDelete={(totem) => dispatch(deleteTotem(totem))} />
             </div>
           </div>
         </div>
@@ -82,7 +82,6 @@ class App extends Component {
 App.propTypes = {
   dispatch: PropTypes.func.isRequired,
   modelData: PropTypes.object.isRequired,
-  crewOptions: PropTypes.object.isRequired,
   crew: PropTypes.object.isRequired
 }
 

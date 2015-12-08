@@ -2,11 +2,11 @@ import React, { Component, PropTypes } from 'react'
 import { map } from 'lodash'
 import Select from 'react-select'
 
-class CrewOptions extends Component {
+class FactionSelect extends Component {
   render () {
 
     var modelData = this.props.modelData;
-    var crewOptions = this.props.crewOptions;
+    var crew = this.props.crew;
 
     var factions = map(modelData.factions, function(faction, f) {
       return (
@@ -19,7 +19,7 @@ class CrewOptions extends Component {
         <label>Faction</label>
         <Select
           name="faction-select"
-          value={crewOptions.selectedFaction}
+          value={crew.selectedFaction}
           options={factions}
           onChange={e => this.handleChangeFaction(e)}
           clearable={false} />
@@ -32,10 +32,10 @@ class CrewOptions extends Component {
   }
 }
 
-CrewOptions.propTypes = {
+FactionSelect.propTypes = {
   switchFaction: PropTypes.func.isRequired,
   modelData: PropTypes.object.isRequired,
-  crewOptions: PropTypes.object.isRequired
+  crew: PropTypes.object.isRequired
 }
 
-export default CrewOptions
+export default FactionSelect

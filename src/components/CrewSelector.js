@@ -4,10 +4,10 @@ import Select from 'react-select'
 
 class CrewSelector extends Component {
   render () {
-    const { modelData, crewOptions, crew } = this.props
+    const { modelData, crew } = this.props
 
-    var faction = modelData.factions[crewOptions.selectedFaction];
-    var leader = modelData.leaders[crewOptions.selectedLeader];
+    var faction = modelData.factions[crew.selectedFaction];
+    var leader = modelData.leaders[crew.selectedLeader];
 
     var members = map(faction.members, function(m) {
       return this.buildMember(m)
@@ -21,36 +21,46 @@ class CrewSelector extends Component {
       <div id='crew-selector'>
         <form onSubmit={e => this.handleAddMember(e)}>
           <label>Models</label>
-          <Select
-            name="member-select"
-            value={crew.selectedMember}
-            options={members}
-            onChange={e => this.handleSelectMember(e)}
-            placeholder="Select member..."
-            clearable={false} />
-          <input value="Add crew member" type="submit" />
+          <div className="inline-select">
+            <Select
+              name="member-select"
+              value={crew.selectedMember}
+              options={members}
+              onChange={e => this.handleSelectMember(e)}
+              placeholder="Select member..."
+              clearable={false}
+              optionRenderer={this.renderOption} />
+            <input value="Add" type="submit" />
+          </div>
         </form>
         <form onSubmit={e => this.handleAddMerc(e)}>
           <label>Mercenaries</label>
-          <Select
-            name="merc-select"
-            value={crew.selectedMerc}
-            options={mercs}
-            onChange={e => this.handleSelectMerc(e)}
-            placeholder="Select mercenary..."
-            clearable={false} />
-          <input value="Add mercenary" type="submit" />
+          <div className="inline-select">
+            <Select
+              name="merc-select"
+              value={crew.selectedMerc}
+              options={mercs}
+              onChange={e => this.handleSelectMerc(e)}
+              placeholder="Select mercenary..."
+              clearable={false}
+              optionRenderer={this.renderOption} />
+            <input value="Add" type="submit" />
+          </div>
         </form>
       </div>
     )
   }
 
+  renderOption (option) {
+    return <span>{option.label} <strong className="float-right">{option.cost}ss</strong></span>;
+  }
+
   buildMember (m) {
     let member = this.props.modelData.members[m];
-    let merc = member.factions.indexOf(parseInt(this.props.crewOptions.selectedFaction)) > -1;
+    let merc = member.factions.indexOf(parseInt(this.props.crew.selectedFaction)) > -1;
     let cost = merc ? member.cost : member.cost + 1
     return (
-      {value: m, label: member.name}
+      {value: m, label: member.name, cost: member.cost}
     );
   }
 
@@ -91,7 +101,6 @@ CrewSelector.propTypes = {
   onMemberAdd: PropTypes.func.isRequired,
   onMercAdd: PropTypes.func.isRequired,
   modelData: PropTypes.object.isRequired,
-  crewOptions: PropTypes.object.isRequired,
   crew: PropTypes.object.isRequired
 }
 

@@ -1,8 +1,24 @@
 import update from 'react-addons-update'
 import { handleActions } from 'redux-actions'
-import { ADD_MEMBER, DELETE_MEMBER, SELECT_MEMBER, CLEAR_MEMBERS, SELECT_MERC, SET_SOULSTONES } from '../actionTypes'
+import {
+  ADD_MEMBER,
+  DELETE_MEMBER,
+  SELECT_MEMBER,
+  CLEAR_MEMBERS,
+  SELECT_MERC,
+  SET_SOULSTONES,
+  SET_FACTION,
+  SET_LEADER,
+  SET_TOTEM,
+  UPDATE_SOULSTONES,
+  DELETE_TOTEM
+} from '../actionTypes'
 
 const CREW_STATE = {
+  selectedFaction: "1",
+  selectedLeader: "1",
+  selectedTotem: "",
+  selectedSoulstones: 50,
   selectedMember: "1",
   selectedMerc: "4",
   soulstoneAmount: 50,
@@ -11,6 +27,34 @@ const CREW_STATE = {
 }
 
 const reducer = handleActions({
+  [SET_FACTION]: (state, action) => {
+    return update(state, {
+      selectedFaction: { $set: action.payload }
+    })
+  },
+  [SET_LEADER]: (state, action) => {
+    return update(state, {
+      selectedLeader: { $set: action.payload }
+    })
+  },
+  [SET_TOTEM]: (state, action) => {
+    console.log(action)
+    return update(state, {
+      selectedTotem: { $set: action.payload.id },
+      soulstonesRemaining: { $set: state.soulstonesRemaining - parseInt(action.payload.data.cost) }
+    })
+  },
+  [UPDATE_SOULSTONES]: (state, action) => {
+    return update(state, {
+      selectedSoulstones: { $set: action.payload }
+    })
+  },
+  [DELETE_TOTEM]: (state, action) => {
+    return update(state, {
+      selectedTotem: { $set: "" },
+      soulstonesRemaining: { $set: state.soulstonesRemaining + parseInt(action.payload) }
+    })
+  },
   [SELECT_MEMBER]: (state, action) => {
     return update(state, {
       selectedMember: { $set: action.payload }
@@ -29,7 +73,8 @@ const reducer = handleActions({
   },
   [DELETE_MEMBER]: (state, action) => {
     return update(state, {
-      members: { $splice: [[action.payload, 1]] }
+      members: { $splice: [[action.payload.id, 1]] },
+      soulstonesRemaining: { $set: state.soulstonesRemaining + parseInt(action.payload.cost) }
     })
   },
   [CLEAR_MEMBERS]: (state, action) => {

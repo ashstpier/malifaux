@@ -1,0 +1,16 @@
+body {
+  font-family: $sans;
+  background: $dark-grey;
+  color: #fff;
+}
+
+h1, h2, h3, h4 {
+  font-family: $display;
+}
+
+.red {
+  color: #ff0000;
+}
+.float-right {
+  float: right;
+}

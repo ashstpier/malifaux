@@ -6,25 +6,26 @@ import TotemSelector from '../components/TotemSelector'
 
 class CrewOptions extends Component {
   render () {
-    const { modelData, crewOptions } = this.props
+    const { modelData, crew } = this.props
 
     return (
       <div id='crew-options'>
         <form onSubmit={e => this.handleUpdateSoulstones(e)} onBlur={e => this.handleUpdateSoulstones(e)}>
-          <input type="text" value={crewOptions.selectedSoulstones} onChange={e => this.handleChangeSoulstones(e)}/>
+          <label>Soulstones</label>
+          <input type="text" value={crew.selectedSoulstones} onChange={e => this.handleChangeSoulstones(e)}/>
         </form>
         <form>
           <FactionSelector
             modelData={modelData}
-            crewOptions={crewOptions}
+            crew={crew}
             switchFaction={this.onFactionChange.bind(this)} />
           <LeaderSelector
             modelData={modelData}
-            crewOptions={crewOptions}
+            crew={crew}
             switchLeader={this.onLeaderChange.bind(this)} />
           <TotemSelector
             modelData={modelData}
-            crewOptions={crewOptions}
+            crew={crew}
             switchTotem={this.onTotemChange.bind(this)} />
         </form>
       </div>
@@ -52,7 +53,7 @@ class CrewOptions extends Component {
 
   handleUpdateSoulstones (e) {
     e.preventDefault();
-    var ss = String(this.props.crewOptions.selectedSoulstones);
+    var ss = String(this.props.crew.selectedSoulstones);
     var regex=/^[0-9]+$/;
     if (ss.match(regex)){
       if(parseInt(ss) < 10){
@@ -78,7 +79,7 @@ CrewOptions.propTypes = {
   onResetForm: PropTypes.func.isRequired,
   onClearMembers: PropTypes.func.isRequired,
   modelData: PropTypes.object.isRequired,
-  crewOptions: PropTypes.object.isRequired
+  crew: PropTypes.object.isRequired
 }
 
 export default CrewOptions

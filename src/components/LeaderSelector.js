@@ -2,12 +2,12 @@ import React, { Component, PropTypes } from 'react'
 import { map } from 'lodash'
 import Select from 'react-select'
 
-class CrewOptions extends Component {
+class LeaderSelect extends Component {
   render () {
 
     var modelData = this.props.modelData;
-    var crewOptions = this.props.crewOptions;
-    var faction = modelData.factions[crewOptions.selectedFaction];
+    var crew = this.props.crew;
+    var faction = modelData.factions[crew.selectedFaction];
 
     var leaders = map(faction.leaders, function(l) {
       let leader = modelData.leaders[l];
@@ -21,7 +21,7 @@ class CrewOptions extends Component {
         <label>Leader</label>
         <Select
           name="leader-select"
-          value={crewOptions.selectedLeader}
+          value={crew.selectedLeader}
           options={leaders}
           onChange={e => this.handleChangeLeader(e)}
           clearable={false} />
@@ -34,10 +34,10 @@ class CrewOptions extends Component {
   }
 }
 
-CrewOptions.propTypes = {
+LeaderSelect.propTypes = {
   switchLeader: PropTypes.func.isRequired,
   modelData: PropTypes.object.isRequired,
-  crewOptions: PropTypes.object.isRequired
+  crew: PropTypes.object.isRequired
 }
 
-export default CrewOptions
+export default LeaderSelect
