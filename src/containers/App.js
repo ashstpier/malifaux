@@ -11,7 +11,8 @@ import {
   clearMembers,
   setSoulstones,
   changeSoulstones,
-  deleteTotem
+  deleteTotem,
+  resetSoulstones
 } from '../actions'
 
 import { appSelector } from '../selectors'
@@ -27,34 +28,36 @@ class App extends Component {
 
     return (
       <div id="crew-builder">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-4">
-              <h1>Malifaux Crew Builder</h1>
-              <CrewOptions
-                modelData={modelData}
-                crew={crew}
-                onFactionChange={faction_id => dispatch(setFaction(faction_id))}
-                onLeaderChange={leader_id => dispatch(setLeader(leader_id))}
-                onTotemChange={totem_id => dispatch(setTotem(totem_id))}
-                onSoulstonesChange={soulstones => dispatch(changeSoulstones(soulstones))}
-                onSoulstonesUpdate={soulstones => dispatch(setSoulstones(soulstones))}
-                onResetForm={this.resetForm.bind(this)}
-                onClearMembers={this.clearMembers.bind(this)} />
-              <CrewSelector
-                modelData={modelData}
-                crew={crew}
-                onMemberAdd={member => dispatch(addMember(member))}
-                onMemberSelect={member => dispatch(selectMember(member))}
-                onMercAdd={member => dispatch(addMember(member))}
-                onMercSelect={member => dispatch(selectMerc(member))} />
-            </div>
-            <div className="col-md-8">
-              <CrewList
-                modelData={modelData}
-                crew={crew}
-                onMemberDelete={member_index => dispatch(deleteMember(member_index))}
-                onTotemDelete={(totem) => dispatch(deleteTotem(totem))} />
+        <div className="sidebar">
+          <h1>Malifaux Crew Builder</h1>
+          <CrewOptions
+            modelData={modelData}
+            crew={crew}
+            onFactionChange={faction_id => dispatch(setFaction(faction_id))}
+            onLeaderChange={leader_id => dispatch(setLeader(leader_id))}
+            onTotemChange={totem_id => dispatch(setTotem(totem_id))}
+            onSoulstonesChange={soulstones => dispatch(changeSoulstones(soulstones))}
+            onSoulstonesUpdate={soulstones => dispatch(setSoulstones(soulstones))}
+            onResetForm={this.resetForm.bind(this)}
+            onClearMembers={this.clearMembers.bind(this)} />
+          <CrewSelector
+            modelData={modelData}
+            crew={crew}
+            onMemberAdd={member => dispatch(addMember(member))}
+            onMemberSelect={member => dispatch(selectMember(member))}
+            onMercAdd={member => dispatch(addMember(member))}
+            onMercSelect={member => dispatch(selectMerc(member))} />
+        </div>
+        <div className="content">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-md-12">
+                <CrewList
+                  modelData={modelData}
+                  crew={crew}
+                  onMemberDelete={member_index => dispatch(deleteMember(member_index))}
+                  onTotemDelete={(totem) => dispatch(deleteTotem(totem))} />
+              </div>
             </div>
           </div>
         </div>
@@ -70,7 +73,8 @@ class App extends Component {
     this.props.dispatch(clearMembers());
     let faction_leaders = this.props.modelData.factions[faction_id].leaders;
     this.props.dispatch(setLeader(String(faction_leaders[0])));
-    this.props.dispatch(setTotem(""));
+    this.props.dispatch(setTotem({}));
+    this.props.dispatch(resetSoulstones());
 
     let leader_members = this.props.modelData.factions[faction_id].members;
     let leader_mercs = this.props.modelData.factions[faction_id].mercs;

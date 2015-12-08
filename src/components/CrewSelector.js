@@ -30,7 +30,9 @@ class CrewSelector extends Component {
               placeholder="Select member..."
               clearable={false}
               optionRenderer={this.renderOption} />
-            <input value="Add" type="submit" />
+            <button type="submit">
+              <i className="fa fa-plus fa-lg"></i>
+            </button>
           </div>
         </form>
         <form onSubmit={e => this.handleAddMerc(e)}>
@@ -44,7 +46,9 @@ class CrewSelector extends Component {
               placeholder="Select mercenary..."
               clearable={false}
               optionRenderer={this.renderOption} />
-            <input value="Add" type="submit" />
+            <button type="submit">
+              <i className="fa fa-plus fa-lg"></i>
+            </button>
           </div>
         </form>
       </div>

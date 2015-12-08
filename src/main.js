@@ -28,9 +28,11 @@ if (__DEV__) {
       <Provider store={store}>
         <App />
       </Provider>
-      <DebugPanel top right bottom>
-        <DevTools store={store} monitor={LogMonitor} />
-      </DebugPanel>
+      <div className="devtools">
+        <DebugPanel top right bottom>
+          <DevTools store={store} monitor={LogMonitor} />
+        </DebugPanel>
+      </div>
     </div>
     , root)
 } else {

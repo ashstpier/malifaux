@@ -7,6 +7,7 @@ import {
   CLEAR_MEMBERS,
   SELECT_MERC,
   SET_SOULSTONES,
+  RESET_SOULSTONES,
   SET_FACTION,
   SET_LEADER,
   SET_TOTEM,
@@ -17,7 +18,7 @@ import {
 const CREW_STATE = {
   selectedFaction: "1",
   selectedLeader: "1",
-  selectedTotem: "",
+  selectedTotem: {},
   selectedSoulstones: 50,
   selectedMember: "1",
   selectedMerc: "4",
@@ -40,8 +41,8 @@ const reducer = handleActions({
   [SET_TOTEM]: (state, action) => {
     console.log(action)
     return update(state, {
-      selectedTotem: { $set: action.payload.id },
-      soulstonesRemaining: { $set: state.soulstonesRemaining - parseInt(action.payload.data.cost) }
+      selectedTotem: { $set: action.payload },
+      soulstonesRemaining: { $set: state.soulstonesRemaining - parseInt(action.payload.cost) }
     })
   },
   [UPDATE_SOULSTONES]: (state, action) => {
@@ -51,7 +52,7 @@ const reducer = handleActions({
   },
   [DELETE_TOTEM]: (state, action) => {
     return update(state, {
-      selectedTotem: { $set: "" },
+      selectedTotem: { $set: {} },
       soulstonesRemaining: { $set: state.soulstonesRemaining + parseInt(action.payload) }
     })
   },
@@ -89,6 +90,12 @@ const reducer = handleActions({
       soulstonesRemaining: {
         $set: parseInt(action.payload) - (state.soulstoneAmount - state.soulstonesRemaining)
       }
+    })
+  },
+  [RESET_SOULSTONES]: (state, action) => {
+    return update(state, {
+      soulstoneAmount: { $set: 50 },
+      soulstonesRemaining: { $set: 50 }
     })
   }
 }, CREW_STATE)

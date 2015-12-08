@@ -1,11 +1,21 @@
 body {
   font-family: $sans;
-  background: $dark-grey;
+  background: lighten($dark-grey, 3%);
   color: #fff;
+  width: 100%;
+}
+
+.devtools {
+  display: none;
 }
 
 h1, h2, h3, h4 {
   font-family: $display;
+}
+
+h1 {
+  margin-top: 0;
+  text-shadow: 0 1px 5px rgba(0,0,0,0.3);
 }
 
 .red {
@@ -13,4 +23,19 @@ h1, h2, h3, h4 {
 }
 .float-right {
   float: right;
+}
+
+.sidebar {
+  width: $sidebar-width;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  padding: 20px;
+  background: $dark-grey;
+}
+
+.content {
+  padding: 20px;
+  padding-left: $sidebar-width + 20;
 }

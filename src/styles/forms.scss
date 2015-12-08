@@ -1,9 +1,8 @@
-input {
-  background-color: #fff;
-  border-color: #d9d9d9 #ccc #b3b3b3;
+input.soulstones {
+  background-color: $grey;
+  border: 1px solid lighten($grey, 10%);
   border-radius: 4px;
-  border: 1px solid #ccc;
-  color: #333;
+  color: #fff;
   display: table;
   height: 36px;
   outline: none;
@@ -11,6 +10,10 @@ input {
   position: relative;
   width: 100%;
   padding: 5px 10px;
+  &:focus {
+    background: darken($grey, 5%);
+    border-color: $primary;
+  }
 }
 
 label {
@@ -30,7 +33,7 @@ label {
 input[type="submit"],
 button {
   background: $primary;
-  color: #fff;
+  color: darken($primary, 30%);
   border: none;
   outline: none;
   padding: 8px 10px;
@@ -43,5 +46,13 @@ button {
 
 input[type="submit"]:hover,
 button:hover {
-  background: #318E8E;
+  background: darken($primary, 10%);
+  color: darken($primary, 35%);
+}
+
+.inline-select {
+  input[type="submit"], button {
+    border-radius: 0 4px 4px 0;
+    height: 36px;
+  }
 }

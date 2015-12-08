@@ -12,7 +12,7 @@ class CrewOptions extends Component {
       <div id='crew-options'>
         <form onSubmit={e => this.handleUpdateSoulstones(e)} onBlur={e => this.handleUpdateSoulstones(e)}>
           <label>Soulstones</label>
-          <input type="text" value={crew.selectedSoulstones} onChange={e => this.handleChangeSoulstones(e)}/>
+          <input className="soulstones" type="text" value={crew.selectedSoulstones} onChange={e => this.handleChangeSoulstones(e)}/>
         </form>
         <form>
           <FactionSelector

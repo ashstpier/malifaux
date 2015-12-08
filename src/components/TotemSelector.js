@@ -42,9 +42,11 @@ class TotemSelect extends Component {
   }
 
   handleChangeTotem (e) {
+    let totem = this.props.modelData.totems[e];
     this.props.switchTotem({
       id: e,
-      data: this.props.modelData.totems[e]
+      name: totem.name,
+      cost: totem.cost
     });
   }
 }

@@ -8,15 +8,25 @@ class CrewList extends Component {
 
     var faction = modelData.factions[crew.selectedFaction];
     var leader = modelData.leaders[crew.selectedLeader];
-    var totem = modelData.totems[crew.selectedTotem];
+    var totem = modelData.totems[crew.selectedTotem.id];
 
     if(totem){
-       var totem_el = <li className='totem'>{totem.name} - {totem.cost}ss <span className="float-right delete-icon" onClick={this.deleteTotem.bind(this, totem.cost)}>x</span></li>
+      var totem_el = <li className='totem'>
+        {totem.name} - {totem.cost}ss
+        <span className="float-right delete-icon" onClick={this.deleteTotem.bind(this, totem.cost)}>
+          <i className="fa fa-times"></i>
+        </span>
+      </li>
     }
 
     var members = map(crew.members, function(member, id) {
       return (
-        <li key={id}>{member.name} <span className="float-right delete-icon" onClick={this.deleteMember.bind(this, id, member.cost)}>x</span></li>
+        <li key={id}>
+          {member.name}
+          <span className="float-right delete-icon" onClick={this.deleteMember.bind(this, id, member.cost)}>
+            <i className="fa fa-times"></i>
+          </span>
+        </li>
       );
     }, this);
 

@@ -6,6 +6,7 @@ export const setFaction = createAction(types.SET_FACTION, faction_id => faction_
 export const setLeader = createAction(types.SET_LEADER, leader_id => leader_id)
 export const setTotem = createAction(types.SET_TOTEM, totem_id => totem_id)
 export const setSoulstones = createAction(types.SET_SOULSTONES, soulstones => soulstones)
+export const resetSoulstones = createAction(types.RESET_SOULSTONES, totem => totem)
 export const changeSoulstones = createAction(types.UPDATE_SOULSTONES, soulstones => soulstones)
 export const addMember = createAction(types.ADD_MEMBER, member => member)
 export const deleteMember = createAction(types.DELETE_MEMBER, index => index)
