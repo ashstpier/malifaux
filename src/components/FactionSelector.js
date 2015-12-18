@@ -6,7 +6,7 @@ class FactionSelect extends Component {
   render () {
 
     var modelData = this.props.modelData;
-    var crew = this.props.crew;
+    var crewOptions = this.props.crewOptions;
 
     var factions = map(modelData.factions, function(faction, f) {
       return (
@@ -19,7 +19,7 @@ class FactionSelect extends Component {
         <label>Faction</label>
         <Select
           name="faction-select"
-          value={crew.selectedFaction}
+          value={crewOptions.selectedFaction}
           options={factions}
           onChange={e => this.handleChangeFaction(e)}
           clearable={false} />
@@ -28,14 +28,19 @@ class FactionSelect extends Component {
   }
 
   handleChangeFaction (e) {
-    this.props.switchFaction(e);
+    let faction = this.props.modelData.factions[e];
+    this.props.switchFaction({
+      id: e,
+      name: faction.name,
+      color: faction.color
+    });
   }
 }
 
 FactionSelect.propTypes = {
   switchFaction: PropTypes.func.isRequired,
   modelData: PropTypes.object.isRequired,
-  crew: PropTypes.object.isRequired
+  crewOptions: PropTypes.object.isRequired
 }
 
 export default FactionSelect

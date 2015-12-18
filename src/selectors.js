@@ -2,17 +2,17 @@ import { createSelector } from 'reselect'
 
 const modelDataSelector = state => state.modelData
 const crewOptionsSelector = state => state.crewOptions
-const crewSelector = state => state.crew
+const crewListSelector = state => state.crewList
 
 export const appSelector = createSelector(
   modelDataSelector,
   crewOptionsSelector,
-  crewSelector,
-  (modelData, crewOptions, crew) => {
+  crewListSelector,
+  (modelData, crewOptions, crewList) => {
     return {
       modelData,
       crewOptions,
-      crew
+      crewList
     }
   }
 )

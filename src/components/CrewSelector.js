@@ -4,10 +4,10 @@ import Select from 'react-select'
 
 class CrewSelector extends Component {
   render () {
-    const { modelData, crew } = this.props
+    const { modelData, crewList, crewOptions } = this.props
 
-    var faction = modelData.factions[crew.selectedFaction];
-    var leader = modelData.leaders[crew.selectedLeader];
+    var faction = modelData.factions[crewOptions.selectedFaction];
+    var leader = modelData.leaders[crewOptions.selectedLeader];
 
     var members = map(faction.members, function(m) {
       return this.buildMember(m)
@@ -24,7 +24,7 @@ class CrewSelector extends Component {
           <div className="inline-select">
             <Select
               name="member-select"
-              value={crew.selectedMember}
+              value={crewOptions.selectedMember}
               options={members}
               onChange={e => this.handleSelectMember(e)}
               placeholder="Select member..."
@@ -40,7 +40,7 @@ class CrewSelector extends Component {
           <div className="inline-select">
             <Select
               name="merc-select"
-              value={crew.selectedMerc}
+              value={crewOptions.selectedMerc}
               options={mercs}
               onChange={e => this.handleSelectMerc(e)}
               placeholder="Select mercenary..."
@@ -61,7 +61,7 @@ class CrewSelector extends Component {
 
   buildMember (m) {
     let member = this.props.modelData.members[m];
-    let merc = member.factions.indexOf(parseInt(this.props.crew.selectedFaction)) > -1;
+    let merc = member.factions.indexOf(parseInt(this.props.crewOptions.selectedFaction)) > -1;
     let cost = merc ? member.cost : member.cost + 1
     return (
       {value: m, label: member.name, cost: member.cost}
@@ -78,19 +78,23 @@ class CrewSelector extends Component {
 
   handleAddMember (e) {
     e.preventDefault();
-    let model = this.props.modelData.members[this.props.crew.selectedMember];
-    if(this.props.crew.soulstonesRemaining >= parseInt(model.cost)){
-      this.props.onMemberAdd(model);
+    let model = this.props.modelData.members[this.props.crewOptions.selectedMember];
+    if(this.props.crewList.soulstonesRemaining >= parseInt(model.cost)){
+      this.props.onMemberAdd({
+        name: model.name,
+        cost: model.cost,
+        merc: false
+      });
     }
   }
 
   handleAddMerc (e) {
     e.preventDefault();
-    let model = this.props.modelData.members[this.props.crew.selectedMerc];
-    if(this.props.crew.soulstonesRemaining >= parseInt(model.cost)){
+    let model = this.props.modelData.members[this.props.crewOptions.selectedMerc];
+    if(this.props.crewList.soulstonesRemaining >= parseInt(model.cost) + 1){
       let cost = model.cost;
       let merc = {
-        name: this.props.modelData.members[this.props.crew.selectedMerc].name,
+        name: this.props.modelData.members[this.props.crewOptions.selectedMerc].name,
         cost: parseInt(cost) + 1,
         merc: true
       }
@@ -105,7 +109,8 @@ CrewSelector.propTypes = {
   onMemberAdd: PropTypes.func.isRequired,
   onMercAdd: PropTypes.func.isRequired,
   modelData: PropTypes.object.isRequired,
-  crew: PropTypes.object.isRequired
+  crewList: PropTypes.object.isRequired,
+  crewOptions: PropTypes.object.isRequired
 }
 
 export default CrewSelector

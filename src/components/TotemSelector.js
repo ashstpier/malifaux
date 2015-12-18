@@ -6,18 +6,19 @@ class TotemSelect extends Component {
   render () {
 
     var modelData = this.props.modelData;
-    var crew = this.props.crew;
-    var faction = modelData.factions[crew.selectedFaction];
-    var leader = modelData.leaders[crew.selectedLeader];
+    var crewOptions = this.props.crewOptions;
+    var faction = modelData.factions[crewOptions.selectedFaction];
+    var leader = modelData.leaders[crewOptions.selectedLeader];
 
-    var totems = map(modelData.totems, function(faction, t) {
+    var totems = map(leader.totems, function(t) {
       let totem = modelData.totems[t];
-      let isLeader = totem.leaders.indexOf(parseInt(crew.selectedLeader)) > -1 || totem.merc;
-      if(isLeader){
-        let merc = totem.merc && totem.factions.indexOf(parseInt(crew.selectedFaction)) == -1;
+
+      if(totem.factions.indexOf(parseInt(crewOptions.selectedFaction)) != -1 || totem.merc){
+
+        let merc = totem.merc && totem.factions.indexOf(parseInt(crewOptions.selectedFaction)) == -1;
         let cost = merc ? totem.cost + 1 : totem.cost
         return (
-          {value: t, label: totem.name, cost: totem.cost}
+          {value: t, label: totem.name, cost: cost}
         );
       }
     }).filter(function(n){ return n != undefined });
@@ -27,7 +28,7 @@ class TotemSelect extends Component {
         <label>Totem</label>
         <Select
           name="totem-select"
-          value={crew.selectedTotem.id}
+          value={crewOptions.selectedTotem}
           options={totems}
           onChange={e => this.handleChangeTotem(e)}
           optionRenderer={this.renderOption}
@@ -53,7 +54,8 @@ class TotemSelect extends Component {
 
 TotemSelect.propTypes = {
   switchTotem: PropTypes.func.isRequired,
-  modelData: PropTypes.object.isRequired
+  modelData: PropTypes.object.isRequired,
+  crewOptions: PropTypes.object.isRequired
 }
 
 export default TotemSelect

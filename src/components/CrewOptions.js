@@ -6,26 +6,26 @@ import TotemSelector from '../components/TotemSelector'
 
 class CrewOptions extends Component {
   render () {
-    const { modelData, crew } = this.props
+    const { modelData, crewOptions } = this.props
 
     return (
       <div id='crew-options'>
         <form onSubmit={e => this.handleUpdateSoulstones(e)} onBlur={e => this.handleUpdateSoulstones(e)}>
           <label>Soulstones</label>
-          <input className="soulstones" type="text" value={crew.selectedSoulstones} onChange={e => this.handleChangeSoulstones(e)}/>
+          <input className="soulstones" type="text" value={crewOptions.selectedSoulstones} onChange={e => this.handleChangeSoulstones(e)}/>
         </form>
         <form>
           <FactionSelector
             modelData={modelData}
-            crew={crew}
+            crewOptions={crewOptions}
             switchFaction={this.onFactionChange.bind(this)} />
           <LeaderSelector
             modelData={modelData}
-            crew={crew}
+            crewOptions={crewOptions}
             switchLeader={this.onLeaderChange.bind(this)} />
           <TotemSelector
             modelData={modelData}
-            crew={crew}
+            crewOptions={crewOptions}
             switchTotem={this.onTotemChange.bind(this)} />
         </form>
       </div>
@@ -53,7 +53,7 @@ class CrewOptions extends Component {
 
   handleUpdateSoulstones (e) {
     e.preventDefault();
-    var ss = String(this.props.crew.selectedSoulstones);
+    var ss = String(this.props.crewOptions.selectedSoulstones);
     var regex=/^[0-9]+$/;
     if (ss.match(regex)){
       if(parseInt(ss) < 10){
@@ -79,7 +79,7 @@ CrewOptions.propTypes = {
   onResetForm: PropTypes.func.isRequired,
   onClearMembers: PropTypes.func.isRequired,
   modelData: PropTypes.object.isRequired,
-  crew: PropTypes.object.isRequired
+  crewOptions: PropTypes.object.isRequired
 }
 
 export default CrewOptions

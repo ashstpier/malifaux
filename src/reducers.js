@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux'
 import modelData from './reducers/modelData'
-import crew from './reducers/crew'
+import crewOptions from './reducers/crewOptions'
+import crewList from './reducers/crewList'
 
 const malifauxApp = combineReducers({
   modelData,
-  crew
+  crewOptions,
+  crewList
 })
 
 export default malifauxApp

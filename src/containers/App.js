@@ -24,7 +24,7 @@ require("../styles/main.scss")
 
 class App extends Component {
   render () {
-    const { dispatch, modelData, crewOptions, crew } = this.props
+    const { dispatch, modelData, crewOptions, crewList } = this.props
 
     return (
       <div id="crew-builder">
@@ -32,8 +32,8 @@ class App extends Component {
           <h1>Malifaux Crew Builder</h1>
           <CrewOptions
             modelData={modelData}
-            crew={crew}
-            onFactionChange={faction_id => dispatch(setFaction(faction_id))}
+            crewOptions={crewOptions}
+            onFactionChange={faction => dispatch(setFaction(faction))}
             onLeaderChange={leader_id => dispatch(setLeader(leader_id))}
             onTotemChange={totem_id => dispatch(setTotem(totem_id))}
             onSoulstonesChange={soulstones => dispatch(changeSoulstones(soulstones))}
@@ -42,7 +42,8 @@ class App extends Component {
             onClearMembers={this.clearMembers.bind(this)} />
           <CrewSelector
             modelData={modelData}
-            crew={crew}
+            crewList={crewList}
+            crewOptions={crewOptions}
             onMemberAdd={member => dispatch(addMember(member))}
             onMemberSelect={member => dispatch(selectMember(member))}
             onMercAdd={member => dispatch(addMember(member))}
@@ -54,7 +55,7 @@ class App extends Component {
               <div className="col-md-12">
                 <CrewList
                   modelData={modelData}
-                  crew={crew}
+                  crewList={crewList}
                   onMemberDelete={member_index => dispatch(deleteMember(member_index))}
                   onTotemDelete={(totem) => dispatch(deleteTotem(totem))} />
               </div>
@@ -69,24 +70,31 @@ class App extends Component {
     this.props.dispatch(clearMembers());
   }
 
-  resetForm (faction_id) {
-    this.props.dispatch(clearMembers());
-    let faction_leaders = this.props.modelData.factions[faction_id].leaders;
-    this.props.dispatch(setLeader(String(faction_leaders[0])));
-    this.props.dispatch(setTotem({}));
-    this.props.dispatch(resetSoulstones());
+  resetForm (faction) {
+    let faction_leaders = this.props.modelData.factions[faction.id].leaders;
+    let leader = this.props.modelData.leaders[faction_leaders[0]];
+    let leader_members = this.props.modelData.factions[faction.id].members;
+    let leader_mercs = this.props.modelData.factions[faction.id].mercs;
 
-    let leader_members = this.props.modelData.factions[faction_id].members;
-    let leader_mercs = this.props.modelData.factions[faction_id].mercs;
+    this.props.dispatch(setLeader({
+      id: faction_leaders[0],
+      name: leader.name,
+      cache: leader.cache
+    }));
+
+    this.props.dispatch(deleteTotem());
+    this.props.dispatch(resetSoulstones());
     this.props.dispatch(selectMember(leader_members[0]));
     this.props.dispatch(selectMerc(leader_mercs[0]));
+    this.props.dispatch(clearMembers());
   }
 }
 
 App.propTypes = {
   dispatch: PropTypes.func.isRequired,
   modelData: PropTypes.object.isRequired,
-  crew: PropTypes.object.isRequired
+  crewList: PropTypes.object.isRequired,
+  crewOptions: PropTypes.object.isRequired
 }
 
 export default connect(appSelector)(App)

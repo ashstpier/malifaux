@@ -4,13 +4,13 @@ import classNames from 'classnames'
 
 class CrewList extends Component {
   render () {
-    const { modelData, crew } = this.props
+    const { modelData, crewList, crewOptions } = this.props
 
-    var faction = modelData.factions[crew.selectedFaction];
-    var leader = modelData.leaders[crew.selectedLeader];
-    var totem = modelData.totems[crew.selectedTotem.id];
+    var faction = crewList.faction;
+    var leader = crewList.leader;
+    var totem = crewList.totem;
 
-    if(totem){
+    if(totem.name){
       var totem_el = <li className='totem'>
         {totem.name} - {totem.cost}ss
         <span className="float-right delete-icon" onClick={this.deleteTotem.bind(this, totem.cost)}>
@@ -19,10 +19,10 @@ class CrewList extends Component {
       </li>
     }
 
-    var members = map(crew.members, function(member, id) {
+    var members = map(crewList.members, function(member, id) {
       return (
         <li key={id}>
-          {member.name}
+          {member.name} - {member.cost}ss
           <span className="float-right delete-icon" onClick={this.deleteMember.bind(this, id, member.cost)}>
             <i className="fa fa-times"></i>
           </span>
@@ -30,13 +30,13 @@ class CrewList extends Component {
       );
     }, this);
 
-    var negativeClass = classNames({red: crew.soulstonesRemaining < 0});
+    var negativeClass = classNames({red: crewList.soulstonesRemaining < 0});
 
     return (
       <div id='crew'>
         <h1 className='faction' style={{color: faction.color}}>{faction.name}</h1>
         <div className='soulstone-amount'>
-          <span className={negativeClass}>{crew.soulstonesRemaining}</span>/{crew.soulstoneAmount}
+          <span className={negativeClass}>{crewList.soulstonesRemaining}</span>/{crewList.soulstoneAmount}
         </div>
         <div className='leader'>
           <h2>{leader.name} <span className='float-right'>cache: {leader.cache}</span></h2>
@@ -58,7 +58,6 @@ class CrewList extends Component {
     });
   }
   deleteTotem (cost){
-    console.log(cost)
     this.props.onTotemDelete(cost);
   }
 }
@@ -67,7 +66,7 @@ CrewList.propTypes = {
   onMemberDelete: PropTypes.func.isRequired,
   onTotemDelete: PropTypes.func.isRequired,
   modelData: PropTypes.object.isRequired,
-  crew: PropTypes.object.isRequired
+  crewList: PropTypes.object.isRequired
 }
 
 export default CrewList
